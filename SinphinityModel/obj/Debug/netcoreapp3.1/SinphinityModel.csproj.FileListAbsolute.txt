@@ -1,0 +1,9 @@
+C:\dev\Sinphinity\SinphinityModel\SinphinityModel\obj\Debug\netcoreapp3.1\SinphinityModel.csprojAssemblyReference.cache
+C:\dev\Sinphinity\SinphinityModel\SinphinityModel\obj\Debug\netcoreapp3.1\SinphinityModel.AssemblyInfoInputs.cache
+C:\dev\Sinphinity\SinphinityModel\SinphinityModel\obj\Debug\netcoreapp3.1\SinphinityModel.AssemblyInfo.cs
+C:\dev\Sinphinity\SinphinityModel\SinphinityModel\obj\Debug\netcoreapp3.1\SinphinityModel.csproj.CoreCompileInputs.cache
+C:\dev\Sinphinity\SinphinityModel\SinphinityModel\bin\Debug\netcoreapp3.1\SinphinityModel.deps.json
+C:\dev\Sinphinity\SinphinityModel\SinphinityModel\bin\Debug\netcoreapp3.1\SinphinityModel.dll
+C:\dev\Sinphinity\SinphinityModel\SinphinityModel\bin\Debug\netcoreapp3.1\SinphinityModel.pdb
+C:\dev\Sinphinity\SinphinityModel\SinphinityModel\obj\Debug\netcoreapp3.1\SinphinityModel.dll
+C:\dev\Sinphinity\SinphinityModel\SinphinityModel\obj\Debug\netcoreapp3.1\SinphinityModel.pdb

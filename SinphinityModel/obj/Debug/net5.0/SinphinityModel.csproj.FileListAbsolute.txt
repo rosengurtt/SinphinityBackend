@@ -1,0 +1,12 @@
+C:\dev\Sinphinity\Backend\SinphinityModel\bin\Debug\net5.0\SinphinityModel.deps.json
+C:\dev\Sinphinity\Backend\SinphinityModel\bin\Debug\net5.0\SinphinityModel.dll
+C:\dev\Sinphinity\Backend\SinphinityModel\bin\Debug\net5.0\ref\SinphinityModel.dll
+C:\dev\Sinphinity\Backend\SinphinityModel\bin\Debug\net5.0\SinphinityModel.pdb
+C:\dev\Sinphinity\Backend\SinphinityModel\obj\Debug\net5.0\SinphinityModel.csprojAssemblyReference.cache
+C:\dev\Sinphinity\Backend\SinphinityModel\obj\Debug\net5.0\SinphinityModel.GeneratedMSBuildEditorConfig.editorconfig
+C:\dev\Sinphinity\Backend\SinphinityModel\obj\Debug\net5.0\SinphinityModel.AssemblyInfoInputs.cache
+C:\dev\Sinphinity\Backend\SinphinityModel\obj\Debug\net5.0\SinphinityModel.AssemblyInfo.cs
+C:\dev\Sinphinity\Backend\SinphinityModel\obj\Debug\net5.0\SinphinityModel.csproj.CoreCompileInputs.cache
+C:\dev\Sinphinity\Backend\SinphinityModel\obj\Debug\net5.0\SinphinityModel.dll
+C:\dev\Sinphinity\Backend\SinphinityModel\obj\Debug\net5.0\ref\SinphinityModel.dll
+C:\dev\Sinphinity\Backend\SinphinityModel\obj\Debug\net5.0\SinphinityModel.pdb
