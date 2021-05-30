@@ -37,11 +37,20 @@ namespace SinphinityExpApi
 
             services.AddSingleton<SysStoreClient>();
             services.AddSingleton<ProcMidiClient>();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                       builder =>
+                       {
+                           builder.WithOrigins(Configuration.GetSection("SinphinityUI:BaseUrl").Value).AllowAnyHeader().AllowAnyMethod();
+                       });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -29,7 +29,6 @@ namespace SinphinitySysStore.Repositories
 
         public async Task<long> GetStylesCountAsync(string contains = ".*")
         {
-            // return await _stylesCollection.CountDocumentsAsync(Builders<Style>.Filter.Empty);
             return await _stylesCollection.CountDocumentsAsync(Builders<Style>.Filter.Regex(s => s.Name, @$"/.*{contains}.*/i"));
         }
 
@@ -43,11 +42,10 @@ namespace SinphinitySysStore.Repositories
 
             var sortFilter = new BsonDocument(sort, sortDirection);
             var styles = await _stylesCollection
-               // .Find(Builders<Style>.Filter.Empty)
                 .Find(Builders<Style>.Filter.Regex(s=>s.Name, @$"/.*{contains}.*/i"))
+                .Sort(sortFilter)
                 .Limit(limit)
                 .Skip(skip)
-                .Sort(sortFilter)
                 .ToListAsync(cancellationToken);
 
             return styles;

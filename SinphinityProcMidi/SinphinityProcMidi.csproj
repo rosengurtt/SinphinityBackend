@@ -13,8 +13,4 @@
     <ProjectReference Include="..\SinphinityModel\SinphinityModel.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Midi\" />
-  </ItemGroup>
-
 </Project>

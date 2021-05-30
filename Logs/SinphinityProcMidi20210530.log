@@ -1,0 +1,6 @@
+2021-05-30 05:49:45.020 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-05-30 06:00:50.133 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-05-30 06:04:36.837 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-05-30 06:07:27.855 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-05-30 06:26:48.151 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-05-30 19:49:43.109 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.

@@ -10,13 +10,13 @@ namespace SinphinityProcMidi.Midi
 {
     public static partial class MidiUtilities
     {
-        public static MidiStats GetSongStats(string base64EncodedMidi)
+        public static MidiStats GetMidiStats(string base64EncodedMidi)
         {
             var retObj = new MidiStats();
             var midiFile = MidiFile.Read(base64EncodedMidi);
 
             retObj.TotalTracks = midiFile.Chunks.Count;
-            //retObj.DurationInSeconds = GetSongDurationInSeconds(base64EncodedMidi);
+            retObj.DurationInSeconds = GetSongDurationInSeconds(base64EncodedMidi);
             //retObj.TimeSignature = GetMainTimeSignatureOfSong(base64EncodedMidi);
             //retObj.InstrumentsAsString = MidiUtilities.GetInstrumentsAsString(base64EncodedMidi);
             var channels = new List<FourBitNumber>();
@@ -126,7 +126,7 @@ namespace SinphinityProcMidi.Midi
                 if (!hasProgramChangeEvent && !instruments.Contains((SevenBitNumber)0))
                     instruments.Add((SevenBitNumber)0);
             }
-           // retObj.NumberOfTicks = (int)songDurationInTicks;
+            retObj.DurationInTicks = (int)songDurationInTicks;
             retObj.TotalChannels = channels.Count;
             retObj.TotalInstruments = instruments.Count;
             retObj.TotalPercussionInstruments = percussionInstruments.Count;

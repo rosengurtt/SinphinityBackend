@@ -21,17 +21,17 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable>> GetBandsAsync(int pageNo = 0, int pageSize = 10, string contains = null, string sortKey = "Name", int sortDirection = 1)
+        public async Task<ActionResult<IEnumerable>> GetBandsAsync(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null, string sortKey = "name", int sortDirection = 1)
         {
-            var totalBands = await _bandsRepository.GetBandsCountAsync(contains);
-            var bands = await _bandsRepository.GetBandsAsync(pageSize, pageNo, contains, sortKey, sortDirection);
+            var totalBands = await _bandsRepository.GetBandsCountAsync(contains, styleId);
+            var bands = await _bandsRepository.GetBandsAsync(pageSize, pageNo, contains, styleId, sortKey, sortDirection);
             var retObj = new
             {
                 pageNo,
                 pageSize,
                 totalItems = totalBands,
                 totalPages = (int)Math.Ceiling((double)totalBands / pageSize),
-                bands 
+                items = bands
             };
             return Ok(new ApiOKResponse(retObj));
         }

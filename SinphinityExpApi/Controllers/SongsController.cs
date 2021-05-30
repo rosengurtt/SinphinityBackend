@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SinphinityExpApi.Clients;
 using Sinphinity.Models;
+using Sinphinity.Models.ErrorHandling;
 
 namespace SinphinitySysStore.Controllers
 {
@@ -21,7 +22,12 @@ namespace SinphinitySysStore.Controllers
             _sysStoreClient = sysStoreClient;
             _procMidiClient = procMidiClient;
         }
- 
+
+        [HttpGet]
+        public async Task<ActionResult> GetSongs(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null, string bandId = null)
+        {
+            return Ok(new ApiOKResponse(await _sysStoreClient.GetSongs(pageNo, pageSize, contains, styleId, bandId)));
+        }
 
         [HttpPost]
         public async Task<ActionResult<Song>> UploadSong(Song song)

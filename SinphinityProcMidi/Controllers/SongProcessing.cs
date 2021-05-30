@@ -53,8 +53,9 @@ namespace SinphinityProcMidi.Controllers
                 Style = new Style { Name = style },
                 MidiBase64Encoded = midiBase64encoded,
             };
-            //song.SongStats = MidiUtilities.GetSongStats(midiBase64encoded);
-   
+            song.MidiStats = MidiUtilities.GetMidiStats(midiBase64encoded);
+            song.DurationInSeconds = song.MidiStats.DurationInSeconds;
+            song.DurationInTicks = song.MidiStats.DurationInTicks;
      
 
             var simplificationZero = MidiUtilities.GetSimplificationZeroOfSong(midiBase64encoded);

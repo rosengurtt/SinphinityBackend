@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 using SinphinitySysStore.Models;
 
 namespace SinphinitySysStore.Repositories
@@ -27,25 +28,36 @@ namespace SinphinitySysStore.Repositories
             _songsCollection = mongoClient.GetDatabase("sinphinity").GetCollection<Song>("songs");
         }
 
-        public async Task<long> GetSongsCountAsync(string contains = ".*")
+        public async Task<long> GetSongsCountAsync(string contains = ".*", string styleId = null, string bandId = null)
         {
-            return await _songsCollection.CountDocumentsAsync(Builders<Song>.Filter.Regex(s=>s.Name, @$"/.*{contains}.*/i"));
+            var nameFilter = Builders<Song>.Filter.Regex(s => s.Name, @$"/.*{contains}.*/i");
+            var bandFilter = Builders<Song>.Filter.Eq(x => x.Band.Id, bandId);
+            var styleFilter = Builders<Song>.Filter.Eq(x => x.Style.Id, styleId);
+            var combineFilter = string.IsNullOrEmpty(bandId) ? nameFilter : Builders<Song>.Filter.And(nameFilter, bandFilter, styleFilter);
+            return await _songsCollection.Find(combineFilter).CountDocumentsAsync();
         }
 
-        public async Task<IReadOnlyList<Song>> GetSongsAsync(int pageSize = DefaultPageSize, int page = 0, string contains = ".*",
+        public async Task<IReadOnlyList<Song>> GetSongsAsync(int pageSize = DefaultPageSize, int page = 0, string contains = ".*", string styleId = null, string bandId = null,
        string sort = DefaultSortKey, int sortDirection = DefaultSortOrder,
        CancellationToken cancellationToken = default)
         {
-            var skip = pageSize * page;
-            var limit = pageSize;
-
-
             var sortFilter = new BsonDocument(sort, sortDirection);
+            var nameFilter = Builders<Song>.Filter.Regex(s => s.Name, @$"/.*{contains}.*/i");
+            var bandFilter = Builders<Song>.Filter.Eq(x => x.Band.Id, bandId);
+            var styleFilter = Builders<Song>.Filter.Eq(x => x.Style.Id, styleId);
+            var combineFilter = string.IsNullOrEmpty(bandId) ? nameFilter : Builders<Song>.Filter.And(nameFilter, bandFilter, styleFilter);
+            var options = new FindOptions
+            {
+                Collation = new Collation("en", strength: CollationStrength.Secondary)
+            };
+
+
             var songs = await _songsCollection
-                .Find(Builders<Song>.Filter.Regex(s => s.Name, @$"/.*{contains}.*/i"))
-                .Limit(limit)
-                .Skip(skip)
+                .Find(combineFilter, options)
                 .Sort(sortFilter)
+                .Project<Song>(Builders<Song>.Projection.Include(x => x.Name))
+                .Limit(pageSize)
+                .Skip(pageSize * page)
                 .ToListAsync(cancellationToken);
 
             return songs;

@@ -21,5 +21,7 @@
         public int TotalTracksWithoutNotes { get; set; }
         public int TotalInstruments { get; set; }
         public int TotalPercussionInstruments { get; set; }
+        public long DurationInTicks { get; set; }
+        public int DurationInSeconds { get; set; }
     }
 }

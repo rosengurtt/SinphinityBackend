@@ -21,7 +21,7 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable>> GetStylesAsync(int pageNo = 0, int pageSize = 10, string contains = null, string sortKey="Name",  int sortDirection=1)
+        public async Task<ActionResult<IEnumerable>> GetStylesAsync(int pageNo = 0, int pageSize = 10, string contains = null, string sortKey="name",  int sortDirection=1)
         {
             var totaStyles = await _stylesRepository.GetStylesCountAsync(contains);
             var styles = await _stylesRepository.GetStylesAsync(pageSize, pageNo, contains,sortKey, sortDirection );
@@ -31,7 +31,7 @@ namespace SinphinitySysStore.Controllers
                 pageSize,
                 totalItems = totaStyles,
                 totalPages = (int)Math.Ceiling((double)totaStyles / pageSize),
-                styles
+                items = styles
             };
             return Ok(new ApiOKResponse(retObj));
         }
