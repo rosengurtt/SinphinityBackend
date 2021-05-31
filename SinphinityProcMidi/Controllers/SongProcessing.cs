@@ -22,47 +22,23 @@ namespace SinphinityProcMidi.Controllers
         [HttpPost]
         public ActionResult ImportMidiFile(Song song)
         {
-            string songPath = @"C:\music\midi\Classic\bach\bach\invent\invent1.mid";
-            string band = "John Sebastian Bach";
-            string style = "Classic";
-
-            song =  ProcesameLaSong(songPath, band, style);
+            song =  ProcesameLaSong(song);
 
             return Ok(new ApiOKResponse(song));
         }
-        private Song ProcesameLaSong(string songPath, string band, string style)
+        private Song ProcesameLaSong(Song song)
         {
-            if (!songPath.ToLower().EndsWith(".mid")) return null;
-            try
-            {
-                var lelo = MidiFile.Read(songPath, null);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, $"Song {songPath} esta podrida");
-                return null;
-            }
-
-            var midiBase64encoded = FileSystemUtils.GetBase64encodedFile(songPath);
-            midiBase64encoded = MidiUtilities.NormalizeTicksPerQuarterNote(midiBase64encoded);
-
-            Song song = new Song()
-            {
-                Name = Path.GetFileName(songPath),
-                Band = new Band { Name = band },
-                Style = new Style { Name = style },
-                MidiBase64Encoded = midiBase64encoded,
-            };
-            song.MidiStats = MidiUtilities.GetMidiStats(midiBase64encoded);
+            song.MidiStats = MidiUtilities.GetMidiStats(song.MidiBase64Encoded);
             song.DurationInSeconds = song.MidiStats.DurationInSeconds;
             song.DurationInTicks = song.MidiStats.DurationInTicks;
      
 
-            var simplificationZero = MidiUtilities.GetSimplificationZeroOfSong(midiBase64encoded);
-            song.Bars = MidiUtilities.GetBarsOfSong(midiBase64encoded, simplificationZero);
+            var simplificationZero = MidiUtilities.GetSimplificationZeroOfSong(song.MidiBase64Encoded);
+            song.Bars = MidiUtilities.GetBarsOfSong(song.MidiBase64Encoded, simplificationZero);
        
-            song.TempoChanges = MidiUtilities.GetTempoChanges(midiBase64encoded);           
-         
+            song.TempoChanges = MidiUtilities.GetTempoChanges(song.MidiBase64Encoded);
+            song.AverageTempoInBeatsPerMinute = MidiUtilities.GetAverageTempoInBeatsPerMinute(song.TempoChanges, song.DurationInTicks);
+
             song.SongSimplifications = new List<SongSimplification>();
             song.SongSimplifications.Add(simplificationZero);
             song.SongSimplifications.Add(MidiUtilities.GetSimplification1ofSong(song));

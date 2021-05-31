@@ -105,6 +105,8 @@ namespace SinphinityExpApi.Clients
             else
             {
                 var errorMessage = $"Couldn't process song";
+                if (response.StatusCode == HttpStatusCode.Conflict)
+                    throw new SongAlreadyExistsException();
                 Log.Error(errorMessage);
                 throw new ApplicationException(errorMessage);
             }

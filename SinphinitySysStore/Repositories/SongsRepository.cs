@@ -8,6 +8,7 @@ using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using SinphinitySysStore.Models;
+using SinphinitySysStore.Models.Exceptions;
 
 namespace SinphinitySysStore.Repositories
 {
@@ -65,7 +66,13 @@ namespace SinphinitySysStore.Repositories
 
         public async Task<Song> InsertSongAsync(Song song)
         {
-             await _songsCollection.InsertOneAsync(song);
+            var nameFilter = Builders<Song>.Filter.Eq(s => s.Name, song.Name);
+            var bandFilter = Builders<Song>.Filter.Eq(x => x.Band.Id, song.Band.Id);
+            var styleFilter = Builders<Song>.Filter.Eq(x => x.Style.Id, song.Style.Id);
+            var combineFilter =  Builders<Song>.Filter.And(nameFilter, bandFilter, styleFilter);
+            var count= await _songsCollection.Find(combineFilter).CountDocumentsAsync();
+            if (count > 0) throw new SongAlreadyExistsException();
+            await _songsCollection.InsertOneAsync(song);
             return song;
         }
     }

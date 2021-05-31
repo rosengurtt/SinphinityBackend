@@ -25,6 +25,8 @@ namespace Sinphinity.Models.ErrorHandling
                     return "Bad Request";
                 case 404:
                     return "Resource not found";
+                case 409:
+                    return "Conflict";
                 case 500:
                     return "An unhandled error occurred";
                 default:

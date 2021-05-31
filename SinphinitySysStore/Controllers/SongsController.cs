@@ -9,6 +9,7 @@ using SinphinitySysStore.Models;
 using Sinphinity.Models.ErrorHandling;
 using Newtonsoft.Json;
 using System.IO;
+using SinphinitySysStore.Models.Exceptions;
 
 namespace SinphinitySysStore.Controllers
 {
@@ -42,23 +43,18 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<ActionResult<Song>> SaveSongAsync(string bandId, string styleId)
+        public async Task<ActionResult<Song>> UploadSong(Song song)
         {
-            //var files = Request.Form.Files;
-            //foreach (var file in files)
-            //{
+            try
+            {
+                return Ok(new ApiOKResponse(await _songsRepository.InsertSongAsync(song)));
+            }
+            catch (SongAlreadyExistsException ex)
+            {
+                return Conflict(new ApiConflictResponse("Song already exists"));
+            }
 
-            //    var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles");
-            //    var fullPath = Path.Combine(pathToSave, file.Name + ".txt");
-            //    using (var stream = new FileStream(fullPath, FileMode.Create))
-            //    {
-            //        file.CopyTo(stream);
-
-
-            //        return Ok(new ApiOKResponse(await _songsRepository.InsertSongAsync(song)));
-            return Ok(new ApiOKResponse("lolo te saluda"));
         }
-
     }
 }
 
