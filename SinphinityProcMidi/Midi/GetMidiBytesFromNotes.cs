@@ -124,15 +124,18 @@ namespace SinphinityProcMidi.Midi
                 NoteNumber = new SevenBitNumber(n.Pitch)
             };
             chunkito.Events.Add(noteOff);
-            foreach (var pb in n.PitchBending)
+            if (n.PitchBending != null)
             {
-                var p = new PitchBendEvent()
+                foreach (var pb in n.PitchBending)
                 {
-                    Channel = new FourBitNumber(channel),
-                    DeltaTime = pb.TicksSinceBeginningOfSong,
-                    PitchValue = pb.Pitch
-                };
-                chunkito.Events.Add(p);
+                    var p = new PitchBendEvent()
+                    {
+                        Channel = new FourBitNumber(channel),
+                        DeltaTime = pb.TicksSinceBeginningOfSong,
+                        PitchValue = pb.Pitch
+                    };
+                    chunkito.Events.Add(p);
+                }
             }
             return chunkito;
         }

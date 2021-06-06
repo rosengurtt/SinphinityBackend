@@ -42,6 +42,17 @@ namespace SinphinitySysStore.Controllers
             return Ok(new ApiOKResponse(retObj));
         }
 
+        // GET: api/Songs/5
+        [HttpGet("{songId}")]
+        public async Task<IActionResult> GetSong(string songId, int? simplificationVersion)
+        {
+            Song song = await _songsRepository.GetSongByIdAsync(songId, simplificationVersion);
+            if (song == null)
+                return NotFound(new ApiResponse(404));
+
+            return Ok(new ApiOKResponse(song));
+        }
+
         [HttpPost, DisableRequestSizeLimit]
         public async Task<ActionResult<Song>> UploadSong(Song song)
         {

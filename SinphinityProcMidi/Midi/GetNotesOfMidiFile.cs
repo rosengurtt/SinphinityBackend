@@ -106,6 +106,7 @@ namespace SinphinityProcMidi.Midi
                         PitchBendEvent bendito = eventito as PitchBendEvent;
                         foreach (var notita in currentNotes)
                         {
+                            if (notita.PitchBending == null) notita.PitchBending = new List<PitchBendItem>();
                             notita.PitchBending.Add(new PitchBendItem
                             {
                                 Pitch = bendito.PitchValue,

@@ -27,7 +27,7 @@ namespace SinphinitySysStore.Controllers
         [HttpGet]
         public async Task<ActionResult> GetBands(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null)
         {
-            return Ok(new ApiOKResponse(await _sysStoreClient.GetBands(pageNo, pageSize, contains, styleId)));
+            return Ok(new ApiOKResponse(await _sysStoreClient.GetBandsAsync(pageNo, pageSize, contains, styleId)));
         }
     }
 }

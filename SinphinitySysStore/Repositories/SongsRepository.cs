@@ -64,6 +64,25 @@ namespace SinphinitySysStore.Repositories
             return songs;
         }
 
+        public async Task<Song> GetSongByIdAsync(string songId, int? songSimplification)
+        {
+            var filter = Builders<Song>.Filter.Eq(x => x.Id , songId);
+     
+           var song = await _songsCollection.Find(filter).FirstOrDefaultAsync();
+
+            // the base64 encoded midi is not needed
+            song.MidiBase64Encoded = null;
+            if (songSimplification!= null)
+            {
+                var newSongSimplifications = new List<SongSimplification>();
+                var songSimplificationToKeep = song.SongSimplifications.Where(x => x.Version == songSimplification).FirstOrDefault();
+                if (songSimplificationToKeep != null)
+                    newSongSimplifications.Add(songSimplificationToKeep);
+                song.SongSimplifications = newSongSimplifications;
+            }
+            return song;
+        }
+
         public async Task<Song> InsertSongAsync(Song song)
         {
             var nameFilter = Builders<Song>.Filter.Eq(s => s.Name, song.Name);

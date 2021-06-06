@@ -9,6 +9,7 @@ using Sinphinity.Models;
 using Sinphinity.Models.ErrorHandling;
 using System.IO;
 using SinphinityExpApi.Models;
+using System.Net.Mime;
 
 namespace SinphinitySysStore.Controllers
 {
@@ -28,10 +29,21 @@ namespace SinphinitySysStore.Controllers
         [HttpGet]
         public async Task<ActionResult> GetSongs(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null, string bandId = null)
         {
-            return Ok(new ApiOKResponse(await _sysStoreClient.GetSongs(pageNo, pageSize, contains, styleId, bandId)));
+            return Ok(new ApiOKResponse(await _sysStoreClient.GetSongsAsync(pageNo, pageSize, contains, styleId, bandId)));
         }
 
+        // GET: api/Songs/5
+        [HttpGet("{songId}")]
+        public async Task<IActionResult> GetSong(string songId, int? simplificationVersion)
+        {
+            Song song = await _sysStoreClient.GetSongByIdAsync(songId, simplificationVersion);
+            if (song == null)
+                return NotFound(new ApiResponse(404));
 
+            song.MidiBase64Encoded = null;
+
+            return Ok(new ApiOKResponse(song));
+        }
 
         [HttpPost, DisableRequestSizeLimit]
         public async Task<ActionResult<Song>> UploadSong()
@@ -62,6 +74,26 @@ namespace SinphinitySysStore.Controllers
                 return Conflict(new ApiConflictResponse("Song already exists"));
             }
         }
+
+        [HttpGet("{songId}/midi")]
+        public async Task<IActionResult> GetSongMidi(string songId, int tempoInBeatsPerMinute, int simplificationVersion = 1, int startInSeconds = 0, string mutedTracks = null)
+        {
+            try
+            {
+                Song song = await _sysStoreClient.GetSongByIdAsync(songId, simplificationVersion);
+                if (song == null) return null;
+                var base64encodedMidiBytes = await _procMidiClient.GetMidiFragmentOfSong(song, tempoInBeatsPerMinute, simplificationVersion, startInSeconds, mutedTracks);
+                var ms = new MemoryStream(Convert.FromBase64String(base64encodedMidiBytes));
+
+                return File(ms, MediaTypeNames.Text.Plain, song.Name);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
+        }
+
     }
 }
 

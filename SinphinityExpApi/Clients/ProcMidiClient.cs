@@ -45,5 +45,28 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
+
+        public async Task<string> GetMidiFragmentOfSong(Song song, int tempoInBeatsPerMinute, int simplificationVersion, int startInSeconds , string mutedTracks)
+        {
+            HttpClient httpClient = _clientFactory.CreateClient();
+            var content = new StringContent(JsonConvert.SerializeObject(song));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var url = $"{_appConfiguration.ProcMidiUrl}/api/SongProcessing/{song.Id}?tempoInBeatsPerMinute={tempoInBeatsPerMinute}" +
+                $"&simplificationVersion={simplificationVersion}&startInSeconds={startInSeconds}&mutedTracks={mutedTracks}";
+            var response = await httpClient.PostAsync(url, content);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
+                return apiResponse.result;
+            }
+            else
+            {
+                var errorMessage = $"Couldn't process song";
+                Log.Error(errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
+        }
     }
 }

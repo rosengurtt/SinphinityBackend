@@ -27,7 +27,7 @@ namespace SinphinitySysStore.Controllers
         [HttpGet]
         public async Task<ActionResult> GetStyles(int page = 0, int pageSize = 10, string contains = null)
         {
-            return Ok(new ApiOKResponse (await _sysStoreClient.GetStyles(page, pageSize, contains)));
+            return Ok(new ApiOKResponse (await _sysStoreClient.GetStylesAsync(page, pageSize, contains)));
         }
     }
 }

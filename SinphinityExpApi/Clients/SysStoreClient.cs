@@ -24,7 +24,7 @@ namespace SinphinityExpApi.Clients
             _clientFactory = clientFactory;
         }
 
-        public async Task<PaginatedList<Style>> GetStyles(int page = 0, int pageSize = 10, string contains = "")
+        public async Task<PaginatedList<Style>> GetStylesAsync(int page = 0, int pageSize = 10, string contains = "")
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var url = $"{_appConfiguration.SysStoreUrl}/api/Styles?page={page}&pageSize={pageSize}";
@@ -44,7 +44,7 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
-        public async Task<PaginatedList<Band>> GetBands(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null)
+        public async Task<PaginatedList<Band>> GetBandsAsync(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var url = $"{_appConfiguration.SysStoreUrl}/api/Bands?pageNo={pageNo}&pageSize={pageSize}";
@@ -65,7 +65,7 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
-        public async Task<PaginatedList<Band>> GetSongs(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null, string bandId = null)
+        public async Task<PaginatedList<Song>> GetSongsAsync(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null, string bandId = null)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var url = $"{_appConfiguration.SysStoreUrl}/api/Songs?pageNo={pageNo}&pageSize={pageSize}";
@@ -78,7 +78,7 @@ namespace SinphinityExpApi.Clients
                 var responseContent = await response.Content.ReadAsStringAsync();
                 dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
                 var result = JsonConvert.SerializeObject(apiResponse.result);
-                return JsonConvert.DeserializeObject<PaginatedList<Band>>(result);
+                return JsonConvert.DeserializeObject<PaginatedList<Song>>(result);
             }
             else
             {
@@ -87,6 +87,28 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
+        public async Task<Song> GetSongByIdAsync(string songId, int? SongSimplification)
+        {
+            HttpClient httpClient = _clientFactory.CreateClient();
+            var url = $"{_appConfiguration.SysStoreUrl}/api/Songs/{songId}";
+            if (SongSimplification != null)
+                url += $"?songSimplification={SongSimplification}";
+            var response = await httpClient.GetAsync(url);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
+                var result = JsonConvert.SerializeObject(apiResponse.result);
+                return JsonConvert.DeserializeObject<Song>(result);
+            }
+            else
+            {
+                var errorMessage = $"Couldn't get bands";
+                Log.Error(errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
+        }
+
 
         public async Task<Song> SaveSong(Song song)
         {
