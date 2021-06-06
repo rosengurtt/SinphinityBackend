@@ -62,3 +62,4 @@ C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.cspro
 C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.dll
 C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.xml
 C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.pdb
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.csprojAssemblyReference.cache

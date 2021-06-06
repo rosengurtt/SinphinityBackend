@@ -44,9 +44,9 @@ namespace SinphinitySysStore.Repositories
         {
             var sortFilter = new BsonDocument(sort, sortDirection);
             var nameFilter = Builders<Song>.Filter.Regex(s => s.Name, @$"/.*{contains}.*/i");
-            var bandFilter = Builders<Song>.Filter.Eq(x => x.Band.Id, bandId);
-            var styleFilter = Builders<Song>.Filter.Eq(x => x.Style.Id, styleId);
-            var combineFilter = string.IsNullOrEmpty(bandId) ? nameFilter : Builders<Song>.Filter.And(nameFilter, bandFilter, styleFilter);
+            var bandFilter = bandId == null ? Builders<Song>.Filter.Exists(x => x.Band.Id) : Builders<Song>.Filter.Eq(x => x.Band.Id, bandId);
+            var styleFilter = styleId == null ? Builders<Song>.Filter.Exists(x => x.Style.Id) : Builders<Song>.Filter.Eq(x => x.Style.Id, styleId);
+            var combineFilter = Builders<Song>.Filter.And(nameFilter, bandFilter, styleFilter);
             var options = new FindOptions
             {
                 Collation = new Collation("en", strength: CollationStrength.Secondary)

@@ -71,7 +71,7 @@ namespace SinphinityExpApi.Clients
             var url = $"{_appConfiguration.SysStoreUrl}/api/Songs?pageNo={pageNo}&pageSize={pageSize}";
             if (!string.IsNullOrEmpty(contains)) url += $"&contains={contains}";
             if (!string.IsNullOrEmpty(styleId)) url += $"&styleId={styleId}";
-            if (!string.IsNullOrEmpty(bandId)) url += $"&styleId={bandId}";
+            if (!string.IsNullOrEmpty(bandId)) url += $"&bandId={bandId}";
             var response = await httpClient.GetAsync(url);
             if (response.StatusCode == HttpStatusCode.OK)
             {
