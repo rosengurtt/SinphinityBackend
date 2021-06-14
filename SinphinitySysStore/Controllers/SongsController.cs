@@ -17,10 +17,14 @@ namespace SinphinitySysStore.Controllers
     [Route("api/[controller]")]
     public class SongsController : ControllerBase
     {
+        private StylesRepository _stylesRepository;
+        private BandsRepository _bandssRepository;
         private SongsRepository _songsRepository;
 
-        public SongsController(SongsRepository songsRepository)
+        public SongsController(StylesRepository stylesRepository, BandsRepository bandssRepository, SongsRepository songsRepository)
         {
+            _stylesRepository = stylesRepository;
+            _bandssRepository = bandssRepository;
             _songsRepository = songsRepository;
         }
 
@@ -58,13 +62,25 @@ namespace SinphinitySysStore.Controllers
         {
             try
             {
+                if (string.IsNullOrEmpty(song.Style.Id) && !string.IsNullOrEmpty(song.Style.Name))
+                {
+                    song.Style = await _stylesRepository.GetStyleByNameAsync(song.Style.Name);
+                }
+                if (string.IsNullOrEmpty(song.Band.Id) && !string.IsNullOrEmpty(song.Band.Name))
+                {
+                    song.Band = await _bandssRepository.GetBandByNameAsync(song.Band.Name);
+                }
                 return Ok(new ApiOKResponse(await _songsRepository.InsertSongAsync(song)));
             }
             catch (SongAlreadyExistsException ex)
             {
                 return Conflict(new ApiConflictResponse("Song already exists"));
             }
-
+        }
+        [HttpPut, DisableRequestSizeLimit]
+        public async Task<ActionResult<Song>> UpdateSong(Song song)
+        {
+            return Ok(new ApiOKResponse(await _songsRepository.UpdateSongAsync(song)));
         }
     }
 }

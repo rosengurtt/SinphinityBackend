@@ -94,6 +94,13 @@ namespace SinphinitySysStore.Repositories
             await _songsCollection.InsertOneAsync(song);
             return song;
         }
+
+        public async Task<Song> UpdateSongAsync(Song song)
+        {
+            var filter = Builders<Song>.Filter.Eq(s => s.Id, song.Id);
+            song = await _songsCollection.FindOneAndUpdateAsync<Song>(filter, Builders<Song>.Update.Set(s=> s,song));
+            return song;
+        }
     }
 }
 

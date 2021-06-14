@@ -27,6 +27,21 @@ namespace SinphinityProcMidi.Controllers
             return Ok(new ApiOKResponse(song));
         }
 
+        [HttpPost("verify")]
+        public ActionResult VerifyMidiFile(Song song)
+        {
+            try
+            {
+                var midiFile = MidiFile.Read(song.MidiBase64Encoded);
+                return Ok(new ApiOKResponse(null));
+            }
+           catch(Exception ex)
+            {
+                return BadRequest(new ApiBadRequestResponse(ex.Message));
+            }
+
+        }
+
 
         /// <summary>
         /// Receives a song object and some parameters like a tempo value or a start point in seconds and returns a midi file
@@ -93,29 +108,7 @@ namespace SinphinityProcMidi.Controllers
             return song;
         }
 
-     
-
-        private List<(int, long, byte)> UbicameLosProgramChange(MidiFile songi)
-        {
-            var retObj = new List<(int, long, byte)>();
-            var acum = MidiUtilities.ConvertDeltaTimeToAccumulatedTime(songi);
-            var chunky = -1;
-            foreach (TrackChunk chunk in songi.Chunks)
-            {
-                chunky++;
-                var eventsToRemove = new List<MidiEvent>();
-
-                foreach (MidiEvent eventito in chunk.Events)
-                {
-                    if (eventito is ProgramChangeEvent)
-                    {
-                        var soret = eventito as ProgramChangeEvent;
-                        retObj.Add((chunky, eventito.DeltaTime, soret.ProgramNumber));
-                    }
-                }
-            }
-            return retObj;
-        }
+        
 
     }
 }

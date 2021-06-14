@@ -58,5 +58,11 @@ namespace SinphinitySysStore.Repositories
 
             return bands;
         }
+        public async Task<Band> GetBandByNameAsync(string name)
+        {
+            return await _bandsCollection
+                .Find(Builders<Band>.Filter.Eq(x => x.Name, name))
+                .FirstOrDefaultAsync();
+        }
     }
 }

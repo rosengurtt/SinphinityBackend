@@ -32,6 +32,13 @@ namespace SinphinitySysStore.Repositories
             return await _stylesCollection.CountDocumentsAsync(Builders<Style>.Filter.Regex(s => s.Name, @$"/.*{contains}.*/i"));
         }
 
+        public async Task<Style> GetStyleByNameAsync(string name)
+        {
+            return await _stylesCollection
+                .Find(Builders<Style>.Filter.Eq(x => x.Name, name))
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<IReadOnlyList<Style>> GetStylesAsync(int pageSize = DefaultPageSize, int page = 0, string contains = ".*",
        string sort = DefaultSortKey, int sortDirection = DefaultSortOrder,
        CancellationToken cancellationToken = default)

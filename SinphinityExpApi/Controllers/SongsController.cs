@@ -10,6 +10,7 @@ using Sinphinity.Models.ErrorHandling;
 using System.IO;
 using SinphinityExpApi.Models;
 using System.Net.Mime;
+using Serilog;
 
 namespace SinphinitySysStore.Controllers
 {
@@ -66,7 +67,7 @@ namespace SinphinitySysStore.Controllers
             var processedSong = await _procMidiClient.ProcessSong(song);
             try
             {
-                await _sysStoreClient.SaveSong(processedSong);
+                await _sysStoreClient.InsertSong(processedSong);
                 return Ok(new ApiOKResponse(null));
             }
             catch (SongAlreadyExistsException ex)
@@ -74,6 +75,9 @@ namespace SinphinitySysStore.Controllers
                 return Conflict(new ApiConflictResponse("Song already exists"));
             }
         }
+
+
+
 
         [HttpGet("{songId}/midi")]
         public async Task<IActionResult> GetSongMidi(string songId, int tempoInBeatsPerMinute, int simplificationVersion = 1, int startInSeconds = 0, string mutedTracks = null)
@@ -94,6 +98,73 @@ namespace SinphinitySysStore.Controllers
             return null;
         }
 
+
+        [HttpGet("importbatch")]
+        public async Task<IActionResult> ImportBatch(string folder = @"C:\music\test\midi")
+        {
+            foreach (var styleDir in Directory.GetDirectories(folder))
+            {
+                var style = Path.GetFileName(styleDir);
+                foreach (var bandDir in Directory.GetDirectories(styleDir))
+                {
+                    var band = Path.GetFileName(bandDir);
+                    foreach (var songPath in Directory.GetFiles(bandDir, "*.mid"))
+                    {
+                        var song = new Song
+                        {
+                            Name = Path.GetFileName(songPath),
+                            Band = new Band { Name = band },
+                            Style = new Style { Name = style },
+                            MidiBase64Encoded = Convert.ToBase64String(System.IO.File.ReadAllBytes(songPath))
+                        };
+                        try
+                        {
+                            if (await _procMidiClient.VerifySong(song))
+                                await _sysStoreClient.InsertSong(song);
+                            else
+                            {
+                                Log.Error($"The song {song.Name} of band {song.Band.Name} could not be read by DryWet library.");
+                            }
+
+                        }
+                        catch (SongAlreadyExistsException ex)
+                        {
+                            Log.Error(ex, $"Couldn't process song {songPath}");
+                        }
+                    }
+                }
+            }
+            return Ok(new ApiOKResponse(null));
+        }
+
+        [HttpGet("processbatch")]
+        public async Task<IActionResult> ProcessBatch(string styleId, string bandId)
+        {
+            var keepLooping = true;
+            var pageSize = 5;
+            var page = 0;
+            while (keepLooping)
+            {
+                PaginatedList<Song> songsBatch = await _sysStoreClient.GetSongsAsync(page, pageSize, null, styleId, bandId);
+                if (songsBatch.items?.Count > 0)
+                {
+                    foreach (var s in songsBatch.items)
+                    {
+                        try
+                        {
+                            var processedSong = await _procMidiClient.ProcessSong(s);
+                            await _sysStoreClient.UpdateSong(processedSong);
+                        }
+                        catch (SongAlreadyExistsException ex)
+                        {
+                            Log.Error(ex, $"Couldn't process song {s.Name}");
+                        }
+                    }
+                }
+                page += pageSize;
+            }
+            return Ok(new ApiOKResponse(null));
+        }
     }
 }
 

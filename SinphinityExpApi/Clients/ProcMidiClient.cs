@@ -45,6 +45,24 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
+        public async Task<bool> VerifySong(Song song)
+        {
+            HttpClient httpClient = _clientFactory.CreateClient();
+            var content = new StringContent(JsonConvert.SerializeObject(song));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var response = await httpClient.PostAsync($"{_appConfiguration.ProcMidiUrl}/api/SongProcessing/verify", content);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+                return true;
+            else if (response.StatusCode == HttpStatusCode.BadRequest)
+                return false;
+            else
+            {
+                var errorMessage = $"Couldn't verify song";
+                Log.Error(errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
+        }
 
         public async Task<string> GetMidiFragmentOfSong(Song song, int tempoInBeatsPerMinute, int simplificationVersion, int startInSeconds , string mutedTracks)
         {

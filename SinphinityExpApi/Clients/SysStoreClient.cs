@@ -110,7 +110,7 @@ namespace SinphinityExpApi.Clients
         }
 
 
-        public async Task<Song> SaveSong(Song song)
+        public async Task<Song> InsertSong(Song song)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(song));
@@ -126,7 +126,31 @@ namespace SinphinityExpApi.Clients
             }
             else
             {
-                var errorMessage = $"Couldn't process song";
+                var errorMessage = $"Couldn't insert song";
+                if (response.StatusCode == HttpStatusCode.Conflict)
+                    throw new SongAlreadyExistsException();
+                Log.Error(errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
+        }
+
+        public async Task<Song> UpdateSong(Song song)
+        {
+            HttpClient httpClient = _clientFactory.CreateClient();
+            var content = new StringContent(JsonConvert.SerializeObject(song));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var response = await httpClient.PutAsync($"{_appConfiguration.SysStoreUrl}/api/Songs", content);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
+                var result = JsonConvert.SerializeObject(apiResponse.result);
+                return JsonConvert.DeserializeObject<Song>(result);
+            }
+            else
+            {
+                var errorMessage = $"Couldn't update song";
                 if (response.StatusCode == HttpStatusCode.Conflict)
                     throw new SongAlreadyExistsException();
                 Log.Error(errorMessage);
