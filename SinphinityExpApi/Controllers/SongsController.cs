@@ -30,7 +30,7 @@ namespace SinphinitySysStore.Controllers
         [HttpGet]
         public async Task<ActionResult> GetSongs(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null, string bandId = null)
         {
-            return Ok(new ApiOKResponse(await _sysStoreClient.GetSongsAsync(pageNo, pageSize, false, contains, styleId, bandId)));
+            return Ok(new ApiOKResponse(await _sysStoreClient.GetSongsAsync(pageNo, pageSize, contains, styleId, bandId)));
         }
 
         // GET: api/Songs/5
@@ -141,31 +141,27 @@ namespace SinphinitySysStore.Controllers
             var alca = 1;
             while (keepLooping)
             {
-                PaginatedList<Song> songsBatch = await _sysStoreClient.GetSongsAsync(page, pageSize, true, null, styleId, bandId);
-                if (songsBatch.items?.Count > 0 || pageSize*page> songsBatch.totalItems)
+                PaginatedList<Song> songsBatch = await _sysStoreClient.GetSongsAsync(page, pageSize, null, styleId, bandId);
+                if (songsBatch.items?.Count > 0)
                 {
                     foreach (var s in songsBatch.items)
                     {
+                        var song = await _sysStoreClient.GetSongByIdAsync(s.Id, null);
                         try
                         {
-                            if (alca > 30)
-                            {
-
-                            }
                             Song processedSong;
-                            if (s.IsMidiCorrect && !s.IsSongProcessed && !s.CantBeProcessed)
+                            if (song.IsMidiCorrect && !song.IsSongProcessed && !song.CantBeProcessed)
                             {
-                                Log.Information($"{alca} - Start with song: {s.Name}");
-                                processedSong = await _procMidiClient.ProcessSong(s);
-                                Log.Information($"ProcMidi completed OK for {s.Name}");
-                                processedSong.IsSongProcessed = true;
+                                Log.Information($"{alca} - Start with song: {song.Name}");
+                                processedSong = await _procMidiClient.ProcessSong(song);
+                                Log.Information($"ProcMidi completed OK for {song.Name}");
                                 await _sysStoreClient.UpdateSong(processedSong);
-                                Log.Information($"Saved OK {s.Name}");
+                                Log.Information($"Saved OK {song.Name}");
                             }
                         }
                         catch (Exception ex)
                         {
-                            Log.Error(ex, $"Couldn't process song {s.Name}");
+                            Log.Error(ex, $"Couldn't process song {song.Name}");
                             s.CantBeProcessed = true;
                             await _sysStoreClient.UpdateSong(s);
                         }

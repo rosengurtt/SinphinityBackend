@@ -65,10 +65,10 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
-        public async Task<PaginatedList<Song>> GetSongsAsync(int pageNo = 0, int pageSize = 10, bool includeMidi = false, string contains = null, string styleId = null, string bandId = null)
+        public async Task<PaginatedList<Song>> GetSongsAsync(int pageNo = 0, int pageSize = 10,  string contains = null, string styleId = null, string bandId = null)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
-            var url = $"{_appConfiguration.SysStoreUrl}/api/Songs?pageNo={pageNo}&pageSize={pageSize}&includeMidi={includeMidi}";
+            var url = $"{_appConfiguration.SysStoreUrl}/api/Songs?pageNo={pageNo}&pageSize={pageSize}";
             if (!string.IsNullOrEmpty(contains)) url += $"&contains={contains}";
             if (!string.IsNullOrEmpty(styleId)) url += $"&styleId={styleId}";
             if (!string.IsNullOrEmpty(bandId)) url += $"&bandId={bandId}";

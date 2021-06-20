@@ -47,13 +47,21 @@ db.createCollection("bands", {
 })
 
 
-db.createCollection("song", {
+db.createCollection("songsInfo", {
     validator: {
         $jsonSchema: {
             bsonType: "object",
             required: ["name", "style", "band"],
             properties: {
                 name: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },
+                songDataId: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },
+                songMidiId: {
                     bsonType: "string",
                     description: "must be a string and is required"
                 },
@@ -109,155 +117,6 @@ db.createCollection("song", {
                     bsonType: "int",
                     description: "must be an integer"
                 },
-                bars: {
-                    bsonType: "array",
-                    uniqueItems: true,
-                    additionalProperties: false,
-                    items: {
-                        bsonType: "object",
-                        required: ["barNumber"],
-                        properties: {
-                            barNumber: {
-                                bsonType: "int",
-                                description: "must be an integer"
-                            },
-                            ticksFromBeginningOfSong: {
-                                bsonType: "int",
-                                description: "must be an integer"
-                            },
-                            tempoInMicrosecondsPerQuarterNote: {
-                                bsonType: "int",
-                                description: "must be an integer"
-                            },
-                            hasTriplets: {
-                                bsonType: "bool",
-                                description: "must be a bool"
-                            },
-                            timeSignature: {
-                                bsonType: "object",
-                                required: ["numerator", "denominator"],
-                                properties: {
-                                    numerator: {
-                                        bsonType: "int",
-                                        description: "must be an integer"
-
-                                    },
-                                    denominator: {
-                                        bsonType: "int",
-                                        description: "must be an integer"
-
-                                    }
-                                }
-                            },
-                            keySignature: {
-                                bsonType: "object",
-                                required: ["key", "scaleType"],
-                                properties: {
-                                    key: {
-                                        bsonType: "int",
-                                        description: "must be an integer"
-
-                                    },
-                                    scale: {
-                                        bsonType: "string",
-                                        description: "must be a string"
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                tempoChanges: {
-                    bsonType: "array",
-                    items: {
-                        bsonType: "object",
-                        required: ["microsecondsPerQuarterNote", "ticksSinceBeginningOfSong"],
-                        properties: {
-                            microsecondsPerQuarterNote: {
-                                bsonType: "long",
-                                description: "must be an integer"
-                            },
-                            ticksSinceBeginningOfSong: {
-                                bsonType: "long",
-                                description: "must be an integer"
-                            }
-                        }
-                    }
-                },
-                simplifications: {
-                    bsonType: "array",
-                    items: {
-                        bsonType: "object",
-                        properties: {
-                            version: {
-                                bsonType: "int",
-                                description: "must be an integer"
-                            },
-                            numberOfVoices: {
-                                bsonType: "int",
-                                description: "must be an integer"
-                            },
-                            notes: {
-                                bsonType: "array",
-                                items: {
-                                    bsonType: "object",
-                                    required: ["pitch", "volume", "startSinceBeginningOfSongInTicks", "endSinceBeginningOfSongInTicks", "voice"],
-                                    properties: {
-                                        guid: {
-                                            bsonType: "string",
-                                            description: "must be a string"
-                                        },
-                                        pitch: {
-                                            bsonType: "int",
-                                            description: "must be an integer"
-                                        },
-                                        volume: {
-                                            bsonType: "int",
-                                            description: "must be an integer"
-                                        },
-                                        startSinceBeginningOfSongInTicks: {
-                                            bsonType: "long",
-                                            description: "must be an integer"
-                                        },
-                                        endSinceBeginningOfSongInTicks: {
-                                            bsonType: "long",
-                                            description: "must be an integer"
-                                        },
-                                        voice: {
-                                            bsonType: "int",
-                                            description: "must be an integer"
-                                        },
-                                        instrument: {
-                                            bsonType: "int",
-                                            description: "must be an integer"
-                                        },
-                                        isPercussion: {
-                                            bsonType: "bool",
-                                            description: "must be a boolean"
-                                        },
-                                        pitchBending: {
-                                            bsonType: "array",
-                                            items: {
-                                                bsonType: "object",
-                                                properties: {
-                                                    ticksSinceBeginningOfSong: {
-                                                        bsonType: "long",
-                                                        description: "must be a long"
-                                                    },
-                                                    pitch: {
-                                                        bsonType: "int",
-                                                        description: "must be an int"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
                 midiStats: {
                     bsonType: "object",
                     required: [],
@@ -308,6 +167,191 @@ db.createCollection("song", {
         }
     }
 })
+
+db.createCollection("songsMidi", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["midiBase64Encoded", "songInfoId"],
+            properties: {
+                songInfoId: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },             
+                midiBase64Encoded: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                }
+            }
+        }
+    }
+})
+
+
+
+//db.createCollection("songsData", {
+//    validator: {
+//        $jsonSchema: {
+//            bsonType: "object",
+//            required: ["songInfoId", "bars", "simplifications"],
+//            properties: {
+//                songInfoId: {
+//                    bsonType: "string",
+//                    description: "must be a string and is required"
+//                },       
+//                bars: {
+//                    bsonType: "array",
+//                    uniqueItems: true,
+//                    additionalProperties: false,
+//                    items: {
+//                        bsonType: "object",
+//                        required: ["barNumber"],
+//                        properties: {
+//                            barNumber: {
+//                                bsonType: "int",
+//                                description: "must be an integer"
+//                            },
+//                            ticksFromBeginningOfSong: {
+//                                bsonType: "int",
+//                                description: "must be an integer"
+//                            },
+//                            tempoInMicrosecondsPerQuarterNote: {
+//                                bsonType: "int",
+//                                description: "must be an integer"
+//                            },
+//                            hasTriplets: {
+//                                bsonType: "bool",
+//                                description: "must be a bool"
+//                            },
+//                            timeSignature: {
+//                                bsonType: "object",
+//                                required: ["numerator", "denominator"],
+//                                properties: {
+//                                    numerator: {
+//                                        bsonType: "int",
+//                                        description: "must be an integer"
+
+//                                    },
+//                                    denominator: {
+//                                        bsonType: "int",
+//                                        description: "must be an integer"
+
+//                                    }
+//                                }
+//                            },
+//                            keySignature: {
+//                                bsonType: "object",
+//                                required: ["key", "scaleType"],
+//                                properties: {
+//                                    key: {
+//                                        bsonType: "int",
+//                                        description: "must be an integer"
+
+//                                    },
+//                                    scale: {
+//                                        bsonType: "string",
+//                                        description: "must be a string"
+
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                },
+//                tempoChanges: {
+//                    bsonType: "array",
+//                    items: {
+//                        bsonType: "object",
+//                        required: ["microsecondsPerQuarterNote", "ticksSinceBeginningOfSong"],
+//                        properties: {
+//                            microsecondsPerQuarterNote: {
+//                                bsonType: "long",
+//                                description: "must be an integer"
+//                            },
+//                            ticksSinceBeginningOfSong: {
+//                                bsonType: "long",
+//                                description: "must be an integer"
+//                            }
+//                        }
+//                    }
+//                },
+//                simplifications: {
+//                    bsonType: "array",
+//                    items: {
+//                        bsonType: "object",
+//                        properties: {
+//                            version: {
+//                                bsonType: "int",
+//                                description: "must be an integer"
+//                            },
+//                            numberOfVoices: {
+//                                bsonType: "int",
+//                                description: "must be an integer"
+//                            },
+//                            notes: {
+//                                bsonType: "array",
+//                                items: {
+//                                    bsonType: "object",
+//                                    required: ["pitch", "volume", "startSinceBeginningOfSongInTicks", "endSinceBeginningOfSongInTicks", "voice"],
+//                                    properties: {
+//                                        guid: {
+//                                            bsonType: "string",
+//                                            description: "must be a string"
+//                                        },
+//                                        pitch: {
+//                                            bsonType: "int",
+//                                            description: "must be an integer"
+//                                        },
+//                                        volume: {
+//                                            bsonType: "int",
+//                                            description: "must be an integer"
+//                                        },
+//                                        startSinceBeginningOfSongInTicks: {
+//                                            bsonType: "long",
+//                                            description: "must be an integer"
+//                                        },
+//                                        endSinceBeginningOfSongInTicks: {
+//                                            bsonType: "long",
+//                                            description: "must be an integer"
+//                                        },
+//                                        voice: {
+//                                            bsonType: "int",
+//                                            description: "must be an integer"
+//                                        },
+//                                        instrument: {
+//                                            bsonType: "int",
+//                                            description: "must be an integer"
+//                                        },
+//                                        isPercussion: {
+//                                            bsonType: "bool",
+//                                            description: "must be a boolean"
+//                                        },
+//                                        pitchBending: {
+//                                            bsonType: "array",
+//                                            items: {
+//                                                bsonType: "object",
+//                                                properties: {
+//                                                    ticksSinceBeginningOfSong: {
+//                                                        bsonType: "long",
+//                                                        description: "must be a long"
+//                                                    },
+//                                                    pitch: {
+//                                                        bsonType: "int",
+//                                                        description: "must be an int"
+//                                                    }
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                },
+//               }
+//        }
+//    }
+//})
 
 
 

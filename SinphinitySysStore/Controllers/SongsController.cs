@@ -30,12 +30,12 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable>> GetSongsAsync(int pageNo = 0, int pageSize = 10, bool includeMidi = false, string contains = null, string styleId = null, string bandId = null,
+        public async Task<ActionResult<IEnumerable>> GetSongsAsync(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null, string bandId = null,
             string sortKey = "name", int sortDirection = 1)
         {
-            Log.Information($"Me llego GetSongs con pageNo={pageNo}, pageSize={pageSize}, includeMidi={includeMidi}");
+            Log.Information($"Me llego GetSongs con pageNo={pageNo}, pageSize={pageSize}");
             var totalSongs = await _songsRepository.GetSongsCountAsync(contains, styleId, bandId);
-            var songs = await _songsRepository.GetSongsAsync(pageSize, pageNo, includeMidi, contains, styleId, bandId, sortKey, sortDirection);
+            var songs = await _songsRepository.GetSongsAsync(pageSize, pageNo, contains, styleId, bandId, sortKey, sortDirection);
             var retObj = new
             {
                 pageNo,
@@ -72,7 +72,8 @@ namespace SinphinitySysStore.Controllers
                 {
                     song.Band = await _bandssRepository.GetBandByNameAsync(song.Band.Name);
                 }
-                return Ok(new ApiOKResponse(await _songsRepository.InsertSongAsync(song)));
+              
+                return Ok(new ApiOKResponse(await _songsRepository.InsertSongInfoAndMidiAsync(song)));
             }
             catch (SongAlreadyExistsException ex)
             {
@@ -80,10 +81,10 @@ namespace SinphinitySysStore.Controllers
             }
         }
         [HttpPut, DisableRequestSizeLimit]
-        public async Task<ActionResult> UpdateSong(Song song)
+        public async Task<ActionResult> AddProcessedDataToSong(Song song)
         {
             Log.Information($"Me llego para updatear la song {song.Name}");
-            await _songsRepository.UpdateSongAsync(song);
+            await _songsRepository.InsertSongDataAsync(song);
             Log.Information($"Update la song {song.Name}");
             return Ok(new ApiOKResponse(null));
         }
