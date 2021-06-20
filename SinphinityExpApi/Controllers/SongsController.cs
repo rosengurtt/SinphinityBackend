@@ -30,7 +30,7 @@ namespace SinphinitySysStore.Controllers
         [HttpGet]
         public async Task<ActionResult> GetSongs(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null, string bandId = null)
         {
-            return Ok(new ApiOKResponse(await _sysStoreClient.GetSongsAsync(pageNo, pageSize, contains, styleId, bandId)));
+            return Ok(new ApiOKResponse(await _sysStoreClient.GetSongsAsync(pageNo, pageSize, false, contains, styleId, bandId)));
         }
 
         // GET: api/Songs/5
@@ -112,20 +112,15 @@ namespace SinphinitySysStore.Controllers
                     {
                         var song = new Song
                         {
-                            Name = Path.GetFileName(songPath),
+                            Name = Path.GetFileNameWithoutExtension(songPath),
                             Band = new Band { Name = band },
                             Style = new Style { Name = style },
                             MidiBase64Encoded = Convert.ToBase64String(System.IO.File.ReadAllBytes(songPath))
                         };
                         try
                         {
-                            if (await _procMidiClient.VerifySong(song))
-                                await _sysStoreClient.InsertSong(song);
-                            else
-                            {
-                                Log.Error($"The song {song.Name} of band {song.Band.Name} could not be read by DryWet library.");
-                            }
-
+                            song.IsMidiCorrect = await _procMidiClient.VerifySong(song);
+                            await _sysStoreClient.InsertSong(song);
                         }
                         catch (SongAlreadyExistsException ex)
                         {
@@ -143,25 +138,43 @@ namespace SinphinitySysStore.Controllers
             var keepLooping = true;
             var pageSize = 5;
             var page = 0;
+            var alca = 1;
             while (keepLooping)
             {
-                PaginatedList<Song> songsBatch = await _sysStoreClient.GetSongsAsync(page, pageSize, null, styleId, bandId);
-                if (songsBatch.items?.Count > 0)
+                PaginatedList<Song> songsBatch = await _sysStoreClient.GetSongsAsync(page, pageSize, true, null, styleId, bandId);
+                if (songsBatch.items?.Count > 0 || pageSize*page> songsBatch.totalItems)
                 {
                     foreach (var s in songsBatch.items)
                     {
                         try
                         {
-                            var processedSong = await _procMidiClient.ProcessSong(s);
-                            await _sysStoreClient.UpdateSong(processedSong);
+                            if (alca > 30)
+                            {
+
+                            }
+                            Song processedSong;
+                            if (s.IsMidiCorrect && !s.IsSongProcessed && !s.CantBeProcessed)
+                            {
+                                Log.Information($"{alca} - Start with song: {s.Name}");
+                                processedSong = await _procMidiClient.ProcessSong(s);
+                                Log.Information($"ProcMidi completed OK for {s.Name}");
+                                processedSong.IsSongProcessed = true;
+                                await _sysStoreClient.UpdateSong(processedSong);
+                                Log.Information($"Saved OK {s.Name}");
+                            }
                         }
-                        catch (SongAlreadyExistsException ex)
+                        catch (Exception ex)
                         {
                             Log.Error(ex, $"Couldn't process song {s.Name}");
+                            s.CantBeProcessed = true;
+                            await _sysStoreClient.UpdateSong(s);
                         }
+                        alca++;
                     }
+                    page += 1;
                 }
-                page += pageSize;
+                else
+                    keepLooping = false;
             }
             return Ok(new ApiOKResponse(null));
         }

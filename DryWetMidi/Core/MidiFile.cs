@@ -177,7 +177,21 @@ namespace Melanchall.DryWetMidi.Core
         public static MidiFile Read(string base64encodedMidiFile)
         {
             var data = new MemoryStream(Convert.FromBase64String(base64encodedMidiFile));
-            return Read(data, null);
+            return Read(data, new ReadingSettings
+            {
+                InvalidMetaEventParameterValuePolicy = InvalidMetaEventParameterValuePolicy.SnapToLimits,
+                MissedEndOfTrackPolicy = MissedEndOfTrackPolicy.Ignore,
+                NoHeaderChunkPolicy = NoHeaderChunkPolicy.Ignore,
+                InvalidChannelEventParameterValuePolicy = InvalidChannelEventParameterValuePolicy.SnapToLimits,
+                InvalidSystemCommonEventParameterValuePolicy = InvalidSystemCommonEventParameterValuePolicy.SnapToLimits,
+                InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore,
+                UnexpectedTrackChunksCountPolicy = UnexpectedTrackChunksCountPolicy.Ignore,
+                UnknownChunkIdPolicy = UnknownChunkIdPolicy.Skip,
+                UnknownFileFormatPolicy = UnknownFileFormatPolicy.Ignore,
+                NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
+                ExtraTrackChunkPolicy = ExtraTrackChunkPolicy.Skip,
+                  
+            });
         }
 
         /// <summary>

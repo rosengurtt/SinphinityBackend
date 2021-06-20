@@ -7,6 +7,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using Newtonsoft.Json;
+using Serilog;
 using SinphinitySysStore.Models;
 using SinphinitySysStore.Models.Exceptions;
 
@@ -18,11 +19,9 @@ namespace SinphinitySysStore.Repositories
         private const string DefaultSortKey = "name";
         private const int DefaultSortOrder = -1;
         private readonly IMongoCollection<Song> _songsCollection;
-        private readonly IMongoClient _mongoClient;
 
         public SongsRepository(IMongoClient mongoClient)
         {
-            _mongoClient = mongoClient;
             var camelCaseConvention = new ConventionPack { new CamelCaseElementNameConvention() };
             ConventionRegistry.Register("CamelCase", camelCaseConvention, type => true);
 
@@ -38,15 +37,16 @@ namespace SinphinitySysStore.Repositories
             return await _songsCollection.Find(combineFilter).CountDocumentsAsync();
         }
 
-        public async Task<IReadOnlyList<Song>> GetSongsAsync(int pageSize = DefaultPageSize, int page = 0, string contains = ".*", string styleId = null, string bandId = null,
-       string sort = DefaultSortKey, int sortDirection = DefaultSortOrder,
-       CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<Song>> GetSongsAsync(int pageSize = DefaultPageSize, int page = 0, bool includeMidi = false, string contains = ".*", string styleId = null, string bandId = null,
+            string sort = DefaultSortKey, int sortDirection = DefaultSortOrder, CancellationToken cancellationToken = default)
         {
             var sortFilter = new BsonDocument(sort, sortDirection);
             var nameFilter = Builders<Song>.Filter.Regex(s => s.Name, @$"/.*{contains}.*/i");
             var bandFilter = bandId == null ? Builders<Song>.Filter.Exists(x => x.Band.Id) : Builders<Song>.Filter.Eq(x => x.Band.Id, bandId);
             var styleFilter = styleId == null ? Builders<Song>.Filter.Exists(x => x.Style.Id) : Builders<Song>.Filter.Eq(x => x.Style.Id, styleId);
             var combineFilter = Builders<Song>.Filter.And(nameFilter, bandFilter, styleFilter);
+            var projection = includeMidi ? Builders<Song>.Projection.Exclude(x => x.SongSimplifications):
+                                           Builders<Song>.Projection.Exclude(x => x.SongSimplifications).Exclude(x => x.MidiBase64Encoded);
             var options = new FindOptions
             {
                 Collation = new Collation("en", strength: CollationStrength.Secondary)
@@ -55,8 +55,8 @@ namespace SinphinitySysStore.Repositories
 
             var songs = await _songsCollection
                 .Find(combineFilter, options)
+                .Project<Song>(projection)
                 .Sort(sortFilter)
-                .Project<Song>(Builders<Song>.Projection.Include(x => x.Name))
                 .Limit(pageSize)
                 .Skip(pageSize * page)
                 .ToListAsync(cancellationToken);
@@ -66,13 +66,13 @@ namespace SinphinitySysStore.Repositories
 
         public async Task<Song> GetSongByIdAsync(string songId, int? songSimplification)
         {
-            var filter = Builders<Song>.Filter.Eq(x => x.Id , songId);
-     
-           var song = await _songsCollection.Find(filter).FirstOrDefaultAsync();
+            var filter = Builders<Song>.Filter.Eq(x => x.Id, songId);
+
+            var song = await _songsCollection.Find(filter).FirstOrDefaultAsync();
 
             // the base64 encoded midi is not needed
             song.MidiBase64Encoded = null;
-            if (songSimplification!= null)
+            if (songSimplification != null)
             {
                 var newSongSimplifications = new List<SongSimplification>();
                 var songSimplificationToKeep = song.SongSimplifications.Where(x => x.Version == songSimplification).FirstOrDefault();
@@ -88,18 +88,35 @@ namespace SinphinitySysStore.Repositories
             var nameFilter = Builders<Song>.Filter.Eq(s => s.Name, song.Name);
             var bandFilter = Builders<Song>.Filter.Eq(x => x.Band.Id, song.Band.Id);
             var styleFilter = Builders<Song>.Filter.Eq(x => x.Style.Id, song.Style.Id);
-            var combineFilter =  Builders<Song>.Filter.And(nameFilter, bandFilter, styleFilter);
-            var count= await _songsCollection.Find(combineFilter).CountDocumentsAsync();
+            var combineFilter = Builders<Song>.Filter.And(nameFilter, bandFilter, styleFilter);
+            var count = await _songsCollection.Find(combineFilter).CountDocumentsAsync();
             if (count > 0) throw new SongAlreadyExistsException();
             await _songsCollection.InsertOneAsync(song);
             return song;
         }
 
-        public async Task<Song> UpdateSongAsync(Song song)
+        public async Task UpdateSongAsync(Song song)
         {
-            var filter = Builders<Song>.Filter.Eq(s => s.Id, song.Id);
-            song = await _songsCollection.FindOneAndUpdateAsync<Song>(filter, Builders<Song>.Update.Set(s=> s,song));
-            return song;
+            try
+            {
+                await _songsCollection.ReplaceOneAsync(s => s.Id == song.Id, song);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, $"Couldnt update song {song.Name} to MongoDb");
+                // Try to save with flag CantBeProcessed = true and without the SongSimplifications
+                song.SongSimplifications = null;
+                song.CantBeProcessed = true;
+                try
+                {
+                    await _songsCollection.ReplaceOneAsync(s => s.Id == song.Id, song);
+                    Log.Information($"Updated song {song.Name} setting flag CantBeProcessed to true");
+                }
+                catch(Exception ex)
+                {
+                    Log.Information("Couldn't set flag CantBeProcessed to true");
+                }
+            }
         }
     }
 }

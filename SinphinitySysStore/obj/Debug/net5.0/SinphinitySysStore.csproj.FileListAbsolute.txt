@@ -69,6 +69,7 @@ C:\dev\Sinphinity\Backend\SinphinitySysStore\bin\Debug\net5.0\Serilog.Extensions
 C:\dev\Sinphinity\Backend\SinphinitySysStore\bin\Debug\net5.0\Serilog.Extensions.Logging.dll
 C:\dev\Sinphinity\Backend\SinphinitySysStore\bin\Debug\net5.0\Serilog.Formatting.Compact.dll
 C:\dev\Sinphinity\Backend\SinphinitySysStore\bin\Debug\net5.0\Serilog.Settings.Configuration.dll
+C:\dev\Sinphinity\Backend\SinphinitySysStore\bin\Debug\net5.0\Serilog.Sinks.Async.dll
 C:\dev\Sinphinity\Backend\SinphinitySysStore\bin\Debug\net5.0\Serilog.Sinks.Console.dll
 C:\dev\Sinphinity\Backend\SinphinitySysStore\bin\Debug\net5.0\Serilog.Sinks.Debug.dll
 C:\dev\Sinphinity\Backend\SinphinitySysStore\bin\Debug\net5.0\Serilog.Sinks.File.dll

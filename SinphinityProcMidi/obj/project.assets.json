@@ -3357,6 +3357,7 @@
     "net5.0": [
       "Melanchall.DryWetMidi >= 5.1.0",
       "Serilog.AspNetCore >= 4.1.0",
+      "Serilog.Sinks.Async >= 1.4.0",
       "SinphinityModel >= 1.0.0"
     ]
   },
@@ -3409,6 +3410,10 @@
           "Serilog.AspNetCore": {
             "target": "Package",
             "version": "[4.1.0, )"
+          },
+          "Serilog.Sinks.Async": {
+            "target": "Package",
+            "version": "[1.4.0, )"
           }
         },
         "imports": [

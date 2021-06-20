@@ -13,9 +13,9 @@ namespace SinphinitySysStore.Repositories
                 var uri = s.GetRequiredService<IConfiguration>()["MongoUri"];
                 return new MongoClient(uri);
             });
-            servicesBuilder.AddSingleton<StylesRepository>();
-            servicesBuilder.AddSingleton<BandsRepository>();
-            servicesBuilder.AddSingleton<SongsRepository>();
+            servicesBuilder.AddTransient<StylesRepository>();
+            servicesBuilder.AddTransient<BandsRepository>();
+            servicesBuilder.AddTransient<SongsRepository>();
         }
     }
 }

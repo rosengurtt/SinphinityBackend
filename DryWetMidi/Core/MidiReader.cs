@@ -44,7 +44,10 @@ namespace Melanchall.DryWetMidi.Core
         public long Position
         {
             get { return _binaryReader.BaseStream.Position; }
-            set { _binaryReader.BaseStream.Position = value; }
+            set
+            {
+                _binaryReader.BaseStream.Position = value;
+            }
         }
 
         /// <summary>

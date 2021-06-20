@@ -1,0 +1,212 @@
+2021-06-20 09:34:09.841 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-06-20 09:36:17.281 +01:00 [INF] 1 - Start with song: 14 Years
+2021-06-20 09:36:18.387 +01:00 [INF] ProcMidi completed OK for 14 Years
+2021-06-20 09:36:18.608 +01:00 [INF] Saved OK 14 Years
+2021-06-20 09:36:18.608 +01:00 [INF] 2 - Start with song: 74 75
+2021-06-20 09:36:25.713 +01:00 [INF] ProcMidi completed OK for 74 75
+2021-06-20 09:36:25.902 +01:00 [INF] Saved OK 74 75
+2021-06-20 09:36:25.902 +01:00 [INF] 3 - Start with song: A day in the life
+2021-06-20 09:36:37.731 +01:00 [INF] ProcMidi completed OK for A day in the life
+2021-06-20 09:36:37.873 +01:00 [INF] Saved OK A day in the life
+2021-06-20 09:36:37.874 +01:00 [INF] 4 - Start with song: A German Requiem mov 1
+2021-06-20 09:36:39.776 +01:00 [INF] ProcMidi completed OK for A German Requiem mov 1
+2021-06-20 09:36:39.866 +01:00 [INF] Saved OK A German Requiem mov 1
+2021-06-20 09:36:39.866 +01:00 [INF] 5 - Start with song: A German Requiem mov 2
+2021-06-20 09:36:50.677 +01:00 [INF] ProcMidi completed OK for A German Requiem mov 2
+2021-06-20 09:36:50.872 +01:00 [INF] Saved OK A German Requiem mov 2
+2021-06-20 09:36:50.942 +01:00 [INF] 6 - Start with song: A German Requiem mov 5
+2021-06-20 09:36:52.481 +01:00 [INF] ProcMidi completed OK for A German Requiem mov 5
+2021-06-20 09:36:52.595 +01:00 [INF] Saved OK A German Requiem mov 5
+2021-06-20 09:36:52.595 +01:00 [INF] 7 - Start with song: A German Requiem mov 6
+2021-06-20 09:37:27.905 +01:00 [INF] ProcMidi completed OK for A German Requiem mov 6
+2021-06-20 09:37:28.471 +01:00 [INF] Saved OK A German Requiem mov 6
+2021-06-20 09:37:28.471 +01:00 [INF] 8 - Start with song: A German Requiem mov 7
+2021-06-20 09:37:32.088 +01:00 [INF] ProcMidi completed OK for A German Requiem mov 7
+2021-06-20 09:37:32.205 +01:00 [INF] Saved OK A German Requiem mov 7
+2021-06-20 09:37:32.205 +01:00 [INF] 9 - Start with song: A horse with no name
+2021-06-20 09:37:33.244 +01:00 [INF] ProcMidi completed OK for A horse with no name
+2021-06-20 09:37:33.338 +01:00 [INF] Saved OK A horse with no name
+2021-06-20 09:37:33.339 +01:00 [INF] 10 - Start with song: A man I ll never be
+2021-06-20 09:37:35.888 +01:00 [INF] ProcMidi completed OK for A man I ll never be
+2021-06-20 09:37:36.032 +01:00 [INF] Saved OK A man I ll never be
+2021-06-20 09:37:36.055 +01:00 [INF] 11 - Start with song: A trick of the tail
+2021-06-20 09:37:40.876 +01:00 [INF] ProcMidi completed OK for A trick of the tail
+2021-06-20 09:37:41.058 +01:00 [INF] Saved OK A trick of the tail
+2021-06-20 09:37:41.058 +01:00 [INF] 12 - Start with song: Abacab
+2021-06-20 09:37:50.839 +01:00 [INF] ProcMidi completed OK for Abacab
+2021-06-20 09:37:51.004 +01:00 [INF] Saved OK Abacab
+2021-06-20 09:37:51.004 +01:00 [INF] 13 - Start with song: Aint Talkin about love
+2021-06-20 09:37:52.929 +01:00 [INF] ProcMidi completed OK for Aint Talkin about love
+2021-06-20 09:37:53.039 +01:00 [INF] Saved OK Aint Talkin about love
+2021-06-20 09:37:53.039 +01:00 [INF] 14 - Start with song: All dead all dead
+2021-06-20 09:37:53.741 +01:00 [INF] ProcMidi completed OK for All dead all dead
+2021-06-20 09:37:53.824 +01:00 [INF] Saved OK All dead all dead
+2021-06-20 09:37:53.824 +01:00 [INF] 15 - Start with song: All I need is a miracle
+2021-06-20 09:37:57.870 +01:00 [INF] ProcMidi completed OK for All I need is a miracle
+2021-06-20 09:37:58.106 +01:00 [INF] Saved OK All I need is a miracle
+2021-06-20 09:37:58.184 +01:00 [INF] 16 - Start with song: All in a mouses night
+2021-06-20 09:38:01.023 +01:00 [INF] ProcMidi completed OK for All in a mouses night
+2021-06-20 09:38:01.197 +01:00 [INF] Saved OK All in a mouses night
+2021-06-20 09:38:01.197 +01:00 [INF] 17 - Start with song: All of my love
+2021-06-20 09:38:09.279 +01:00 [INF] ProcMidi completed OK for All of my love
+2021-06-20 09:38:09.508 +01:00 [INF] Saved OK All of my love
+2021-06-20 09:38:09.508 +01:00 [INF] 18 - Start with song: All we like sheep Messiah
+2021-06-20 09:38:11.425 +01:00 [INF] ProcMidi completed OK for All we like sheep Messiah
+2021-06-20 09:38:11.515 +01:00 [INF] Saved OK All we like sheep Messiah
+2021-06-20 09:38:11.515 +01:00 [INF] 19 - Start with song: All you need is love
+2021-06-20 09:38:15.274 +01:00 [INF] ProcMidi completed OK for All you need is love
+2021-06-20 09:38:15.446 +01:00 [INF] Saved OK All you need is love
+2021-06-20 09:38:15.446 +01:00 [INF] 20 - Start with song: Alll right now
+2021-06-20 09:38:18.483 +01:00 [INF] ProcMidi completed OK for Alll right now
+2021-06-20 09:38:18.691 +01:00 [INF] Saved OK Alll right now
+2021-06-20 09:38:18.736 +01:00 [INF] 21 - Start with song: Along the watchtower
+2021-06-20 09:38:22.226 +01:00 [INF] ProcMidi completed OK for Along the watchtower
+2021-06-20 09:38:22.355 +01:00 [INF] Saved OK Along the watchtower
+2021-06-20 09:38:22.356 +01:00 [INF] 22 - Start with song: Always on my mind
+2021-06-20 09:39:18.464 +01:00 [INF] ProcMidi completed OK for Always on my mind
+2021-06-20 09:39:18.749 +01:00 [INF] Saved OK Always on my mind
+2021-06-20 09:39:18.749 +01:00 [INF] 23 - Start with song: And He shall Purify Messiah
+2021-06-20 09:39:20.299 +01:00 [INF] ProcMidi completed OK for And He shall Purify Messiah
+2021-06-20 09:39:20.408 +01:00 [INF] Saved OK And He shall Purify Messiah
+2021-06-20 09:39:20.408 +01:00 [INF] 24 - Start with song: And the Glory of the Lord Messiah
+2021-06-20 09:39:21.698 +01:00 [INF] ProcMidi completed OK for And the Glory of the Lord Messiah
+2021-06-20 09:39:21.770 +01:00 [INF] Saved OK And the Glory of the Lord Messiah
+2021-06-20 09:39:21.770 +01:00 [INF] 25 - Start with song: Angel of Harlem
+2021-06-20 09:39:33.528 +01:00 [INF] ProcMidi completed OK for Angel of Harlem
+2021-06-20 09:39:33.758 +01:00 [INF] Saved OK Angel of Harlem
+2021-06-20 09:39:33.796 +01:00 [INF] 26 - Start with song: Angie
+2021-06-20 09:39:35.743 +01:00 [INF] ProcMidi completed OK for Angie
+2021-06-20 09:39:35.864 +01:00 [INF] Saved OK Angie
+2021-06-20 09:39:35.864 +01:00 [INF] 27 - Start with song: Another brick in the wall 1
+2021-06-20 09:39:40.416 +01:00 [INF] ProcMidi completed OK for Another brick in the wall 1
+2021-06-20 09:39:40.562 +01:00 [INF] Saved OK Another brick in the wall 1
+2021-06-20 09:39:40.562 +01:00 [INF] 28 - Start with song: Another brick in the wall 2
+2021-06-20 09:39:45.158 +01:00 [INF] ProcMidi completed OK for Another brick in the wall 2
+2021-06-20 09:39:45.430 +01:00 [INF] Saved OK Another brick in the wall 2
+2021-06-20 09:39:45.430 +01:00 [INF] 29 - Start with song: Another day in paradise
+2021-06-20 09:39:49.186 +01:00 [INF] ProcMidi completed OK for Another day in paradise
+2021-06-20 09:39:49.313 +01:00 [INF] Saved OK Another day in paradise
+2021-06-20 09:39:49.313 +01:00 [INF] 30 - Start with song: Another one bites the dust
+2021-06-20 09:39:53.903 +01:00 [INF] ProcMidi completed OK for Another one bites the dust
+2021-06-20 09:39:54.022 +01:00 [INF] Saved OK Another one bites the dust
+2021-06-20 09:39:54.063 +01:00 [INF] 31 - Start with song: Aqualung
+2021-06-20 09:39:54.835 +01:00 [INF] ProcMidi completed OK for Aqualung
+2021-06-20 09:39:54.904 +01:00 [INF] Saved OK Aqualung
+2021-06-20 09:39:54.904 +01:00 [INF] 32 - Start with song: Are remark You Made
+2021-06-20 09:40:00.379 +01:00 [INF] ProcMidi completed OK for Are remark You Made
+2021-06-20 09:40:00.498 +01:00 [INF] Saved OK Are remark You Made
+2021-06-20 09:40:00.499 +01:00 [INF] 33 - Start with song: Available light
+2021-06-20 09:40:02.698 +01:00 [INF] ProcMidi completed OK for Available light
+2021-06-20 09:40:02.776 +01:00 [INF] Saved OK Available light
+2021-06-20 09:40:02.776 +01:00 [INF] 34 - Start with song: Ave Maria
+2021-06-20 09:40:03.517 +01:00 [INF] ProcMidi completed OK for Ave Maria
+2021-06-20 09:40:03.593 +01:00 [INF] Saved OK Ave Maria
+2021-06-20 09:40:03.593 +01:00 [INF] 35 - Start with song: Awake the Harp chorus The Creation's Oratorio
+2021-06-20 09:40:07.725 +01:00 [INF] ProcMidi completed OK for Awake the Harp chorus The Creation's Oratorio
+2021-06-20 09:40:07.797 +01:00 [INF] Saved OK Awake the Harp chorus The Creation's Oratorio
+2021-06-20 09:40:07.840 +01:00 [INF] 36 - Start with song: Babe
+2021-06-20 09:40:08.927 +01:00 [INF] ProcMidi completed OK for Babe
+2021-06-20 09:40:09.014 +01:00 [INF] Saved OK Babe
+2021-06-20 09:40:09.014 +01:00 [INF] 37 - Start with song: Back in black
+2021-06-20 09:40:10.375 +01:00 [INF] ProcMidi completed OK for Back in black
+2021-06-20 09:40:10.480 +01:00 [INF] Saved OK Back in black
+2021-06-20 09:40:10.480 +01:00 [INF] 38 - Start with song: Bad attitude
+2021-06-20 09:40:14.636 +01:00 [INF] ProcMidi completed OK for Bad attitude
+2021-06-20 09:40:14.839 +01:00 [INF] Saved OK Bad attitude
+2021-06-20 09:40:14.839 +01:00 [INF] 39 - Start with song: Bagatelle 25 A minor WoO 59 Fur Elise
+2021-06-20 09:40:15.165 +01:00 [INF] ProcMidi completed OK for Bagatelle 25 A minor WoO 59 Fur Elise
+2021-06-20 09:40:15.186 +01:00 [INF] Saved OK Bagatelle 25 A minor WoO 59 Fur Elise
+2021-06-20 09:40:15.186 +01:00 [INF] 40 - Start with song: Baker street
+2021-06-20 09:40:20.008 +01:00 [INF] ProcMidi completed OK for Baker street
+2021-06-20 09:40:20.201 +01:00 [INF] Saved OK Baker street
+2021-06-20 09:40:20.244 +01:00 [INF] 41 - Start with song: Beat it
+2021-06-20 09:40:23.080 +01:00 [INF] ProcMidi completed OK for Beat it
+2021-06-20 09:40:23.277 +01:00 [INF] Saved OK Beat it
+2021-06-20 09:40:23.277 +01:00 [INF] 42 - Start with song: Beds are burning
+2021-06-20 09:40:24.658 +01:00 [INF] ProcMidi completed OK for Beds are burning
+2021-06-20 09:40:24.778 +01:00 [INF] Saved OK Beds are burning
+2021-06-20 09:40:24.778 +01:00 [INF] 43 - Start with song: Benny and the jets
+2021-06-20 09:40:49.566 +01:00 [INF] ProcMidi completed OK for Benny and the jets
+2021-06-20 09:40:49.778 +01:00 [INF] Saved OK Benny and the jets
+2021-06-20 09:40:49.778 +01:00 [INF] 44 - Start with song: Big Gun
+2021-06-20 09:40:50.787 +01:00 [INF] ProcMidi completed OK for Big Gun
+2021-06-20 09:40:50.845 +01:00 [INF] Saved OK Big Gun
+2021-06-20 09:40:50.845 +01:00 [INF] 45 - Start with song: Big in Japan
+2021-06-20 09:40:53.133 +01:00 [INF] ProcMidi completed OK for Big in Japan
+2021-06-20 09:40:53.255 +01:00 [INF] Saved OK Big in Japan
+2021-06-20 09:40:53.314 +01:00 [INF] 46 - Start with song: Bigmouth strikes again
+2021-06-20 09:41:09.938 +01:00 [INF] ProcMidi completed OK for Bigmouth strikes again
+2021-06-20 09:41:10.259 +01:00 [INF] Saved OK Bigmouth strikes again
+2021-06-20 09:41:10.259 +01:00 [INF] 47 - Start with song: Bird Land
+2021-06-20 09:41:15.234 +01:00 [INF] ProcMidi completed OK for Bird Land
+2021-06-20 09:41:15.476 +01:00 [INF] Saved OK Bird Land
+2021-06-20 09:41:15.476 +01:00 [INF] 48 - Start with song: Birthday
+2021-06-20 09:41:17.537 +01:00 [INF] ProcMidi completed OK for Birthday
+2021-06-20 09:41:17.699 +01:00 [INF] Saved OK Birthday
+2021-06-20 09:41:17.699 +01:00 [INF] 49 - Start with song: Bittersweet symphony
+2021-06-20 09:41:20.393 +01:00 [INF] ProcMidi completed OK for Bittersweet symphony
+2021-06-20 09:41:20.599 +01:00 [INF] Saved OK Bittersweet symphony
+2021-06-20 09:41:20.599 +01:00 [INF] 50 - Start with song: Black Dog
+2021-06-20 09:41:22.884 +01:00 [INF] ProcMidi completed OK for Black Dog
+2021-06-20 09:41:23.027 +01:00 [INF] Saved OK Black Dog
+2021-06-20 09:41:23.083 +01:00 [INF] 51 - Start with song: Black magic woman
+2021-06-20 09:41:52.061 +01:00 [INF] ProcMidi completed OK for Black magic woman
+2021-06-20 09:41:52.277 +01:00 [INF] Saved OK Black magic woman
+2021-06-20 09:41:52.277 +01:00 [INF] 52 - Start with song: Black Market
+2021-06-20 09:41:54.317 +01:00 [INF] ProcMidi completed OK for Black Market
+2021-06-20 09:41:54.405 +01:00 [INF] Saved OK Black Market
+2021-06-20 09:41:54.405 +01:00 [INF] 53 - Start with song: Black night
+2021-06-20 09:41:57.212 +01:00 [INF] ProcMidi completed OK for Black night
+2021-06-20 09:41:57.377 +01:00 [INF] Saved OK Black night
+2021-06-20 09:41:57.377 +01:00 [INF] 54 - Start with song: Blinded by the light
+2021-06-20 09:41:59.043 +01:00 [INF] ProcMidi completed OK for Blinded by the light
+2021-06-20 09:41:59.181 +01:00 [INF] Saved OK Blinded by the light
+2021-06-20 09:41:59.181 +01:00 [INF] 55 - Start with song: Bloody well right
+2021-06-20 09:42:06.579 +01:00 [INF] ProcMidi completed OK for Bloody well right
+2021-06-20 09:42:06.883 +01:00 [INF] Saved OK Bloody well right
+2021-06-20 09:42:06.940 +01:00 [INF] 56 - Start with song: Blue collar man
+2021-06-20 09:42:16.595 +01:00 [INF] ProcMidi completed OK for Blue collar man
+2021-06-20 09:42:16.886 +01:00 [INF] Saved OK Blue collar man
+2021-06-20 09:42:16.886 +01:00 [INF] 57 - Start with song: Boat on the river
+2021-06-20 09:42:44.020 +01:00 [INF] ProcMidi completed OK for Boat on the river
+2021-06-20 09:42:44.200 +01:00 [INF] Saved OK Boat on the river
+2021-06-20 09:42:44.200 +01:00 [INF] 58 - Start with song: Bohemian Rhapsody
+2021-06-20 09:42:47.501 +01:00 [INF] ProcMidi completed OK for Bohemian Rhapsody
+2021-06-20 09:42:47.636 +01:00 [INF] Saved OK Bohemian Rhapsody
+2021-06-20 09:42:47.636 +01:00 [INF] 59 - Start with song: Bouree
+2021-06-20 09:42:51.460 +01:00 [INF] ProcMidi completed OK for Bouree
+2021-06-20 09:42:51.597 +01:00 [INF] Saved OK Bouree
+2021-06-20 09:42:51.597 +01:00 [INF] 60 - Start with song: Brighton rock
+2021-06-20 09:42:53.607 +01:00 [INF] ProcMidi completed OK for Brighton rock
+2021-06-20 09:42:53.758 +01:00 [INF] Saved OK Brighton rock
+2021-06-20 09:42:55.140 +01:00 [ERR] Couldn't get songs
+2021-06-20 09:42:55.632 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ApplicationException: Couldn't get songs
+   at SinphinityExpApi.Clients.SysStoreClient.GetSongsAsync(Int32 pageNo, Int32 pageSize, Boolean includeMidi, String contains, String styleId, String bandId) in C:\dev\Sinphinity\Backend\SinphinityExpApi\Clients\SysStoreClient.cs:line 87
+   at SinphinitySysStore.Controllers.SongsController.ProcessBatch(String styleId, String bandId) in C:\dev\Sinphinity\Backend\SinphinityExpApi\Controllers\SongsController.cs:line 144
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2021-06-20 10:33:03.866 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-06-20 10:33:15.939 +01:00 [ERR] Couldn't get songs
+2021-06-20 10:33:16.598 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ApplicationException: Couldn't get songs
+   at SinphinityExpApi.Clients.SysStoreClient.GetSongsAsync(Int32 pageNo, Int32 pageSize, Boolean includeMidi, String contains, String styleId, String bandId) in C:\dev\Sinphinity\Backend\SinphinityExpApi\Clients\SysStoreClient.cs:line 87
+   at SinphinitySysStore.Controllers.SongsController.ProcessBatch(String styleId, String bandId) in C:\dev\Sinphinity\Backend\SinphinityExpApi\Controllers\SongsController.cs:line 144
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ox02sWw7xTlpMnkbAGfF+8vTH+y9bmoeBJGEtuzR0a1ZhNSDHMPPnTFVIQ5ZRo91kAGn4rGlUMrrUBLcFpsdZg==",
+  "dgSpecHash": "MtPtI8ps9ql69wSEUXMP/l47wvWjxrZqgkvh8AU2WAcNB6606Eze+kYxy5w023Q5kdabdxlXmtHpP42nyXI41A==",
   "success": true,
   "projectFilePath": "C:\\dev\\Sinphinity\\Backend\\SinphinitySysStore\\SinphinitySysStore.csproj",
   "expectedPackageFiles": [
@@ -38,6 +38,7 @@
     "C:\\Users\\44772\\.nuget\\packages\\serilog.extensions.logging\\3.0.1\\serilog.extensions.logging.3.0.1.nupkg.sha512",
     "C:\\Users\\44772\\.nuget\\packages\\serilog.formatting.compact\\1.1.0\\serilog.formatting.compact.1.1.0.nupkg.sha512",
     "C:\\Users\\44772\\.nuget\\packages\\serilog.settings.configuration\\3.1.0\\serilog.settings.configuration.3.1.0.nupkg.sha512",
+    "C:\\Users\\44772\\.nuget\\packages\\serilog.sinks.async\\1.4.0\\serilog.sinks.async.1.4.0.nupkg.sha512",
     "C:\\Users\\44772\\.nuget\\packages\\serilog.sinks.console\\3.1.1\\serilog.sinks.console.3.1.1.nupkg.sha512",
     "C:\\Users\\44772\\.nuget\\packages\\serilog.sinks.debug\\2.0.0\\serilog.sinks.debug.2.0.0.nupkg.sha512",
     "C:\\Users\\44772\\.nuget\\packages\\serilog.sinks.file\\4.1.0\\serilog.sinks.file.4.1.0.nupkg.sha512",

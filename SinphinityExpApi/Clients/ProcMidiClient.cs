@@ -27,8 +27,10 @@ namespace SinphinityExpApi.Clients
         public async Task<Song> ProcessSong(Song song)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
+            httpClient.Timeout = TimeSpan.FromMinutes(5);
             var content = new StringContent(JsonConvert.SerializeObject(song));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
             var response = await httpClient.PostAsync($"{_appConfiguration.ProcMidiUrl}/api/SongProcessing", content);
 
             if (response.StatusCode == HttpStatusCode.OK)

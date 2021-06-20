@@ -25,6 +25,8 @@ namespace SinphinityProcMidi.Midi
 
                 byte currentSubVoiceNumber = 0;
                 var jobCompleted = false;
+                // We take alternatively the highest and the lowest voice in each iteration. We use the boolean getUpperVoice to keep track of which (higher or lower) we are extracting
+                var getUpperVoice = true;
                 // we keep looping while there are notes not assigned to a subVoice
                 while (!jobCompleted)
                 {
@@ -57,10 +59,10 @@ namespace SinphinityProcMidi.Midi
                         break;
                     }
 
-                    var upperVoice = GetUpperVoice(notesNotAssignedToSubVoice);
+                    var extractedVoice = GetUpperOrLowerVoice(notesNotAssignedToSubVoice, getUpperVoice);
 
                     // the start and ending of notes may have been modified when getting the upper voice
-                    foreach (var n in upperVoice)
+                    foreach (var n in extractedVoice)
                     {
                         var noteAssigned = voiceNotes.Where(m => m.Guid == n.Guid).FirstOrDefault();
                         noteAssigned.SubVoice = currentSubVoiceNumber;
@@ -68,6 +70,7 @@ namespace SinphinityProcMidi.Midi
                         noteAssigned.EndSinceBeginningOfSongInTicks = n.EndSinceBeginningOfSongInTicks;
                     }
                     currentSubVoiceNumber++;
+                    getUpperVoice = !getUpperVoice;
                 }
            
             }
@@ -218,7 +221,7 @@ namespace SinphinityProcMidi.Midi
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        private static List<Note> GetUpperVoice(List<Note> notes)
+        private static List<Note> GetUpperOrLowerVoice(List<Note> notes, bool getUpper)
         {
             // whe check how many notes are parts of chords. If they are more than 20% of the total of notes, we assign the notes of the chords to the same voice
             var shouldMakeChords = notes.InChords().Count > notes.Count / 5;
@@ -234,8 +237,10 @@ namespace SinphinityProcMidi.Midi
                 m.Guid != n.Guid &&
                 GetIntersectionOfNotesInTicks(m, n) >= Math.Min(m.DurationInTicks, n.DurationInTicks) / 2 )
                 .ToList();
-                // If there are no notes simulaneous to this with a higher pitch, then add it to the upper voice
-                if (simulNotes.Where(m => m.Pitch > n.Pitch).ToList().Count == 0)
+
+                // Depending if we are looking for the highest or lowest voice
+                // If there are no notes simulaneous to this with a higher pitch (for higher voice) or a lower pitch (for lowest voice) , then add it to the upper (lowest) voice
+                if (simulNotes.Where(m => (getUpper && m.Pitch > n.Pitch) || (!getUpper && m.Pitch<n.Pitch)).ToList().Count == 0)
                 {
                     retObj.Add(n);
 
@@ -254,7 +259,7 @@ namespace SinphinityProcMidi.Midi
             }
 
             // Remove notes which pitch is too far from the average
-            var notesToRemove = GetNotesThatAreTooLowForThisVoice(retObj, notes);
+            var notesToRemove = GetNotesThatAreTooLowOrTooHighForThisVoice(retObj, notes);
             notesToRemove.ForEach(x => retObj.Remove(retObj.Where(y => y.Guid == x.Guid).FirstOrDefault()));
 
             // Now correct the timings, so there are no small overlapping of consecutive notes or
@@ -404,21 +409,21 @@ namespace SinphinityProcMidi.Midi
         // upper voice or not
         // The function modifies the parameters sent to it and doesn't return a value. It basically removes some notes from
         // the upper voice and puts them in the pool of notes
-        private static List<Note> GetNotesThatAreTooLowForThisVoice(List<Note> upperVoice, List<Note> poolOfNotes)
+        private static List<Note> GetNotesThatAreTooLowOrTooHighForThisVoice(List<Note> voice, List<Note> poolOfNotes)
         {
             var notesToRemove = new List<Note>();
 
             // restOfNotes have the notes in poolOfNotes that are not in upperVoice
             var restOfNotes = new List<Note>();
             foreach (var n in poolOfNotes)
-                if (upperVoice.Where(x => x.Guid == n.Guid).Count() == 0) restOfNotes.Add(n);
+                if (voice.Where(x => x.Guid == n.Guid).Count() == 0) restOfNotes.Add(n);
 
             if (restOfNotes.Count == 0) return notesToRemove;
 
             var tolerance = 7;
-            foreach (var n in upperVoice)
+            foreach (var n in voice)
             {
-                var upperVoiceNeighbors = upperVoice
+                var voiceNeighbors = voice
                     .Where(y => y.StartSinceBeginningOfSongInTicks > n.StartSinceBeginningOfSongInTicks - 300 &&
                     y.StartSinceBeginningOfSongInTicks < n.StartSinceBeginningOfSongInTicks + 300).ToList();
 
@@ -426,19 +431,20 @@ namespace SinphinityProcMidi.Midi
                     .Where(y => y.StartSinceBeginningOfSongInTicks > n.StartSinceBeginningOfSongInTicks - 300 &&
                     y.StartSinceBeginningOfSongInTicks < n.StartSinceBeginningOfSongInTicks + 300).ToList();
 
-                if (upperVoiceNeighbors.Count > 0 && restOfNotesNeighboors.Count > 0)
+                if (voiceNeighbors.Count > 0 && restOfNotesNeighboors.Count > 0)
                 {
-                    var upperVoiceAveragePitch = upperVoiceNeighbors.Average(x => x.Pitch);
+                    var voiceAveragePitch = voiceNeighbors.Average(x => x.Pitch);
                     var restOfNotesAveragePitch = restOfNotesNeighboors.Average(x => x.Pitch);
-                    var difWithUpperVoiceAverage = Math.Abs(n.Pitch - upperVoiceAveragePitch);
+                    var difWithVoiceAverage = Math.Abs(n.Pitch - voiceAveragePitch);
                     var difWithRestOfNotes = Math.Abs(n.Pitch - restOfNotesAveragePitch);
-                    if (difWithUpperVoiceAverage - tolerance > difWithRestOfNotes)
+                    if (difWithVoiceAverage - tolerance > difWithRestOfNotes)
                         notesToRemove.Add(n);
                 }
             }
             return notesToRemove;
         }
 
+       
 
 
     }

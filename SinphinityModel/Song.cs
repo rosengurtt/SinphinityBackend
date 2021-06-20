@@ -11,6 +11,10 @@ namespace Sinphinity.Models
         public virtual string Id { get; set; }
         public string Name { get; set; }
         public string MidiBase64Encoded { get; set; }
+        public bool IsSongProcessed { get; set; }
+        public bool IsMidiCorrect { get; set; }
+
+        public bool CantBeProcessed { get; set; }
         public Band Band { get; set; }
         public Style Style { get; set; }
         public MidiStats MidiStats { get; set; }

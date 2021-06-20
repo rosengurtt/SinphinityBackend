@@ -203,6 +203,10 @@
             "Serilog.AspNetCore": {
               "target": "Package",
               "version": "[4.1.0, )"
+            },
+            "Serilog.Sinks.Async": {
+              "target": "Package",
+              "version": "[1.4.0, )"
             }
           },
           "imports": [

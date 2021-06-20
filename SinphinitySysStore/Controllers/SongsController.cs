@@ -10,6 +10,7 @@ using Sinphinity.Models.ErrorHandling;
 using Newtonsoft.Json;
 using System.IO;
 using SinphinitySysStore.Models.Exceptions;
+using Serilog;
 
 namespace SinphinitySysStore.Controllers
 {
@@ -29,11 +30,12 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable>> GetSongsAsync(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null, string bandId = null,
+        public async Task<ActionResult<IEnumerable>> GetSongsAsync(int pageNo = 0, int pageSize = 10, bool includeMidi = false, string contains = null, string styleId = null, string bandId = null,
             string sortKey = "name", int sortDirection = 1)
         {
+            Log.Information($"Me llego GetSongs con pageNo={pageNo}, pageSize={pageSize}, includeMidi={includeMidi}");
             var totalSongs = await _songsRepository.GetSongsCountAsync(contains, styleId, bandId);
-            var songs = await _songsRepository.GetSongsAsync(pageSize, pageNo, contains, styleId, bandId, sortKey, sortDirection);
+            var songs = await _songsRepository.GetSongsAsync(pageSize, pageNo, includeMidi, contains, styleId, bandId, sortKey, sortDirection);
             var retObj = new
             {
                 pageNo,
@@ -42,7 +44,7 @@ namespace SinphinitySysStore.Controllers
                 totalPages = (int)Math.Ceiling((double)totalSongs / pageSize),
                 items = songs
             };
-
+            Log.Information($"Retorno estas songs {string.Join(",", songs.Select(s => s.Name))}");
             return Ok(new ApiOKResponse(retObj));
         }
 
@@ -78,9 +80,12 @@ namespace SinphinitySysStore.Controllers
             }
         }
         [HttpPut, DisableRequestSizeLimit]
-        public async Task<ActionResult<Song>> UpdateSong(Song song)
+        public async Task<ActionResult> UpdateSong(Song song)
         {
-            return Ok(new ApiOKResponse(await _songsRepository.UpdateSongAsync(song)));
+            Log.Information($"Me llego para updatear la song {song.Name}");
+            await _songsRepository.UpdateSongAsync(song);
+            Log.Information($"Update la song {song.Name}");
+            return Ok(new ApiOKResponse(null));
         }
     }
 }

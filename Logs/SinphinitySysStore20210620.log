@@ -1,0 +1,224 @@
+2021-06-20 09:34:09.712 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-06-20 09:36:17.189 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=5, includeMidi=True
+2021-06-20 09:36:17.243 +01:00 [INF] Retorno estas songs 14 Years,74 75,A day in the life,A German Requiem mov 1,A German Requiem mov 2
+2021-06-20 09:36:18.464 +01:00 [INF] Me llego para updatear la song 14 Years
+2021-06-20 09:36:18.569 +01:00 [INF] Update la song 14 Years
+2021-06-20 09:36:25.796 +01:00 [INF] Me llego para updatear la song 74 75
+2021-06-20 09:36:25.878 +01:00 [INF] Update la song 74 75
+2021-06-20 09:36:37.793 +01:00 [INF] Me llego para updatear la song A day in the life
+2021-06-20 09:36:37.844 +01:00 [INF] Update la song A day in the life
+2021-06-20 09:36:39.828 +01:00 [INF] Me llego para updatear la song A German Requiem mov 1
+2021-06-20 09:36:39.865 +01:00 [INF] Update la song A German Requiem mov 1
+2021-06-20 09:36:50.780 +01:00 [INF] Me llego para updatear la song A German Requiem mov 2
+2021-06-20 09:36:50.871 +01:00 [INF] Update la song A German Requiem mov 2
+2021-06-20 09:36:50.873 +01:00 [INF] Me llego GetSongs con pageNo=1, pageSize=5, includeMidi=True
+2021-06-20 09:36:50.894 +01:00 [INF] Retorno estas songs A German Requiem mov 5,A German Requiem mov 6,A German Requiem mov 7,A horse with no name,A man I ll never be
+2021-06-20 09:36:52.517 +01:00 [INF] Me llego para updatear la song A German Requiem mov 5
+2021-06-20 09:36:52.595 +01:00 [INF] Update la song A German Requiem mov 5
+2021-06-20 09:37:28.205 +01:00 [INF] Me llego para updatear la song A German Requiem mov 6
+2021-06-20 09:37:28.435 +01:00 [INF] Update la song A German Requiem mov 6
+2021-06-20 09:37:32.156 +01:00 [INF] Me llego para updatear la song A German Requiem mov 7
+2021-06-20 09:37:32.205 +01:00 [INF] Update la song A German Requiem mov 7
+2021-06-20 09:37:33.296 +01:00 [INF] Me llego para updatear la song A horse with no name
+2021-06-20 09:37:33.338 +01:00 [INF] Update la song A horse with no name
+2021-06-20 09:37:35.966 +01:00 [INF] Me llego para updatear la song A man I ll never be
+2021-06-20 09:37:36.031 +01:00 [INF] Update la song A man I ll never be
+2021-06-20 09:37:36.033 +01:00 [INF] Me llego GetSongs con pageNo=2, pageSize=5, includeMidi=True
+2021-06-20 09:37:36.050 +01:00 [INF] Retorno estas songs A trick of the tail,Abacab,Aint Talkin about love,All dead all dead,All I need is a miracle
+2021-06-20 09:37:40.980 +01:00 [INF] Me llego para updatear la song A trick of the tail
+2021-06-20 09:37:41.057 +01:00 [INF] Update la song A trick of the tail
+2021-06-20 09:37:50.908 +01:00 [INF] Me llego para updatear la song Abacab
+2021-06-20 09:37:50.970 +01:00 [INF] Update la song Abacab
+2021-06-20 09:37:52.991 +01:00 [INF] Me llego para updatear la song Aint Talkin about love
+2021-06-20 09:37:53.039 +01:00 [INF] Update la song Aint Talkin about love
+2021-06-20 09:37:53.767 +01:00 [INF] Me llego para updatear la song All dead all dead
+2021-06-20 09:37:53.791 +01:00 [INF] Update la song All dead all dead
+2021-06-20 09:37:57.988 +01:00 [INF] Me llego para updatear la song All I need is a miracle
+2021-06-20 09:37:58.072 +01:00 [INF] Update la song All I need is a miracle
+2021-06-20 09:37:58.107 +01:00 [INF] Me llego GetSongs con pageNo=3, pageSize=5, includeMidi=True
+2021-06-20 09:37:58.176 +01:00 [INF] Retorno estas songs All in a mouses night,All of my love,All we like sheep Messiah,All you need is love,Alll right now
+2021-06-20 09:38:01.115 +01:00 [INF] Me llego para updatear la song All in a mouses night
+2021-06-20 09:38:01.196 +01:00 [INF] Update la song All in a mouses night
+2021-06-20 09:38:09.383 +01:00 [INF] Me llego para updatear la song All of my love
+2021-06-20 09:38:09.475 +01:00 [INF] Update la song All of my love
+2021-06-20 09:38:11.472 +01:00 [INF] Me llego para updatear la song All we like sheep Messiah
+2021-06-20 09:38:11.514 +01:00 [INF] Update la song All we like sheep Messiah
+2021-06-20 09:38:15.351 +01:00 [INF] Me llego para updatear la song All you need is love
+2021-06-20 09:38:15.411 +01:00 [INF] Update la song All you need is love
+2021-06-20 09:38:18.572 +01:00 [INF] Me llego para updatear la song Alll right now
+2021-06-20 09:38:18.645 +01:00 [INF] Update la song Alll right now
+2021-06-20 09:38:18.697 +01:00 [INF] Me llego GetSongs con pageNo=4, pageSize=5, includeMidi=True
+2021-06-20 09:38:18.726 +01:00 [INF] Retorno estas songs Along the watchtower,Always on my mind,And He shall Purify Messiah,And the Glory of the Lord Messiah,Angel of Harlem
+2021-06-20 09:38:22.295 +01:00 [INF] Me llego para updatear la song Along the watchtower
+2021-06-20 09:38:22.355 +01:00 [INF] Update la song Along the watchtower
+2021-06-20 09:39:18.596 +01:00 [INF] Me llego para updatear la song Always on my mind
+2021-06-20 09:39:18.716 +01:00 [INF] Update la song Always on my mind
+2021-06-20 09:39:20.341 +01:00 [INF] Me llego para updatear la song And He shall Purify Messiah
+2021-06-20 09:39:20.375 +01:00 [INF] Update la song And He shall Purify Messiah
+2021-06-20 09:39:21.734 +01:00 [INF] Me llego para updatear la song And the Glory of the Lord Messiah
+2021-06-20 09:39:21.769 +01:00 [INF] Update la song And the Glory of the Lord Messiah
+2021-06-20 09:39:33.642 +01:00 [INF] Me llego para updatear la song Angel of Harlem
+2021-06-20 09:39:33.731 +01:00 [INF] Update la song Angel of Harlem
+2021-06-20 09:39:33.759 +01:00 [INF] Me llego GetSongs con pageNo=5, pageSize=5, includeMidi=True
+2021-06-20 09:39:33.789 +01:00 [INF] Retorno estas songs Angie,Another brick in the wall 1,Another brick in the wall 2,Another day in paradise,Another one bites the dust
+2021-06-20 09:39:35.789 +01:00 [INF] Me llego para updatear la song Angie
+2021-06-20 09:39:35.828 +01:00 [INF] Update la song Angie
+2021-06-20 09:39:40.497 +01:00 [INF] Me llego para updatear la song Another brick in the wall 1
+2021-06-20 09:39:40.561 +01:00 [INF] Update la song Another brick in the wall 1
+2021-06-20 09:39:45.289 +01:00 [INF] Me llego para updatear la song Another brick in the wall 2
+2021-06-20 09:39:45.398 +01:00 [INF] Update la song Another brick in the wall 2
+2021-06-20 09:39:49.260 +01:00 [INF] Me llego para updatear la song Another day in paradise
+2021-06-20 09:39:49.313 +01:00 [INF] Update la song Another day in paradise
+2021-06-20 09:39:53.948 +01:00 [INF] Me llego para updatear la song Another one bites the dust
+2021-06-20 09:39:53.985 +01:00 [INF] Update la song Another one bites the dust
+2021-06-20 09:39:54.023 +01:00 [INF] Me llego GetSongs con pageNo=6, pageSize=5, includeMidi=True
+2021-06-20 09:39:54.060 +01:00 [INF] Retorno estas songs Aqualung,Are remark You Made,Available light,Ave Maria,Awake the Harp chorus The Creation's Oratorio
+2021-06-20 09:39:54.871 +01:00 [INF] Me llego para updatear la song Aqualung
+2021-06-20 09:39:54.903 +01:00 [INF] Update la song Aqualung
+2021-06-20 09:40:00.423 +01:00 [INF] Me llego para updatear la song Are remark You Made
+2021-06-20 09:40:00.466 +01:00 [INF] Update la song Are remark You Made
+2021-06-20 09:40:02.741 +01:00 [INF] Me llego para updatear la song Available light
+2021-06-20 09:40:02.775 +01:00 [INF] Update la song Available light
+2021-06-20 09:40:03.541 +01:00 [INF] Me llego para updatear la song Ave Maria
+2021-06-20 09:40:03.563 +01:00 [INF] Update la song Ave Maria
+2021-06-20 09:40:07.764 +01:00 [INF] Me llego para updatear la song Awake the Harp chorus The Creation's Oratorio
+2021-06-20 09:40:07.797 +01:00 [INF] Update la song Awake the Harp chorus The Creation's Oratorio
+2021-06-20 09:40:07.799 +01:00 [INF] Me llego GetSongs con pageNo=7, pageSize=5, includeMidi=True
+2021-06-20 09:40:07.834 +01:00 [INF] Retorno estas songs Babe,Back in black,Bad attitude,Bagatelle 25 A minor WoO 59 Fur Elise,Baker street
+2021-06-20 09:40:08.954 +01:00 [INF] Me llego para updatear la song Babe
+2021-06-20 09:40:08.980 +01:00 [INF] Update la song Babe
+2021-06-20 09:40:10.419 +01:00 [INF] Me llego para updatear la song Back in black
+2021-06-20 09:40:10.478 +01:00 [INF] Update la song Back in black
+2021-06-20 09:40:14.732 +01:00 [INF] Me llego para updatear la song Bad attitude
+2021-06-20 09:40:14.804 +01:00 [INF] Update la song Bad attitude
+2021-06-20 09:40:15.178 +01:00 [INF] Me llego para updatear la song Bagatelle 25 A minor WoO 59 Fur Elise
+2021-06-20 09:40:15.186 +01:00 [INF] Update la song Bagatelle 25 A minor WoO 59 Fur Elise
+2021-06-20 09:40:20.119 +01:00 [INF] Me llego para updatear la song Baker street
+2021-06-20 09:40:20.201 +01:00 [INF] Update la song Baker street
+2021-06-20 09:40:20.202 +01:00 [INF] Me llego GetSongs con pageNo=8, pageSize=5, includeMidi=True
+2021-06-20 09:40:20.236 +01:00 [INF] Retorno estas songs Beat it,Beds are burning,Benny and the jets,Big Gun,Big in Japan
+2021-06-20 09:40:23.183 +01:00 [INF] Me llego para updatear la song Beat it
+2021-06-20 09:40:23.276 +01:00 [INF] Update la song Beat it
+2021-06-20 09:40:24.707 +01:00 [INF] Me llego para updatear la song Beds are burning
+2021-06-20 09:40:24.745 +01:00 [INF] Update la song Beds are burning
+2021-06-20 09:40:49.665 +01:00 [INF] Me llego para updatear la song Benny and the jets
+2021-06-20 09:40:49.743 +01:00 [INF] Update la song Benny and the jets
+2021-06-20 09:40:50.817 +01:00 [INF] Me llego para updatear la song Big Gun
+2021-06-20 09:40:50.845 +01:00 [INF] Update la song Big Gun
+2021-06-20 09:40:53.198 +01:00 [INF] Me llego para updatear la song Big in Japan
+2021-06-20 09:40:53.254 +01:00 [INF] Update la song Big in Japan
+2021-06-20 09:40:53.256 +01:00 [INF] Me llego GetSongs con pageNo=9, pageSize=5, includeMidi=True
+2021-06-20 09:40:53.304 +01:00 [INF] Retorno estas songs Bigmouth strikes again,Bird Land,Birthday,Bittersweet symphony,Black Dog
+2021-06-20 09:41:10.092 +01:00 [INF] Me llego para updatear la song Bigmouth strikes again
+2021-06-20 09:41:10.226 +01:00 [INF] Update la song Bigmouth strikes again
+2021-06-20 09:41:15.351 +01:00 [INF] Me llego para updatear la song Bird Land
+2021-06-20 09:41:15.439 +01:00 [INF] Update la song Bird Land
+2021-06-20 09:41:17.609 +01:00 [INF] Me llego para updatear la song Birthday
+2021-06-20 09:41:17.666 +01:00 [INF] Update la song Birthday
+2021-06-20 09:41:20.482 +01:00 [INF] Me llego para updatear la song Bittersweet symphony
+2021-06-20 09:41:20.598 +01:00 [INF] Update la song Bittersweet symphony
+2021-06-20 09:41:22.943 +01:00 [INF] Me llego para updatear la song Black Dog
+2021-06-20 09:41:22.993 +01:00 [INF] Update la song Black Dog
+2021-06-20 09:41:23.028 +01:00 [INF] Me llego GetSongs con pageNo=10, pageSize=5, includeMidi=True
+2021-06-20 09:41:23.077 +01:00 [INF] Retorno estas songs Black magic woman,Black Market,Black night,Blinded by the light,Bloody well right
+2021-06-20 09:41:52.177 +01:00 [INF] Me llego para updatear la song Black magic woman
+2021-06-20 09:41:52.276 +01:00 [INF] Update la song Black magic woman
+2021-06-20 09:41:54.351 +01:00 [INF] Me llego para updatear la song Black Market
+2021-06-20 09:41:54.373 +01:00 [INF] Update la song Black Market
+2021-06-20 09:41:57.298 +01:00 [INF] Me llego para updatear la song Black night
+2021-06-20 09:41:57.376 +01:00 [INF] Update la song Black night
+2021-06-20 09:41:59.098 +01:00 [INF] Me llego para updatear la song Blinded by the light
+2021-06-20 09:41:59.148 +01:00 [INF] Update la song Blinded by the light
+2021-06-20 09:42:06.734 +01:00 [INF] Me llego para updatear la song Bloody well right
+2021-06-20 09:42:06.846 +01:00 [INF] Update la song Bloody well right
+2021-06-20 09:42:06.884 +01:00 [INF] Me llego GetSongs con pageNo=11, pageSize=5, includeMidi=True
+2021-06-20 09:42:06.930 +01:00 [INF] Retorno estas songs Blue collar man,Boat on the river,Bohemian Rhapsody,Bouree,Brighton rock
+2021-06-20 09:42:16.750 +01:00 [INF] Me llego para updatear la song Blue collar man
+2021-06-20 09:42:16.886 +01:00 [INF] Update la song Blue collar man
+2021-06-20 09:42:44.128 +01:00 [INF] Me llego para updatear la song Boat on the river
+2021-06-20 09:42:44.200 +01:00 [INF] Update la song Boat on the river
+2021-06-20 09:42:47.557 +01:00 [INF] Me llego para updatear la song Bohemian Rhapsody
+2021-06-20 09:42:47.603 +01:00 [INF] Update la song Bohemian Rhapsody
+2021-06-20 09:42:51.532 +01:00 [INF] Me llego para updatear la song Bouree
+2021-06-20 09:42:51.596 +01:00 [INF] Update la song Bouree
+2021-06-20 09:42:53.676 +01:00 [INF] Me llego para updatear la song Brighton rock
+2021-06-20 09:42:53.723 +01:00 [INF] Update la song Brighton rock
+2021-06-20 09:42:53.759 +01:00 [INF] Me llego GetSongs con pageNo=12, pageSize=5, includeMidi=True
+2021-06-20 09:42:55.068 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+MongoDB.Driver.MongoCommandException: Command find failed: Executor error during find command :: caused by :: Sort exceeded memory limit of 104857600 bytes, but did not opt in to external sorting. Aborting operation. Pass allowDiskUse:true to opt in..
+   at MongoDB.Driver.Core.WireProtocol.CommandUsingCommandMessageWireProtocol`1.ProcessResponse(ConnectionId connectionId, CommandMessage responseMessage)
+   at MongoDB.Driver.Core.WireProtocol.CommandUsingCommandMessageWireProtocol`1.ExecuteAsync(IConnection connection, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Servers.Server.ServerChannel.ExecuteProtocolAsync[TResult](IWireProtocol`1 protocol, ICoreSession session, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.ExecuteAsync[TResult](IRetryableReadOperation`1 operation, RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.ExecuteAsync(RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.FindCommandOperation`1.ExecuteAsync(RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(IReadBinding binding, CancellationToken cancellationToken)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperationAsync[TResult](IReadBinding binding, IReadOperation`1 operation, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperationAsync[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.UsingImplicitSessionAsync[TResult](Func`2 funcAsync, CancellationToken cancellationToken)
+   at MongoDB.Driver.IAsyncCursorSourceExtensions.ToListAsync[TDocument](IAsyncCursorSource`1 source, CancellationToken cancellationToken)
+   at SinphinitySysStore.Repositories.SongsRepository.GetSongsAsync(Int32 pageSize, Int32 page, Boolean includeMidi, String contains, String styleId, String bandId, String sort, Int32 sortDirection, CancellationToken cancellationToken) in C:\dev\Sinphinity\Backend\SinphinitySysStore\Repositories\SongsRepository.cs:line 56
+   at SinphinitySysStore.Controllers.SongsController.GetSongsAsync(Int32 pageNo, Int32 pageSize, Boolean includeMidi, String contains, String styleId, String bandId, String sortKey, Int32 sortDirection) in C:\dev\Sinphinity\Backend\SinphinitySysStore\Controllers\SongsController.cs:line 38
+   at lambda_method40(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2021-06-20 10:33:03.814 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-06-20 10:33:12.130 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=5, includeMidi=True
+2021-06-20 10:33:12.411 +01:00 [INF] Retorno estas songs 14 Years,74 75,A day in the life,A German Requiem mov 1,A German Requiem mov 2
+2021-06-20 10:33:12.968 +01:00 [INF] Me llego GetSongs con pageNo=1, pageSize=5, includeMidi=True
+2021-06-20 10:33:13.019 +01:00 [INF] Retorno estas songs A German Requiem mov 5,A German Requiem mov 6,A German Requiem mov 7,A horse with no name,A man I ll never be
+2021-06-20 10:33:13.076 +01:00 [INF] Me llego GetSongs con pageNo=2, pageSize=5, includeMidi=True
+2021-06-20 10:33:13.119 +01:00 [INF] Retorno estas songs A trick of the tail,Abacab,Aint Talkin about love,All dead all dead,All I need is a miracle
+2021-06-20 10:33:13.205 +01:00 [INF] Me llego GetSongs con pageNo=3, pageSize=5, includeMidi=True
+2021-06-20 10:33:13.264 +01:00 [INF] Retorno estas songs All in a mouses night,All of my love,All we like sheep Messiah,All you need is love,Alll right now
+2021-06-20 10:33:13.318 +01:00 [INF] Me llego GetSongs con pageNo=4, pageSize=5, includeMidi=True
+2021-06-20 10:33:13.369 +01:00 [INF] Retorno estas songs Along the watchtower,Always on my mind,And He shall Purify Messiah,And the Glory of the Lord Messiah,Angel of Harlem
+2021-06-20 10:33:13.406 +01:00 [INF] Me llego GetSongs con pageNo=5, pageSize=5, includeMidi=True
+2021-06-20 10:33:13.471 +01:00 [INF] Retorno estas songs Angie,Another brick in the wall 1,Another brick in the wall 2,Another day in paradise,Another one bites the dust
+2021-06-20 10:33:13.586 +01:00 [INF] Me llego GetSongs con pageNo=6, pageSize=5, includeMidi=True
+2021-06-20 10:33:13.640 +01:00 [INF] Retorno estas songs Aqualung,Are remark You Made,Available light,Ave Maria,Awake the Harp chorus The Creation's Oratorio
+2021-06-20 10:33:13.670 +01:00 [INF] Me llego GetSongs con pageNo=7, pageSize=5, includeMidi=True
+2021-06-20 10:33:13.726 +01:00 [INF] Retorno estas songs Babe,Back in black,Bad attitude,Bagatelle 25 A minor WoO 59 Fur Elise,Baker street
+2021-06-20 10:33:13.748 +01:00 [INF] Me llego GetSongs con pageNo=8, pageSize=5, includeMidi=True
+2021-06-20 10:33:13.819 +01:00 [INF] Retorno estas songs Beat it,Beds are burning,Benny and the jets,Big Gun,Big in Japan
+2021-06-20 10:33:13.850 +01:00 [INF] Me llego GetSongs con pageNo=9, pageSize=5, includeMidi=True
+2021-06-20 10:33:13.917 +01:00 [INF] Retorno estas songs Bigmouth strikes again,Bird Land,Birthday,Bittersweet symphony,Black Dog
+2021-06-20 10:33:13.981 +01:00 [INF] Me llego GetSongs con pageNo=10, pageSize=5, includeMidi=True
+2021-06-20 10:33:14.042 +01:00 [INF] Retorno estas songs Black magic woman,Black Market,Black night,Blinded by the light,Bloody well right
+2021-06-20 10:33:14.069 +01:00 [INF] Me llego GetSongs con pageNo=11, pageSize=5, includeMidi=True
+2021-06-20 10:33:15.839 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+MongoDB.Driver.MongoCommandException: Command find failed: Executor error during find command :: caused by :: Sort exceeded memory limit of 104857600 bytes, but did not opt in to external sorting. Aborting operation. Pass allowDiskUse:true to opt in..
+   at MongoDB.Driver.Core.WireProtocol.CommandUsingCommandMessageWireProtocol`1.ProcessResponse(ConnectionId connectionId, CommandMessage responseMessage)
+   at MongoDB.Driver.Core.WireProtocol.CommandUsingCommandMessageWireProtocol`1.ExecuteAsync(IConnection connection, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Servers.Server.ServerChannel.ExecuteProtocolAsync[TResult](IWireProtocol`1 protocol, ICoreSession session, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.RetryableReadOperationExecutor.ExecuteAsync[TResult](IRetryableReadOperation`1 operation, RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.ReadCommandOperation`1.ExecuteAsync(RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.FindCommandOperation`1.ExecuteAsync(RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(RetryableReadContext context, CancellationToken cancellationToken)
+   at MongoDB.Driver.Core.Operations.FindOperation`1.ExecuteAsync(IReadBinding binding, CancellationToken cancellationToken)
+   at MongoDB.Driver.OperationExecutor.ExecuteReadOperationAsync[TResult](IReadBinding binding, IReadOperation`1 operation, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.ExecuteReadOperationAsync[TResult](IClientSessionHandle session, IReadOperation`1 operation, ReadPreference readPreference, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.UsingImplicitSessionAsync[TResult](Func`2 funcAsync, CancellationToken cancellationToken)
+   at MongoDB.Driver.IAsyncCursorSourceExtensions.ToListAsync[TDocument](IAsyncCursorSource`1 source, CancellationToken cancellationToken)
+   at SinphinitySysStore.Repositories.SongsRepository.GetSongsAsync(Int32 pageSize, Int32 page, Boolean includeMidi, String contains, String styleId, String bandId, String sort, Int32 sortDirection, CancellationToken cancellationToken) in C:\dev\Sinphinity\Backend\SinphinitySysStore\Repositories\SongsRepository.cs:line 56
+   at SinphinitySysStore.Controllers.SongsController.GetSongsAsync(Int32 pageNo, Int32 pageSize, Boolean includeMidi, String contains, String styleId, String bandId, String sortKey, Int32 sortDirection) in C:\dev\Sinphinity\Backend\SinphinitySysStore\Controllers\SongsController.cs:line 38
+   at lambda_method4(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)

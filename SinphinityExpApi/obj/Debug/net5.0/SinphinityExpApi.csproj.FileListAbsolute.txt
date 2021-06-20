@@ -16,6 +16,7 @@ C:\dev\Sinphinity\Backend\SinphinityExpApi\bin\Debug\net5.0\Serilog.Extensions.H
 C:\dev\Sinphinity\Backend\SinphinityExpApi\bin\Debug\net5.0\Serilog.Extensions.Logging.dll
 C:\dev\Sinphinity\Backend\SinphinityExpApi\bin\Debug\net5.0\Serilog.Formatting.Compact.dll
 C:\dev\Sinphinity\Backend\SinphinityExpApi\bin\Debug\net5.0\Serilog.Settings.Configuration.dll
+C:\dev\Sinphinity\Backend\SinphinityExpApi\bin\Debug\net5.0\Serilog.Sinks.Async.dll
 C:\dev\Sinphinity\Backend\SinphinityExpApi\bin\Debug\net5.0\Serilog.Sinks.Console.dll
 C:\dev\Sinphinity\Backend\SinphinityExpApi\bin\Debug\net5.0\Serilog.Sinks.Debug.dll
 C:\dev\Sinphinity\Backend\SinphinityExpApi\bin\Debug\net5.0\Serilog.Sinks.File.dll
@@ -26,6 +27,7 @@ C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\SinphinityExpApi.Gen
 C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\SinphinityExpApi.AssemblyInfoInputs.cache
 C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\SinphinityExpApi.AssemblyInfo.cs
 C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\SinphinityExpApi.csproj.CoreCompileInputs.cache
+C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\SinphinityExpApi.MvcApplicationPartsAssemblyInfo.cs
 C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\SinphinityExpApi.MvcApplicationPartsAssemblyInfo.cache
 C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\staticwebassets\SinphinityExpApi.StaticWebAssets.Manifest.cache
 C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\staticwebassets\SinphinityExpApi.StaticWebAssets.xml
@@ -36,4 +38,3 @@ C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\SinphinityExpApi.dll
 C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\ref\SinphinityExpApi.dll
 C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\SinphinityExpApi.pdb
 C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\SinphinityExpApi.genruntimeconfig.cache
-C:\dev\Sinphinity\Backend\SinphinityExpApi\obj\Debug\net5.0\SinphinityExpApi.MvcApplicationPartsAssemblyInfo.cs

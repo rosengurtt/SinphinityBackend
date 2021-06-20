@@ -22,6 +22,7 @@ namespace SinphinityProcMidi.Controllers
         [HttpPost]
         public ActionResult ImportMidiFile(Song song)
         {
+            Log.Information($"Me llego para procesar la song {song.Name}");
             song =  ProcesameLaSong(song);
 
             return Ok(new ApiOKResponse(song));
