@@ -124,7 +124,7 @@ namespace SinphinitySysStore.Repositories
             return song;
         }
 
-        public async Task InsertSongDataAsync(Song song)
+        public async Task AddInfoToSong(Song song)
         {
             try
             {
@@ -137,7 +137,12 @@ namespace SinphinitySysStore.Repositories
                 await _songsInfoCollection.UpdateOneAsync(Builders<SongInfo>.Filter.Eq(s => s.Id, song.Id),
                     Builders<SongInfo>.Update
                     .Set(t => t.SongDataId, songData.Id)
-                    .Set(t => t.IsSongProcessed, true));
+                    .Set(t => t.IsSongProcessed, true)
+                    .Set(t => t.MidiStats, song.MidiStats)
+                    .Set(t => t.DurationInSeconds, song.DurationInSeconds)
+                    .Set(t => t.DurationInTicks, song.DurationInTicks)
+                    .Set(t => t.AverageTempoInBeatsPerMinute, song.AverageTempoInBeatsPerMinute)
+                    );
             }
             catch (Exception e)
             {
@@ -151,7 +156,7 @@ namespace SinphinitySysStore.Repositories
                     Builders<SongInfo>.Update.Set(t => t.CantBeProcessed, true));
                     Log.Information($"Updated song {song.Name} setting flag CantBeProcessed to true");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Log.Information("Couldn't set flag CantBeProcessed to true");
                 }

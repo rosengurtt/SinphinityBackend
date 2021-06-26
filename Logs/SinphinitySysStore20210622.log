@@ -1,0 +1,721 @@
+2021-06-22 18:25:05.495 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-06-22 18:25:21.205 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=5
+2021-06-22 18:25:21.488 +01:00 [INF] Retorno estas songs 14 Years,74 75,A day in the life,A German Requiem mov 1,A German Requiem mov 2
+2021-06-22 18:25:23.632 +01:00 [INF] Me llego GetSongs con pageNo=1, pageSize=5
+2021-06-22 18:25:23.658 +01:00 [INF] Retorno estas songs A German Requiem mov 5,A German Requiem mov 6,A German Requiem mov 7,A horse with no name,A man I ll never be
+2021-06-22 18:25:25.331 +01:00 [INF] Me llego GetSongs con pageNo=2, pageSize=5
+2021-06-22 18:25:25.351 +01:00 [INF] Retorno estas songs A trick of the tail,Abacab,Aint Talkin about love,All dead all dead,All I need is a miracle
+2021-06-22 18:25:26.500 +01:00 [INF] Me llego GetSongs con pageNo=3, pageSize=5
+2021-06-22 18:25:26.530 +01:00 [INF] Retorno estas songs All in a mouses night,All of my love,All we like sheep Messiah,All you need is love,Alll right now
+2021-06-22 18:25:27.944 +01:00 [INF] Me llego GetSongs con pageNo=4, pageSize=5
+2021-06-22 18:25:27.964 +01:00 [INF] Retorno estas songs Along the watchtower,Always on my mind,And He shall Purify Messiah,And the Glory of the Lord Messiah,Angel of Harlem
+2021-06-22 18:25:29.374 +01:00 [INF] Me llego GetSongs con pageNo=5, pageSize=5
+2021-06-22 18:25:29.394 +01:00 [INF] Retorno estas songs Angie,Another brick in the wall 1,Another brick in the wall 2,Another day in paradise,Another one bites the dust
+2021-06-22 18:25:30.720 +01:00 [INF] Me llego GetSongs con pageNo=6, pageSize=5
+2021-06-22 18:25:30.743 +01:00 [INF] Retorno estas songs Aqualung,Are remark You Made,Available light,Ave Maria,Awake the Harp chorus The Creation's Oratorio
+2021-06-22 18:25:31.387 +01:00 [INF] Me llego GetSongs con pageNo=7, pageSize=5
+2021-06-22 18:25:31.397 +01:00 [INF] Retorno estas songs Babe,Back in black,Bad attitude,Bagatelle 25 A minor WoO 59 Fur Elise,Baker street
+2021-06-22 18:25:32.285 +01:00 [INF] Me llego GetSongs con pageNo=8, pageSize=5
+2021-06-22 18:25:32.305 +01:00 [INF] Retorno estas songs Beat it,Beds are burning,Benny and the jets,Big Gun,Big in Japan
+2021-06-22 18:25:33.368 +01:00 [INF] Me llego GetSongs con pageNo=9, pageSize=5
+2021-06-22 18:25:33.384 +01:00 [INF] Retorno estas songs Bigmouth strikes again,Bird Land,Birthday,Bittersweet symphony,Black Dog
+2021-06-22 18:25:34.956 +01:00 [INF] Me llego GetSongs con pageNo=10, pageSize=5
+2021-06-22 18:25:34.967 +01:00 [INF] Retorno estas songs Black magic woman,Black Market,Black night,Blinded by the light,Bloody well right
+2021-06-22 18:25:36.375 +01:00 [INF] Me llego GetSongs con pageNo=11, pageSize=5
+2021-06-22 18:25:36.387 +01:00 [INF] Retorno estas songs Blue collar man,Boat on the river,Bohemian Rhapsody,Bouree,Brighton rock
+2021-06-22 18:25:37.817 +01:00 [INF] Me llego GetSongs con pageNo=12, pageSize=5
+2021-06-22 18:25:37.829 +01:00 [INF] Retorno estas songs Bring It On Home,Bring on the night,Bringin' On The Heartbreak,Bron-Y-Aur Stomp,Brothers in arms
+2021-06-22 18:25:39.131 +01:00 [INF] Me llego GetSongs con pageNo=13, pageSize=5
+2021-06-22 18:25:39.142 +01:00 [INF] Retorno estas songs Brown sugar,Bungle in the jungle,Burn,But thanks be to God 'Messiah',BWV 1000 Fugue in G minor mov 1
+2021-06-22 18:25:40.643 +01:00 [INF] Me llego GetSongs con pageNo=14, pageSize=5
+2021-06-22 18:25:40.657 +01:00 [INF] Retorno estas songs BWV 1000 Fugue in G minor mov 2,BWV 1007 Suite No. 1 in G major mov 1,BWV 1007 Suite No. 1 in G major mov 2,BWV 1007 Suite No. 1 in G major mov 3,BWV 1007 Suite No. 1 in G major mov 4
+2021-06-22 18:25:40.906 +01:00 [INF] Me llego GetSongs con pageNo=15, pageSize=5
+2021-06-22 18:25:40.917 +01:00 [INF] Retorno estas songs BWV 1007 Suite No. 1 in G major mov 5,BWV 1007 Suite No. 1 in G major mov 6,BWV 1008 Suite No. 2 in D minor mov 1,BWV 1008 Suite No. 2 in D minor mov 2,BWV 1008 Suite No. 2 in D minor mov 3
+2021-06-22 18:25:41.116 +01:00 [INF] Me llego GetSongs con pageNo=16, pageSize=5
+2021-06-22 18:25:41.126 +01:00 [INF] Retorno estas songs BWV 1008 Suite No. 2 in D minor mov 4,BWV 1008 Suite No. 2 in D minor mov 5,BWV 1008 Suite No. 2 in D minor mov 6,BWV 1009 Suite No. 3 in C major mov 1,BWV 1009 Suite No. 3 in C major mov 2
+2021-06-22 18:25:41.405 +01:00 [INF] Me llego GetSongs con pageNo=17, pageSize=5
+2021-06-22 18:25:41.416 +01:00 [INF] Retorno estas songs BWV 1009 Suite No. 3 in C major mov 3,BWV 1009 Suite No. 3 in C major mov 4,BWV 1009 Suite No. 3 in C major mov 5,BWV 1009 Suite No. 3 in C major mov 6,BWV 1010 Suite No. 4 in Eb major mov 1
+2021-06-22 18:25:41.681 +01:00 [INF] Me llego GetSongs con pageNo=18, pageSize=5
+2021-06-22 18:25:41.692 +01:00 [INF] Retorno estas songs BWV 1010 Suite No. 4 in Eb major mov 2,BWV 1010 Suite No. 4 in Eb major mov 3,BWV 1010 Suite No. 4 in Eb major mov 4,BWV 1010 Suite No. 4 in Eb major mov 5,BWV 1010 Suite No. 4 in Eb major mov 6
+2021-06-22 18:25:41.997 +01:00 [INF] Me llego GetSongs con pageNo=19, pageSize=5
+2021-06-22 18:25:42.017 +01:00 [INF] Retorno estas songs BWV 1011 Suite No. 5 in C minor mov 1,BWV 1011 Suite No. 5 in C minor mov 2,BWV 1011 Suite No. 5 in C minor mov 3,BWV 1011 Suite No. 5 in C minor mov 4,BWV 1011 Suite No. 5 in C minor mov 5
+2021-06-22 18:25:42.253 +01:00 [INF] Me llego GetSongs con pageNo=20, pageSize=5
+2021-06-22 18:25:42.264 +01:00 [INF] Retorno estas songs BWV 1011 Suite No. 5 in C minor mov 6,BWV 1013 Partita in A minor for Solo Flute mov 1,BWV 1013 Partita in A minor for Solo Flute mov 2,BWV 1013 Partita in A minor for Solo Flute mov 3,BWV 1013 Partita in A minor for Solo Flute mov 4
+2021-06-22 18:25:42.500 +01:00 [INF] Me llego GetSongs con pageNo=21, pageSize=5
+2021-06-22 18:25:42.512 +01:00 [INF] Retorno estas songs BWV 1014 Sonata No. 1 in B minor mov 1,BWV 1014 Sonata No. 1 in B minor mov 2,BWV 1014 Sonata No. 1 in B minor mov 3,BWV 1014 Sonata No. 1 in B minor mov 4,BWV 1015 Sonata No. 2 in A Major mov 1
+2021-06-22 18:25:42.979 +01:00 [INF] Me llego GetSongs con pageNo=22, pageSize=5
+2021-06-22 18:25:42.988 +01:00 [INF] Retorno estas songs BWV 1015 Sonata No. 2 in A Major mov 2,BWV 1015 Sonata No. 2 in A Major mov 3,BWV 1015 Sonata No. 2 in A Major mov 4,BWV 1016 Sonata No. 3 in E Major mov 1,BWV 1016 Sonata No. 3 in E Major mov 2
+2021-06-22 18:25:43.568 +01:00 [INF] Me llego GetSongs con pageNo=23, pageSize=5
+2021-06-22 18:25:43.581 +01:00 [INF] Retorno estas songs BWV 1016 Sonata No. 3 in E Major mov 3,BWV 1016 Sonata No. 3 in E Major mov 4,BWV 1017 Sonata No. 4 in C minor mov 1,BWV 1017 Sonata No. 4 in C minor mov 2,BWV 1017 Sonata No. 4 in C minor mov 3
+2021-06-22 18:25:44.124 +01:00 [INF] Me llego GetSongs con pageNo=24, pageSize=5
+2021-06-22 18:25:44.135 +01:00 [INF] Retorno estas songs BWV 1017 Sonata No. 4 in C minor mov 4,BWV 1018 Sonata No. 5 in F minor mov 1,BWV 1018 Sonata No. 5 in F minor mov 2,BWV 1018 Sonata No. 5 in F minor mov 3,BWV 1018 Sonata No. 5 in F minor mov 4
+2021-06-22 18:25:44.799 +01:00 [INF] Me llego GetSongs con pageNo=25, pageSize=5
+2021-06-22 18:25:44.809 +01:00 [INF] Retorno estas songs BWV 1019 Sonata No. 6 in G Major mov 1,BWV 1019 Sonata No. 6 in G Major mov 2,BWV 1019 Sonata No. 6 in G Major mov 3,BWV 1019 Sonata No. 6 in G Major mov 4,BWV 1019 Sonata No. 6 in G Major mov 5
+2021-06-22 18:25:45.369 +01:00 [INF] Me llego GetSongs con pageNo=26, pageSize=5
+2021-06-22 18:25:45.381 +01:00 [INF] Retorno estas songs BWV 1027 Sonata No. 1 in G Major ,BWV 1031  Sonata No. 2 in Eb major mov 1,BWV 1031  Sonata No. 2 in Eb major mov 2,BWV 1046 Brandenburg Concerto No. 1 in F Major mov 1 ,BWV 1046 Brandenburg Concerto No. 1 in F Major mov 2
+2021-06-22 18:25:46.292 +01:00 [INF] Me llego GetSongs con pageNo=27, pageSize=5
+2021-06-22 18:25:46.312 +01:00 [INF] Retorno estas songs BWV 1046 Brandenburg Concerto No. 1 in F Major mov 3,BWV 1046 Brandenburg Concerto No. 1 in F Major mov 4,BWV 1046 Brandenburg Concerto No. 1 in F Major mov 5,BWV 1066 Orchestral Suite I - 1 OVERTURE,BWV 1066 Orchestral Suite I - 2 COURANTE
+2021-06-22 18:25:48.283 +01:00 [INF] Me llego GetSongs con pageNo=28, pageSize=5
+2021-06-22 18:25:48.296 +01:00 [INF] Retorno estas songs BWV 1066 Orchestral Suite I - 3 GAVOTTE,BWV 1066 Orchestral Suite I - 4 FORLANE,BWV 1066 Orchestral Suite I - 5 MENUET,BWV 1066 Orchestral Suite I - 6 PASSPIED,BWV 1066 Orchestral Suite I BOURREE
+2021-06-22 18:25:49.198 +01:00 [INF] Me llego GetSongs con pageNo=29, pageSize=5
+2021-06-22 18:25:49.210 +01:00 [INF] Retorno estas songs BWV 1067  Orchestral Suite II - 1 OVERTURE,BWV 1067  Orchestral Suite II - 2 RONDEAU,BWV 1067  Orchestral Suite II - 3 SARABAND,BWV 1067  Orchestral Suite II - 4 BOURREE,BWV 1067  Orchestral Suite II - 5 POLONAIS
+2021-06-22 18:25:50.042 +01:00 [INF] Me llego GetSongs con pageNo=30, pageSize=5
+2021-06-22 18:25:50.057 +01:00 [INF] Retorno estas songs BWV 1067  Orchestral Suite II - 6 MENUET,BWV 1067  Orchestral Suite II - 7 BADINERI,BWV 1068  Orchestral Suite III - 1 OVERTURE,BWV 1068  Orchestral Suite III - 2 AIR,BWV 1068  Orchestral Suite III - 3 GAVOTTE
+2021-06-22 18:25:51.166 +01:00 [INF] Me llego GetSongs con pageNo=31, pageSize=5
+2021-06-22 18:25:51.177 +01:00 [INF] Retorno estas songs BWV 1068  Orchestral Suite III - 4 BOURREE,BWV 1068  Orchestral Suite III - 5 GIGUE,BWV 1069  Orchestral Suite IV - 1 OVERTURE,BWV 1069  Orchestral Suite IV - 2 BOURREE,BWV 1069  Orchestral Suite IV - 3 GAVOTTE
+2021-06-22 18:25:52.647 +01:00 [INF] Me llego GetSongs con pageNo=32, pageSize=5
+2021-06-22 18:25:52.659 +01:00 [INF] Retorno estas songs BWV 1069  Orchestral Suite IV - 4 MENUET,BWV 1069  Orchestral Suite IV - 5 rejouiss,BWV 1072 Canon trias harmonica a 8, in contrary motion,BWV 1073 Canon a 4 perpetuus 2 Aug,BWV 1074 Canon a 4
+2021-06-22 18:25:53.175 +01:00 [INF] Me llego GetSongs con pageNo=33, pageSize=5
+2021-06-22 18:25:53.186 +01:00 [INF] Retorno estas songs BWV 1074 Canon a 4, inverted minor mode,BWV 1075 Canon a 2 perpetuus,BWV 1076 Canon triplex a 6 voc.,BWV 1077 Canone doppio sopr'il soggetto,BWV 1078 Canon super fa mi a 7 post tempus musicu
+2021-06-22 18:25:53.289 +01:00 [INF] Me llego GetSongs con pageNo=34, pageSize=5
+2021-06-22 18:25:53.301 +01:00 [INF] Retorno estas songs BWV 1080 Contrapunctus  2b,BWV 1080 Contrapunctus 1,BWV 1080 Contrapunctus 12,BWV 1080 Contrapunctus 2,BWV 1086 Canon concordia discors a 2, in contrary motion
+2021-06-22 18:25:53.605 +01:00 [INF] Me llego GetSongs con pageNo=35, pageSize=5
+2021-06-22 18:25:53.615 +01:00 [INF] Retorno estas songs BWV 1087 14 Canons on the First Eight Notes,BWV 202 Cantata Weichet nur, betrübte Schatten,BWV 205 Cantata Zerreisset, zerspreget, zertrümmert die Gruft,BWV 212 Cantata Mer hahn en neue Oberkeet,BWV 243 Magnificat in D major
+2021-06-22 18:25:56.617 +01:00 [INF] Me llego GetSongs con pageNo=36, pageSize=5
+2021-06-22 18:25:56.629 +01:00 [INF] Retorno estas songs BWV 29 Sinfonia to cantata ,BWV 525 Trio Sonata No.1 in Eb major mov 1,BWV 525 Trio Sonata No.1 in Eb major mov 2,BWV 525 Trio Sonata No.1 in Eb major mov 3,BWV 529-Trio Sonata No.5 in C major mov 1
+2021-06-22 18:25:57.325 +01:00 [INF] Me llego GetSongs con pageNo=37, pageSize=5
+2021-06-22 18:25:57.338 +01:00 [INF] Retorno estas songs BWV 529-Trio Sonata No.5 in C major mov 2,BWV 529-Trio Sonata No.5 in C major mov 3,BWV 530-Trio Sonata No.6 in G Major mov 1,BWV 530-Trio Sonata No.6 in G Major mov 2,BWV 530-Trio Sonata No.6 in G Major mov 3
+2021-06-22 18:25:57.842 +01:00 [INF] Me llego GetSongs con pageNo=38, pageSize=5
+2021-06-22 18:25:57.852 +01:00 [INF] Retorno estas songs BWV 532 Prelude and Fugue D major,BWV 533 Preluda and Fugue E minor,BWV 537 - Organ works - Fantasia and Fugue in C minor ,BWV 539 - Organ works - Praeludium and Fugue in D minor ,BWV 539 Fugue in D minor
+2021-06-22 18:25:58.591 +01:00 [INF] Me llego GetSongs con pageNo=39, pageSize=5
+2021-06-22 18:25:58.603 +01:00 [INF] Retorno estas songs BWV 539 Prelude in D minor,BWV 541 Fugue,BWV 541 Prelude,BWV 541 Prelude and Fugue G major,BWV 543 Prelude and Fugue A minor
+2021-06-22 18:25:59.213 +01:00 [INF] Me llego GetSongs con pageNo=40, pageSize=5
+2021-06-22 18:25:59.226 +01:00 [INF] Retorno estas songs BWV 549 Prelude and Fugue C minor,BWV 552 Fugue,BWV 552 Prelude,BWV 552 Prelude and Fugue Eb major,BWV 572 Fantasia in G major
+2021-06-22 18:26:00.093 +01:00 [INF] Me llego GetSongs con pageNo=41, pageSize=5
+2021-06-22 18:26:00.106 +01:00 [INF] Retorno estas songs BWV 582 - Organ works - Passacaglia and Fugue in C minor ,BWV 588 - Organ works - Canzona in D minor,BWV 653 - Organ works - By the Waters of Babylon,BWV 686 - Organ works - I Call to You Out of Deep Distress,BWV 733 - Organ works - Fuga sopra Magnificate
+2021-06-22 18:26:00.712 +01:00 [INF] Me llego GetSongs con pageNo=42, pageSize=5
+2021-06-22 18:26:00.725 +01:00 [INF] Retorno estas songs BWV 772 – Invention No. 1 in C major,BWV 773 – Invention No. 2 in C minor,BWV 774 – Invention No. 3 in D major,BWV 775 – Invention No. 4 in D minor,BWV 776 – Invention No. 5 in E-flat major
+2021-06-22 18:26:00.913 +01:00 [INF] Me llego GetSongs con pageNo=43, pageSize=5
+2021-06-22 18:26:00.925 +01:00 [INF] Retorno estas songs BWV 777 – Invention No. 6 in E major,BWV 778 – Invention No. 7 in E minor,BWV 779 – Invention No. 8 in F major,BWV 780 – Invention No. 9 in F minor,BWV 781 – Invention No. 10 in G major
+2021-06-22 18:26:01.140 +01:00 [INF] Me llego GetSongs con pageNo=44, pageSize=5
+2021-06-22 18:26:01.152 +01:00 [INF] Retorno estas songs BWV 782 – Invention No. 11 in G minor,BWV 783 – Invention No. 12 in A major,BWV 784 – Invention No. 13 in A minor,BWV 785 – Invention No. 14 in B-flat major,BWV 786 – Invention No. 15 in B minor
+2021-06-22 18:26:01.349 +01:00 [INF] Me llego GetSongs con pageNo=45, pageSize=5
+2021-06-22 18:26:01.361 +01:00 [INF] Retorno estas songs BWV 787 – Sinfonia No. 1 in C major,BWV 788 – Sinfonia No. 2 in C minor,BWV 789 – Sinfonia No. 3 in D major,BWV 790 – Sinfonia No. 4 in D minor,BWV 791 – Sinfonia No. 5 in E-flat major
+2021-06-22 18:26:01.560 +01:00 [INF] Me llego GetSongs con pageNo=46, pageSize=5
+2021-06-22 18:26:01.570 +01:00 [INF] Retorno estas songs BWV 792 – Sinfonia No. 6 in E major,BWV 793 – Sinfonia No. 7 in E minor,BWV 794 – Sinfonia No. 8 in F major,BWV 795 – Sinfonia No. 9 in F minor,BWV 796 – Sinfonia No. 10 in G major
+2021-06-22 18:26:01.848 +01:00 [INF] Me llego GetSongs con pageNo=47, pageSize=5
+2021-06-22 18:26:01.859 +01:00 [INF] Retorno estas songs BWV 797 – Sinfonia No. 11 in G minor,BWV 798 – Sinfonia No. 12 in A major,BWV 799 – Sinfonia No. 13 in A minor,BWV 800 – Sinfonia No. 14 in B-flat major,BWV 801 – Sinfonia No. 15 in B minor
+2021-06-22 18:26:02.050 +01:00 [INF] Me llego GetSongs con pageNo=48, pageSize=5
+2021-06-22 18:26:02.063 +01:00 [INF] Retorno estas songs BWV 802 Duetto I in E minor,BWV 803 Duetto II in F major,BWV 804 Duetto III in G major,BWV 805 Duetto IV in A Minor,BWV 806 English suite
+2021-06-22 18:26:02.662 +01:00 [INF] Me llego GetSongs con pageNo=49, pageSize=5
+2021-06-22 18:26:02.674 +01:00 [INF] Retorno estas songs BWV 807 English suite,BWV 808 English suite,BWV 809 English suite,BWV 810 English suite,BWV 811 English suite
+2021-06-22 18:26:04.278 +01:00 [INF] Me llego GetSongs con pageNo=50, pageSize=5
+2021-06-22 18:26:04.288 +01:00 [INF] Retorno estas songs BWV 812 French Suite No. 1 in D minor,BWV 813 French Suite No. 2 in C minor,BWV 814 French Suite No. 3 in B minor,BWV 815 French Suite No. 4 in E-flat major,BWV 816 French Suite No. 5 in G major
+2021-06-22 18:26:05.090 +01:00 [INF] Me llego GetSongs con pageNo=51, pageSize=5
+2021-06-22 18:26:05.102 +01:00 [INF] Retorno estas songs BWV 817 French Suite No. 6 in E major,BWV 825 Partita in B-flat major,BWV 826 Partita in C minor,BWV 827 Partita in A minor,BWV 828 Partita in D major
+2021-06-22 18:26:06.367 +01:00 [INF] Me llego GetSongs con pageNo=52, pageSize=5
+2021-06-22 18:26:06.380 +01:00 [INF] Retorno estas songs BWV 829 Partita in G major,BWV 830 Partita in E minor,BWV 846 Well tempered clavier Prelude and Fugue in C major,BWV 847 Well tempered clavier Prelude and Fugue in C minor,BWV 848 Well tempered clavier Prelude and Fugue in C-sharp major
+2021-06-22 18:26:07.353 +01:00 [INF] Me llego GetSongs con pageNo=53, pageSize=5
+2021-06-22 18:26:07.366 +01:00 [INF] Retorno estas songs BWV 849 Well tempered clavier Prelude and Fugue in C-sharp minor,BWV 850 Well tempered clavier Prelude and Fugue in D major,BWV 851 Well tempered clavier  Prelude and Fugue in D minor,BWV 852 Well tempered clavier Prelude and Fugue in E-flat major,BWV 853 Well tempered clavier Prelude and Fugue in E-flat minor
+2021-06-22 18:26:07.858 +01:00 [INF] Me llego GetSongs con pageNo=54, pageSize=5
+2021-06-22 18:26:07.868 +01:00 [INF] Retorno estas songs BWV 854 Well tempered clavier Prelude and Fugue in E major,BWV 855 Well tempered clavier Prelude and Fugue in E minor,BWV 856 Well tempered clavier Prelude and Fugue in F major,BWV 857 Well tempered clavier Prelude and Fugue in F minor,BWV 858 Well tempered clavier Prelude and Fugue in F-sharp major
+2021-06-22 18:26:08.315 +01:00 [INF] Me llego GetSongs con pageNo=55, pageSize=5
+2021-06-22 18:26:08.326 +01:00 [INF] Retorno estas songs BWV 859 Well tempered clavier Prelude and Fugue in F-sharp minor,BWV 860 Well tempered clavier Prelude and Fugue in G major,BWV 861 Well tempered clavier Prelude and Fugue in G minor,BWV 862 Well tempered clavier Prelude and Fugue in A-flat major,BWV 863 Well tempered clavier Prelude and Fugue in G-sharp minor
+2021-06-22 18:26:08.682 +01:00 [INF] Me llego GetSongs con pageNo=56, pageSize=5
+2021-06-22 18:26:08.693 +01:00 [INF] Retorno estas songs BWV 864 Well tempered clavier Prelude and Fugue in A major,BWV 865 Well tempered clavier Prelude and Fugue in A minor,BWV 866 Well tempered clavier Prelude and Fugue in B-flat major,BWV 867 Well tempered clavier Prelude and Fugue in B-flat minor,BWV 868 Well tempered clavier Prelude and Fugue in B major
+2021-06-22 18:26:09.181 +01:00 [INF] Me llego GetSongs con pageNo=57, pageSize=5
+2021-06-22 18:26:09.191 +01:00 [INF] Retorno estas songs BWV 869 Well tempered clavier Prelude and Fugue in B minor,BWV 870 Prelude and Fugue in C major,BWV 871 Prelude and Fugue in C minor,BWV 872 Prelude and Fugue in C-sharp major,BWV 873 Prelude and Fugue in C-sharp minor
+2021-06-22 18:26:09.741 +01:00 [INF] Me llego GetSongs con pageNo=58, pageSize=5
+2021-06-22 18:26:09.753 +01:00 [INF] Retorno estas songs BWV 874 Prelude and Fugue in D major,BWV 875 Prelude and Fugue in D minor,BWV 876 Prelude and Fugue in E-flat major,BWV 877 Prelude and Fugue in D-sharp minor,BWV 878 Prelude and Fugue in E major
+2021-06-22 18:26:10.306 +01:00 [INF] Me llego GetSongs con pageNo=59, pageSize=5
+2021-06-22 18:26:10.320 +01:00 [INF] Retorno estas songs BWV 879 Prelude and Fugue in E minor,BWV 880 Prelude and Fugue in F major,BWV 881 Prelude and Fugue in F minor,BWV 906 Fantasia in C minor ,BWV 906 Fugue in C minor 
+2021-06-22 18:26:10.831 +01:00 [INF] Me llego GetSongs con pageNo=60, pageSize=5
+2021-06-22 18:26:10.845 +01:00 [INF] Retorno estas songs BWV 910 Tocatta,BWV 911 Tocatta,BWV 912 Tocatta,BWV 913 Tocatta,BWV 914 Tocatta
+2021-06-22 18:26:11.927 +01:00 [INF] Me llego GetSongs con pageNo=61, pageSize=5
+2021-06-22 18:26:11.940 +01:00 [INF] Retorno estas songs BWV 915 Tocatta,BWV 916 Tocatta,BWV 971 Concerto in F mov 1,BWV 971 Italian Concerto in F Major,BWV 982 Concerto in Bb
+2021-06-22 18:26:12.971 +01:00 [INF] Me llego GetSongs con pageNo=62, pageSize=5
+2021-06-22 18:26:12.985 +01:00 [INF] Retorno estas songs BWV 988 Goldber variations,BWV 996 Suite in in E minor ,BWV 997 Partita in C minor mov 1,BWV 997 Partita in C minor mov 2,BWV 997 Partita in C minor mov 3
+2021-06-22 18:26:13.462 +01:00 [INF] Me llego GetSongs con pageNo=63, pageSize=5
+2021-06-22 18:26:13.476 +01:00 [INF] Retorno estas songs BWV 997 Partita in C minor mov 4,BWV 997 Partita in C minor mov 5,BWV 998 Prelude, Fugue, and Allegro in Eb major mov 1,BWV 998 Prelude, Fugue, and Allegro in Eb major mov 2,BWV 998 Prelude, Fugue, and Allegro in Eb major mov 3
+2021-06-22 18:26:13.822 +01:00 [INF] Me llego GetSongs con pageNo=64, pageSize=5
+2021-06-22 18:26:13.847 +01:00 [INF] Retorno estas songs BWV1028 Sonata No. 2 in D Major,BWV1029 Sonata No. 3 in G minor,BWV1041 Violin Concerto No. 1 mov 1,BWV1041 Violin Concerto No. 1 mov 2,BWV1041 Violin Concerto No. 1 mov 3
+2021-06-22 18:26:15.259 +01:00 [INF] Me llego GetSongs con pageNo=65, pageSize=5
+2021-06-22 18:26:15.285 +01:00 [INF] Retorno estas songs BWV1060 Concerto for Two Harpsichords in C minor,BWV1062 Concerto for Two Harpsichords in C minor,BWV1063 Concerto for Three Harpsichords in D minor,California dreaming,Can't fight this feeling
+2021-06-22 18:26:17.765 +01:00 [INF] Me llego GetSongs con pageNo=66, pageSize=5
+2021-06-22 18:26:17.782 +01:00 [INF] Retorno estas songs Can't stand losing you,Candle in the wind,Canzone Venezia e Napoli,Capriccio_in_B_n2,Carolina in my mind
+2021-06-22 18:26:18.490 +01:00 [INF] Me llego GetSongs con pageNo=67, pageSize=5
+2021-06-22 18:26:18.514 +01:00 [INF] Retorno estas songs Carry on,Carry on wayward son,Carry that weight,Cats in the craddle,Celebration Day
+2021-06-22 18:26:20.137 +01:00 [INF] Me llego GetSongs con pageNo=68, pageSize=5
+2021-06-22 18:26:20.160 +01:00 [INF] Retorno estas songs Central Park West,Chameleon,Child in time,Chip Blue,Civil War
+2021-06-22 18:26:22.183 +01:00 [INF] Me llego GetSongs con pageNo=69, pageSize=5
+2021-06-22 18:26:22.198 +01:00 [INF] Retorno estas songs Close to the edge,Cocodrile rock,Come as you are,Come sail away,Come together
+2021-06-22 18:26:24.697 +01:00 [INF] Me llego GetSongs con pageNo=70, pageSize=5
+2021-06-22 18:26:24.710 +01:00 [INF] Retorno estas songs Communication breakdown,Concerto in Eb mov 3,Concerto in Eb mov 4),Concerto No 6 in A,Confortably numb
+2021-06-22 18:26:25.912 +01:00 [INF] Me llego GetSongs con pageNo=71, pageSize=5
+2021-06-22 18:26:25.922 +01:00 [INF] Retorno estas songs Crazy,Crime of the century,Cross eyed mary,Crystall ball,Daddy cool
+2021-06-22 18:26:27.300 +01:00 [INF] Me llego GetSongs con pageNo=72, pageSize=5
+2021-06-22 18:26:27.311 +01:00 [INF] Retorno estas songs Day tripper,Dazed and confused,De do do do,Desire,Digging in the dirt
+2021-06-22 18:26:28.963 +01:00 [INF] Me llego GetSongs con pageNo=73, pageSize=5
+2021-06-22 18:26:29.006 +01:00 [INF] Retorno estas songs Dirty deeds done dirt cheap,Distant early warning,Do you feel like we do,Domino_dancing,Don't cry
+2021-06-22 18:26:30.265 +01:00 [INF] Me llego GetSongs con pageNo=74, pageSize=5
+2021-06-22 18:26:30.275 +01:00 [INF] Retorno estas songs Don't let it end,Don't look back,Don't stand so close to you,Dont bring me down,Dont go breaking my heart
+2021-06-22 18:26:31.634 +01:00 [INF] Me llego GetSongs con pageNo=75, pageSize=5
+2021-06-22 18:26:31.644 +01:00 [INF] Retorno estas songs Dont stop me now,Down on the corner,Dream on,Dreamer,Dreamline
+2021-06-22 18:26:32.821 +01:00 [INF] Me llego GetSongs con pageNo=76, pageSize=5
+2021-06-22 18:26:32.832 +01:00 [INF] Retorno estas songs Drive my car,Dude looks like a lady,Dust in the wind,Earth song,Easy lover
+2021-06-22 18:26:34.303 +01:00 [INF] Me llego GetSongs con pageNo=77, pageSize=5
+2021-06-22 18:26:34.314 +01:00 [INF] Retorno estas songs Ecuador,Edie Ciao Baby,Eleanor Rugby,EltonJohn_Rocket_man,Englishman in New York
+2021-06-22 18:26:35.851 +01:00 [INF] Me llego GetSongs con pageNo=78, pageSize=5
+2021-06-22 18:26:35.867 +01:00 [INF] Retorno estas songs Enjoy the silence,Eroica Etude Transcendentale,Eruption,Europa,Even in the quitest moments
+2021-06-22 18:26:36.885 +01:00 [INF] Me llego GetSongs con pageNo=79, pageSize=5
+2021-06-22 18:26:36.900 +01:00 [INF] Retorno estas songs Every breath you take,Every little thing,Everybodys got something to hide except me and my monkey,Evil ways,Evil woman
+2021-06-22 18:26:38.257 +01:00 [INF] Me llego GetSongs con pageNo=80, pageSize=5
+2021-06-22 18:26:38.272 +01:00 [INF] Retorno estas songs Eye in the sky,Eye of the beholder,Eye of the tiger,Fading like a flower,Fantaisie Op78 D894 Menuet
+2021-06-22 18:26:39.385 +01:00 [INF] Me llego GetSongs con pageNo=81, pageSize=5
+2021-06-22 18:26:39.404 +01:00 [INF] Retorno estas songs Father to son,Feux Follets Etude Transcendentale,Fire Woman,Flash Gordon,Flashdance what a feeling
+2021-06-22 18:26:40.781 +01:00 [INF] Me llego GetSongs con pageNo=82, pageSize=5
+2021-06-22 18:26:40.796 +01:00 [INF] Retorno estas songs Flute Sonata No 7 in A minor,Fly away,Fool for your stockins,Fooling yourself (the angry young man),For those about to rock
+2021-06-22 18:26:42.523 +01:00 [INF] Me llego GetSongs con pageNo=83, pageSize=5
+2021-06-22 18:26:42.539 +01:00 [INF] Retorno estas songs For unto us a Child is Born Messiah,Forever young,Four Sticks,Foxy lady,Frankenstein
+2021-06-22 18:26:43.771 +01:00 [INF] Me llego GetSongs con pageNo=84, pageSize=5
+2021-06-22 18:26:43.787 +01:00 [INF] Retorno estas songs Friends,From me_to you,From the beginning,Funky town,Funny How Love Is
+2021-06-22 18:26:45.290 +01:00 [INF] Me llego GetSongs con pageNo=85, pageSize=5
+2021-06-22 18:26:45.306 +01:00 [INF] Retorno estas songs Gallows Pole,Gimme all your lovin,Gimme shelter,Give a little bit,Go_Down
+2021-06-22 18:26:46.823 +01:00 [INF] Me llego GetSongs con pageNo=86, pageSize=5
+2021-06-22 18:26:46.839 +01:00 [INF] Retorno estas songs Going for the one,Going To California,Golden slumbers,Gondoliera Venezia e Napoli,Good Old-Fashioned Lover Boy
+2021-06-22 18:26:47.771 +01:00 [INF] Me llego GetSongs con pageNo=87, pageSize=5
+2021-06-22 18:26:47.788 +01:00 [INF] Retorno estas songs Good times bad times,Goodbye stranger,Goodbye yellow brick road,Great symphony,Guitar man
+2021-06-22 18:26:49.905 +01:00 [INF] Me llego GetSongs con pageNo=88, pageSize=5
+2021-06-22 18:26:49.920 +01:00 [INF] Retorno estas songs Guitar Quartet in D mov 1,Guitar Quartet in D mov 3,Guitar Quartet in D mov 5,Gypsy Rondo,Hallehujah Messiah
+2021-06-22 18:26:50.853 +01:00 [INF] Me llego GetSongs con pageNo=89, pageSize=5
+2021-06-22 18:26:50.869 +01:00 [INF] Retorno estas songs Hard as a rock,Hats Off To Roy Harper,Have a cigar,Have a drink on_Me,Have you ever seen the rain
+2021-06-22 18:26:51.517 +01:00 [INF] Me llego GetSongs con pageNo=90, pageSize=5
+2021-06-22 18:26:51.536 +01:00 [INF] Retorno estas songs He trusted in God Messiah,He was Despised Messiah,Heart,Heartbreaker,Heat of the moment
+2021-06-22 18:26:52.914 +01:00 [INF] Me llego GetSongs con pageNo=91, pageSize=5
+2021-06-22 18:26:52.931 +01:00 [INF] Retorno estas songs Heatseeker,Heaven for Everyone,Hell aint a bad place to be,Hell bells,Hello I love you
+2021-06-22 18:26:53.909 +01:00 [INF] Me llego GetSongs con pageNo=92, pageSize=5
+2021-06-22 18:26:53.924 +01:00 [INF] Retorno estas songs Here comes the sun,Here I go again,Hey Jude,Hey you,High voltage
+2021-06-22 18:26:54.682 +01:00 [INF] Me llego GetSongs con pageNo=93, pageSize=5
+2021-06-22 18:26:54.701 +01:00 [INF] Retorno estas songs Highway star,Highway to hell,His Yoke is easy Messiah,Hocus pocus,Hold me thril me kiss me
+2021-06-22 18:26:56.121 +01:00 [INF] Me llego GetSongs con pageNo=94, pageSize=5
+2021-06-22 18:26:56.137 +01:00 [INF] Retorno estas songs Hold the line,Honky tonk women,Hotel California,Hungry Like A Wolf,Hush
+2021-06-22 18:26:57.697 +01:00 [INF] Me llego GetSongs con pageNo=95, pageSize=5
+2021-06-22 18:26:57.711 +01:00 [INF] Retorno estas songs Hymn43,Hysteria,I am in love with my car,I am the walrus,I love rock and roll
+2021-06-22 18:26:58.924 +01:00 [INF] Me llego GetSongs con pageNo=96, pageSize=5
+2021-06-22 18:26:58.938 +01:00 [INF] Retorno estas songs I m your boogie man,I need you,I Robot,I started a joke,I wanna hold your hand
+2021-06-22 18:27:00.290 +01:00 [INF] Me llego GetSongs con pageNo=97, pageSize=5
+2021-06-22 18:27:00.308 +01:00 [INF] Retorno estas songs I was born to love you,Icarus born on wings of steel,If you leave me now,If you want blood,Imagine
+2021-06-22 18:27:01.597 +01:00 [INF] Me llego GetSongs con pageNo=98, pageSize=5
+2021-06-22 18:27:01.614 +01:00 [INF] Retorno estas songs Imitation of life,Immigrant Song,Impromptu Venezia e Napoli,In the air tonight,In the flesh
+2021-06-22 18:27:02.469 +01:00 [INF] Me llego GetSongs con pageNo=99, pageSize=5
+2021-06-22 18:27:02.482 +01:00 [INF] Retorno estas songs Inject the venom,Is this love,It must have been love,It's a Beautiful Day,It's a sin
+2021-06-22 18:27:03.291 +01:00 [INF] Me llego GetSongs con pageNo=100, pageSize=5
+2021-06-22 18:27:03.305 +01:00 [INF] Retorno estas songs It's late,Its only love,Jack,Jailbait,Jailbreak
+2021-06-22 18:27:04.469 +01:00 [INF] Me llego GetSongs con pageNo=101, pageSize=5
+2021-06-22 18:27:04.482 +01:00 [INF] Retorno estas songs Janie's got a gun,Jerusalem,Jump,K 002 Minuet in F major,K 003 Allegro in Bb major
+2021-06-22 18:27:05.114 +01:00 [INF] Me llego GetSongs con pageNo=102, pageSize=5
+2021-06-22 18:27:05.125 +01:00 [INF] Retorno estas songs K 004 Minuet in F major,K 117 Jubilate Deo,K 175 Piano Concerto 5 D major mov 1,K 175 Piano Concerto 5 D major mov 2,K 175 Piano Concerto 5 D major mov 3
+2021-06-22 18:27:06.022 +01:00 [INF] Me llego GetSongs con pageNo=103, pageSize=5
+2021-06-22 18:27:06.033 +01:00 [INF] Retorno estas songs K 191 Concerto Bassoon Bb major ,K 211 Violin Concerto 2 in D major mov 1,K 211 Violin Concerto 2 in D major mov 2,K 211 Violin Concerto 2 in D major mov 3,K 216 Violin Concerto 3 G major mov 1
+2021-06-22 18:27:07.500 +01:00 [INF] Me llego GetSongs con pageNo=104, pageSize=5
+2021-06-22 18:27:07.511 +01:00 [INF] Retorno estas songs K 216 Violin Concerto 3 G major mov 2,K 216 Violin Concerto 3 G major mov 3,K 218 Violin Concerto 4 D major mov 1,K 218 Violin Concerto 4 D major mov 2,K 218 Violin Concerto 4 D major mov 3
+2021-06-22 18:27:08.591 +01:00 [INF] Me llego GetSongs con pageNo=105, pageSize=5
+2021-06-22 18:27:08.603 +01:00 [INF] Retorno estas songs K 219 Violin Concerto 5 A major mov 1,K 219 Violin Concerto 5 A major mov 2,K 219 Violin Concerto 5 A major mov 3,K 246 Piano Concerto 8 C major mov 1,K 246 Piano Concerto 8 C major mov 2
+2021-06-22 18:27:09.858 +01:00 [INF] Me llego GetSongs con pageNo=106, pageSize=5
+2021-06-22 18:27:09.869 +01:00 [INF] Retorno estas songs K 246 Piano Concerto 8 C major mov 3,K 271 Piano Concerto EbMajor mov 1,K 271 Piano Concerto EbMajor mov 2,K 271 Piano Concerto EbMajor mov 3,K 299 Concerto for Flute, Harp & Piano C major mov 1
+2021-06-22 18:27:11.512 +01:00 [INF] Me llego GetSongs con pageNo=107, pageSize=5
+2021-06-22 18:27:11.523 +01:00 [INF] Retorno estas songs K 299 Concerto for Flute, Harp & Piano C major mov 2,K 299 Concerto for Flute, Harp & Piano C major mov 3,K 313 Flute Concerto No.1 in G major mov 1,K 313 Flute Concerto No.1 in G major mov 2,K 313 Flute Concerto No.1 in G major mov 3
+2021-06-22 18:27:12.874 +01:00 [INF] Me llego GetSongs con pageNo=108, pageSize=5
+2021-06-22 18:27:12.886 +01:00 [INF] Retorno estas songs K 314 Oboe Concerto C Major mov 1,K 314 Oboe Concerto C Major mov 2,K 314 Oboe Concerto C Major mov 3,K 357 Piano duet Sonata in G major,K 358 Piano  Duet Sonata Bb major
+2021-06-22 18:27:13.903 +01:00 [INF] Me llego GetSongs con pageNo=109, pageSize=5
+2021-06-22 18:27:13.917 +01:00 [INF] Retorno estas songs K 381 Piano Duet Sonata in D major,K 385 Symphony 35 D major mov 1,K 385 Symphony 35 D major mov 2,K 385 Symphony 35 D major mov 3,K 385 Symphony 35 D major mov 4
+2021-06-22 18:27:15.192 +01:00 [INF] Me llego GetSongs con pageNo=110, pageSize=5
+2021-06-22 18:27:15.203 +01:00 [INF] Retorno estas songs K 394 Fugue C major,K 394 Prelude C major,K 396 Fantasia C minor,K 401 Fugue G minor,K 450 Piano Concerto 15 Bb major mov 1
+2021-06-22 18:27:16.054 +01:00 [INF] Me llego GetSongs con pageNo=111, pageSize=5
+2021-06-22 18:27:16.064 +01:00 [INF] Retorno estas songs K 450 Piano Concerto 15 Bb major mov 2,K 450 Piano Concerto 15 Bb major mov 3,K 453 Piano Concerto 17 G major mov 1,K 453 Piano Concerto 17 G major mov 2,K 453 Piano Concerto 17 G major mov 3
+2021-06-22 18:27:17.522 +01:00 [INF] Me llego GetSongs con pageNo=112, pageSize=5
+2021-06-22 18:27:17.539 +01:00 [INF] Retorno estas songs K 466 Piano Concerto 20 D minor,K 466 Piano Concerto 20 D Minor mov 1,K 466 Piano Concerto 20 D Minor mov 2,K 467 Piano Concerto 21 C major mov 1,K 467 Piano Concerto 21 C major mov 2
+2021-06-22 18:27:19.707 +01:00 [INF] Me llego GetSongs con pageNo=113, pageSize=5
+2021-06-22 18:27:19.724 +01:00 [INF] Retorno estas songs K 467 Piano Concerto 21 C major mov 3,K 475 Fantasia C Minor,K 488 Piano Concerto 23 A major mov 1,K 488 Piano Concerto 23 A major mov 2,K 488 Piano Concerto 23 A major mov 3
+2021-06-22 18:27:21.018 +01:00 [INF] Me llego GetSongs con pageNo=114, pageSize=5
+2021-06-22 18:27:21.034 +01:00 [INF] Retorno estas songs K 492 The marriage of Figaro,K 521  Piano Duet Sonata C  major,K 527 Don Giovanni,K 546 Adagio and Fugue C Minor,K 547 Violin and Piano Sonata 35 in F major
+2021-06-22 18:27:22.551 +01:00 [INF] Me llego GetSongs con pageNo=115, pageSize=5
+2021-06-22 18:27:22.568 +01:00 [INF] Retorno estas songs K 547 Violin Sonata Fmajor,K 573 Variations on a menuet,K 620A The magic flute,K 622 Clarinet Concerto Bb mov 1,K 622 Clarinet Concerto Bb mov 2
+2021-06-22 18:27:23.973 +01:00 [INF] Me llego GetSongs con pageNo=116, pageSize=5
+2021-06-22 18:27:23.991 +01:00 [INF] Retorno estas songs K 626 Requiem D minor,K504 Sinfonia 38 mov 1,K504 Sinfonia 38 mov 2,K504 Sinfonia 38 mov 3,K543 Sinfonia 39 mov 1
+2021-06-22 18:27:25.457 +01:00 [INF] Me llego GetSongs con pageNo=117, pageSize=5
+2021-06-22 18:27:25.473 +01:00 [INF] Retorno estas songs K543 Sinfonia 39 mov 2,K543 Sinfonia 39 mov 3,K543 Sinfonia 39 mov 4,K550 Sinfonia 40 mov 1,K550 Sinfonia 40 mov 2
+2021-06-22 18:27:26.561 +01:00 [INF] Me llego GetSongs con pageNo=118, pageSize=5
+2021-06-22 18:27:26.580 +01:00 [INF] Retorno estas songs K550 Sinfonia 40 mov 3,K550 Sinfonia 40 mov 4,K551 Sinfonia 41 mov 1,K551 Sinfonia 41 mov 2,K551 Sinfonia 41 mov 3
+2021-06-22 18:27:27.610 +01:00 [INF] Me llego GetSongs con pageNo=119, pageSize=5
+2021-06-22 18:27:27.628 +01:00 [INF] Retorno estas songs K551 Sinfonia 41 mov 4,K622 Clarinet Concerto A major mov 1,K622 Clarinet Concerto A major mov 2,K622 Clarinet Concerto A major mov 3,Karn evil
+2021-06-22 18:27:28.986 +01:00 [INF] Me llego GetSongs con pageNo=120, pageSize=5
+2021-06-22 18:27:29.006 +01:00 [INF] Retorno estas songs Kashmir,Keep on loving you,Killer queen,Killing me softly with his song,La Villa Strangiato
+2021-06-22 18:27:30.345 +01:00 [INF] Me llego GetSongs con pageNo=121, pageSize=5
+2021-06-22 18:27:30.364 +01:00 [INF] Retorno estas songs Lady,Last train to London,Lazy,Lennon_Imagine,Let it be
+2021-06-22 18:27:31.673 +01:00 [INF] Me llego GetSongs con pageNo=122, pageSize=5
+2021-06-22 18:27:31.687 +01:00 [INF] Retorno estas songs Let Me Live,Let there be rock,Lift up your Heads Messiah,Light my fire,Light Year
+2021-06-22 18:27:33.046 +01:00 [INF] Me llego GetSongs con pageNo=123, pageSize=5
+2021-06-22 18:27:33.066 +01:00 [INF] Retorno estas songs Limelight,LisLiebestraume No 3,Listen to the music,Listen to your heart,Little Sunflower
+2021-06-22 18:27:34.569 +01:00 [INF] Me llego GetSongs con pageNo=124, pageSize=5
+2021-06-22 18:27:34.584 +01:00 [INF] Retorno estas songs Little wing,Live forever,Live wire,Liveand let die,Living in the past
+2021-06-22 18:27:35.539 +01:00 [INF] Me llego GetSongs con pageNo=125, pageSize=5
+2021-06-22 18:27:35.554 +01:00 [INF] Retorno estas songs Living Loving Maid,Locomotive breath,Lola,Lonely people,Long train running
+2021-06-22 18:27:37.279 +01:00 [INF] Me llego GetSongs con pageNo=126, pageSize=5
+2021-06-22 18:27:37.293 +01:00 [INF] Retorno estas songs Loosing my religion,Love Bites,Love in an elevator,Love madly,Love of my life
+2021-06-22 18:27:38.058 +01:00 [INF] Me llego GetSongs con pageNo=127, pageSize=5
+2021-06-22 18:27:38.070 +01:00 [INF] Retorno estas songs Love will find a way,Lovely Rita,Lucky man,Lucy in the sky with diamonds,Machine messiah
+2021-06-22 18:27:39.451 +01:00 [INF] Me llego GetSongs con pageNo=128, pageSize=5
+2021-06-22 18:27:39.465 +01:00 [INF] Retorno estas songs Madchenlied,Made in Heaven,Magical mistery tour,Man on the moon,Mandolin Concerto in C mov 1
+2021-06-22 18:27:40.060 +01:00 [INF] Me llego GetSongs con pageNo=129, pageSize=5
+2021-06-22 18:27:40.074 +01:00 [INF] Retorno estas songs Mandolin Concerto in C mov 2,Mandolin Concerto in C mov 3,Maxwell's silver hammer,Mazeppa Etude Transcendentale,Message in a bottle
+2021-06-22 18:27:40.783 +01:00 [INF] Me llego GetSongs con pageNo=130, pageSize=5
+2021-06-22 18:27:40.796 +01:00 [INF] Retorno estas songs Miniature Piano Concerto,Minstrel in the gallery,Minuet in Eb,Minuetto Guitar Quartet in D mov 2,Minuetto Guitar Quartet in D mov 4
+2021-06-22 18:27:41.733 +01:00 [INF] Me llego GetSongs con pageNo=131, pageSize=5
+2021-06-22 18:27:41.743 +01:00 [INF] Retorno estas songs Misty Mountain Hop,Misunderstanding,Moby Dick,Money,Money for nothing
+2021-06-22 18:27:42.915 +01:00 [INF] Me llego GetSongs con pageNo=132, pageSize=5
+2021-06-22 18:27:42.929 +01:00 [INF] Retorno estas songs Money talks,Money's too tight to mention,More than a feeling,Morning glory,moroder-midi-flashdance
+2021-06-22 18:27:43.895 +01:00 [INF] Me llego GetSongs con pageNo=133, pageSize=5
+2021-06-22 18:27:43.908 +01:00 [INF] Retorno estas songs Mother Love,Mr Roboto,Music,My Life Has Been Saved,My sharona
+2021-06-22 18:27:44.937 +01:00 [INF] Me llego GetSongs con pageNo=134, pageSize=5
+2021-06-22 18:27:44.951 +01:00 [INF] Retorno estas songs My sweet lord,Nevermore,New Years Day,Next to you,Nights on broadway
+2021-06-22 18:27:46.182 +01:00 [INF] Me llego GetSongs con pageNo=135, pageSize=5
+2021-06-22 18:27:46.199 +01:00 [INF] Retorno estas songs no 1 Mephisto Waltz,no 1 Valse Oubliee,no 13 Hungarian Raphsody,no 2 Hungarian Raphsody,no 2 Valse Oubliee
+2021-06-22 18:27:46.934 +01:00 [INF] Me llego GetSongs con pageNo=136, pageSize=5
+2021-06-22 18:27:46.953 +01:00 [INF] Retorno estas songs no 3 Mephisto Waltz,No more mr nice guy,No one like you,No Quarter,Nobody home
+2021-06-22 18:27:47.858 +01:00 [INF] Me llego GetSongs con pageNo=137, pageSize=5
+2021-06-22 18:27:47.875 +01:00 [INF] Retorno estas songs Notorious,Now I'm Here,Nowhere man,O thon that tellest good tidings Messiah,Ohio
+2021-06-22 18:27:49.057 +01:00 [INF] Me llego GetSongs con pageNo=138, pageSize=5
+2021-06-22 18:27:49.072 +01:00 [INF] Retorno estas songs On the turning away,One,One for the vine,One of these days,One Of These Nights
+2021-06-22 18:27:51.854 +01:00 [INF] Me llego GetSongs con pageNo=139, pageSize=5
+2021-06-22 18:27:51.872 +01:00 [INF] Retorno estas songs Only time will tell,Op 06 Mazurka No 1 for Piano,Op 06 Mazurka No 2 for Piano,Op 06 Mazurka No 3 for Piano,Op 064 String Quartet No.2 in B minor mov 1
+2021-06-22 18:27:52.667 +01:00 [INF] Me llego GetSongs con pageNo=140, pageSize=5
+2021-06-22 18:27:52.680 +01:00 [INF] Retorno estas songs Op 09 Nocturne No 1 in Bb minor,Op 09 Nocturne No.3 B,Op 09 Nocturne No2 in Eb,Op 10  Edude No 11 in Eb,Op 10  Edude No.01 in C
+2021-06-22 18:27:52.923 +01:00 [INF] Me llego GetSongs con pageNo=141, pageSize=5
+2021-06-22 18:27:52.934 +01:00 [INF] Retorno estas songs Op 10 Edude No 02 in A minor,Op 10 Edude No 03 in E,Op 10 Edude No 04 in C# minor,Op 10 Edude No 05 in Gb,Op 10 Edude No 06 in Eb mino
+2021-06-22 18:27:53.166 +01:00 [INF] Me llego GetSongs con pageNo=142, pageSize=5
+2021-06-22 18:27:53.178 +01:00 [INF] Retorno estas songs Op 10 Edude No 07 in C,Op 10 Edude No 08 in F,Op 10 Edude No 09 in F minor,Op 10 Edude No 10 in Ab,Op 10 Edude No 12 in C minor
+2021-06-22 18:27:53.459 +01:00 [INF] Me llego GetSongs con pageNo=143, pageSize=5
+2021-06-22 18:27:53.473 +01:00 [INF] Retorno estas songs Op 101 Cello Concerto in D mov 2,Op 15  Nocturne No 1 in F,Op 15  Nocturne No 2 in F#,Op 15 Nocturne No 3 in G minor,Op 21 Piano Concerto No 2 in F minor mov 2
+2021-06-22 18:27:53.747 +01:00 [INF] Me llego GetSongs con pageNo=144, pageSize=5
+2021-06-22 18:27:53.760 +01:00 [INF] Retorno estas songs Op 25 Edude No 01,Op 25 Edude No 11,Op 27 Nocturne No 1 in C# minor,Op 27 Nocturne No 2 in Db,Op 28 Prelude in G minor No 04
+2021-06-22 18:27:54.021 +01:00 [INF] Me llego GetSongs con pageNo=145, pageSize=5
+2021-06-22 18:27:54.032 +01:00 [INF] Retorno estas songs Op 32 Nocturne No 1 in B,Op 32 Nocturne No.2 in Ab,Op 37 Nocturne No 1 in G minor,Op 37 Nocturne No 2 in G,Op 48 Nocturne No 1 in C minor
+2021-06-22 18:27:54.566 +01:00 [INF] Me llego GetSongs con pageNo=146, pageSize=5
+2021-06-22 18:27:54.577 +01:00 [INF] Retorno estas songs Op 48 Nocturne No 2 in F# minor,Op 53 Polonaise in Ab Heroic,Op 55 Nocturne No 1 in F minor,Op 55 Nocturne No 2 in Eb,Op 58 Sonata No 3 in B minor mov 1
+2021-06-22 18:27:55.035 +01:00 [INF] Me llego GetSongs con pageNo=147, pageSize=5
+2021-06-22 18:27:55.047 +01:00 [INF] Retorno estas songs Op 58 Sonata No 3 in B minor mov 2,Op 58 Sonata No 3 in B minor mov3,Op 58 Sonata No.3 in B minor mov 4,Op 62 Nocturne No 1 in B ,Op 62 Nocturne No 2 in E
+2021-06-22 18:27:55.252 +01:00 [INF] Me llego GetSongs con pageNo=148, pageSize=5
+2021-06-22 18:27:55.265 +01:00 [INF] Retorno estas songs Op 64 Waltz in C# minor No 2,Op 64 Waltz in Db No.1,Op 66 Fantaisie-impromptu in C# minor,Op 70 Waltz No 2,Op 72 Nocturne No 1 in E minor
+2021-06-22 18:27:55.512 +01:00 [INF] Me llego GetSongs con pageNo=149, pageSize=5
+2021-06-22 18:27:55.524 +01:00 [INF] Retorno estas songs Op No 1 in D German Dance,Op No 5 in D German Dance,Op No 6 in E  German Dance,Op.033 No.1 'Seven Bagatelles' (Wesley Venable),Op.033 No.2 'Seven Bagatelles' (Wesley Venable)
+2021-06-22 18:27:55.809 +01:00 [INF] Me llego GetSongs con pageNo=150, pageSize=5
+2021-06-22 18:27:55.821 +01:00 [INF] Retorno estas songs Op.033 No.3 'Seven Bagatelles' (Wesley Venable),Op.033 No.4 'Seven Bagatelles' (Wesley Venable),Op.033 No.5 'Seven Bagatelles' (Wesley Venable),Op.033 No.6 'Seven Bagatelles' (Wesley Venable),Op.033 No.7 'Seven Bagatelles' (Wesley Venable)
+2021-06-22 18:27:56.201 +01:00 [INF] Me llego GetSongs con pageNo=151, pageSize=5
+2021-06-22 18:27:56.212 +01:00 [INF] Retorno estas songs Op.04 No.5 mov.1 Concerto in F,Op.04 No.5 mov.2 Concerto in F,Op.04 No.5 mov.3 Concerto in F,Op.04 No.5 mov.4 Concerto in F.,Op.04 No.5 Organ Concerto
+2021-06-22 18:27:56.801 +01:00 [INF] Me llego GetSongs con pageNo=152, pageSize=5
+2021-06-22 18:27:56.815 +01:00 [INF] Retorno estas songs Op.077 Violin Concerto),Op.117 No 1 Intermezzo in Eb,Op.117 No 2 Intermezzo in Bb,Op.117 No 3 Intermezzo in D minor,Op.118 No 2 Intermezzo in A
+2021-06-22 18:27:57.588 +01:00 [INF] Me llego GetSongs con pageNo=153, pageSize=5
+2021-06-22 18:27:57.599 +01:00 [INF] Retorno estas songs Op.118 No 6 Intermezzo in Eb.,Op.120 Sonata for Clarinet and Piano No.2 in Eb mov 1,Op.120 Sonata for Clarinet and Piano No.2 in Eb mov 2,Op03 No11 Concerto Grosso,Op08 No1 La Primavera in E mov 1
+2021-06-22 18:27:58.214 +01:00 [INF] Me llego GetSongs con pageNo=154, pageSize=5
+2021-06-22 18:27:58.227 +01:00 [INF] Retorno estas songs Op08 No1 La Primavera in E mov 2,Op08 No1 La Primavera in E mov 3,Op08 No2 L'Estate in G minor mov 1,Op08 No2 L'Estate in G minor mov 2,Op08 No2 L'Estate in G minor mov 3
+2021-06-22 18:27:58.813 +01:00 [INF] Me llego GetSongs con pageNo=155, pageSize=5
+2021-06-22 18:27:58.826 +01:00 [INF] Retorno estas songs Op08 No3 L'Autunno in F mov 1,Op08 No3 L'Autunno in F mov 2,Op08 No3 L'Autunno in F mov 3,Op08 No4 L'Inverno in F minor mov 1,Op08 No4 L'Inverno in F minor mov 2
+2021-06-22 18:27:59.479 +01:00 [INF] Me llego GetSongs con pageNo=156, pageSize=5
+2021-06-22 18:27:59.492 +01:00 [INF] Retorno estas songs Op08 No4 L'Inverno in F minor mov 3,Opus 102 Cello Sonata 4 mov 1,Opus 102 Cello Sonata 4 mov 2,Opus 143 1,Opus 143 2
+2021-06-22 18:28:00.327 +01:00 [INF] Me llego GetSongs con pageNo=157, pageSize=5
+2021-06-22 18:28:00.342 +01:00 [INF] Retorno estas songs Opus 143 3,Opus 5 Cello Sonata 1 mov 2,Opus 5 Cello Sonata 2 mov 1,Opus 5 Cello Sonata 2 mov 2,Opus 5 Cello Sonata1 mov 1
+2021-06-22 18:28:02.131 +01:00 [INF] Me llego GetSongs con pageNo=158, pageSize=5
+2021-06-22 18:28:02.144 +01:00 [INF] Retorno estas songs Opus 58 PIano Concerto 4 mov 1,Opus 58 PIano Concerto 4 mov 2,Opus 69 Cello Sonata 3 mov 1,Opus 69 Cello Sonata 3 mov 2,Opus 69 Cello Sonata 3 mov 3
+2021-06-22 18:28:03.914 +01:00 [INF] Me llego GetSongs con pageNo=159, pageSize=5
+2021-06-22 18:28:03.925 +01:00 [INF] Retorno estas songs Opus d960 1,Opus d960 2,Opus d960 3,Opus d960 4,Orange crush
+2021-06-22 18:28:04.746 +01:00 [INF] Me llego GetSongs con pageNo=160, pageSize=5
+2021-06-22 18:28:04.764 +01:00 [INF] Retorno estas songs Out on The Tiles,Over The Hills And Far Away,Owner of a lonely heart,Oye como va,Paladium
+2021-06-22 18:28:06.585 +01:00 [INF] Me llego GetSongs con pageNo=161, pageSize=5
+2021-06-22 18:28:06.598 +01:00 [INF] Retorno estas songs Paperback writer,Paradise city,Paranoid,Penny Lane,Perfect strangers
+2021-06-22 18:28:07.539 +01:00 [INF] Me llego GetSongs con pageNo=162, pageSize=5
+2021-06-22 18:28:07.553 +01:00 [INF] Retorno estas songs Petrarch Sonnet,Phantasm,Photograph,Piano fantasy in c 1st mov,Piano Sonata No 52 in Eb mov 1
+2021-06-22 18:28:08.278 +01:00 [INF] Me llego GetSongs con pageNo=163, pageSize=5
+2021-06-22 18:28:08.290 +01:00 [INF] Retorno estas songs Piano Sonata No 52 in Eb mov 3,Piano Sonata No.37 in D mov 1,Picture Of You,Pictures of home,Pieces of eight
+2021-06-22 18:28:09.458 +01:00 [INF] Me llego GetSongs con pageNo=164, pageSize=5
+2021-06-22 18:28:09.473 +01:00 [INF] Retorno estas songs PinkFloyd_Ship,Play the game,Please please me,Poison,Police spirits in the _material world
+2021-06-22 18:28:10.565 +01:00 [INF] Me llego GetSongs con pageNo=165, pageSize=5
+2021-06-22 18:28:10.580 +01:00 [INF] Retorno estas songs Polonaise in E no 2,Pour Some Sugar On Me,Pretty woman,Private investigations,Problem child
+2021-06-22 18:28:11.633 +01:00 [INF] Me llego GetSongs con pageNo=166, pageSize=5
+2021-06-22 18:28:11.647 +01:00 [INF] Retorno estas songs Procession,Puppets dance,Purple haze,Radar love,Radio Free Europe
+2021-06-22 18:28:12.616 +01:00 [INF] Me llego GetSongs con pageNo=167, pageSize=5
+2021-06-22 18:28:12.643 +01:00 [INF] Retorno estas songs Radio ga ga,Ramble On,Rat bat blue,Rawhide,Red wine
+2021-06-22 18:28:14.080 +01:00 [INF] Me llego GetSongs con pageNo=168, pageSize=5
+2021-06-22 18:28:14.104 +01:00 [INF] Retorno estas songs Refugee,Relax,Rent,Return to innocence,Revolution
+2021-06-22 18:28:15.394 +01:00 [INF] Me llego GetSongs con pageNo=169, pageSize=5
+2021-06-22 18:28:15.417 +01:00 [INF] Retorno estas songs Ride on,Riders on the storm,Riff Raff,Right now,Rock And Roll
+2021-06-22 18:28:16.738 +01:00 [INF] Me llego GetSongs con pageNo=170, pageSize=5
+2021-06-22 18:28:16.763 +01:00 [INF] Retorno estas songs Rock n roll aint noise pollution,Rock n roll damnation,Rock you like a hurricane,Rocker,Rocket man
+2021-06-22 18:28:17.563 +01:00 [INF] Me llego GetSongs con pageNo=171, pageSize=5
+2021-06-22 18:28:17.588 +01:00 [INF] Retorno estas songs Rockit,Rocky mountain way,Roll th bones,Romantic Warrior,Rossana
+2021-06-22 18:28:19.773 +01:00 [INF] Me llego GetSongs con pageNo=172, pageSize=5
+2021-06-22 18:28:19.798 +01:00 [INF] Retorno estas songs Rough boy,Roundabout,Roxanne,Ruby Tuesday,Rumble
+2021-06-22 18:28:21.175 +01:00 [INF] Me llego GetSongs con pageNo=173, pageSize=5
+2021-06-22 18:28:21.201 +01:00 [INF] Retorno estas songs Run to you,Runnin' with the devil,Rythm of love,Sadness part 1,Sandman
+2021-06-22 18:28:22.814 +01:00 [INF] Me llego GetSongs con pageNo=174, pageSize=5
+2021-06-22 18:28:22.833 +01:00 [INF] Retorno estas songs Satisfaction,Save a prayer,Save me,Save Tonight,Scarlet begonias
+2021-06-22 18:28:24.533 +01:00 [INF] Me llego GetSongs con pageNo=175, pageSize=5
+2021-06-22 18:28:24.548 +01:00 [INF] Retorno estas songs Schertzo in F Sonatina No 4,School,School's out,Serenade,Seven seas of Rhye
+2021-06-22 18:28:26.064 +01:00 [INF] Me llego GetSongs con pageNo=176, pageSize=5
+2021-06-22 18:28:26.083 +01:00 [INF] Retorno estas songs Seven stones,Sexy sadie,Sgt peppers,Shake a leg,Shake your foundations
+2021-06-22 18:28:26.763 +01:00 [INF] Me llego GetSongs con pageNo=177, pageSize=5
+2021-06-22 18:28:26.780 +01:00 [INF] Retorno estas songs She sells sanctuary,Shine on crazy diamond,Shiny happy people,Shock the monkey,Shook me all night
+2021-06-22 18:28:28.110 +01:00 [INF] Me llego GetSongs con pageNo=178, pageSize=5
+2021-06-22 18:28:28.128 +01:00 [INF] Retorno estas songs Shoot high aim low,Shoot to thrill,Shot down in flames,Shout,Sidewalk
+2021-06-22 18:28:29.743 +01:00 [INF] Me llego GetSongs con pageNo=179, pageSize=5
+2021-06-22 18:28:29.763 +01:00 [INF] Retorno estas songs Silent running,Sin City,Since by Man came Death Messiah,Since I´ve Been Loving You,Since you've been gone
+2021-06-22 18:28:30.919 +01:00 [INF] Me llego GetSongs con pageNo=180, pageSize=5
+2021-06-22 18:28:30.939 +01:00 [INF] Retorno estas songs Sing for the day,Sink the pink,Sister golden hair,Smells like teen spirit,Smoke on the water
+2021-06-22 18:28:32.064 +01:00 [INF] Me llego GetSongs con pageNo=181, pageSize=5
+2021-06-22 18:28:32.081 +01:00 [INF] Retorno estas songs Snowballed,Snowblind,So lonely,Solsbury,Some Day One Day
+2021-06-22 18:28:33.756 +01:00 [INF] Me llego GetSongs con pageNo=182, pageSize=5
+2021-06-22 18:28:33.776 +01:00 [INF] Retorno estas songs Somebody Get Me A Doctor,Somebody to Love,Someone saved my life tonight,Something,Sonata 1 C major K 279 mov 1
+2021-06-22 18:28:34.545 +01:00 [INF] Me llego GetSongs con pageNo=183, pageSize=5
+2021-06-22 18:28:34.565 +01:00 [INF] Retorno estas songs Sonata 1 C major K 279 mov 2,Sonata 1 C major K 279 mov 3,Sonata 1 F Minor Opus 2 1 mov 1,Sonata 1 F Minor Opus 2 1 mov 2,Sonata 1 F Minor Opus 2 1 mov 3
+2021-06-22 18:28:35.088 +01:00 [INF] Me llego GetSongs con pageNo=184, pageSize=5
+2021-06-22 18:28:35.101 +01:00 [INF] Retorno estas songs Sonata 1 F Minor Opus 2 1 mov 4,Sonata 10 C major K 330 mov 1,Sonata 10 C major K 330 mov 2,Sonata 10 C major K 330 mov 3,Sonata 10 C Minor Opus 10 1 mov 1
+2021-06-22 18:28:35.938 +01:00 [INF] Me llego GetSongs con pageNo=185, pageSize=5
+2021-06-22 18:28:35.958 +01:00 [INF] Retorno estas songs Sonata 10 C Minor Opus 10 1 mov 2,Sonata 10 C Minor Opus 10 1 mov 3,Sonata 10 G Major Opus 14 2 mov 1,Sonata 10 G Major Opus 14 2 mov 2,Sonata 10 G Major Opus 14 2 mov 3
+2021-06-22 18:28:36.640 +01:00 [INF] Me llego GetSongs con pageNo=186, pageSize=5
+2021-06-22 18:28:36.659 +01:00 [INF] Retorno estas songs Sonata 11 A major K 331 Alla Turca mov 1,Sonata 11 A major K 331 Alla Turca mov 2,Sonata 11 A major K 331 Alla Turca mov 3,Sonata 11 Bb Major Opus 22 1 mov 1,Sonata 11 Bb Major Opus 22 1 mov 2
+2021-06-22 18:28:37.571 +01:00 [INF] Me llego GetSongs con pageNo=187, pageSize=5
+2021-06-22 18:28:37.591 +01:00 [INF] Retorno estas songs Sonata 11 Bb Major Opus 22 1 mov 3,Sonata 11 Bb Major Opus 22 1 mov 4,Sonata 12 Ab Major Opus 26 mov 1,Sonata 12 Ab Major Opus 26 mov 2,Sonata 12 Ab Major Opus 26 mov 3
+2021-06-22 18:28:38.318 +01:00 [INF] Me llego GetSongs con pageNo=188, pageSize=5
+2021-06-22 18:28:38.336 +01:00 [INF] Retorno estas songs Sonata 12 Ab Major Opus 26 mov 4,Sonata 12 F major K 332 mov 1,Sonata 12 F major K 332 mov 2,Sonata 12 F major K 332 mov 3,Sonata 13 Bb major K 333 mov 1
+2021-06-22 18:28:39.312 +01:00 [INF] Me llego GetSongs con pageNo=189, pageSize=5
+2021-06-22 18:28:39.330 +01:00 [INF] Retorno estas songs Sonata 13 Bb major K 333 mov 2,Sonata 13 Bb major K 333 mov 3,Sonata 13 Eb Major Opus 27 1 mov 1,Sonata 13 Eb Major Opus 27 1 mov 2,Sonata 13 Eb Major Opus 27 1 mov 3
+2021-06-22 18:28:40.008 +01:00 [INF] Me llego GetSongs con pageNo=190, pageSize=5
+2021-06-22 18:28:40.027 +01:00 [INF] Retorno estas songs Sonata 14 C minor K 457 mov 1,Sonata 14 C minor K 457 mov 2,Sonata 14 C minor K 457 mov 3,Sonata 14 Csharp Minor Opus 27 2 Moonlight mov 1,Sonata 14 Csharp Minor Opus 27 2 Moonlight mov 2
+2021-06-22 18:28:40.466 +01:00 [INF] Me llego GetSongs con pageNo=191, pageSize=5
+2021-06-22 18:28:40.483 +01:00 [INF] Retorno estas songs Sonata 14 Csharp Minor Opus 27 2 Moonlight mov 3,Sonata 15 D Major Opus 28 Pastoral mov 1,Sonata 15 D Major Opus 28 Pastoral mov 2,Sonata 15 D Major Opus 28 Pastoral mov 3,Sonata 15 D Major Opus 28 Pastoral mov 4
+2021-06-22 18:28:41.401 +01:00 [INF] Me llego GetSongs con pageNo=192, pageSize=5
+2021-06-22 18:28:41.418 +01:00 [INF] Retorno estas songs Sonata 15 F major K 533 mov 1,Sonata 15 K593-494 F major,Sonata 16 C major K 545 SonataFacile mov 1,Sonata 16 C major K 545 SonataFacile mov 2,Sonata 16 C major K 545 SonataFacile mov 3
+2021-06-22 18:28:42.206 +01:00 [INF] Me llego GetSongs con pageNo=193, pageSize=5
+2021-06-22 18:28:42.221 +01:00 [INF] Retorno estas songs Sonata 16 G Major Opus 31 1 mov 1,Sonata 16 G Major Opus 31 1 mov 2,Sonata 16 G Major Opus 31 1 mov 3,Sonata 17 Bb major K 570 mov 1,Sonata 17 Bb major K 570 mov 2
+2021-06-22 18:28:43.126 +01:00 [INF] Me llego GetSongs con pageNo=194, pageSize=5
+2021-06-22 18:28:43.144 +01:00 [INF] Retorno estas songs Sonata 17 Bb major K 570 mov 3,Sonata 17 D Minor Opus 31 2 mov 1,Sonata 17 D Minor Opus 31 2 mov 2,Sonata 17 D Minor Opus 31 2 mov 3,Sonata 18 D major K 576
+2021-06-22 18:28:43.801 +01:00 [INF] Me llego GetSongs con pageNo=195, pageSize=5
+2021-06-22 18:28:43.821 +01:00 [INF] Retorno estas songs Sonata 18 Eb Major Opus 31 3 mov 1,Sonata 18 Eb Major Opus 31 3 mov 2,Sonata 18 Eb Major Opus 31 3 mov 3,Sonata 18 Eb Major Opus 31 3 mov 4,Sonata 19 G Minor Opus 49 1 mov 1
+2021-06-22 18:28:44.599 +01:00 [INF] Me llego GetSongs con pageNo=196, pageSize=5
+2021-06-22 18:28:44.616 +01:00 [INF] Retorno estas songs Sonata 19 G Minor Opus 49 1 mov 2,Sonata 2 A Major Opus 2 2 mov 1,Sonata 2 A Major Opus 2 2 mov 2,Sonata 2 A Major Opus 2 2 mov 3,Sonata 2 A Major Opus 2 2 mov 4
+2021-06-22 18:28:45.351 +01:00 [INF] Me llego GetSongs con pageNo=197, pageSize=5
+2021-06-22 18:28:45.364 +01:00 [INF] Retorno estas songs Sonata 2 F major K 280,Sonata 20 G Minor Opus 49 1 mov 1,Sonata 20 G Minor Opus 49 1 mov 2,Sonata 21 C Major Opus 53 Waldstein mov 1,Sonata 21 C Major Opus 53 Waldstein mov 2
+2021-06-22 18:28:46.202 +01:00 [INF] Me llego GetSongs con pageNo=198, pageSize=5
+2021-06-22 18:28:46.215 +01:00 [INF] Retorno estas songs Sonata 21 C Major Opus 53 Waldstein mov 3,Sonata 22 F Major Opus 54 mov 1,Sonata 22 F Major Opus 54 mov 2,Sonata 23 F Minor Opus 57 Apasionata mov 1,Sonata 23 F Minor Opus 57 Apasionata mov 2
+2021-06-22 18:28:47.326 +01:00 [INF] Me llego GetSongs con pageNo=199, pageSize=5
+2021-06-22 18:28:47.340 +01:00 [INF] Retorno estas songs Sonata 23 F Minor Opus 57 Apasionata mov 3,Sonata 24 Fsharp Major Opus 78 A Therese mov 1,Sonata 24 Fsharp Major Opus 78 A Therese mov 2,Sonata 25 G Major Opus 79 mov 1,Sonata 25 G Major Opus 79 mov 2
+2021-06-22 18:28:48.128 +01:00 [INF] Me llego GetSongs con pageNo=200, pageSize=5
+2021-06-22 18:28:48.141 +01:00 [INF] Retorno estas songs Sonata 25 G Major Opus 79 mov 3,Sonata 26 Eb Major Opus 81a mov 1,Sonata 26 Eb Major Opus 81a mov 2,Sonata 26 Eb Major Opus 81a mov 3,Sonata 27 E Minor Opus 90 mov 1
+2021-06-22 18:28:48.815 +01:00 [INF] Me llego GetSongs con pageNo=201, pageSize=5
+2021-06-22 18:28:48.827 +01:00 [INF] Retorno estas songs Sonata 27 E Minor Opus 90 mov 2,Sonata 28 A Major Opus 101 mov 1,Sonata 28 A Major Opus 101 mov 2,Sonata 28 A Major Opus 101 mov 3,Sonata 29 Bb Major Opus 106 mov 1
+2021-06-22 18:28:49.929 +01:00 [INF] Me llego GetSongs con pageNo=202, pageSize=5
+2021-06-22 18:28:49.943 +01:00 [INF] Retorno estas songs Sonata 29 Bb Major Opus 106 mov 2,Sonata 29 Bb Major Opus 106 mov 3,Sonata 29 Bb Major Opus 106 mov 4,Sonata 3 Bb major K 281 mov 1,Sonata 3 Bb major K 281 mov 2
+2021-06-22 18:28:50.880 +01:00 [INF] Me llego GetSongs con pageNo=203, pageSize=5
+2021-06-22 18:28:50.893 +01:00 [INF] Retorno estas songs Sonata 3 Bb major K 281 mov 3,Sonata 3 C Major Opus 2 3 mov 1 ,Sonata 3 C Major Opus 2 3 mov 2,Sonata 3 C Major Opus 2 3 mov 3,Sonata 3 C Major Opus 2 3 mov 4
+2021-06-22 18:28:51.762 +01:00 [INF] Me llego GetSongs con pageNo=204, pageSize=5
+2021-06-22 18:28:51.773 +01:00 [INF] Retorno estas songs Sonata 30 e Major Opus 109 mov 1,Sonata 30 e Major Opus 109 mov 2,Sonata 30 e Major Opus 109 mov 3,Sonata 4 Eb major K 282 mov 1,Sonata 4 Eb major K 282 mov 2
+2021-06-22 18:28:52.470 +01:00 [INF] Me llego GetSongs con pageNo=205, pageSize=5
+2021-06-22 18:28:52.482 +01:00 [INF] Retorno estas songs Sonata 4 Eb major K 282 mov 3,Sonata 4 Eb Major Opus 7 mov 1,Sonata 4 Eb Major Opus 7 mov 2,Sonata 4 Eb Major Opus 7 mov 3,Sonata 4 Eb Major Opus 7 mov 4
+2021-06-22 18:28:53.299 +01:00 [INF] Me llego GetSongs con pageNo=206, pageSize=5
+2021-06-22 18:28:53.310 +01:00 [INF] Retorno estas songs Sonata 5 Gb major K 283,Sonata 6 D major K 284,Sonata 6 F Major Opus 10 2 mov 1,Sonata 6 F Major Opus 10 2 mov 2,Sonata 6 F Major Opus 10 2 mov 3
+2021-06-22 18:28:54.390 +01:00 [INF] Me llego GetSongs con pageNo=207, pageSize=5
+2021-06-22 18:28:54.411 +01:00 [INF] Retorno estas songs Sonata 7 C major K 309 mov 1,Sonata 7 C major K 309 mov 2,Sonata 7 C major K 309 mov 3,Sonata 7 D Major Opus 10 3 mov 1,Sonata 7 D Major Opus 10 3 mov 2
+2021-06-22 18:28:55.273 +01:00 [INF] Me llego GetSongs con pageNo=208, pageSize=5
+2021-06-22 18:28:55.293 +01:00 [INF] Retorno estas songs Sonata 7 D Major Opus 10 3 mov 3,Sonata 7 D Major Opus 10 3 mov 4,Sonata 8 A minor K 310 mov 1,Sonata 8 A minor K 310 mov 2,Sonata 8 A minor K 310 mov 3
+2021-06-22 18:28:56.077 +01:00 [INF] Me llego GetSongs con pageNo=209, pageSize=5
+2021-06-22 18:28:56.095 +01:00 [INF] Retorno estas songs Sonata 8 C Minor Opus 13 Pathetique mov 1,Sonata 8 C Minor Opus 13 Pathetique mov 2,Sonata 8 C Minor Opus 13 Pathetique mov 3,Sonata 9 D major K 311 mov 1,Sonata 9 D major K 311 mov 2
+2021-06-22 18:28:56.829 +01:00 [INF] Me llego GetSongs con pageNo=210, pageSize=5
+2021-06-22 18:28:56.847 +01:00 [INF] Retorno estas songs Sonata 9 D major K 311 mov 3,Sonata 9 E Major Opus 14 1 mov 1,Sonata 9 E Major Opus 14 1 mov 2,Sonata 9 E Major Opus 14 1 mov 3,Sonata in B minor
+2021-06-22 18:28:57.561 +01:00 [INF] Me llego GetSongs con pageNo=211, pageSize=5
+2021-06-22 18:28:57.578 +01:00 [INF] Retorno estas songs Sonata Op 120,Songs from the wood,Spanish fly,Spending my time,Spread your wings
+2021-06-22 18:28:58.407 +01:00 [INF] Me llego GetSongs con pageNo=212, pageSize=5
+2021-06-22 18:28:58.425 +01:00 [INF] Retorno estas songs Squealer,Squonk,Stagnation,Stairway to heaven,Starcship trooper
+2021-06-22 18:29:00.507 +01:00 [INF] Me llego GetSongs con pageNo=213, pageSize=5
+2021-06-22 18:29:00.524 +01:00 [INF] Retorno estas songs stayalve,Staying alive,Stiff upper lip,Still loving you,Straberry fields forever
+2021-06-22 18:29:01.917 +01:00 [INF] Me llego GetSongs con pageNo=214, pageSize=5
+2021-06-22 18:29:01.936 +01:00 [INF] Retorno estas songs Suite Madame Blue,Sunday bloody sunday,Surfing in USA,Sussudio,Sweet child o mine
+2021-06-22 18:29:03.485 +01:00 [INF] Me llego GetSongs con pageNo=215, pageSize=5
+2021-06-22 18:29:03.502 +01:00 [INF] Retorno estas songs Sweet child of innocence,Sweet emotions,Symphony 8 Op 93 F Major,Symphony No 007 mov 1,Symphony No 045 in F mov 1
+2021-06-22 18:29:05.317 +01:00 [INF] Me llego GetSongs con pageNo=216, pageSize=5
+2021-06-22 18:29:05.330 +01:00 [INF] Retorno estas songs Symphony No 073 in D mov 4,Symphony No 077 mov 4,Symphony No 095 mov 1,Symphony No 096 in D mov 1,Symphony No 104 in D mov 1
+2021-06-22 18:29:07.220 +01:00 [INF] Me llego GetSongs con pageNo=217, pageSize=5
+2021-06-22 18:29:07.230 +01:00 [INF] Retorno estas songs Symphony No 104 in D mov 2,Symphony No 104 in D mov 3,Symphony No 104 in D mov 4,Symphony No.5 in C minor Op 67 mov 1,Symphony No.5 in C minor Op 67 mov 2
+2021-06-22 18:29:09.214 +01:00 [INF] Me llego GetSongs con pageNo=218, pageSize=5
+2021-06-22 18:29:09.234 +01:00 [INF] Retorno estas songs Symphony No.5 in C minor Op 67 mov 3,Symphony No.5 in C minor Op 67 mov 4,Take on me,Take thelong way home,Tangerine
+2021-06-22 18:29:10.145 +01:00 [INF] Me llego GetSongs con pageNo=219, pageSize=5
+2021-06-22 18:29:10.161 +01:00 [INF] Retorno estas songs Taxman,Teentown,Texarkana,Thank You,The Battle For Evermore
+2021-06-22 18:29:11.069 +01:00 [INF] Me llego GetSongs con pageNo=220, pageSize=5
+2021-06-22 18:29:11.086 +01:00 [INF] Retorno estas songs The best of times,The big money,The boys are back in town,The Fairy Feller's Master-Stroke,The final countdown
+2021-06-22 18:29:12.050 +01:00 [INF] Me llego GetSongs con pageNo=221, pageSize=5
+2021-06-22 18:29:12.068 +01:00 [INF] Retorno estas songs The fountain of Salmacis,The grand illusion,The knife,The Lemon Song,The logical song
+2021-06-22 18:29:18.847 +01:00 [INF] Me llego para updatear la song The grand illusion
+2021-06-22 18:29:19.074 +01:00 [INF] Update la song The grand illusion
+2021-06-22 18:29:30.104 +01:00 [INF] Me llego para updatear la song The knife
+2021-06-22 18:29:30.209 +01:00 [INF] Update la song The knife
+2021-06-22 18:29:54.195 +01:00 [INF] Me llego para updatear la song The Lemon Song
+2021-06-22 18:29:54.292 +01:00 [INF] Update la song The Lemon Song
+2021-06-22 18:29:59.135 +01:00 [INF] Me llego para updatear la song The logical song
+2021-06-22 18:29:59.200 +01:00 [INF] Update la song The logical song
+2021-06-22 18:29:59.201 +01:00 [INF] Me llego GetSongs con pageNo=222, pageSize=5
+2021-06-22 18:29:59.218 +01:00 [INF] Retorno estas songs The March of the Black Queen,The miracle,The Music for the Royal Fireworks mov 0 overture,The Music for the Royal Fireworks mov 1 Allegro,The Music for the Royal Fireworks mov 2 Bourree
+2021-06-22 18:30:07.239 +01:00 [INF] Me llego para updatear la song The March of the Black Queen
+2021-06-22 18:30:07.327 +01:00 [INF] Update la song The March of the Black Queen
+2021-06-22 18:30:24.457 +01:00 [INF] Me llego para updatear la song The miracle
+2021-06-22 18:30:24.540 +01:00 [INF] Update la song The miracle
+2021-06-22 18:30:53.181 +01:00 [INF] Me llego para updatear la song The Music for the Royal Fireworks mov 0 overture
+2021-06-22 18:30:53.256 +01:00 [INF] Update la song The Music for the Royal Fireworks mov 0 overture
+2021-06-22 18:35:53.755 +01:00 [INF] Me llego para updatear la song The Music for the Royal Fireworks mov 1 Allegro
+2021-06-22 18:35:53.770 +01:00 [INF] Update la song The Music for the Royal Fireworks mov 1 Allegro
+2021-06-22 18:35:58.108 +01:00 [INF] Me llego para updatear la song The Music for the Royal Fireworks mov 2 Bourree
+2021-06-22 18:35:58.160 +01:00 [INF] Update la song The Music for the Royal Fireworks mov 2 Bourree
+2021-06-22 18:35:58.194 +01:00 [INF] Me llego GetSongs con pageNo=223, pageSize=5
+2021-06-22 18:35:58.212 +01:00 [INF] Retorno estas songs The Music for the Royal Fireworks mov 3 La Paix,The Music for the Royal Fireworks mov 4 La Rejouissance,The Music for the Royal Fireworks mov 5 Menuet I & II,The musical box,The Ocean
+2021-06-22 18:36:03.084 +01:00 [INF] Me llego para updatear la song The Music for the Royal Fireworks mov 3 La Paix
+2021-06-22 18:36:03.129 +01:00 [INF] Update la song The Music for the Royal Fireworks mov 3 La Paix
+2021-06-22 18:36:18.188 +01:00 [INF] Me llego para updatear la song The Music for the Royal Fireworks mov 4 La Rejouissance
+2021-06-22 18:36:18.251 +01:00 [INF] Update la song The Music for the Royal Fireworks mov 4 La Rejouissance
+2021-06-22 18:36:23.023 +01:00 [INF] Me llego para updatear la song The Music for the Royal Fireworks mov 5 Menuet I & II
+2021-06-22 18:36:23.056 +01:00 [INF] Update la song The Music for the Royal Fireworks mov 5 Menuet I & II
+2021-06-22 18:36:28.064 +01:00 [INF] Me llego para updatear la song The musical box
+2021-06-22 18:36:28.153 +01:00 [INF] Update la song The musical box
+2021-06-22 18:36:34.678 +01:00 [INF] Me llego para updatear la song The Ocean
+2021-06-22 18:36:34.753 +01:00 [INF] Update la song The Ocean
+2021-06-22 18:36:34.785 +01:00 [INF] Me llego GetSongs con pageNo=224, pageSize=5
+2021-06-22 18:36:34.799 +01:00 [INF] Retorno estas songs The one I love,The prophet's song,The reflex,The return of the giant Hogweed,The show must go on
+2021-06-22 18:36:37.185 +01:00 [INF] Me llego para updatear la song The one I love
+2021-06-22 18:36:37.216 +01:00 [INF] Update la song The one I love
+2021-06-22 18:36:42.287 +01:00 [INF] Me llego para updatear la song The prophet's song
+2021-06-22 18:36:42.364 +01:00 [INF] Update la song The prophet's song
+2021-06-22 18:37:36.458 +01:00 [INF] Me llego para updatear la song The reflex
+2021-06-22 18:37:36.565 +01:00 [INF] Update la song The reflex
+2021-06-22 18:37:47.479 +01:00 [INF] Me llego para updatear la song The return of the giant Hogweed
+2021-06-22 18:37:47.594 +01:00 [INF] Update la song The return of the giant Hogweed
+2021-06-22 18:37:58.186 +01:00 [INF] Me llego para updatear la song The show must go on
+2021-06-22 18:37:58.242 +01:00 [INF] Update la song The show must go on
+2021-06-22 18:37:58.278 +01:00 [INF] Me llego GetSongs con pageNo=225, pageSize=5
+2021-06-22 18:37:58.292 +01:00 [INF] Retorno estas songs The Six Wives of Henry VIII,The Song Remains The Same,The sweetest_thing,The way it is,The_fly
+2021-06-22 18:38:00.274 +01:00 [INF] Me llego para updatear la song The Six Wives of Henry VIII
+2021-06-22 18:38:00.310 +01:00 [INF] Update la song The Six Wives of Henry VIII
+2021-06-22 18:38:09.237 +01:00 [INF] Me llego para updatear la song The Song Remains The Same
+2021-06-22 18:38:09.397 +01:00 [INF] Update la song The Song Remains The Same
+2021-06-22 18:38:12.269 +01:00 [INF] Me llego para updatear la song The sweetest_thing
+2021-06-22 18:38:12.310 +01:00 [INF] Update la song The sweetest_thing
+2021-06-22 18:38:14.075 +01:00 [INF] Me llego para updatear la song The way it is
+2021-06-22 18:38:14.132 +01:00 [INF] Update la song The way it is
+2021-06-22 18:38:30.244 +01:00 [INF] Me llego para updatear la song The_fly
+2021-06-22 18:38:30.320 +01:00 [INF] Update la song The_fly
+2021-06-22 18:38:30.321 +01:00 [INF] Me llego GetSongs con pageNo=226, pageSize=5
+2021-06-22 18:38:30.336 +01:00 [INF] Retorno estas songs TheLook,Those eyes,Throwing it all away,Thunder_Struck,Thunderstruck
+2021-06-22 18:38:44.880 +01:00 [INF] Me llego para updatear la song TheLook
+2021-06-22 18:38:44.942 +01:00 [INF] Update la song TheLook
+2021-06-22 18:38:48.419 +01:00 [INF] Me llego para updatear la song Those eyes
+2021-06-22 18:38:48.479 +01:00 [INF] Update la song Those eyes
+2021-06-22 18:38:50.415 +01:00 [INF] Me llego para updatear la song Throwing it all away
+2021-06-22 18:38:50.461 +01:00 [INF] Update la song Throwing it all away
+2021-06-22 18:38:56.723 +01:00 [INF] Me llego para updatear la song Thunder_Struck
+2021-06-22 18:38:56.797 +01:00 [INF] Update la song Thunder_Struck
+2021-06-22 18:39:22.409 +01:00 [INF] Me llego para updatear la song Thunderstruck
+2021-06-22 18:39:22.479 +01:00 [INF] Update la song Thunderstruck
+2021-06-22 18:39:22.513 +01:00 [INF] Me llego GetSongs con pageNo=227, pageSize=5
+2021-06-22 18:39:22.527 +01:00 [INF] Retorno estas songs Ticket to ride,Tie Your Mother Down,Time,Time and still,Time passages
+2021-06-22 18:39:25.437 +01:00 [INF] Me llego para updatear la song Ticket to ride
+2021-06-22 18:39:25.489 +01:00 [INF] Update la song Ticket to ride
+2021-06-22 18:39:35.874 +01:00 [INF] Me llego para updatear la song Tie Your Mother Down
+2021-06-22 18:39:35.995 +01:00 [INF] Update la song Tie Your Mother Down
+2021-06-22 18:39:38.255 +01:00 [INF] Me llego para updatear la song Time
+2021-06-22 18:39:38.328 +01:00 [INF] Update la song Time
+2021-06-22 18:39:47.134 +01:00 [INF] Me llego para updatear la song Time and still
+2021-06-22 18:39:47.220 +01:00 [INF] Update la song Time and still
+2021-06-22 18:39:49.871 +01:00 [INF] Me llego para updatear la song Time passages
+2021-06-22 18:39:49.930 +01:00 [INF] Update la song Time passages
+2021-06-22 18:39:49.931 +01:00 [INF] Me llego GetSongs con pageNo=228, pageSize=5
+2021-06-22 18:39:49.946 +01:00 [INF] Retorno estas songs Tin man,TNT,Too much love will kill you,Too much time on my hands,Too old to rock and roll
+2021-06-22 18:39:51.015 +01:00 [INF] Me llego para updatear la song Tin man
+2021-06-22 18:39:51.069 +01:00 [INF] Update la song Tin man
+2021-06-22 18:39:56.960 +01:00 [INF] Me llego para updatear la song TNT
+2021-06-22 18:39:57.007 +01:00 [INF] Update la song TNT
+2021-06-22 18:39:58.888 +01:00 [INF] Me llego para updatear la song Too much love will kill you
+2021-06-22 18:39:58.922 +01:00 [INF] Update la song Too much love will kill you
+2021-06-22 18:40:03.238 +01:00 [INF] Me llego para updatear la song Too much time on my hands
+2021-06-22 18:40:03.307 +01:00 [INF] Update la song Too much time on my hands
+2021-06-22 18:40:04.464 +01:00 [INF] Me llego para updatear la song Too old to rock and roll
+2021-06-22 18:40:04.508 +01:00 [INF] Update la song Too old to rock and roll
+2021-06-22 18:40:04.510 +01:00 [INF] Me llego GetSongs con pageNo=229, pageSize=5
+2021-06-22 18:40:04.521 +01:00 [INF] Retorno estas songs Toto_Africa,Touch too much,Tubular bells,Turn it on again,Two Steps Behind
+2021-06-22 18:41:21.162 +01:00 [INF] Me llego para updatear la song Toto_Africa
+2021-06-22 18:41:21.290 +01:00 [INF] Update la song Toto_Africa
+2021-06-22 18:41:25.405 +01:00 [INF] Me llego para updatear la song Touch too much
+2021-06-22 18:41:25.476 +01:00 [INF] Update la song Touch too much
+2021-06-22 18:42:55.412 +01:00 [INF] Me llego para updatear la song Tubular bells
+2021-06-22 18:42:55.725 +01:00 [INF] Update la song Tubular bells
+2021-06-22 18:42:58.358 +01:00 [INF] Me llego para updatear la song Turn it on again
+2021-06-22 18:42:58.473 +01:00 [INF] Update la song Turn it on again
+2021-06-22 18:42:59.009 +01:00 [INF] Me llego para updatear la song Two Steps Behind
+2021-06-22 18:42:59.027 +01:00 [INF] Update la song Two Steps Behind
+2021-06-22 18:42:59.028 +01:00 [INF] Me llego GetSongs con pageNo=230, pageSize=5
+2021-06-22 18:42:59.045 +01:00 [INF] Retorno estas songs Unchain my heart,Under pressure,Velvet green,Ventura Highway,Victim Of Love
+2021-06-22 18:43:15.132 +01:00 [INF] Me llego para updatear la song Unchain my heart
+2021-06-22 18:43:15.192 +01:00 [INF] Update la song Unchain my heart
+2021-06-22 18:43:36.942 +01:00 [INF] Me llego para updatear la song Under pressure
+2021-06-22 18:43:37.011 +01:00 [INF] Update la song Under pressure
+2021-06-22 18:43:44.018 +01:00 [INF] Me llego para updatear la song Velvet green
+2021-06-22 18:43:44.089 +01:00 [INF] Update la song Velvet green
+2021-06-22 18:43:51.391 +01:00 [INF] Me llego para updatear la song Ventura Highway
+2021-06-22 18:43:51.459 +01:00 [INF] Update la song Ventura Highway
+2021-06-22 18:43:53.762 +01:00 [INF] Me llego para updatear la song Victim Of Love
+2021-06-22 18:43:53.827 +01:00 [INF] Update la song Victim Of Love
+2021-06-22 18:43:53.828 +01:00 [INF] Me llego GetSongs con pageNo=231, pageSize=5
+2021-06-22 18:43:53.840 +01:00 [INF] Retorno estas songs Violin Sonata No.3 in F mov 1,Violin Sonata No.3 in F mov 2,Violin Sonata No.3 in F mov 3,Violin Sonata No.3 in F mov 4,Violin Sonata No.6 in F mov 1 Adagio
+2021-06-22 18:43:54.269 +01:00 [INF] Me llego para updatear la song Violin Sonata No.3 in F mov 1
+2021-06-22 18:43:54.292 +01:00 [INF] Update la song Violin Sonata No.3 in F mov 1
+2021-06-22 18:43:55.030 +01:00 [INF] Me llego para updatear la song Violin Sonata No.3 in F mov 2
+2021-06-22 18:43:55.062 +01:00 [INF] Update la song Violin Sonata No.3 in F mov 2
+2021-06-22 18:43:55.255 +01:00 [INF] Me llego para updatear la song Violin Sonata No.3 in F mov 3
+2021-06-22 18:43:55.270 +01:00 [INF] Update la song Violin Sonata No.3 in F mov 3
+2021-06-22 18:43:55.967 +01:00 [INF] Me llego para updatear la song Violin Sonata No.3 in F mov 4
+2021-06-22 18:43:55.990 +01:00 [INF] Update la song Violin Sonata No.3 in F mov 4
+2021-06-22 18:43:56.198 +01:00 [INF] Me llego para updatear la song Violin Sonata No.6 in F mov 1 Adagio
+2021-06-22 18:43:56.212 +01:00 [INF] Update la song Violin Sonata No.6 in F mov 1 Adagio
+2021-06-22 18:43:56.236 +01:00 [INF] Me llego GetSongs con pageNo=232, pageSize=5
+2021-06-22 18:43:56.248 +01:00 [INF] Retorno estas songs Violin Sonata No.6 in F mov 2 Allegro,Violin Sonata No.6 in F mov 3 Largo,Violin Sonata No.6 in F mov 4 Allegro non troppo),Vision of angels,Voodoo child
+2021-06-22 18:43:56.951 +01:00 [INF] Me llego para updatear la song Violin Sonata No.6 in F mov 2 Allegro
+2021-06-22 18:43:56.978 +01:00 [INF] Update la song Violin Sonata No.6 in F mov 2 Allegro
+2021-06-22 18:43:57.040 +01:00 [INF] Me llego para updatear la song Violin Sonata No.6 in F mov 3 Largo
+2021-06-22 18:43:57.060 +01:00 [INF] Update la song Violin Sonata No.6 in F mov 3 Largo
+2021-06-22 18:43:57.461 +01:00 [INF] Me llego para updatear la song Violin Sonata No.6 in F mov 4 Allegro non troppo)
+2021-06-22 18:43:57.486 +01:00 [INF] Update la song Violin Sonata No.6 in F mov 4 Allegro non troppo)
+2021-06-22 18:44:03.277 +01:00 [INF] Me llego para updatear la song Vision of angels
+2021-06-22 18:44:03.364 +01:00 [INF] Update la song Vision of angels
+2021-06-22 18:44:15.703 +01:00 [INF] Me llego para updatear la song Voodoo child
+2021-06-22 18:44:15.777 +01:00 [INF] Update la song Voodoo child
+2021-06-22 18:44:15.778 +01:00 [INF] Me llego GetSongs con pageNo=233, pageSize=5
+2021-06-22 18:44:15.790 +01:00 [INF] Retorno estas songs Waiting for a girl like you,Walk all over you,Walking on the moon,waltz_in_Ab,Was it all worth it
+2021-06-22 18:44:16.964 +01:00 [INF] Me llego para updatear la song Waiting for a girl like you
+2021-06-22 18:44:17.014 +01:00 [INF] Update la song Waiting for a girl like you
+2021-06-22 18:44:21.068 +01:00 [INF] Me llego para updatear la song Walk all over you
+2021-06-22 18:44:21.137 +01:00 [INF] Update la song Walk all over you
+2021-06-22 18:44:23.597 +01:00 [INF] Me llego para updatear la song Walking on the moon
+2021-06-22 18:44:23.665 +01:00 [INF] Update la song Walking on the moon
+2021-06-22 18:44:23.736 +01:00 [INF] Me llego para updatear la song waltz_in_Ab
+2021-06-22 18:44:23.745 +01:00 [INF] Update la song waltz_in_Ab
+2021-06-22 18:44:27.280 +01:00 [INF] Me llego para updatear la song Was it all worth it
+2021-06-22 18:44:27.354 +01:00 [INF] Update la song Was it all worth it
+2021-06-22 18:44:27.355 +01:00 [INF] Me llego GetSongs con pageNo=234, pageSize=5
+2021-06-22 18:44:27.367 +01:00 [INF] Retorno estas songs Watcher of the skyes,Water Music Suite No.2 in D,Watermelon Man,We are the champions,We will rock you
+2021-06-22 18:45:35.153 +01:00 [INF] Me llego para updatear la song Watcher of the skyes
+2021-06-22 18:45:35.255 +01:00 [INF] Update la song Watcher of the skyes
+2021-06-22 18:45:37.562 +01:00 [INF] Me llego para updatear la song Water Music Suite No.2 in D
+2021-06-22 18:45:37.610 +01:00 [INF] Update la song Water Music Suite No.2 in D
+2021-06-22 18:45:41.874 +01:00 [INF] Me llego para updatear la song Watermelon Man
+2021-06-22 18:45:41.960 +01:00 [INF] Update la song Watermelon Man
+2021-06-22 18:45:46.483 +01:00 [INF] Me llego para updatear la song We are the champions
+2021-06-22 18:45:46.525 +01:00 [INF] Update la song We are the champions
+2021-06-22 18:45:46.984 +01:00 [INF] Me llego para updatear la song We will rock you
+2021-06-22 18:45:47.016 +01:00 [INF] Update la song We will rock you
+2021-06-22 18:45:47.047 +01:00 [INF] Me llego GetSongs con pageNo=235, pageSize=5
+2021-06-22 18:45:47.061 +01:00 [INF] Retorno estas songs Welcome to the Jungle,What do you do for money,What Is And What Should Never Be,When The Levee Breaks,Where the streets have no name
+2021-06-22 18:45:51.525 +01:00 [INF] Me llego para updatear la song Welcome to the Jungle
+2021-06-22 18:45:51.585 +01:00 [INF] Update la song Welcome to the Jungle
+2021-06-22 18:45:52.118 +01:00 [INF] Me llego para updatear la song What do you do for money
+2021-06-22 18:45:52.156 +01:00 [INF] Update la song What do you do for money
+2021-06-22 18:45:57.035 +01:00 [INF] Me llego para updatear la song What Is And What Should Never Be
+2021-06-22 18:45:57.124 +01:00 [INF] Update la song What Is And What Should Never Be
+2021-06-22 18:46:03.223 +01:00 [INF] Me llego para updatear la song When The Levee Breaks
+2021-06-22 18:46:03.304 +01:00 [INF] Update la song When The Levee Breaks
+2021-06-22 18:47:19.420 +01:00 [INF] Me llego para updatear la song Where the streets have no name
+2021-06-22 18:47:19.565 +01:00 [INF] Update la song Where the streets have no name
+2021-06-22 18:47:19.597 +01:00 [INF] Me llego GetSongs con pageNo=236, pageSize=5
+2021-06-22 18:47:19.613 +01:00 [INF] Retorno estas songs While my guitar gently weeps,Who ll stop the rain,Who made who,Who wants to live for ever,Whole lotta love
+2021-06-22 18:47:42.237 +01:00 [INF] Me llego para updatear la song While my guitar gently weeps
+2021-06-22 18:47:42.302 +01:00 [INF] Update la song While my guitar gently weeps
+2021-06-22 18:47:50.628 +01:00 [INF] Me llego para updatear la song Who ll stop the rain
+2021-06-22 18:47:50.712 +01:00 [INF] Update la song Who ll stop the rain
+2021-06-22 18:47:52.091 +01:00 [INF] Me llego para updatear la song Who made who
+2021-06-22 18:47:52.147 +01:00 [INF] Update la song Who made who
+2021-06-22 18:47:52.816 +01:00 [INF] Me llego para updatear la song Who wants to live for ever
+2021-06-22 18:47:52.847 +01:00 [INF] Update la song Who wants to live for ever
+2021-06-22 18:47:54.834 +01:00 [INF] Me llego para updatear la song Whole lotta love
+2021-06-22 18:47:54.892 +01:00 [INF] Update la song Whole lotta love
+2021-06-22 18:47:54.924 +01:00 [INF] Me llego GetSongs con pageNo=237, pageSize=5
+2021-06-22 18:47:54.941 +01:00 [INF] Retorno estas songs Whole lotta rosie,Why cant this be love,Wild Boys,Wild horses,Wild world
+2021-06-22 18:47:56.406 +01:00 [INF] Me llego para updatear la song Whole lotta rosie
+2021-06-22 18:47:56.464 +01:00 [INF] Update la song Whole lotta rosie
+2021-06-22 18:48:02.494 +01:00 [INF] Me llego para updatear la song Why cant this be love
+2021-06-22 18:48:02.614 +01:00 [INF] Update la song Why cant this be love
+2021-06-22 18:48:05.180 +01:00 [INF] Me llego para updatear la song Wild Boys
+2021-06-22 18:48:05.257 +01:00 [INF] Update la song Wild Boys
+2021-06-22 18:48:11.399 +01:00 [INF] Me llego para updatear la song Wild horses
+2021-06-22 18:48:11.466 +01:00 [INF] Update la song Wild horses
+2021-06-22 18:48:12.621 +01:00 [INF] Me llego para updatear la song Wild world
+2021-06-22 18:48:12.657 +01:00 [INF] Update la song Wild world
+2021-06-22 18:48:12.658 +01:00 [INF] Me llego GetSongs con pageNo=238, pageSize=5
+2021-06-22 18:48:12.669 +01:00 [INF] Retorno estas songs Wind of change,Wish you were here,Witchy Woman,With a little help of my friends,With or without you
+2021-06-22 18:48:18.926 +01:00 [INF] Me llego para updatear la song Wind of change
+2021-06-22 18:48:19.084 +01:00 [INF] Update la song Wind of change
+2021-06-22 18:48:19.819 +01:00 [INF] Me llego para updatear la song Wish you were here
+2021-06-22 18:48:19.874 +01:00 [INF] Update la song Wish you were here
+2021-06-22 18:48:25.574 +01:00 [INF] Me llego para updatear la song Witchy Woman
+2021-06-22 18:48:25.638 +01:00 [INF] Update la song Witchy Woman
+2021-06-22 18:48:26.744 +01:00 [INF] Me llego para updatear la song With a little help of my friends
+2021-06-22 18:48:26.788 +01:00 [INF] Update la song With a little help of my friends
+2021-06-22 18:48:28.604 +01:00 [INF] Me llego para updatear la song With or without you
+2021-06-22 18:48:28.647 +01:00 [INF] Update la song With or without you
+2021-06-22 18:48:28.648 +01:00 [INF] Me llego GetSongs con pageNo=239, pageSize=5
+2021-06-22 18:48:28.659 +01:00 [INF] Retorno estas songs Women,Wonderwall,Worthy - Blessing and Honour - Amen Messiah,Year of the cat,Yesterday
+2021-06-22 18:48:32.923 +01:00 [INF] Me llego para updatear la song Women
+2021-06-22 18:48:32.998 +01:00 [INF] Update la song Women
+2021-06-22 18:48:34.497 +01:00 [INF] Me llego para updatear la song Wonderwall
+2021-06-22 18:48:34.521 +01:00 [INF] Update la song Wonderwall
+2021-06-22 18:48:39.781 +01:00 [INF] Me llego para updatear la song Worthy - Blessing and Honour - Amen Messiah
+2021-06-22 18:48:39.842 +01:00 [INF] Update la song Worthy - Blessing and Honour - Amen Messiah
+2021-06-22 18:48:51.268 +01:00 [INF] Me llego para updatear la song Year of the cat
+2021-06-22 18:48:51.368 +01:00 [INF] Update la song Year of the cat
+2021-06-22 18:48:51.987 +01:00 [INF] Me llego para updatear la song Yesterday
+2021-06-22 18:48:52.031 +01:00 [INF] Update la song Yesterday
+2021-06-22 18:48:52.061 +01:00 [INF] Me llego GetSongs con pageNo=240, pageSize=5
+2021-06-22 18:48:52.077 +01:00 [INF] Retorno estas songs YMCA,You are my best friend,You can do magic,You can leave your hat on,You Could Be Mine
+2021-06-22 18:48:53.236 +01:00 [INF] Me llego para updatear la song YMCA
+2021-06-22 18:48:53.291 +01:00 [INF] Update la song YMCA
+2021-06-22 18:48:56.299 +01:00 [INF] Me llego para updatear la song You are my best friend
+2021-06-22 18:48:56.332 +01:00 [INF] Update la song You are my best friend
+2021-06-22 18:48:56.873 +01:00 [INF] Me llego para updatear la song You can do magic
+2021-06-22 18:48:56.894 +01:00 [INF] Update la song You can do magic
+2021-06-22 18:49:14.127 +01:00 [INF] Me llego para updatear la song You can leave your hat on
+2021-06-22 18:49:14.190 +01:00 [INF] Update la song You can leave your hat on
+2021-06-22 18:49:22.859 +01:00 [INF] Me llego para updatear la song You Could Be Mine
+2021-06-22 18:49:22.909 +01:00 [INF] Update la song You Could Be Mine
+2021-06-22 18:49:22.941 +01:00 [INF] Me llego GetSongs con pageNo=241, pageSize=5
+2021-06-22 18:49:22.955 +01:00 [INF] Retorno estas songs You Don't Fool Me,You really got me,You should be dancing,Your Love,Your song
+2021-06-22 18:50:05.108 +01:00 [INF] Me llego para updatear la song You Don't Fool Me
+2021-06-22 18:50:05.207 +01:00 [INF] Update la song You Don't Fool Me
+2021-06-22 18:50:06.608 +01:00 [INF] Me llego para updatear la song You really got me
+2021-06-22 18:50:06.646 +01:00 [INF] Update la song You really got me
+2021-06-22 18:50:44.521 +01:00 [INF] Me llego para updatear la song You should be dancing
+2021-06-22 18:50:44.604 +01:00 [INF] Update la song You should be dancing
+2021-06-22 18:50:51.126 +01:00 [INF] Me llego para updatear la song Your Love
+2021-06-22 18:50:51.171 +01:00 [INF] Update la song Your Love
+2021-06-22 18:50:51.643 +01:00 [INF] Me llego para updatear la song Your song
+2021-06-22 18:50:51.675 +01:00 [INF] Update la song Your song
+2021-06-22 18:50:51.707 +01:00 [INF] Me llego GetSongs con pageNo=242, pageSize=5
+2021-06-22 18:50:51.721 +01:00 [INF] Retorno estas songs Yours is no disgrace
+2021-06-22 18:51:16.384 +01:00 [INF] Me llego para updatear la song Yours is no disgrace
+2021-06-22 18:51:16.523 +01:00 [INF] Update la song Yours is no disgrace
+2021-06-22 18:51:16.555 +01:00 [INF] Me llego GetSongs con pageNo=243, pageSize=5
+2021-06-22 18:51:16.566 +01:00 [INF] Retorno estas songs 
+2021-06-22 19:01:00.666 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=11
+2021-06-22 19:01:00.704 +01:00 [INF] Retorno estas songs 14 Years,74 75,A day in the life,A German Requiem mov 1,A German Requiem mov 2,A German Requiem mov 5,A German Requiem mov 6,A German Requiem mov 7,A horse with no name,A man I ll never be,A trick of the tail
+2021-06-22 19:01:05.441 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=11
+2021-06-22 19:01:05.453 +01:00 [INF] Retorno estas songs A German Requiem mov 1,A German Requiem mov 2,A German Requiem mov 5,A German Requiem mov 6,A German Requiem mov 7,All we like sheep Messiah,And He shall Purify Messiah,And the Glory of the Lord Messiah,Ave Maria,Awake the Harp chorus The Creation's Oratorio,Bagatelle 25 A minor WoO 59 Fur Elise
+2021-06-22 19:01:12.244 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=11
+2021-06-22 19:01:12.257 +01:00 [INF] Retorno estas songs 14 Years,74 75,A day in the life,A German Requiem mov 1,A German Requiem mov 2,A German Requiem mov 5,A German Requiem mov 6,A German Requiem mov 7,A horse with no name,A man I ll never be,A trick of the tail
+2021-06-22 19:01:13.832 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=11
+2021-06-22 19:01:13.842 +01:00 [INF] Retorno estas songs A German Requiem mov 1,A German Requiem mov 2,A German Requiem mov 5,A German Requiem mov 6,A German Requiem mov 7,All we like sheep Messiah,And He shall Purify Messiah,And the Glory of the Lord Messiah,Ave Maria,Awake the Harp chorus The Creation's Oratorio,Bagatelle 25 A minor WoO 59 Fur Elise
+2021-06-22 19:01:16.036 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=11
+2021-06-22 19:01:16.048 +01:00 [INF] Retorno estas songs BWV 1000 Fugue in G minor mov 1,BWV 1000 Fugue in G minor mov 2,BWV 1007 Suite No. 1 in G major mov 1,BWV 1007 Suite No. 1 in G major mov 2,BWV 1007 Suite No. 1 in G major mov 3,BWV 1007 Suite No. 1 in G major mov 4,BWV 1007 Suite No. 1 in G major mov 5,BWV 1007 Suite No. 1 in G major mov 6,BWV 1008 Suite No. 2 in D minor mov 1,BWV 1008 Suite No. 2 in D minor mov 2,BWV 1008 Suite No. 2 in D minor mov 3
+2021-06-22 19:01:20.950 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=11
+2021-06-22 19:01:20.961 +01:00 [INF] Retorno estas songs BWV 1000 Fugue in G minor mov 1,BWV 1000 Fugue in G minor mov 2,BWV 1007 Suite No. 1 in G major mov 1,BWV 1007 Suite No. 1 in G major mov 2,BWV 1007 Suite No. 1 in G major mov 3,BWV 1007 Suite No. 1 in G major mov 4,BWV 1007 Suite No. 1 in G major mov 5,BWV 1007 Suite No. 1 in G major mov 6,BWV 1008 Suite No. 2 in D minor mov 1,BWV 1008 Suite No. 2 in D minor mov 2,BWV 1008 Suite No. 2 in D minor mov 3
+2021-06-22 19:01:21.067 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=11
+2021-06-22 19:01:21.075 +01:00 [INF] Retorno estas songs BWV 1000 Fugue in G minor mov 1,BWV 1000 Fugue in G minor mov 2,BWV 1007 Suite No. 1 in G major mov 1,BWV 1007 Suite No. 1 in G major mov 2,BWV 1007 Suite No. 1 in G major mov 3,BWV 1007 Suite No. 1 in G major mov 4,BWV 1007 Suite No. 1 in G major mov 5,BWV 1007 Suite No. 1 in G major mov 6,BWV 1008 Suite No. 2 in D minor mov 1,BWV 1008 Suite No. 2 in D minor mov 2,BWV 1008 Suite No. 2 in D minor mov 3
+2021-06-22 19:01:21.216 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=11
+2021-06-22 19:01:21.224 +01:00 [INF] Retorno estas songs BWV 1074 Canon a 4, inverted minor mode,BWV 772 – Invention No. 1 in C major,BWV 773 – Invention No. 2 in C minor,BWV 774 – Invention No. 3 in D major,BWV 775 – Invention No. 4 in D minor,BWV 776 – Invention No. 5 in E-flat major,BWV 777 – Invention No. 6 in E major,BWV 778 – Invention No. 7 in E minor,BWV 779 – Invention No. 8 in F major,BWV 780 – Invention No. 9 in F minor,BWV 781 – Invention No. 10 in G major
+2021-06-22 19:02:11.933 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=11
+2021-06-22 19:02:11.941 +01:00 [INF] Retorno estas songs BWV 1074 Canon a 4, inverted minor mode,BWV 772 – Invention No. 1 in C major,BWV 773 – Invention No. 2 in C minor,BWV 774 – Invention No. 3 in D major,BWV 775 – Invention No. 4 in D minor,BWV 776 – Invention No. 5 in E-flat major,BWV 777 – Invention No. 6 in E major,BWV 778 – Invention No. 7 in E minor,BWV 779 – Invention No. 8 in F major,BWV 780 – Invention No. 9 in F minor,BWV 781 – Invention No. 10 in G major
+2021-06-22 19:02:19.027 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=11
+2021-06-22 19:02:19.054 +01:00 [INF] Retorno estas songs 14 Years,74 75,A day in the life,A German Requiem mov 1,A German Requiem mov 2,A German Requiem mov 5,A German Requiem mov 6,A German Requiem mov 7,A horse with no name,A man I ll never be,A trick of the tail
+2021-06-22 19:02:44.627 +01:00 [INF] Me llego GetSongs con pageNo=0, pageSize=11
+2021-06-22 19:02:44.640 +01:00 [INF] Retorno estas songs 14 Years,74 75,A day in the life,A German Requiem mov 1,A German Requiem mov 2,A German Requiem mov 5,A German Requiem mov 6,A German Requiem mov 7,A horse with no name,A man I ll never be,A trick of the tail

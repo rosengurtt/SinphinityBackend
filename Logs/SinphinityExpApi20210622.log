@@ -1,0 +1,338 @@
+2021-06-22 18:25:05.486 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-06-22 18:29:12.587 +01:00 [INF] 1107 - Start with song: The grand illusion
+2021-06-22 18:29:18.672 +01:00 [INF] ProcMidi completed OK for The grand illusion
+2021-06-22 18:29:19.077 +01:00 [INF] Saved OK The grand illusion
+2021-06-22 18:29:19.094 +01:00 [INF] 1108 - Start with song: The knife
+2021-06-22 18:29:29.912 +01:00 [INF] ProcMidi completed OK for The knife
+2021-06-22 18:29:30.247 +01:00 [INF] Saved OK The knife
+2021-06-22 18:29:30.261 +01:00 [INF] 1109 - Start with song: The Lemon Song
+2021-06-22 18:29:54.104 +01:00 [INF] ProcMidi completed OK for The Lemon Song
+2021-06-22 18:29:54.292 +01:00 [INF] Saved OK The Lemon Song
+2021-06-22 18:29:54.301 +01:00 [INF] 1110 - Start with song: The logical song
+2021-06-22 18:29:59.055 +01:00 [INF] ProcMidi completed OK for The logical song
+2021-06-22 18:29:59.201 +01:00 [INF] Saved OK The logical song
+2021-06-22 18:29:59.236 +01:00 [INF] 1111 - Start with song: The March of the Black Queen
+2021-06-22 18:30:07.120 +01:00 [INF] ProcMidi completed OK for The March of the Black Queen
+2021-06-22 18:30:07.360 +01:00 [INF] Saved OK The March of the Black Queen
+2021-06-22 18:30:07.372 +01:00 [INF] 1112 - Start with song: The miracle
+2021-06-22 18:30:24.370 +01:00 [INF] ProcMidi completed OK for The miracle
+2021-06-22 18:30:24.574 +01:00 [INF] Saved OK The miracle
+2021-06-22 18:30:24.591 +01:00 [INF] 1113 - Start with song: The Music for the Royal Fireworks mov 0 overture
+2021-06-22 18:30:53.089 +01:00 [INF] ProcMidi completed OK for The Music for the Royal Fireworks mov 0 overture
+2021-06-22 18:30:53.256 +01:00 [INF] Saved OK The Music for the Royal Fireworks mov 0 overture
+2021-06-22 18:30:53.269 +01:00 [INF] 1114 - Start with song: The Music for the Royal Fireworks mov 1 Allegro
+2021-06-22 18:35:53.741 +01:00 [ERR] Couldn't process song The Music for the Royal Fireworks mov 1 Allegro
+System.Threading.Tasks.TaskCanceledException: The request was canceled due to the configured HttpClient.Timeout of 300 seconds elapsing.
+ ---> System.TimeoutException: The operation was canceled.
+ ---> System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+ ---> System.IO.IOException: Unable to read data from the transport connection: The I/O operation has been aborted because of either a thread exit or an application request..
+ ---> System.Net.Sockets.SocketException (995): The I/O operation has been aborted because of either a thread exit or an application request.
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReadAsyncInternal[TIOAdapter](TIOAdapter adapter, Memory`1 buffer)
+   at System.Net.Http.HttpConnection.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.SendAsyncCore(HttpRequestMessage request, HttpCompletionOption completionOption, Boolean async, Boolean emitTelemetryStartStop, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpClient.SendAsyncCore(HttpRequestMessage request, HttpCompletionOption completionOption, Boolean async, Boolean emitTelemetryStartStop, CancellationToken cancellationToken)
+   at SinphinityExpApi.Clients.ProcMidiClient.ProcessSong(Song song) in C:\dev\Sinphinity\Backend\SinphinityExpApi\Clients\ProcMidiClient.cs:line 34
+   at SinphinitySysStore.Controllers.SongsController.ProcessBatch(String styleId, String bandId) in C:\dev\Sinphinity\Backend\SinphinityExpApi\Controllers\SongsController.cs:line 156
+2021-06-22 18:35:53.787 +01:00 [INF] 1115 - Start with song: The Music for the Royal Fireworks mov 2 Bourree
+2021-06-22 18:35:58.071 +01:00 [INF] ProcMidi completed OK for The Music for the Royal Fireworks mov 2 Bourree
+2021-06-22 18:35:58.193 +01:00 [INF] Saved OK The Music for the Royal Fireworks mov 2 Bourree
+2021-06-22 18:35:58.222 +01:00 [INF] 1116 - Start with song: The Music for the Royal Fireworks mov 3 La Paix
+2021-06-22 18:36:03.029 +01:00 [INF] ProcMidi completed OK for The Music for the Royal Fireworks mov 3 La Paix
+2021-06-22 18:36:03.130 +01:00 [INF] Saved OK The Music for the Royal Fireworks mov 3 La Paix
+2021-06-22 18:36:03.139 +01:00 [INF] 1117 - Start with song: The Music for the Royal Fireworks mov 4 La Rejouissance
+2021-06-22 18:36:18.118 +01:00 [INF] ProcMidi completed OK for The Music for the Royal Fireworks mov 4 La Rejouissance
+2021-06-22 18:36:18.287 +01:00 [INF] Saved OK The Music for the Royal Fireworks mov 4 La Rejouissance
+2021-06-22 18:36:18.295 +01:00 [INF] 1118 - Start with song: The Music for the Royal Fireworks mov 5 Menuet I & II
+2021-06-22 18:36:22.981 +01:00 [INF] ProcMidi completed OK for The Music for the Royal Fireworks mov 5 Menuet I & II
+2021-06-22 18:36:23.057 +01:00 [INF] Saved OK The Music for the Royal Fireworks mov 5 Menuet I & II
+2021-06-22 18:36:23.067 +01:00 [INF] 1119 - Start with song: The musical box
+2021-06-22 18:36:27.958 +01:00 [INF] ProcMidi completed OK for The musical box
+2021-06-22 18:36:28.188 +01:00 [INF] Saved OK The musical box
+2021-06-22 18:36:28.196 +01:00 [INF] 1120 - Start with song: The Ocean
+2021-06-22 18:36:34.584 +01:00 [INF] ProcMidi completed OK for The Ocean
+2021-06-22 18:36:34.784 +01:00 [INF] Saved OK The Ocean
+2021-06-22 18:36:34.808 +01:00 [INF] 1121 - Start with song: The one I love
+2021-06-22 18:36:37.154 +01:00 [INF] ProcMidi completed OK for The one I love
+2021-06-22 18:36:37.247 +01:00 [INF] Saved OK The one I love
+2021-06-22 18:36:37.258 +01:00 [INF] 1122 - Start with song: The prophet's song
+2021-06-22 18:36:42.185 +01:00 [INF] ProcMidi completed OK for The prophet's song
+2021-06-22 18:36:42.365 +01:00 [INF] Saved OK The prophet's song
+2021-06-22 18:36:42.381 +01:00 [INF] 1123 - Start with song: The reflex
+2021-06-22 18:37:36.327 +01:00 [INF] ProcMidi completed OK for The reflex
+2021-06-22 18:37:36.596 +01:00 [INF] Saved OK The reflex
+2021-06-22 18:37:36.611 +01:00 [INF] 1124 - Start with song: The return of the giant Hogweed
+2021-06-22 18:37:47.332 +01:00 [INF] ProcMidi completed OK for The return of the giant Hogweed
+2021-06-22 18:37:47.594 +01:00 [INF] Saved OK The return of the giant Hogweed
+2021-06-22 18:37:47.604 +01:00 [INF] 1125 - Start with song: The show must go on
+2021-06-22 18:37:58.095 +01:00 [INF] ProcMidi completed OK for The show must go on
+2021-06-22 18:37:58.277 +01:00 [INF] Saved OK The show must go on
+2021-06-22 18:37:58.302 +01:00 [INF] 1126 - Start with song: The Six Wives of Henry VIII
+2021-06-22 18:38:00.226 +01:00 [INF] ProcMidi completed OK for The Six Wives of Henry VIII
+2021-06-22 18:38:00.311 +01:00 [INF] Saved OK The Six Wives of Henry VIII
+2021-06-22 18:38:00.321 +01:00 [INF] 1127 - Start with song: The Song Remains The Same
+2021-06-22 18:38:09.101 +01:00 [INF] ProcMidi completed OK for The Song Remains The Same
+2021-06-22 18:38:09.397 +01:00 [INF] Saved OK The Song Remains The Same
+2021-06-22 18:38:09.419 +01:00 [INF] 1128 - Start with song: The sweetest_thing
+2021-06-22 18:38:12.225 +01:00 [INF] ProcMidi completed OK for The sweetest_thing
+2021-06-22 18:38:12.343 +01:00 [INF] Saved OK The sweetest_thing
+2021-06-22 18:38:12.352 +01:00 [INF] 1129 - Start with song: The way it is
+2021-06-22 18:38:14.010 +01:00 [INF] ProcMidi completed OK for The way it is
+2021-06-22 18:38:14.163 +01:00 [INF] Saved OK The way it is
+2021-06-22 18:38:14.173 +01:00 [INF] 1130 - Start with song: The_fly
+2021-06-22 18:38:30.168 +01:00 [INF] ProcMidi completed OK for The_fly
+2021-06-22 18:38:30.320 +01:00 [INF] Saved OK The_fly
+2021-06-22 18:38:30.346 +01:00 [INF] 1131 - Start with song: TheLook
+2021-06-22 18:38:44.803 +01:00 [INF] ProcMidi completed OK for TheLook
+2021-06-22 18:38:44.973 +01:00 [INF] Saved OK TheLook
+2021-06-22 18:38:44.983 +01:00 [INF] 1132 - Start with song: Those eyes
+2021-06-22 18:38:48.351 +01:00 [INF] ProcMidi completed OK for Those eyes
+2021-06-22 18:38:48.509 +01:00 [INF] Saved OK Those eyes
+2021-06-22 18:38:48.519 +01:00 [INF] 1133 - Start with song: Throwing it all away
+2021-06-22 18:38:50.351 +01:00 [INF] ProcMidi completed OK for Throwing it all away
+2021-06-22 18:38:50.461 +01:00 [INF] Saved OK Throwing it all away
+2021-06-22 18:38:50.470 +01:00 [INF] 1134 - Start with song: Thunder_Struck
+2021-06-22 18:38:56.621 +01:00 [INF] ProcMidi completed OK for Thunder_Struck
+2021-06-22 18:38:56.828 +01:00 [INF] Saved OK Thunder_Struck
+2021-06-22 18:38:56.837 +01:00 [INF] 1135 - Start with song: Thunderstruck
+2021-06-22 18:39:22.324 +01:00 [INF] ProcMidi completed OK for Thunderstruck
+2021-06-22 18:39:22.512 +01:00 [INF] Saved OK Thunderstruck
+2021-06-22 18:39:22.536 +01:00 [INF] 1136 - Start with song: Ticket to ride
+2021-06-22 18:39:25.368 +01:00 [INF] ProcMidi completed OK for Ticket to ride
+2021-06-22 18:39:25.524 +01:00 [INF] Saved OK Ticket to ride
+2021-06-22 18:39:25.535 +01:00 [INF] 1137 - Start with song: Tie Your Mother Down
+2021-06-22 18:39:35.710 +01:00 [INF] ProcMidi completed OK for Tie Your Mother Down
+2021-06-22 18:39:35.996 +01:00 [INF] Saved OK Tie Your Mother Down
+2021-06-22 18:39:36.010 +01:00 [INF] 1138 - Start with song: Time
+2021-06-22 18:39:38.177 +01:00 [INF] ProcMidi completed OK for Time
+2021-06-22 18:39:38.358 +01:00 [INF] Saved OK Time
+2021-06-22 18:39:38.370 +01:00 [INF] 1139 - Start with song: Time and still
+2021-06-22 18:39:46.992 +01:00 [INF] ProcMidi completed OK for Time and still
+2021-06-22 18:39:47.251 +01:00 [INF] Saved OK Time and still
+2021-06-22 18:39:47.260 +01:00 [INF] 1140 - Start with song: Time passages
+2021-06-22 18:39:49.802 +01:00 [INF] ProcMidi completed OK for Time passages
+2021-06-22 18:39:49.930 +01:00 [INF] Saved OK Time passages
+2021-06-22 18:39:49.956 +01:00 [INF] 1141 - Start with song: Tin man
+2021-06-22 18:39:50.978 +01:00 [INF] ProcMidi completed OK for Tin man
+2021-06-22 18:39:51.069 +01:00 [INF] Saved OK Tin man
+2021-06-22 18:39:51.078 +01:00 [INF] 1142 - Start with song: TNT
+2021-06-22 18:39:56.912 +01:00 [INF] ProcMidi completed OK for TNT
+2021-06-22 18:39:57.007 +01:00 [INF] Saved OK TNT
+2021-06-22 18:39:57.016 +01:00 [INF] 1143 - Start with song: Too much love will kill you
+2021-06-22 18:39:58.850 +01:00 [INF] ProcMidi completed OK for Too much love will kill you
+2021-06-22 18:39:58.923 +01:00 [INF] Saved OK Too much love will kill you
+2021-06-22 18:39:58.933 +01:00 [INF] 1144 - Start with song: Too much time on my hands
+2021-06-22 18:40:03.155 +01:00 [INF] ProcMidi completed OK for Too much time on my hands
+2021-06-22 18:40:03.339 +01:00 [INF] Saved OK Too much time on my hands
+2021-06-22 18:40:03.348 +01:00 [INF] 1145 - Start with song: Too old to rock and roll
+2021-06-22 18:40:04.416 +01:00 [INF] ProcMidi completed OK for Too old to rock and roll
+2021-06-22 18:40:04.509 +01:00 [INF] Saved OK Too old to rock and roll
+2021-06-22 18:40:04.532 +01:00 [INF] 1146 - Start with song: Toto_Africa
+2021-06-22 18:41:21.000 +01:00 [INF] ProcMidi completed OK for Toto_Africa
+2021-06-22 18:41:21.319 +01:00 [INF] Saved OK Toto_Africa
+2021-06-22 18:41:21.336 +01:00 [INF] 1147 - Start with song: Touch too much
+2021-06-22 18:41:25.317 +01:00 [INF] ProcMidi completed OK for Touch too much
+2021-06-22 18:41:25.505 +01:00 [INF] Saved OK Touch too much
+2021-06-22 18:41:25.522 +01:00 [INF] 1148 - Start with song: Tubular bells
+2021-06-22 18:42:54.990 +01:00 [INF] ProcMidi completed OK for Tubular bells
+2021-06-22 18:42:55.759 +01:00 [INF] Saved OK Tubular bells
+2021-06-22 18:42:55.768 +01:00 [INF] 1149 - Start with song: Turn it on again
+2021-06-22 18:42:58.291 +01:00 [INF] ProcMidi completed OK for Turn it on again
+2021-06-22 18:42:58.505 +01:00 [INF] Saved OK Turn it on again
+2021-06-22 18:42:58.514 +01:00 [INF] 1150 - Start with song: Two Steps Behind
+2021-06-22 18:42:58.988 +01:00 [INF] ProcMidi completed OK for Two Steps Behind
+2021-06-22 18:42:59.027 +01:00 [INF] Saved OK Two Steps Behind
+2021-06-22 18:42:59.054 +01:00 [INF] 1151 - Start with song: Unchain my heart
+2021-06-22 18:43:15.057 +01:00 [INF] ProcMidi completed OK for Unchain my heart
+2021-06-22 18:43:15.192 +01:00 [INF] Saved OK Unchain my heart
+2021-06-22 18:43:15.202 +01:00 [INF] 1152 - Start with song: Under pressure
+2021-06-22 18:43:36.856 +01:00 [INF] ProcMidi completed OK for Under pressure
+2021-06-22 18:43:37.012 +01:00 [INF] Saved OK Under pressure
+2021-06-22 18:43:37.020 +01:00 [INF] 1153 - Start with song: Velvet green
+2021-06-22 18:43:43.918 +01:00 [INF] ProcMidi completed OK for Velvet green
+2021-06-22 18:43:44.090 +01:00 [INF] Saved OK Velvet green
+2021-06-22 18:43:44.099 +01:00 [INF] 1154 - Start with song: Ventura Highway
+2021-06-22 18:43:51.304 +01:00 [INF] ProcMidi completed OK for Ventura Highway
+2021-06-22 18:43:51.493 +01:00 [INF] Saved OK Ventura Highway
+2021-06-22 18:43:51.501 +01:00 [INF] 1155 - Start with song: Victim Of Love
+2021-06-22 18:43:53.671 +01:00 [INF] ProcMidi completed OK for Victim Of Love
+2021-06-22 18:43:53.828 +01:00 [INF] Saved OK Victim Of Love
+2021-06-22 18:43:53.850 +01:00 [INF] 1156 - Start with song: Violin Sonata No.3 in F mov 1
+2021-06-22 18:43:54.254 +01:00 [INF] ProcMidi completed OK for Violin Sonata No.3 in F mov 1
+2021-06-22 18:43:54.326 +01:00 [INF] Saved OK Violin Sonata No.3 in F mov 1
+2021-06-22 18:43:54.334 +01:00 [INF] 1157 - Start with song: Violin Sonata No.3 in F mov 2
+2021-06-22 18:43:55.009 +01:00 [INF] ProcMidi completed OK for Violin Sonata No.3 in F mov 2
+2021-06-22 18:43:55.063 +01:00 [INF] Saved OK Violin Sonata No.3 in F mov 2
+2021-06-22 18:43:55.070 +01:00 [INF] 1158 - Start with song: Violin Sonata No.3 in F mov 3
+2021-06-22 18:43:55.242 +01:00 [INF] ProcMidi completed OK for Violin Sonata No.3 in F mov 3
+2021-06-22 18:43:55.270 +01:00 [INF] Saved OK Violin Sonata No.3 in F mov 3
+2021-06-22 18:43:55.278 +01:00 [INF] 1159 - Start with song: Violin Sonata No.3 in F mov 4
+2021-06-22 18:43:55.942 +01:00 [INF] ProcMidi completed OK for Violin Sonata No.3 in F mov 4
+2021-06-22 18:43:55.990 +01:00 [INF] Saved OK Violin Sonata No.3 in F mov 4
+2021-06-22 18:43:56.007 +01:00 [INF] 1160 - Start with song: Violin Sonata No.6 in F mov 1 Adagio
+2021-06-22 18:43:56.186 +01:00 [INF] ProcMidi completed OK for Violin Sonata No.6 in F mov 1 Adagio
+2021-06-22 18:43:56.235 +01:00 [INF] Saved OK Violin Sonata No.6 in F mov 1 Adagio
+2021-06-22 18:43:56.257 +01:00 [INF] 1161 - Start with song: Violin Sonata No.6 in F mov 2 Allegro
+2021-06-22 18:43:56.921 +01:00 [INF] ProcMidi completed OK for Violin Sonata No.6 in F mov 2 Allegro
+2021-06-22 18:43:56.978 +01:00 [INF] Saved OK Violin Sonata No.6 in F mov 2 Allegro
+2021-06-22 18:43:56.986 +01:00 [INF] 1162 - Start with song: Violin Sonata No.6 in F mov 3 Largo
+2021-06-22 18:43:57.035 +01:00 [INF] ProcMidi completed OK for Violin Sonata No.6 in F mov 3 Largo
+2021-06-22 18:43:57.060 +01:00 [INF] Saved OK Violin Sonata No.6 in F mov 3 Largo
+2021-06-22 18:43:57.068 +01:00 [INF] 1163 - Start with song: Violin Sonata No.6 in F mov 4 Allegro non troppo)
+2021-06-22 18:43:57.446 +01:00 [INF] ProcMidi completed OK for Violin Sonata No.6 in F mov 4 Allegro non troppo)
+2021-06-22 18:43:57.486 +01:00 [INF] Saved OK Violin Sonata No.6 in F mov 4 Allegro non troppo)
+2021-06-22 18:43:57.496 +01:00 [INF] 1164 - Start with song: Vision of angels
+2021-06-22 18:44:03.167 +01:00 [INF] ProcMidi completed OK for Vision of angels
+2021-06-22 18:44:03.399 +01:00 [INF] Saved OK Vision of angels
+2021-06-22 18:44:03.410 +01:00 [INF] 1165 - Start with song: Voodoo child
+2021-06-22 18:44:15.614 +01:00 [INF] ProcMidi completed OK for Voodoo child
+2021-06-22 18:44:15.777 +01:00 [INF] Saved OK Voodoo child
+2021-06-22 18:44:15.800 +01:00 [INF] 1166 - Start with song: Waiting for a girl like you
+2021-06-22 18:44:16.914 +01:00 [INF] ProcMidi completed OK for Waiting for a girl like you
+2021-06-22 18:44:17.015 +01:00 [INF] Saved OK Waiting for a girl like you
+2021-06-22 18:44:17.027 +01:00 [INF] 1167 - Start with song: Walk all over you
+2021-06-22 18:44:20.957 +01:00 [INF] ProcMidi completed OK for Walk all over you
+2021-06-22 18:44:21.173 +01:00 [INF] Saved OK Walk all over you
+2021-06-22 18:44:21.182 +01:00 [INF] 1168 - Start with song: Walking on the moon
+2021-06-22 18:44:23.518 +01:00 [INF] ProcMidi completed OK for Walking on the moon
+2021-06-22 18:44:23.666 +01:00 [INF] Saved OK Walking on the moon
+2021-06-22 18:44:23.674 +01:00 [INF] 1169 - Start with song: waltz_in_Ab
+2021-06-22 18:44:23.734 +01:00 [INF] ProcMidi completed OK for waltz_in_Ab
+2021-06-22 18:44:23.746 +01:00 [INF] Saved OK waltz_in_Ab
+2021-06-22 18:44:23.755 +01:00 [INF] 1170 - Start with song: Was it all worth it
+2021-06-22 18:44:27.173 +01:00 [INF] ProcMidi completed OK for Was it all worth it
+2021-06-22 18:44:27.354 +01:00 [INF] Saved OK Was it all worth it
+2021-06-22 18:44:27.379 +01:00 [INF] 1171 - Start with song: Watcher of the skyes
+2021-06-22 18:45:34.990 +01:00 [INF] ProcMidi completed OK for Watcher of the skyes
+2021-06-22 18:45:35.288 +01:00 [INF] Saved OK Watcher of the skyes
+2021-06-22 18:45:35.297 +01:00 [INF] 1172 - Start with song: Water Music Suite No.2 in D
+2021-06-22 18:45:37.510 +01:00 [INF] ProcMidi completed OK for Water Music Suite No.2 in D
+2021-06-22 18:45:37.611 +01:00 [INF] Saved OK Water Music Suite No.2 in D
+2021-06-22 18:45:37.622 +01:00 [INF] 1173 - Start with song: Watermelon Man
+2021-06-22 18:45:41.760 +01:00 [INF] ProcMidi completed OK for Watermelon Man
+2021-06-22 18:45:42.002 +01:00 [INF] Saved OK Watermelon Man
+2021-06-22 18:45:42.011 +01:00 [INF] 1174 - Start with song: We are the champions
+2021-06-22 18:45:46.429 +01:00 [INF] ProcMidi completed OK for We are the champions
+2021-06-22 18:45:46.525 +01:00 [INF] Saved OK We are the champions
+2021-06-22 18:45:46.535 +01:00 [INF] 1175 - Start with song: We will rock you
+2021-06-22 18:45:46.952 +01:00 [INF] ProcMidi completed OK for We will rock you
+2021-06-22 18:45:47.046 +01:00 [INF] Saved OK We will rock you
+2021-06-22 18:45:47.070 +01:00 [INF] 1176 - Start with song: Welcome to the Jungle
+2021-06-22 18:45:51.459 +01:00 [INF] ProcMidi completed OK for Welcome to the Jungle
+2021-06-22 18:45:51.585 +01:00 [INF] Saved OK Welcome to the Jungle
+2021-06-22 18:45:51.594 +01:00 [INF] 1177 - Start with song: What do you do for money
+2021-06-22 18:45:52.085 +01:00 [INF] ProcMidi completed OK for What do you do for money
+2021-06-22 18:45:52.192 +01:00 [INF] Saved OK What do you do for money
+2021-06-22 18:45:52.202 +01:00 [INF] 1178 - Start with song: What Is And What Should Never Be
+2021-06-22 18:45:56.902 +01:00 [INF] ProcMidi completed OK for What Is And What Should Never Be
+2021-06-22 18:45:57.125 +01:00 [INF] Saved OK What Is And What Should Never Be
+2021-06-22 18:45:57.136 +01:00 [INF] 1179 - Start with song: When The Levee Breaks
+2021-06-22 18:46:03.133 +01:00 [INF] ProcMidi completed OK for When The Levee Breaks
+2021-06-22 18:46:03.335 +01:00 [INF] Saved OK When The Levee Breaks
+2021-06-22 18:46:03.347 +01:00 [INF] 1180 - Start with song: Where the streets have no name
+2021-06-22 18:47:19.270 +01:00 [INF] ProcMidi completed OK for Where the streets have no name
+2021-06-22 18:47:19.595 +01:00 [INF] Saved OK Where the streets have no name
+2021-06-22 18:47:19.630 +01:00 [INF] 1181 - Start with song: While my guitar gently weeps
+2021-06-22 18:47:42.132 +01:00 [INF] ProcMidi completed OK for While my guitar gently weeps
+2021-06-22 18:47:42.303 +01:00 [INF] Saved OK While my guitar gently weeps
+2021-06-22 18:47:42.313 +01:00 [INF] 1182 - Start with song: Who ll stop the rain
+2021-06-22 18:47:50.528 +01:00 [INF] ProcMidi completed OK for Who ll stop the rain
+2021-06-22 18:47:50.713 +01:00 [INF] Saved OK Who ll stop the rain
+2021-06-22 18:47:50.727 +01:00 [INF] 1183 - Start with song: Who made who
+2021-06-22 18:47:52.044 +01:00 [INF] ProcMidi completed OK for Who made who
+2021-06-22 18:47:52.178 +01:00 [INF] Saved OK Who made who
+2021-06-22 18:47:52.186 +01:00 [INF] 1184 - Start with song: Who wants to live for ever
+2021-06-22 18:47:52.782 +01:00 [INF] ProcMidi completed OK for Who wants to live for ever
+2021-06-22 18:47:52.848 +01:00 [INF] Saved OK Who wants to live for ever
+2021-06-22 18:47:52.858 +01:00 [INF] 1185 - Start with song: Whole lotta love
+2021-06-22 18:47:54.766 +01:00 [INF] ProcMidi completed OK for Whole lotta love
+2021-06-22 18:47:54.924 +01:00 [INF] Saved OK Whole lotta love
+2021-06-22 18:47:54.950 +01:00 [INF] 1186 - Start with song: Whole lotta rosie
+2021-06-22 18:47:56.351 +01:00 [INF] ProcMidi completed OK for Whole lotta rosie
+2021-06-22 18:47:56.498 +01:00 [INF] Saved OK Whole lotta rosie
+2021-06-22 18:47:56.508 +01:00 [INF] 1187 - Start with song: Why cant this be love
+2021-06-22 18:48:02.375 +01:00 [INF] ProcMidi completed OK for Why cant this be love
+2021-06-22 18:48:02.615 +01:00 [INF] Saved OK Why cant this be love
+2021-06-22 18:48:02.623 +01:00 [INF] 1188 - Start with song: Wild Boys
+2021-06-22 18:48:05.091 +01:00 [INF] ProcMidi completed OK for Wild Boys
+2021-06-22 18:48:05.292 +01:00 [INF] Saved OK Wild Boys
+2021-06-22 18:48:05.303 +01:00 [INF] 1189 - Start with song: Wild horses
+2021-06-22 18:48:11.309 +01:00 [INF] ProcMidi completed OK for Wild horses
+2021-06-22 18:48:11.500 +01:00 [INF] Saved OK Wild horses
+2021-06-22 18:48:11.509 +01:00 [INF] 1190 - Start with song: Wild world
+2021-06-22 18:48:12.577 +01:00 [INF] ProcMidi completed OK for Wild world
+2021-06-22 18:48:12.658 +01:00 [INF] Saved OK Wild world
+2021-06-22 18:48:12.680 +01:00 [INF] 1191 - Start with song: Wind of change
+2021-06-22 18:48:18.830 +01:00 [INF] ProcMidi completed OK for Wind of change
+2021-06-22 18:48:19.085 +01:00 [INF] Saved OK Wind of change
+2021-06-22 18:48:19.093 +01:00 [INF] 1192 - Start with song: Wish you were here
+2021-06-22 18:48:19.788 +01:00 [INF] ProcMidi completed OK for Wish you were here
+2021-06-22 18:48:19.874 +01:00 [INF] Saved OK Wish you were here
+2021-06-22 18:48:19.928 +01:00 [INF] 1193 - Start with song: Witchy Woman
+2021-06-22 18:48:25.493 +01:00 [INF] ProcMidi completed OK for Witchy Woman
+2021-06-22 18:48:25.638 +01:00 [INF] Saved OK Witchy Woman
+2021-06-22 18:48:25.647 +01:00 [INF] 1194 - Start with song: With a little help of my friends
+2021-06-22 18:48:26.705 +01:00 [INF] ProcMidi completed OK for With a little help of my friends
+2021-06-22 18:48:26.819 +01:00 [INF] Saved OK With a little help of my friends
+2021-06-22 18:48:26.828 +01:00 [INF] 1195 - Start with song: With or without you
+2021-06-22 18:48:28.560 +01:00 [INF] ProcMidi completed OK for With or without you
+2021-06-22 18:48:28.647 +01:00 [INF] Saved OK With or without you
+2021-06-22 18:48:28.671 +01:00 [INF] 1196 - Start with song: Women
+2021-06-22 18:48:32.816 +01:00 [INF] ProcMidi completed OK for Women
+2021-06-22 18:48:33.032 +01:00 [INF] Saved OK Women
+2021-06-22 18:48:33.041 +01:00 [INF] 1197 - Start with song: Wonderwall
+2021-06-22 18:48:34.484 +01:00 [INF] ProcMidi completed OK for Wonderwall
+2021-06-22 18:48:34.522 +01:00 [INF] Saved OK Wonderwall
+2021-06-22 18:48:34.530 +01:00 [INF] 1198 - Start with song: Worthy - Blessing and Honour - Amen Messiah
+2021-06-22 18:48:39.706 +01:00 [INF] ProcMidi completed OK for Worthy - Blessing and Honour - Amen Messiah
+2021-06-22 18:48:39.843 +01:00 [INF] Saved OK Worthy - Blessing and Honour - Amen Messiah
+2021-06-22 18:48:39.855 +01:00 [INF] 1199 - Start with song: Year of the cat
+2021-06-22 18:48:51.128 +01:00 [INF] ProcMidi completed OK for Year of the cat
+2021-06-22 18:48:51.401 +01:00 [INF] Saved OK Year of the cat
+2021-06-22 18:48:51.411 +01:00 [INF] 1200 - Start with song: Yesterday
+2021-06-22 18:48:51.960 +01:00 [INF] ProcMidi completed OK for Yesterday
+2021-06-22 18:48:52.060 +01:00 [INF] Saved OK Yesterday
+2021-06-22 18:48:52.087 +01:00 [INF] 1201 - Start with song: YMCA
+2021-06-22 18:48:53.191 +01:00 [INF] ProcMidi completed OK for YMCA
+2021-06-22 18:48:53.292 +01:00 [INF] Saved OK YMCA
+2021-06-22 18:48:53.300 +01:00 [INF] 1202 - Start with song: You are my best friend
+2021-06-22 18:48:56.260 +01:00 [INF] ProcMidi completed OK for You are my best friend
+2021-06-22 18:48:56.332 +01:00 [INF] Saved OK You are my best friend
+2021-06-22 18:48:56.340 +01:00 [INF] 1203 - Start with song: You can do magic
+2021-06-22 18:48:56.862 +01:00 [INF] ProcMidi completed OK for You can do magic
+2021-06-22 18:48:56.928 +01:00 [INF] Saved OK You can do magic
+2021-06-22 18:48:56.937 +01:00 [INF] 1204 - Start with song: You can leave your hat on
+2021-06-22 18:49:14.051 +01:00 [INF] ProcMidi completed OK for You can leave your hat on
+2021-06-22 18:49:14.190 +01:00 [INF] Saved OK You can leave your hat on
+2021-06-22 18:49:14.199 +01:00 [INF] 1205 - Start with song: You Could Be Mine
+2021-06-22 18:49:22.811 +01:00 [INF] ProcMidi completed OK for You Could Be Mine
+2021-06-22 18:49:22.940 +01:00 [INF] Saved OK You Could Be Mine
+2021-06-22 18:49:22.966 +01:00 [INF] 1206 - Start with song: You Don't Fool Me
+2021-06-22 18:50:04.959 +01:00 [INF] ProcMidi completed OK for You Don't Fool Me
+2021-06-22 18:50:05.243 +01:00 [INF] Saved OK You Don't Fool Me
+2021-06-22 18:50:05.252 +01:00 [INF] 1207 - Start with song: You really got me
+2021-06-22 18:50:06.560 +01:00 [INF] ProcMidi completed OK for You really got me
+2021-06-22 18:50:06.646 +01:00 [INF] Saved OK You really got me
+2021-06-22 18:50:06.656 +01:00 [INF] 1208 - Start with song: You should be dancing
+2021-06-22 18:50:44.405 +01:00 [INF] ProcMidi completed OK for You should be dancing
+2021-06-22 18:50:44.604 +01:00 [INF] Saved OK You should be dancing
+2021-06-22 18:50:44.613 +01:00 [INF] 1209 - Start with song: Your Love
+2021-06-22 18:50:51.074 +01:00 [INF] ProcMidi completed OK for Your Love
+2021-06-22 18:50:51.171 +01:00 [INF] Saved OK Your Love
+2021-06-22 18:50:51.179 +01:00 [INF] 1210 - Start with song: Your song
+2021-06-22 18:50:51.622 +01:00 [INF] ProcMidi completed OK for Your song
+2021-06-22 18:50:51.706 +01:00 [INF] Saved OK Your song
+2021-06-22 18:50:51.732 +01:00 [INF] 1211 - Start with song: Yours is no disgrace
+2021-06-22 18:51:16.125 +01:00 [INF] ProcMidi completed OK for Yours is no disgrace
+2021-06-22 18:51:16.554 +01:00 [INF] Saved OK Yours is no disgrace

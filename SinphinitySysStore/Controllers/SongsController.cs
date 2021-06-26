@@ -84,7 +84,7 @@ namespace SinphinitySysStore.Controllers
         public async Task<ActionResult> AddProcessedDataToSong(Song song)
         {
             Log.Information($"Me llego para updatear la song {song.Name}");
-            await _songsRepository.InsertSongDataAsync(song);
+            await _songsRepository.AddInfoToSong(song);
             Log.Information($"Update la song {song.Name}");
             return Ok(new ApiOKResponse(null));
         }
