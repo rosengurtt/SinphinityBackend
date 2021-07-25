@@ -9,5 +9,7 @@ namespace SinphinityExpApi.Models
     {
         public string ProcMidiUrl { get; set; }
         public string SysStoreUrl { get; set; }
+
+        public string ProcPatternUrl { get; set; }
     }
 }

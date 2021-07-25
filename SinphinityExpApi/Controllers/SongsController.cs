@@ -6,11 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using SinphinityExpApi.Clients;
 using Sinphinity.Models;
-using Sinphinity.Models.ErrorHandling;
 using System.IO;
 using SinphinityExpApi.Models;
 using System.Net.Mime;
 using Serilog;
+using CommonRestLib.ErrorHandling;
 
 namespace SinphinitySysStore.Controllers
 {
@@ -20,11 +20,13 @@ namespace SinphinitySysStore.Controllers
     {
         private SysStoreClient _sysStoreClient;
         private ProcMidiClient _procMidiClient;
+        private ProcPatternClient _procPatternClient;
 
-        public SongsController(SysStoreClient sysStoreClient, ProcMidiClient procMidiClient)
+        public SongsController(SysStoreClient sysStoreClient, ProcMidiClient procMidiClient, ProcPatternClient procPatternClient)
         {
             _sysStoreClient = sysStoreClient;
             _procMidiClient = procMidiClient;
+            _procPatternClient = procPatternClient;
         }
 
         [HttpGet]
@@ -173,6 +175,19 @@ namespace SinphinitySysStore.Controllers
                     keepLooping = false;
             }
             return Ok(new ApiOKResponse(null));
+        }
+        [HttpGet("patterns")]
+        public async Task<IActionResult> ProcessPatternsForSong(string songId)
+        {
+
+            var song = await _sysStoreClient.GetSongByIdAsync(songId);
+
+
+            var patternMatrix = await _procPatternClient.ProcessSong(song);
+            // await _sysStoreClient.UpdateSong(processedSong);
+
+
+            return Ok(new ApiOKResponse(patternMatrix));
         }
     }
 }

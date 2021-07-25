@@ -6,11 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using SinphinitySysStore.Repositories;
 using SinphinitySysStore.Models;
-using Sinphinity.Models.ErrorHandling;
 using Newtonsoft.Json;
 using System.IO;
 using SinphinitySysStore.Models.Exceptions;
 using Serilog;
+using CommonRestLib.ErrorHandling;
 
 namespace SinphinitySysStore.Controllers
 {

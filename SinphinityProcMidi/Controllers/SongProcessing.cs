@@ -1,9 +1,8 @@
-﻿
+﻿using CommonRestLib.ErrorHandling;
 using Melanchall.DryWetMidi.Core;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Sinphinity.Models;
-using SinphinityProcMidi.ErrorHandling;
 using SinphinityProcMidi.Helpers;
 using SinphinityProcMidi.Midi;
 using System;

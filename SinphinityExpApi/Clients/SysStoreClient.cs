@@ -87,7 +87,7 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
-        public async Task<Song> GetSongByIdAsync(string songId, int? SongSimplification)
+        public async Task<Song> GetSongByIdAsync(string songId, int? SongSimplification = null)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var url = $"{_appConfiguration.SysStoreUrl}/api/Songs/{songId}";

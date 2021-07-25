@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SinphinityExpApi.Clients;
 using Sinphinity.Models;
-using Sinphinity.Models.ErrorHandling;
+using CommonRestLib.ErrorHandling;
 
 namespace SinphinitySysStore.Controllers
 {

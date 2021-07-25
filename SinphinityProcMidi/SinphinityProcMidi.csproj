@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CommonRestLib\CommonRestLib.csproj" />
     <ProjectReference Include="..\DryWetMidi\Melanchall.DryWetMidi.csproj" />
     <ProjectReference Include="..\SinphinityModel\SinphinityModel.csproj" />
   </ItemGroup>

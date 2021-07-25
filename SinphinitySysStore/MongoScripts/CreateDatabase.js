@@ -177,10 +177,54 @@ db.createCollection("songsMidi", {
                 songInfoId: {
                     bsonType: "string",
                     description: "must be a string and is required"
-                },             
+                },   
                 midiBase64Encoded: {
                     bsonType: "string",
                     description: "must be a string and is required"
+                } 
+            }
+        }
+    }
+})
+db.createCollection("patterns", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["midiBase64Encoded", "songInfoId"],
+            properties: {
+                asString: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },
+                numberOfNotes: {
+                    bsonType: "int",
+                    description: "must be an integer"
+                },
+                durationInTicks: {
+                    bsonType: "int",
+                    description: "must be an integer"
+                }
+            }
+        }
+    }
+})
+db.createCollection("patterns", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["asString", "numberOfNotes", "durationInTicks"],
+            properties: {
+                asString: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },
+                numberOfNotes: {
+                    bsonType: "int",
+                    description: "must be an integer"
+                },
+                durationInTicks: {
+                    bsonType: "int",
+                    description: "must be an integer"
                 }
             }
         }
@@ -188,6 +232,36 @@ db.createCollection("songsMidi", {
 })
 
 
+db.createCollection("patternOccurrences", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["patternId", "songInfoId", "voice", "barNumber", "beat"],
+            properties: {
+                patternId: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },
+                songInfoId: {
+                    bsonType: "string",
+                    description: "must be an integer"
+                },
+                voice: {
+                    bsonType: "int",
+                    description: "must be an integer"
+                },
+                barNumber: {
+                    bsonType: "int",
+                    description: "must be an integer"
+                },
+                beat: {
+                    bsonType: "int",
+                    description: "must be an integer"
+                }
+            }
+        }
+    }
+})
 
 //db.createCollection("songsData", {
 //    validator: {

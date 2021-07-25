@@ -5,7 +5,7 @@ using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using SinphinitySysStore.Repositories;
-using Sinphinity.Models.ErrorHandling;
+using CommonRestLib.ErrorHandling;
 
 namespace SinphinitySysStore.Controllers
 {

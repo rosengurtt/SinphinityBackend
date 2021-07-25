@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CommonRestLib\CommonRestLib.csproj" />
     <ProjectReference Include="..\SinphinityModel\SinphinityModel.csproj" />
   </ItemGroup>
 
