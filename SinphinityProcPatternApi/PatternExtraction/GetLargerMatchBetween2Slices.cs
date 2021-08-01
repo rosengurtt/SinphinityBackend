@@ -55,12 +55,12 @@ namespace SinphinityProcPatternApi.PatternExtraction
                     !(i == 0 && matchingNotes.Count == 1))
                 {
                     maxConsecutiveMatches = matchingNotes.Count();
-                    start = slice1.GetTickOfFirstNoteAfterTick(start);
+                    start = slice1.GetTickOfFirstNoteAfterTick(difPoints[i]);
                     end = difPoints[i + 1];
                 }
             }
-            // If no matches at all return null
-            if (maxConsecutiveMatches == 0) return null;
+            // If lesss than2 consecutive matches return null
+            if (maxConsecutiveMatches < 2) return null;
 
             // At this point we have an interval (start, end) (start and end are relative values) where there are maxConsecutiveMatches matches
             var notes1 = slice1

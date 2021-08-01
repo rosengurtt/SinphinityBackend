@@ -128,3 +128,52 @@ System.InvalidOperationException: Unable to resolve service for type 'Sinphinity
 2021-08-01 10:59:28.544 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
 2021-08-01 11:00:37.668 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
 2021-08-01 11:23:46.361 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 15:48:38.463 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 15:50:30.516 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:02:04.649 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:02:55.555 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:03:10.890 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:05:54.829 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:06:45.520 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:10:31.134 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:32:54.910 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:40:25.735 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:46:05.733 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:48:07.923 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:56:23.341 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:58:12.929 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 16:59:26.531 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 17:09:31.568 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 17:21:09.850 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 17:51:40.987 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 17:59:23.724 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 18:08:04.638 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 18:15:49.204 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 18:21:19.097 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+MongoDB.Driver.MongoWriteException: A write operation resulted in an error.
+  Document failed validation
+ ---> MongoDB.Driver.MongoBulkWriteException`1[SinphinitySysStore.Models.PatternOccurrence]: A bulk write operation resulted in one or more errors.
+  Document failed validation
+   at MongoDB.Driver.MongoCollectionImpl`1.BulkWriteAsync(IClientSessionHandle session, IEnumerable`1 requests, BulkWriteOptions options, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionImpl`1.UsingImplicitSessionAsync[TResult](Func`2 funcAsync, CancellationToken cancellationToken)
+   at MongoDB.Driver.MongoCollectionBase`1.InsertOneAsync(TDocument document, InsertOneOptions options, Func`3 bulkWriteAsync)
+   --- End of inner exception stack trace ---
+   at MongoDB.Driver.MongoCollectionBase`1.InsertOneAsync(TDocument document, InsertOneOptions options, Func`3 bulkWriteAsync)
+   at SinphinitySysStore.Repositories.PatternsRepository.InsertPatternsOfSongAsync(PatternMatrix patternMatrix) in C:\dev\Sinphinity\Backend\SinphinitySysStore\Repositories\PatternsRepository.cs:line 62
+   at SinphinitySysStore.Controllers.PatternsController.UploadPatternMatrix(PatternMatrix patternMatrix) in C:\dev\Sinphinity\Backend\SinphinitySysStore\Controllers\PatternsController.cs:line 26
+   at lambda_method94(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+2021-08-01 18:25:45.451 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 18:32:48.261 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 18:33:53.535 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 18:38:40.876 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.
+2021-08-01 18:40:43.012 +01:00 [WRN] Overriding address(es) 'https://localhost:5001, http://localhost:5000'. Binding to endpoints defined in UseKestrel() instead.

@@ -23,7 +23,7 @@ namespace SinphinityExpApi.Clients
             _clientFactory = clientFactory;
         }
 
-        public async Task<PatternMatrix> ProcessSong(Song song)
+        public async Task<PatternMatrix> GetPatternMatixOfSong(Song song)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             httpClient.Timeout = TimeSpan.FromMinutes(5);

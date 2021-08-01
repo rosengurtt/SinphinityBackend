@@ -48,7 +48,7 @@ namespace SinphinitySysStore.Models
             var noteAbsPitch = 0;
             IsMonotone = true;
             bool? IsGoingUp = null;
-            NumberOfNotes = 1;
+            NumberOfNotes = 0;
             foreach (var n in relativeNotes)
             {
                 NumberOfNotes++;
@@ -77,7 +77,8 @@ namespace SinphinitySysStore.Models
                     DeltaTick = noteDuration
                 };
             }
-            DurationInTicks = Duration;
+            NumberOfNotes -= 1;
+          DurationInTicks = Duration;
             Range = (int)highestNote - (int)lowestNote;
             Step = noteAbsPitch;
         }

@@ -186,7 +186,7 @@ namespace SinphinitySysStore.Controllers
             var song = await _sysStoreClient.GetSongByIdAsync(songId);
 
 
-            var patternMatrix = await _procPatternClient.ProcessSong(song);
+            var patternMatrix = await _procPatternClient.GetPatternMatixOfSong(song);
             await _sysStoreClient.InsertPatterns(patternMatrix);
 
 

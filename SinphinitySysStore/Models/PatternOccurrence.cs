@@ -22,7 +22,7 @@ namespace SinphinitySysStore.Models
         public string PatternId { get; set; }
         public string SongInfoId { get; set; }
         public byte Voice { get; set; }
-        public long BarNumber { get; set; }
-        public long Beat { get; set; }
+        public int BarNumber { get; set; }
+        public int Beat { get; set; }
     }
 }

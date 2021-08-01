@@ -56,8 +56,8 @@ namespace SinphinitySysStore.Repositories
                             PatternId = patInDb.Id,
                             SongInfoId = occ.SongId,
                             Voice = occ.Voice,
-                            BarNumber = occ.BarNumber,
-                            Beat = occ.Beat
+                            BarNumber = (int)occ.BarNumber,
+                            Beat = (int)occ.Beat
                         };
                         await _patternOccurrencessCollection.InsertOneAsync(occurrence);
                     }

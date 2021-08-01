@@ -109,7 +109,7 @@ namespace Sinphinity.Models.Pattern
         {
             var DifferencePoints = new HashSet<long>();
             long ticksFromBeginningOfSlice1 = 0;
-            long ticksFromBeginningOfSlice2 = 0;
+            long ticksFromBeginningOfSlice2;
             foreach (var n in RelativeNotes)
             {
                 ticksFromBeginningOfSlice1 += n.DeltaTick;
@@ -118,9 +118,12 @@ namespace Sinphinity.Models.Pattern
                 foreach (var m in slice2.RelativeNotes)
                 {
                     ticksFromBeginningOfSlice2 += m.DeltaTick;
-                    if (ticksFromBeginningOfSlice1 == ticksFromBeginningOfSlice2 && n.DeltaPitch == m.DeltaPitch) matched = true;
+                    if (ticksFromBeginningOfSlice1 == ticksFromBeginningOfSlice2 && m.DeltaPitch == n.DeltaPitch)
+                        matched = true;
                 }
-                if (!matched) DifferencePoints.Add(ticksFromBeginningOfSlice1);
+
+                if (!matched)
+                    DifferencePoints.Add(ticksFromBeginningOfSlice1);
             }
             ticksFromBeginningOfSlice2 = 0;
             foreach (var n in slice2.RelativeNotes)
@@ -131,9 +134,11 @@ namespace Sinphinity.Models.Pattern
                 foreach (var m in RelativeNotes)
                 {
                     ticksFromBeginningOfSlice1 += m.DeltaTick;
-                    if (ticksFromBeginningOfSlice1 == ticksFromBeginningOfSlice2 && n.DeltaPitch == m.DeltaPitch) matched = true;
+                    if (ticksFromBeginningOfSlice1 == ticksFromBeginningOfSlice2 && m.DeltaPitch == n.DeltaPitch)
+                        matched = true;
                 }
-                if (!matched) DifferencePoints.Add(ticksFromBeginningOfSlice1);
+                if (!matched)
+                    DifferencePoints.Add(ticksFromBeginningOfSlice2);
             }
             return DifferencePoints;
         }
