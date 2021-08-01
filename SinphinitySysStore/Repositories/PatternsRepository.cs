@@ -33,8 +33,39 @@ namespace SinphinitySysStore.Repositories
 
         public async Task InsertPatternsOfSongAsync(PatternMatrix patternMatrix)
         {
-  
+
+            for (int i = 0; i < patternMatrix.PatternsOfNnotes.Count; i++)
+            {
+                if (patternMatrix.PatternsOfNnotes[i] == null)
+                    continue;
+                foreach (var pat in patternMatrix.PatternsOfNnotes[i])
+                {
+                    var patternAsString = pat.Key;
+                    var filter = Builders<Pattern>.Filter.Eq(s => s.AsString, patternAsString);
+                    var patInDb = await _patternsCollection.Find(filter).FirstOrDefaultAsync();
+                    if (patInDb == null)
+                    {
+                        var paton = new Pattern(patternAsString);
+                        await _patternsCollection.InsertOneAsync(paton);
+                        patInDb = paton;
+                    }
+                    foreach (var occ in pat.Value)
+                    {
+                        var occurrence = new PatternOccurrence
+                        {
+                            PatternId = patInDb.Id,
+                            SongInfoId = occ.SongId,
+                            Voice = occ.Voice,
+                            BarNumber = occ.BarNumber,
+                            Beat = occ.Beat
+                        };
+                        await _patternOccurrencessCollection.InsertOneAsync(occurrence);
+                    }
+                }
+            }
         }
+
+ 
 
     }
 }

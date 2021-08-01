@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SinphinityModel.Helpers
 {
-    public static class Extensions
+    public static class NoteExtensions
     {
         public static List<T> Clone<T>(this List<T> listToClone) where T : ICloneable
         {

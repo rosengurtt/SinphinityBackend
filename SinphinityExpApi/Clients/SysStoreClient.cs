@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Serilog;
 using Sinphinity.Models;
+using Sinphinity.Models.Pattern;
 using SinphinityExpApi.Models;
 using System;
 using System.Collections.Generic;
@@ -103,7 +104,7 @@ namespace SinphinityExpApi.Clients
             }
             else
             {
-                var errorMessage = $"Couldn't get bands";
+                var errorMessage = $"Couldn't get song";
                 Log.Error(errorMessage);
                 throw new ApplicationException(errorMessage);
             }
@@ -153,6 +154,21 @@ namespace SinphinityExpApi.Clients
                 var errorMessage = $"Couldn't update song";
                 if (response.StatusCode == HttpStatusCode.Conflict)
                     throw new SongAlreadyExistsException();
+                Log.Error(errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
+        }
+
+        public async Task InsertPatterns(PatternMatrix patternMatrix)
+        {
+            HttpClient httpClient = _clientFactory.CreateClient();
+            var content = new StringContent(JsonConvert.SerializeObject(patternMatrix));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var response = await httpClient.PostAsync($"{_appConfiguration.SysStoreUrl}/api/Patterns", content);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var errorMessage = $"Couldn't insert patterns";
                 Log.Error(errorMessage);
                 throw new ApplicationException(errorMessage);
             }

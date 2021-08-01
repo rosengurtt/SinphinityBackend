@@ -23,7 +23,7 @@ namespace SinphinityProcPatternApi.PatternExtraction
             var matches2 = PatternsExtraction.GetMelodyMatchesWithDurationOfUpToNbeats(simplifiedNotes, song.Bars, 2);
             var matches3 = PatternsExtraction.GetMelodyMatchesWithDurationOfUpToNbeats(simplifiedNotes, song.Bars, 3);
             var matches4 = PatternsExtraction.GetMelodyMatchesWithDurationOfUpToNbeats(simplifiedNotes, song.Bars, 4);
-            var patterns = ExtractPatterns(matches1.Concat(matches2).Concat(matches4).ToList(), song.Id);
+            var patterns = ExtractPatterns(matches1.Concat(matches2).Concat(matches3).Concat(matches4).ToList(), song.Id);
             return new PatternMatrix(patterns);
         }
     }

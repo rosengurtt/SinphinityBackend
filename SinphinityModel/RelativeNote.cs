@@ -9,13 +9,14 @@ namespace Sinphinity.Models
     /// </summary>
     public class RelativeNote
     {
+        public RelativeNote() { }
         public RelativeNote(Note n, Note previousNote, long startTick, KeySignature key)
         {
             if (previousNote == null)
             {
                 DeltaPitchInSemitones = 0;
                 DeltaPitch = 0;
-                DeltaTick = 0;
+                DeltaTick = n.StartSinceBeginningOfSongInTicks - startTick;
             }
             else
             {

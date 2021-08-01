@@ -11,6 +11,7 @@ using SinphinityExpApi.Models;
 using System.Net.Mime;
 using Serilog;
 using CommonRestLib.ErrorHandling;
+using System.Text.RegularExpressions;
 
 namespace SinphinitySysStore.Controllers
 {
@@ -179,12 +180,14 @@ namespace SinphinitySysStore.Controllers
         [HttpGet("patterns")]
         public async Task<IActionResult> ProcessPatternsForSong(string songId)
         {
+            if (!Regex.IsMatch(songId, "^[0-9a-zA-Z]{20,28}$"))
+                return BadRequest(new ApiBadRequestResponse("Invalid songId"));
 
             var song = await _sysStoreClient.GetSongByIdAsync(songId);
 
 
             var patternMatrix = await _procPatternClient.ProcessSong(song);
-            // await _sysStoreClient.UpdateSong(processedSong);
+            await _sysStoreClient.InsertPatterns(patternMatrix);
 
 
             return Ok(new ApiOKResponse(patternMatrix));

@@ -16,6 +16,7 @@ namespace SinphinitySysStore.Repositories
             servicesBuilder.AddTransient<StylesRepository>();
             servicesBuilder.AddTransient<BandsRepository>();
             servicesBuilder.AddTransient<SongsRepository>();
+            servicesBuilder.AddTransient<PatternsRepository>();
         }
     }
 }

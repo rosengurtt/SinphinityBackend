@@ -20,24 +20,31 @@ namespace Sinphinity.Models.Pattern
                 return RelativeNotes.Select(x => x.DeltaPitch).ToList();
             }
         }
-        //public List<long> Metric
-        //{
-        //    get
-        //    {
-        //        return RelativeNotes.Select(x => x.Tick).ToList();
-        //    }
-        //}
-
+      
         /// <summary>
-        /// Representation of the pattern as a sequence of pairs of numbers, like (24,2),(48,1(24,-2)
-        /// The first digit is the number of ticks from the previous note, the second is the number of semitones over the previous note
-        /// The first element is actually the second note, because the first note is asumed to be (0,0) and is not included
+        /// Represents the pattern as a single string. 
+        /// What we do is to write the relative notes as a pair of (deltaTick, deltaPitch) and we add an extra element at the
+        /// end for the duration of the last note. So the first element and the last element have always a pitch of 0. The deltaTick of the first note represents the time
+        /// of the first dlement from the beginning of the pattern and the time of the last element represents the duration of the last note 
+        /// We use a a comma to separate the deltaTick and deltaPith and a colon to separate the elements
+        /// 
+        /// Example: (48,0);(24,2);(24,-1);(48,0)
+        /// 
+        /// With this denition, if we add the times 
         /// </summary>
         public string AsString
         {
             get
             {
-                return string.Join(",", RelativeNotes.Where(y => y.DeltaTick != 0 && y.DeltaPitch != 0).Select(x => $"({x.DeltaTick}, {x.DeltaPitch})"));
+                var asString = "";
+                long absTick = 0;
+                foreach (var rn in RelativeNotes)
+                {
+                    asString += $"({rn.DeltaTick}, {rn.DeltaPitch});";
+                    absTick += rn.DeltaTick;
+                }
+                asString += $"({Duration - absTick},0)";
+                return asString;
             }
         }
 

@@ -1,0 +1,11 @@
+C:\dev\Sinphinity\Backend\DryWetMidi\bin\Debug\netstandard2.0\Melanchall.DryWetMidi.deps.json
+C:\dev\Sinphinity\Backend\DryWetMidi\bin\Debug\netstandard2.0\Melanchall.DryWetMidi.dll
+C:\dev\Sinphinity\Backend\DryWetMidi\bin\Debug\netstandard2.0\Melanchall.DryWetMidi.pdb
+C:\dev\Sinphinity\Backend\DryWetMidi\bin\Debug\netstandard2.0\Melanchall.DryWetMidi.xml
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\netstandard2.0\Melanchall.DryWetMidi.csprojAssemblyReference.cache
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\netstandard2.0\Melanchall.DryWetMidi.AssemblyInfoInputs.cache
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\netstandard2.0\Melanchall.DryWetMidi.AssemblyInfo.cs
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\netstandard2.0\Melanchall.DryWetMidi.csproj.CoreCompileInputs.cache
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\netstandard2.0\Melanchall.DryWetMidi.dll
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\netstandard2.0\Melanchall.DryWetMidi.xml
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\netstandard2.0\Melanchall.DryWetMidi.pdb

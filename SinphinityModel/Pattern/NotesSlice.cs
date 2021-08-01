@@ -122,6 +122,7 @@ namespace Sinphinity.Models.Pattern
                 }
                 if (!matched) DifferencePoints.Add(ticksFromBeginningOfSlice1);
             }
+            ticksFromBeginningOfSlice2 = 0;
             foreach (var n in slice2.RelativeNotes)
             {
                 ticksFromBeginningOfSlice2 += n.DeltaTick;

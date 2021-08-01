@@ -1,0 +1,14 @@
+C:\dev\Sinphinity\Backend\DryWetMidi\bin\Debug\net45\Melanchall.DryWetMidi.dll
+C:\dev\Sinphinity\Backend\DryWetMidi\bin\Debug\net45\Melanchall.DryWetMidi.pdb
+C:\dev\Sinphinity\Backend\DryWetMidi\bin\Debug\net45\Melanchall.DryWetMidi.xml
+C:\dev\Sinphinity\Backend\DryWetMidi\bin\Debug\net45\Serilog.dll
+C:\dev\Sinphinity\Backend\DryWetMidi\bin\Debug\net45\Serilog.Sinks.Async.dll
+C:\dev\Sinphinity\Backend\DryWetMidi\bin\Debug\net45\Serilog.Sinks.File.dll
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.AssemblyInfoInputs.cache
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.AssemblyInfo.cs
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.csproj.CoreCompileInputs.cache
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.csproj.CopyComplete
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.dll
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.xml
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.pdb
+C:\dev\Sinphinity\Backend\DryWetMidi\obj\Debug\net45\Melanchall.DryWetMidi.csprojAssemblyReference.cache
