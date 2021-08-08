@@ -24,7 +24,9 @@ namespace Sinphinity.Models
                 DeltaPitch = GetNotePositioninKey(n, key) - GetNotePositioninKey(previousNote, key);
                 DeltaTick = n.StartSinceBeginningOfSongInTicks - previousNote.StartSinceBeginningOfSongInTicks;
             }
+            TicksFromSliceStart = n.StartSinceBeginningOfSongInTicks - startTick;
         }
+        public long TicksFromSliceStart { get; set; }
         public long DeltaTick { get; set; }
 
         /// <summary>
@@ -56,6 +58,11 @@ namespace Sinphinity.Models
             majorScalePitches.Add((71 + 7 * key.key) % 12);
 
             return 7 * (n.Pitch / 12) + majorScalePitches.IndexOf(n.Pitch % 12);
+        }
+
+        public bool AreEqual(RelativeNote n)
+        {
+            return (this.DeltaTick == n.DeltaTick && this.TicksFromSliceStart == n.TicksFromSliceStart && this.DeltaPitch == n.DeltaPitch);
         }
     }
 

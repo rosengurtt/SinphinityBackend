@@ -11,8 +11,11 @@ namespace Sinphinity.Models.Pattern
         {
             Duration = match.End - match.Start;
             RelativeNotes = match.Slice1.RelativeNotes;
+            var qtyNotes = match.Slice1.RelativeNotes.Count;
+            var lastNote = match.Slice1.RelativeNotes[qtyNotes - 1];
+            DurationOfLastNote = match.End - lastNote.TicksFromSliceStart;
         }
-
+        private long DurationOfLastNote { get; set; }
         public List<int> Pitches
         {
             get
@@ -37,13 +40,11 @@ namespace Sinphinity.Models.Pattern
             get
             {
                 var asString = "";
-                long absTick = 0;
                 foreach (var rn in RelativeNotes)
                 {
-                    asString += $"({rn.DeltaTick}, {rn.DeltaPitch});";
-                    absTick += rn.DeltaTick;
+                    asString += $"({rn.DeltaTick},{rn.DeltaPitch});";
                 }
-                asString += $"({Duration - absTick},0)";
+                asString += $"({DurationOfLastNote},0)";
                 return asString;
             }
         }

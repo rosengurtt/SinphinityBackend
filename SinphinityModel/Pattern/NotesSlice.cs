@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SinphinityModel.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace Sinphinity.Models.Pattern
             StartTick = startTick;
             EndTick = endTick;
             Voice = voice;
-            Notes = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= startTick &&
+            Notes = notes.Clone().Where(x => x.StartSinceBeginningOfSongInTicks >= startTick &&
                         x.StartSinceBeginningOfSongInTicks < EndTick &&
                         x.Voice == voice)
                 .OrderBy(y => y.StartSinceBeginningOfSongInTicks)
@@ -30,6 +31,11 @@ namespace Sinphinity.Models.Pattern
                 RelativeNotes.Add(new RelativeNote(Notes[0], null, beatStart, bar.KeySignature));
             for (var i = 1; i < Notes.Count; i++)
                 RelativeNotes.Add(new RelativeNote(Notes[i], Notes[i - 1], beatStart, bar.KeySignature));
+        }
+
+        public NotesSlice Clone()
+        {
+            return new NotesSlice(Notes, StartTick, EndTick, Voice, Bar, BeatNumberFromBarStart);
         }
         public long BarNumber
         {
@@ -99,6 +105,14 @@ namespace Sinphinity.Models.Pattern
             }
             return ticksFromStart;
         }
+        public RelativeNote GetNextRelativeNote(RelativeNote n)
+        {
+            return RelativeNotes.Where(x => x.TicksFromSliceStart > n.TicksFromSliceStart).OrderBy(z => z.TicksFromSliceStart).FirstOrDefault();
+        }
+        public RelativeNote GetPreviousRelativeNote(RelativeNote n)
+        {
+            return RelativeNotes.Where(x => x.TicksFromSliceStart < n.TicksFromSliceStart).OrderByDescending(z => z.TicksFromSliceStart).FirstOrDefault();
+        }
 
         /// <summary>
         /// Compares this slice with another one and returns the points (the tick number from the start of the slice) where there is a difference between the 2 slices
@@ -141,6 +155,25 @@ namespace Sinphinity.Models.Pattern
                     DifferencePoints.Add(ticksFromBeginningOfSlice2);
             }
             return DifferencePoints;
+        }
+
+        /// <summary>
+        /// Returns the relative notes that are common to 2 slices
+        /// </summary>
+        /// <param name="slice2"></param>
+        /// <returns></returns>
+        public List<RelativeNote> Intersection(NotesSlice slice2)
+        {
+            var retObj = new List<RelativeNote>();
+            foreach (var n in RelativeNotes)
+            {
+                foreach (var m in slice2.RelativeNotes)
+                {
+                    if (n.TicksFromSliceStart == m.TicksFromSliceStart && n.DeltaPitch == m.DeltaPitch)
+                        retObj.Add(m);
+                }
+            }
+            return retObj;
         }
     }
 }

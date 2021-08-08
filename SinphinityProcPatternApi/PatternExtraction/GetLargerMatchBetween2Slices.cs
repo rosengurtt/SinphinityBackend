@@ -9,6 +9,7 @@ namespace SinphinityProcPatternApi.PatternExtraction
 {
     public static partial class PatternsExtraction
     {
+
         private static MelodyMatch GetLargerMatchBetween2Slices(NotesSlice slice1, NotesSlice slice2, List<Bar> bars)
         {
             if (slice1.Notes.Count == 0 || slice2.Notes.Count == 0) return null;
@@ -17,21 +18,95 @@ namespace SinphinityProcPatternApi.PatternExtraction
             if (slice1.Bar.TimeSignature.Denominator != slice2.Bar.TimeSignature.Denominator)
                 return null;
 
+            var intersection = slice1.Intersection(slice2);
+            if (intersection.Count < 2)
+                return null;
+
+            // We look for consecutive elements in intersection that belong to both slice1 and slice2
+            // The best match is the group of consecutive intersection notes with the longest time
+            (long, long) bestMatch = (0, 0);
+            int i = 0;
+            while (i < intersection.Count)
+            {
+                int j = i;
+                long thisIterationMatchStart;
+                // If this is the first element we have to check from the beginning of the slices
+                if (i == 0 && !AreThereNotMatchingNotesInBetween(slice1, slice2, 0, intersection[j].TicksFromSliceStart))
+                    thisIterationMatchStart = 0;
+                else
+                {
+                    var previousNote = slice1.GetPreviousRelativeNote(intersection[i]);
+                    thisIterationMatchStart = previousNote.TicksFromSliceStart;
+                }
+
+                while (j < intersection.Count - 1 && !AreThereNotMatchingNotesInBetween(slice1, slice2, intersection[j].TicksFromSliceStart, intersection[j + 1].TicksFromSliceStart))
+                    j++;
+                if (j > i )
+                {
+                    var nextNoteInSlice1 = slice1.GetNextRelativeNote(intersection[j]);
+                    var nextNoteInSlice2 = slice2.GetNextRelativeNote(intersection[j]);
+                    long thisIterationMatchEnd;
+                    if (nextNoteInSlice1 == null && nextNoteInSlice2 == null)
+                        thisIterationMatchEnd = slice1.Duration;
+                    else if (nextNoteInSlice1 != null)
+                        thisIterationMatchEnd = nextNoteInSlice1.TicksFromSliceStart;
+                    else
+                        thisIterationMatchEnd = nextNoteInSlice2.TicksFromSliceStart;
+                    if (thisIterationMatchEnd - thisIterationMatchStart > bestMatch.Item2 - bestMatch.Item1)
+                    {
+                        bestMatch = (thisIterationMatchStart, thisIterationMatchEnd);
+                    }
+                }
+                i = j+1;
+            }
+            if (bestMatch == (0, 0)) return null;
+            var (bar1, beat1) = GetBarAndBeatNumberOfTick(bars, slice1.StartTick + bestMatch.Item1);
+            var (bar2, beat2) = GetBarAndBeatNumberOfTick(bars, slice2.StartTick + bestMatch.Item1);
+
+            return new MelodyMatch(new NotesSlice(slice1.Notes, slice1.StartTick + bestMatch.Item1, slice1.StartTick + bestMatch.Item2, slice1.Voice, bars[(int)(bar1 - 1)], beat1),
+              new NotesSlice(slice2.Notes, slice2.StartTick + bestMatch.Item1, slice2.StartTick + bestMatch.Item2, slice2.Voice, bars[(int)(bar2 - 1)], beat2),
+              bestMatch.Item1, bestMatch.Item2);
+
+        }
+
+
+
+        
+        /// <summary>
+        /// Given 2 slices and 2 relative notes that are present in both slices, finds if the 2 notes are consecutive in the 2 slices or in one of them or both of them
+        /// there are other notes in between
+        /// </summary>
+        /// <param name="slice1"></param>
+        /// <param name="slice"></param>
+        /// <param name="n1"></param>
+        /// <param name="n2"></param>
+        /// <returns></returns>
+        private static bool AreThereNotMatchingNotesInBetween(NotesSlice slice1, NotesSlice slice2, long n1, long n2)
+        {
+            var start = Math.Min(n1, n2);
+            var end = Math.Max(n1, n2);
+            if (slice1.RelativeNotes.Where(x => x.TicksFromSliceStart > start && x.TicksFromSliceStart < end).Count() > 0)
+                return true;
+            if (slice2.RelativeNotes.Where(x => x.TicksFromSliceStart > start && x.TicksFromSliceStart < end).Count() > 0)
+                return true;
+            return false;
+        }
+
+        private static MelodyMatch GetLargerMatchBetween2SlicesOld(NotesSlice slice1, NotesSlice slice2, List<Bar> bars)
+        {
+            if (slice1.Notes.Count == 0 || slice2.Notes.Count == 0) return null;
+
+            // if the denominator of the time signatures are different we don't try to match
+            if (slice1.Bar.TimeSignature.Denominator != slice2.Bar.TimeSignature.Denominator)
+                return null;
+
             // DifferencePoints has the ticks since the beginning of the slice where there are notes that don't match
-            HashSet<long> DifferencePoints = slice1.GetDifferencePoints(slice2);;
+            HashSet<long> DifferencePoints = slice1.GetDifferencePoints(slice2); ;
 
 
             // if slices are perfect match return the whole slices as a match
             if (DifferencePoints.Count == 0)
-            {
-                return new MelodyMatch
-                {
-                    Slice1 = slice1,
-                    Slice2 = slice2,
-                    Start = 0,
-                    End = slice1.Duration
-                };
-            }
+                return new MelodyMatch(slice1, slice2, 0, slice1.Duration);
             // Find interval with the maximum number of matches
 
 
@@ -84,13 +159,10 @@ namespace SinphinityProcPatternApi.PatternExtraction
             // We have to make this correction or otherwise the slices will extend 1 tick after the end
             if (end == slice1.Duration + 1) end--;
 
-            return new MelodyMatch
-            {
-                Slice1 = new NotesSlice(notes1, slice1.StartTick + start, slice1.StartTick + end, slice1.Voice, bars[(int)(bar1 - 1)], beat1),
-                Slice2 = new NotesSlice(notes2, slice2.StartTick + start, slice2.StartTick + end, slice2.Voice, bars[(int)(bar2 - 1)], beat2),
-                Start = start,
-                End = end > slice1.Duration ? slice1.Duration : end
-            };
+            return new MelodyMatch(new NotesSlice(notes1, slice1.StartTick + start, slice1.StartTick + end, slice1.Voice, bars[(int)(bar1 - 1)], beat1),
+                new NotesSlice(notes2, slice2.StartTick + start, slice2.StartTick + end, slice2.Voice, bars[(int)(bar2 - 1)], beat2),
+                start,
+                end > slice1.Duration ? slice1.Duration : end);
         }
    
 

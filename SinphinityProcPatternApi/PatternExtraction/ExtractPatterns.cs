@@ -15,10 +15,6 @@ namespace SinphinityProcPatternApi.PatternExtraction
             foreach (var m in matches)
             {
                 var patternito = new MelodyPattern(m);
-                if (patternito.AsString.EndsWith("(0,0)"))
-                {
-                    var sacamela = patternito.AsString;
-                }
                 if (!retObj.Keys.Where(x => x.AreEqual(patternito)).Any())
                 {
                     retObj[patternito] = new List<Occurrence>();

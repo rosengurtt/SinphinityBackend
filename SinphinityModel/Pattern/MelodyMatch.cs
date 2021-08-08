@@ -8,6 +8,14 @@
     /// </summary>
     public class MelodyMatch
     {
+        public MelodyMatch(NotesSlice slice1, NotesSlice slice2, long start, long end)
+        {
+            Slice1 = slice1.Clone();
+            Slice2 = slice2.Clone();
+            Start = start;
+            End = end;
+        }
+
         public NotesSlice Slice1 { get; set; }
         public NotesSlice Slice2 { get; set; }
 
