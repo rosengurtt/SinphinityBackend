@@ -10,7 +10,7 @@ namespace SinphinityProcPatternApi.Simplification
     {
         public static List<Note> GetSimplifiedNotes(List<Note> notes, List<Bar> bars)
         {
-            var onlyMelodicNotes = RemovePercussionNotes(notes);
+            var onlyMelodicNotes = RemoveChordNotes(RemovePercussionNotes(notes));
             return RemoveNonEssentialNotes(RemoveNotesAlterations(onlyMelodicNotes, bars));
         }
     }

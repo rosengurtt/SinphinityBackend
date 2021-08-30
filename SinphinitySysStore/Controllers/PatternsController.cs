@@ -14,16 +14,21 @@ namespace SinphinitySysStore.Controllers
     public class PatternsController : ControllerBase
     {
         private PatternsRepository _patternsRepository;
+        private SongsRepository _songsRepository;
 
-        public PatternsController(PatternsRepository patternsRepository)
+        public PatternsController(PatternsRepository patternsRepository, SongsRepository songsRepository)
         {
             _patternsRepository = patternsRepository;
+                _songsRepository = songsRepository;
         }
 
         [HttpPost, DisableRequestSizeLimit]
         public async Task<ActionResult> UploadPatternMatrix(PatternMatrix patternMatrix)
         {
             await _patternsRepository.InsertPatternsOfSongAsync(patternMatrix);
+            var songInfo = await _songsRepository.GetSongInfoByIdAsync(patternMatrix.SongId);
+            songInfo.ArePatternsExtracted = true;
+            await _songsRepository.UpdateSongInfo(songInfo);
             return Ok(new ApiOKResponse(null));
         }
     }

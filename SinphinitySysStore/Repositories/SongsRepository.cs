@@ -65,6 +65,12 @@ namespace SinphinitySysStore.Repositories
 
             return songs;
         }
+        public async Task<SongInfo> GetSongInfoByIdAsync(string songId)
+        {
+            var filter = Builders<SongInfo>.Filter.Eq(x => x.Id, songId);         
+            return await _songsInfoCollection.Find(filter).FirstOrDefaultAsync();
+        }
+
 
         public async Task<Song> GetSongByIdAsync(string songId, int? songSimplification)
         {
@@ -122,6 +128,18 @@ namespace SinphinitySysStore.Repositories
             }
 
             return song;
+        }
+
+        public async Task UpdateSongInfo(SongInfo songInfo)
+        {
+            try
+            {
+                await _songsInfoCollection.ReplaceOneAsync(Builders<SongInfo>.Filter.Eq(s => s.Id, songInfo.Id), songInfo);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, $"Couldnt update songINfo for  {songInfo.Name} to MongoDb");
+            }
         }
 
         public async Task AddInfoToSong(Song song)

@@ -6,9 +6,9 @@ using System.Linq;
 namespace SinphinityProcPatternApi.Simplification
 {
 
-     static partial class SimplificationUtilities
+    static partial class SimplificationUtilities
     {
-        public static List<Note> RemovePercussionNotes(List<Note>notes)
+        public static List<Note> RemovePercussionNotes(List<Note> notes)
         {
             return notes.Where(x => x.IsPercussion == false).ToList();
         }

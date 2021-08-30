@@ -16,7 +16,7 @@ namespace Sinphinity.Models.Pattern
         {
             Bar = bar;
             BeatNumberFromBarStart = beatNumber;
-            var beatStart = bar.TicksFromBeginningOfSong + (beatNumber - 1) * bar.TimeSignature.Numerator * 96 / bar.TimeSignature.Denominator;
+            var beatStart = bar.TicksFromBeginningOfSong + (beatNumber - 1) * 96 * 4 / bar.TimeSignature.Denominator;
             StartTick = startTick;
             EndTick = endTick;
             Voice = voice;

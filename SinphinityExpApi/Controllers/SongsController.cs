@@ -135,6 +135,36 @@ namespace SinphinitySysStore.Controllers
             return Ok(new ApiOKResponse(null));
         }
 
+        [HttpGet("processSingle")]
+        public async Task<IActionResult> ProcessSingleSong(string songId)
+        {
+
+            var song = await _sysStoreClient.GetSongByIdAsync(songId);
+
+            try
+            {
+                Song processedSong;
+                if (song.IsMidiCorrect)
+                {
+                    Log.Information($"Start with song: {song.Name}");
+                    processedSong = await _procMidiClient.ProcessSong(song);
+                    Log.Information($"ProcMidi completed OK for {song.Name}");
+                    await _sysStoreClient.UpdateSong(processedSong);
+                    Log.Information($"Saved OK {song.Name}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Couldn't process song {song.Name}");
+            }
+
+            return Ok(new ApiOKResponse(null));
+        }
+
+
+
+
+
         [HttpGet("processbatch")]
         public async Task<IActionResult> ProcessBatch(string styleId, string bandId)
         {
@@ -177,22 +207,8 @@ namespace SinphinitySysStore.Controllers
             }
             return Ok(new ApiOKResponse(null));
         }
-        [HttpGet("patterns")]
-        public async Task<IActionResult> ProcessPatternsForSong(string songId)
-        {
-            if (!Regex.IsMatch(songId, "^[0-9a-zA-Z]{20,28}$"))
-                return BadRequest(new ApiBadRequestResponse("Invalid songId"));
 
-            var song = await _sysStoreClient.GetSongByIdAsync(songId);
-
-
-            var patternMatrix = await _procPatternClient.GetPatternMatixOfSong(song);
-            await _sysStoreClient.InsertPatterns(patternMatrix);
-
-
-            return Ok(new ApiOKResponse(patternMatrix));
-        }
-    }
+       }
 }
 
 

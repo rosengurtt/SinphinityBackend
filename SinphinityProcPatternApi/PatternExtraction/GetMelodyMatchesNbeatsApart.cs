@@ -32,11 +32,20 @@ namespace SinphinityProcPatternApi.PatternExtraction
                     var count1 = 1;
                     while (count1 * noBeats <= totalBeats)
                     {
+                        var slice1 = GetNsliceOfLengthMbeats(notes, bars, v1, count1, noBeats);
+                        if (slice1.Notes.Count < 2)
+                        {
+                            count1++;
+                            continue;
+                        }
                         var count2 = count1 + 1;
                         while (count2 * noBeats < totalBeats)
                         {
-                            var slice1 = GetNsliceOfLengthMbeats(notes, bars, v1, count1, noBeats);
                             var slice2 = GetNsliceOfLengthMbeats(notes, bars, v2, count2, noBeats);
+                            if (slice1.BarNumber==1 && slice1.BeatNumberFromBarStart==1 && slice2.BarNumber==2 && slice2.BeatNumberFromBarStart == 1)
+                            {
+
+                            }
                             var match = GetLargerMatchBetween2Slices(slice1, slice2, bars);
                             if (IsGoodMatch(match, noBeats))
                             {

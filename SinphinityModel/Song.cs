@@ -12,6 +12,7 @@ namespace Sinphinity.Models
         public string Name { get; set; }
         public string MidiBase64Encoded { get; set; }
         public bool IsSongProcessed { get; set; }
+        public bool ArePatternsExtracted { get; set; }
         public bool IsMidiCorrect { get; set; }
 
         public bool CantBeProcessed { get; set; }

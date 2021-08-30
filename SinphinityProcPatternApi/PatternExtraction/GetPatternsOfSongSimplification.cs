@@ -15,7 +15,6 @@ namespace SinphinityProcPatternApi.PatternExtraction
         public static PatternMatrix GetPatternsOfSongSimplification(Song song,  int simplification = 1)
         {
             var songNotes = song.SongSimplifications[simplification].Notes;
-            var voices = songNotes.NonPercussionVoices();
 
             var simplifiedNotes = SimplificationUtilities.GetSimplifiedNotes(songNotes, song.Bars);
 
@@ -24,7 +23,7 @@ namespace SinphinityProcPatternApi.PatternExtraction
             var matches3 = PatternsExtraction.GetMelodyMatchesWithDurationOfUpToNbeats(simplifiedNotes, song.Bars, 3);
             var matches4 = PatternsExtraction.GetMelodyMatchesWithDurationOfUpToNbeats(simplifiedNotes, song.Bars, 4);
             var patterns = ExtractPatterns(matches1.Concat(matches2).Concat(matches3).Concat(matches4).ToList(), song.Id);
-            return new PatternMatrix(patterns);
+            return new PatternMatrix(song.Id, patterns);
         }
     }
 }

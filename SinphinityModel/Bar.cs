@@ -15,7 +15,7 @@ namespace Sinphinity.Models
             get
             {
                 int standardTicksPerQuarterNote = 96;
-                int barLengthInTicks = TimeSignature.Numerator * (int)standardTicksPerQuarterNote;
+                int barLengthInTicks = TimeSignature.Numerator * 4  * (int)standardTicksPerQuarterNote / TimeSignature.Denominator;
                 return TicksFromBeginningOfSong + barLengthInTicks;
             }
         }

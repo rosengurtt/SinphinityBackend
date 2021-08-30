@@ -23,10 +23,10 @@ namespace SinphinityExpApi.Clients
             _clientFactory = clientFactory;
         }
 
-        public async Task<PatternMatrix> GetPatternMatixOfSong(Song song)
+        public async Task<PatternMatrix> GetPatternMatrixOfSong(Song song)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
-            httpClient.Timeout = TimeSpan.FromMinutes(5);
+            httpClient.Timeout = TimeSpan.FromMinutes(500);
             var content = new StringContent(JsonConvert.SerializeObject(song));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 

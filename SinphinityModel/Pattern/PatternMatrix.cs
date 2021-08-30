@@ -13,8 +13,9 @@ namespace Sinphinity.Models.Pattern
         /// Provides the patterns of a song and the places in the song where the patterns are used
         /// </summary>
         /// <param name="patterns"></param>
-        public PatternMatrix(Dictionary<MelodyPattern, List<Occurrence>> patterns)
+        public PatternMatrix(string songId, Dictionary<MelodyPattern, List<Occurrence>> patterns)
         {
+            SongId = songId;
             PatternsOfNnotes = new List<Dictionary<string, List<Occurrence>>>();
             PatternsOfNnotes.Add(null);
             PatternsOfNnotes.Add(null);
@@ -40,6 +41,7 @@ namespace Sinphinity.Models.Pattern
                 n++;
             }
         }
+        public string SongId { get; set; }
 
         /// <summary>
         /// This is a list where the nth element of the list has the patterns with n notes

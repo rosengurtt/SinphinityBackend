@@ -13,6 +13,7 @@ namespace SinphinitySysStore.Models
             SongMidiId = sMidi?.Id;
             Name = sInfo.Name;
             IsSongProcessed = sInfo.IsSongProcessed;
+            ArePatternsExtracted = sInfo.ArePatternsExtracted;
             IsMidiCorrect = sInfo.IsMidiCorrect;
             CantBeProcessed = sInfo.CantBeProcessed;
             Band = sInfo.Band;
@@ -32,6 +33,7 @@ namespace SinphinitySysStore.Models
         public string SongMidiId { get; set; }
         public string Name { get; set; }
         public bool IsSongProcessed { get; set; }
+        public bool ArePatternsExtracted { get; set; }
         public bool IsMidiCorrect { get; set; }
         public bool CantBeProcessed { get; set; }
         public Band Band { get; set; }

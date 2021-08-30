@@ -15,7 +15,7 @@ namespace SinphinityProcMidi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SongProcessing : ControllerBase
+    public class SongProcessingController : ControllerBase
     {
 
         [HttpPost]
@@ -103,7 +103,8 @@ namespace SinphinityProcMidi.Controllers
 
             song.SongSimplifications = new List<SongSimplification>();
             song.SongSimplifications.Add(simplificationZero);
-            song.SongSimplifications.Add(MidiUtilities.GetSimplification1ofSong(song));
+            var simplificationOne = MidiUtilities.GetSimplification1ofSong(song);
+            song.SongSimplifications.Add(simplificationOne);
 
             return song;
         }

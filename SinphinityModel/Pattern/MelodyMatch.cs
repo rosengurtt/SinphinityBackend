@@ -14,6 +14,15 @@
             Slice2 = slice2.Clone();
             Start = start;
             End = end;
+            var soret = new MelodyPattern(this);
+            if (soret.AsString.EndsWith("(0,0)"))
+            {
+
+            }
+            if (slice1.Notes.Count != slice2.Notes.Count)
+            {
+
+            }
         }
 
         public NotesSlice Slice1 { get; set; }
