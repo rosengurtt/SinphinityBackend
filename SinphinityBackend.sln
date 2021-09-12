@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinityProcPatternApi", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonRestLib", "CommonRestLib\CommonRestLib.csproj", "{A573FB2E-2AE7-4D6C-B7D0-DBBFA63E7562}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SinphinityGraphApi", "SinphinityGraphApi\SinphinityGraphApi.csproj", "{24E73F56-6B2B-437E-A488-E659D981DBFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{A573FB2E-2AE7-4D6C-B7D0-DBBFA63E7562}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A573FB2E-2AE7-4D6C-B7D0-DBBFA63E7562}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A573FB2E-2AE7-4D6C-B7D0-DBBFA63E7562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24E73F56-6B2B-437E-A488-E659D981DBFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24E73F56-6B2B-437E-A488-E659D981DBFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24E73F56-6B2B-437E-A488-E659D981DBFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24E73F56-6B2B-437E-A488-E659D981DBFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

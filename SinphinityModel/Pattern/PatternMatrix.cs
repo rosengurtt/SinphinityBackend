@@ -4,14 +4,18 @@ using System.Linq;
 
 namespace Sinphinity.Models.Pattern
 {
+    /// <summary>
+    /// Contains the patterns of a song and the places in the song where the patterns are used
+    /// </summary>
     public class PatternMatrix
     {
 
         public PatternMatrix() { }
 
         /// <summary>
-        /// Provides the patterns of a song and the places in the song where the patterns are used
+        /// Populates the PatternsOfNnotes property
         /// </summary>
+        /// <param name="songId"></param>
         /// <param name="patterns"></param>
         public PatternMatrix(string songId, Dictionary<MelodyPattern, List<Occurrence>> patterns)
         {
@@ -50,6 +54,5 @@ namespace Sinphinity.Models.Pattern
         /// </summary>
         public List<Dictionary<string, List<Occurrence>>> PatternsOfNnotes { get; set; }
     }
-
 }
 

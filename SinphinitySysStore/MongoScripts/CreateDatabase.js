@@ -244,7 +244,7 @@ db.createCollection("patternOccurrences", {
                 },
                 songInfoId: {
                     bsonType: "string",
-                    description: "must be an integer"
+                    description: "must be a string and is required"
                 },
                 voice: {
                     bsonType: "int",
@@ -257,6 +257,29 @@ db.createCollection("patternOccurrences", {
                 beat: {
                     bsonType: "int",
                     description: "must be an integer"
+                }
+            }
+        }
+    }
+})
+
+db.createCollection("patternsSongs", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ["patternId", "songInfoId", "patternAsString"],
+            properties: {
+                patternId: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },
+                songInfoId: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
+                },                
+                patternAsString: {
+                    bsonType: "string",
+                    description: "must be a string and is required"
                 }
             }
         }

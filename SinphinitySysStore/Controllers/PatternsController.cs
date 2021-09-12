@@ -31,5 +31,18 @@ namespace SinphinitySysStore.Controllers
             await _songsRepository.UpdateSongInfo(songInfo);
             return Ok(new ApiOKResponse(null));
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetPatterns(int page, int pageSize)
+        {
+            var patterns = await _patternsRepository.GetPatternsAsync(pageSize, page);
+            return Ok(new ApiOKResponse(patterns));
+        }
+        [HttpGet("{songInfoId}")]
+        public async Task<ActionResult> GetPatternsOfSong(string songInfoId)
+        {
+            var patterns = await _patternsRepository.GetPatternsOfSongAsync(songInfoId);
+            return Ok(new ApiOKResponse(patterns));
+        }
     }
 }
