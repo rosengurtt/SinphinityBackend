@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Neo4j.Driver;
+using SinphinityGraphApi.Clients;
+using SinphinityGraphApi.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,32 +14,34 @@ namespace SinphinityGraphApi.Controllers
     public class PatternsController : ControllerBase
     {
         private IDriver _driver;
+        private SysStoreClient _sysStoreClient;
+        private GraphDbRepository _graphDbRepository;
 
-        public PatternsController(IDriver driver)
+        public PatternsController(IDriver driver, SysStoreClient sysStoreClient, GraphDbRepository graphDbRepository)
         {
             _driver = driver;
+            _sysStoreClient = sysStoreClient;
+            _graphDbRepository = graphDbRepository;
         }
 
         [HttpGet("import")]
         public async Task<ActionResult> ImportPatterns()
         {
-            IAsyncSession session = _driver.AsyncSession(o => o.WithDatabase("neo4j"));
-            var cursor = await session.RunAsync($"MATCH (n) RETURN n");
-            if (await cursor.FetchAsync())
+            var page = 0;
+            var pageSize = 5;
+            var keepLoping = true;
+            while (keepLoping)
             {
-                var patternNode = cursor.Current.Values.FirstOrDefault().Value as INode;
-
-                await cursor.ConsumeAsync();
-                //var updateCommand = @$"MATCH (p)
-                //                           WHERE ID(p) = {patternNode.Id}
-                //                           MATCH (ss)
-                //                           WHERE ID(ss) = {songSimplificationId}
-                //                           CREATE (ss)-[:HasPattern {{Voice: {voice}, Tick: {tick}}}]->(p)";
-                //cursor = await session.RunAsync(updateCommand);
-                //await cursor.ConsumeAsync();
+                var patternsSongs = await _sysStoreClient.GetPatternsSongsAsync(page, pageSize);
+                foreach (var ps in patternsSongs.items)
+                    await _graphDbRepository.AddPattern(ps);
+                if (patternsSongs.totalPages == page + 1)
+                    keepLoping = false;
+                else
+                    page++;
             }
 
-            return Ok("Hola papi");
+            return Ok("Job done");
         }
     }
 }

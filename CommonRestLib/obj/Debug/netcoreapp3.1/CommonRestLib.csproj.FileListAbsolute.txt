@@ -1,9 +1,0 @@
-C:\dev\Sinphinity\Backend\CommonRestLib\bin\Debug\netcoreapp3.1\CommonRestLib.deps.json
-C:\dev\Sinphinity\Backend\CommonRestLib\bin\Debug\netcoreapp3.1\CommonRestLib.dll
-C:\dev\Sinphinity\Backend\CommonRestLib\bin\Debug\netcoreapp3.1\CommonRestLib.pdb
-C:\dev\Sinphinity\Backend\CommonRestLib\obj\Debug\netcoreapp3.1\CommonRestLib.csprojAssemblyReference.cache
-C:\dev\Sinphinity\Backend\CommonRestLib\obj\Debug\netcoreapp3.1\CommonRestLib.AssemblyInfoInputs.cache
-C:\dev\Sinphinity\Backend\CommonRestLib\obj\Debug\netcoreapp3.1\CommonRestLib.AssemblyInfo.cs
-C:\dev\Sinphinity\Backend\CommonRestLib\obj\Debug\netcoreapp3.1\CommonRestLib.csproj.CoreCompileInputs.cache
-C:\dev\Sinphinity\Backend\CommonRestLib\obj\Debug\netcoreapp3.1\CommonRestLib.dll
-C:\dev\Sinphinity\Backend\CommonRestLib\obj\Debug\netcoreapp3.1\CommonRestLib.pdb

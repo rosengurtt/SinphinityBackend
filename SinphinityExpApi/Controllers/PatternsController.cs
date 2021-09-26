@@ -29,7 +29,7 @@ namespace SinphinityExpApi.Controllers
             }
 
         // api/songs/patterns?songId=60d577ef035c715d2ea7ef60
-        [HttpGet("patterns")]
+        [HttpGet]
         public async Task<IActionResult> ProcessPatternsForSong(string songId)
         {
             if (!Regex.IsMatch(songId, "^[0-9a-zA-Z]{20,28}$"))
@@ -45,7 +45,8 @@ namespace SinphinityExpApi.Controllers
             return Ok(new ApiOKResponse(patternMatrix));
         }
 
-        [HttpGet("patterns/batch")]
+        // api/songs/patterns/batch
+        [HttpGet("batch")]
         public async Task<IActionResult> ProcessPatternsForAllSongs(string contains)
         {
             var keepLooping = true;

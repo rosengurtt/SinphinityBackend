@@ -33,7 +33,6 @@ namespace SinphinitySysStore.Controllers
         public async Task<ActionResult<IEnumerable>> GetSongsAsync(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null, string bandId = null,
             string sortKey = "name", int sortDirection = 1)
         {
-            Log.Information($"Me llego GetSongs con pageNo={pageNo}, pageSize={pageSize}");
             var totalSongs = await _songsRepository.GetSongsCountAsync(contains, styleId, bandId);
             var songs = await _songsRepository.GetSongsAsync(pageSize, pageNo, contains, styleId, bandId, sortKey, sortDirection);
             var retObj = new
@@ -44,7 +43,6 @@ namespace SinphinitySysStore.Controllers
                 totalPages = (int)Math.Ceiling((double)totalSongs / pageSize),
                 items = songs
             };
-            Log.Information($"Retorno estas songs {string.Join(",", songs.Select(s => s.Name))}");
             return Ok(new ApiOKResponse(retObj));
         }
 

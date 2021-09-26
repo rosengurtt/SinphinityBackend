@@ -25,8 +25,8 @@ namespace SinphinitySysStore.Controllers
         [HttpPost, DisableRequestSizeLimit]
         public async Task<ActionResult> UploadPatternMatrix(PatternMatrix patternMatrix)
         {
-            await _patternsRepository.InsertPatternsOfSongAsync(patternMatrix);
             var songInfo = await _songsRepository.GetSongInfoByIdAsync(patternMatrix.SongId);
+            await _patternsRepository.InsertPatternsOfSongAsync(patternMatrix, songInfo);
             songInfo.ArePatternsExtracted = true;
             await _songsRepository.UpdateSongInfo(songInfo);
             return Ok(new ApiOKResponse(null));
@@ -43,6 +43,22 @@ namespace SinphinitySysStore.Controllers
         {
             var patterns = await _patternsRepository.GetPatternsOfSongAsync(songInfoId);
             return Ok(new ApiOKResponse(patterns));
+        }
+        [HttpGet("PatternsSongs")]
+        public async Task<ActionResult> GetPatternsSongs(int pageNo, int pageSize, string contains)
+        {        
+            var totalPatternsSongs = await _patternsRepository.GetPatternsSongsCountAsync(contains);
+            var patternsSongs = await _patternsRepository.GetPatternsSongsAsync(pageSize, pageNo, contains);
+            var retObj = new
+            {
+                pageNo,
+                pageSize,
+                totalItems = totalPatternsSongs,
+                totalPages = (int)Math.Ceiling((double)totalPatternsSongs / pageSize),
+                items = patternsSongs
+            };
+            return Ok(new ApiOKResponse(retObj));
+
         }
     }
 }

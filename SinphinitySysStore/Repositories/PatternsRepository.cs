@@ -37,11 +37,10 @@ namespace SinphinitySysStore.Repositories
 
         public async Task<IReadOnlyList<Pattern>> GetPatternsAsync(int pageSize, int page)
         {
-            var sortFilter = new BsonDocument("asString", -1);
 
             var patterns = await _patternsCollection
                 .Find(_ => true)
-                .Sort(sortFilter)
+                .SortBy(e => e.AsString)
                 .Limit(pageSize)
                 .Skip(pageSize * page)
                 .ToListAsync();
@@ -59,8 +58,26 @@ namespace SinphinitySysStore.Repositories
 
             return patternsSong;
         }
+        public async Task<long> GetPatternsSongsCountAsync(string contains = ".*")
+        {
+            var nameFilter = Builders<PatternSong>.Filter.Regex(s => s.PatternAsString, @$"/.*{contains}.*/i");
+            return await _patternSongCollection.Find(nameFilter).CountDocumentsAsync();
+        }
+        public async Task<IReadOnlyList<PatternSong>> GetPatternsSongsAsync(int pageSize, int page, string contains)
+        {
 
-        public async Task InsertPatternsOfSongAsync(PatternMatrix patternMatrix)
+            var patternsSong = await _patternSongCollection
+                .Find(_ => true)
+                .SortBy(e => e.PatternAsString)
+                .ThenBy(x=>x.SongInfoId)
+                .Limit(pageSize)
+                .Skip(pageSize * page)
+                .ToListAsync();
+
+            return patternsSong;
+        }
+
+        public async Task InsertPatternsOfSongAsync(PatternMatrix patternMatrix, SongInfo song)
         {
 
             for (int i = 0; i < patternMatrix.PatternsOfNnotes.Count; i++)
@@ -87,7 +104,15 @@ namespace SinphinitySysStore.Repositories
                     var patSong = await _patternSongCollection.Find(combineFilter).FirstOrDefaultAsync();
                     if (patSong == null)
                     {
-                        var ps = new PatternSong() { PatternId=patInDb.Id,  PatternAsString = patternAsString, SongInfoId = patternMatrix.SongId };
+                        var ps = new PatternSong()
+                        {
+                            PatternId = patInDb.Id,
+                            PatternAsString = patternAsString,
+                            SongInfoId = patternMatrix.SongId,
+                            SongName = song.Name,
+                            BandName = song.Band.Name,
+                            StyleName = song.Style.Name
+                        };
                         await _patternSongCollection.InsertOneAsync(ps);
                     }
 

@@ -19,8 +19,10 @@ namespace SinphinitySysStore.Models
         }
 
         public string PatternId { get; set; }
-
         public string PatternAsString { get; set; }
         public string SongInfoId { get; set; }
+        public string SongName { get; set; }
+        public string StyleName { get; set; }
+        public string BandName { get; set; }
     }
 }
