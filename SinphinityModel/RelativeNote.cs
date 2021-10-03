@@ -39,6 +39,13 @@ namespace Sinphinity.Models
         /// </summary>
         public int DeltaPitch { get; set; }
 
+        public string AsString
+        {
+            get
+            {
+                return $"({DeltaTick},{DeltaPitch})";
+            }
+        }
 
         /// <summary>
         /// If we are in C major scale and note is E, it returns 2, so a third has a value of 2, a fourth a value of 3, etc.
