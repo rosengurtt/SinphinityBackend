@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Sinphinity.Models;
 using SinphinityProcPatternFinderApi.PatternExtraction;
+using System.Linq;
 
 namespace SinphinityProcPatternFinderApi.Controllers
 {

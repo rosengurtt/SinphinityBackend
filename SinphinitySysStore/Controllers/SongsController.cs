@@ -69,6 +69,8 @@ namespace SinphinitySysStore.Controllers
                 if (string.IsNullOrEmpty(song.Band.Id) && !string.IsNullOrEmpty(song.Band.Name))
                 {
                     song.Band = await _bandssRepository.GetBandByNameAsync(song.Band.Name);
+                    if (song.Band == null)
+                        return BadRequest(new ApiBadRequestResponse("The band doesn' exist"));
                 }
               
                 return Ok(new ApiOKResponse(await _songsRepository.InsertSongInfoAndMidiAsync(song)));

@@ -498,6 +498,7 @@ db.bands.insertOne({ name: "Bryan Adams", style: { _id: stylito._id, name: styli
 db.bands.insertOne({ name: "Cat Stevens", style: { _id: stylito._id, name: stylito.name } })
 db.bands.insertOne({ name: "Chicago", style: { _id: stylito._id, name: stylito.name } })
 db.bands.insertOne({ name: "Creedence Clearwater Revival", style: { _id: stylito._id, name: stylito.name } })
+db.bands.insertOne({ name: "Counting Crows", style: { _id: stylito._id, name: stylito.name } })
 db.bands.insertOne({ name: "Crosby Stills Nash", style: { _id: stylito._id, name: stylito.name } })
 db.bands.insertOne({ name: "Deep Purple", style: { _id: stylito._id, name: stylito.name } })
 db.bands.insertOne({ name: "Def Leppard", style: { _id: stylito._id, name: stylito.name } })
