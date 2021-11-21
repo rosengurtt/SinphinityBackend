@@ -1,4 +1,6 @@
-﻿namespace SinphinityModel.Pattern
+﻿using Sinphinity.Models;
+
+namespace SinphinityModel.Pattern
 {
     /// <summary>
     /// Represents an association of a pattern with a song
@@ -11,10 +13,9 @@
         public string PatternId { get; set; }
 
         public string PatternAsString { get; set; }
-        public string SongInfoId { get; set; }
+        public Song Song { get; set; }
+        public Style Style { get; set; }
+        public Band Band { get; set; }
 
-        public string SongName { get; set; }
-        public string StyleName { get; set; }
-        public string BandName { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace SinphinityGraphApi.Data
             {
                 IAsyncSession session = _driver.AsyncSession(o => o.WithDatabase("neo4j"));
                 var command = @$"MERGE (p:Pattern {{AsString: '{patternSong.PatternAsString}', id: '{patternSong.PatternId}'}}) 
-                                 MERGE (s: Song {{id: '{patternSong.SongInfoId}', songName: '{patternSong.SongName}', band: '{patternSong.BandName}', style:'{patternSong.StyleName}'}})
+                                 MERGE (s: Song {{id: '{patternSong.Song.Id}', songName: '{patternSong.Song.Name}', band: '{patternSong.Band.Name}', style:'{patternSong.Style.Name}'}})
                                  MERGE (p) -[:IsUsedInSong]-> (s)";
 
                 var cursor = await session.RunAsync(command);

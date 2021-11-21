@@ -24,5 +24,6 @@ namespace SinphinitySysStore.Models
         public byte Voice { get; set; }
         public int BarNumber { get; set; }
         public int Beat { get; set; }
+        public long Tick { get; set; }
     }
 }

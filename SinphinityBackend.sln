@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinityExpApi", "SinphinityExpApi\SinphinityExpApi.csproj", "{C1AC3CBA-7E45-4939-9FED-DCDCE13D7DC3}"
 EndProject
@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonRestLib", "CommonRest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinityGraphApi", "SinphinityGraphApi\SinphinityGraphApi.csproj", "{24E73F56-6B2B-437E-A488-E659D981DBFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SinphinityProcPatternFinderApi", "SinphinityProcPatternFinderApi\SinphinityProcPatternFinderApi.csproj", "{497CA3EB-43A9-44B3-970B-5CB09A448103}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinityProcPatternFinderApi", "SinphinityProcPatternFinderApi\SinphinityProcPatternFinderApi.csproj", "{497CA3EB-43A9-44B3-970B-5CB09A448103}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NunitTests", "NunitTests\NunitTests.csproj", "{67A4604B-A530-4F3A-A07F-4AC1EC6F9D18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{497CA3EB-43A9-44B3-970B-5CB09A448103}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{497CA3EB-43A9-44B3-970B-5CB09A448103}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{497CA3EB-43A9-44B3-970B-5CB09A448103}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67A4604B-A530-4F3A-A07F-4AC1EC6F9D18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67A4604B-A530-4F3A-A07F-4AC1EC6F9D18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67A4604B-A530-4F3A-A07F-4AC1EC6F9D18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67A4604B-A530-4F3A-A07F-4AC1EC6F9D18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

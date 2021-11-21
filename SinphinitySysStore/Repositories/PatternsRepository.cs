@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
+using Sinphinity.Models;
 using Sinphinity.Models.Pattern;
 using SinphinitySysStore.Models;
 
@@ -35,18 +36,36 @@ namespace SinphinitySysStore.Repositories
 
         }
 
-        public async Task<IReadOnlyList<Pattern>> GetPatternsAsync(int pageSize, int page)
+        public async Task<(int, List<Pattern>)> GetPatternsAsync(int pageNo, int pageSize, string styleId, string bandId, string songInfoId)
         {
+            var bandFilter = bandId == null ? Builders<PatternSong>.Filter.Exists(x => x.BandId) : Builders<PatternSong>.Filter.Eq(x => x.BandId, bandId);
+            var songFilter = songInfoId == null ? Builders<PatternSong>.Filter.Exists(x => x.SongInfoId) : Builders<PatternSong>.Filter.Eq(x => x.SongInfoId, songInfoId);
+            var styleFilter = styleId == null ? Builders<PatternSong>.Filter.Exists(x => x.StyleId) : Builders<PatternSong>.Filter.Eq(x => x.StyleId, styleId);
+            var combineFilter = Builders<PatternSong>.Filter.And(bandFilter, styleFilter, songFilter);
 
-            var patterns = await _patternsCollection
-                .Find(_ => true)
-                .SortBy(e => e.AsString)
-                .Limit(pageSize)
-                .Skip(pageSize * page)
+            var patsSongs = await _patternSongCollection
+                .Find(combineFilter)
                 .ToListAsync();
 
-            return patterns;
+            var pats = patsSongs.Select(x => new Pattern { Id = x.PatternId, AsString = x.PatternAsString })
+                .Distinct()
+                .OrderBy(x => x.AsString)
+                .Skip(pageSize * pageNo)
+                .Take(pageSize)
+                .ToList();
+            var retObj = new List<Pattern>();
+            foreach (var p in pats)
+            {
+                var filter = Builders<Pattern>.Filter.Eq(x => x.Id, p.Id);
+                var pat = await _patternsCollection.Find(filter).FirstOrDefaultAsync();
+                retObj.Add(pat);
+            }
+
+            return (pats.Count(), retObj);
         }
+
+
+
 
         public async Task<IReadOnlyList<PatternSong>> GetPatternsOfSongAsync(string songInfoId)
         {
@@ -77,14 +96,10 @@ namespace SinphinitySysStore.Repositories
             return patternsSong;
         }
 
-        public async Task InsertPatternsOfSongAsync(PatternMatrix patternMatrix, SongInfo song)
+        public async Task InsertPatternsOfSongAsync(Dictionary<string, HashSet<Occurrence>> patterns, SongInfo song)
         {
 
-            for (int i = 0; i < patternMatrix.PatternsOfNnotes.Count; i++)
-            {
-                if (patternMatrix.PatternsOfNnotes[i] == null)
-                    continue;
-                foreach (var pat in patternMatrix.PatternsOfNnotes[i])
+                foreach (var pat in patterns)
                 {
                     // Insert pattern if it is not in collection already
                     var patternAsString = pat.Key;
@@ -99,7 +114,7 @@ namespace SinphinitySysStore.Repositories
 
                     // Insert record to PatternsSongs if not there
                     var paternFilter = Builders<PatternSong>.Filter.Eq(x => x.PatternAsString, patternAsString);
-                    var songFilter = Builders<PatternSong>.Filter.Eq(x => x.SongInfoId, patternMatrix.SongId);
+                    var songFilter = Builders<PatternSong>.Filter.Eq(x => x.SongInfoId, song.Id);
                     var combineFilter = Builders<PatternSong>.Filter.And(paternFilter, songFilter);
                     var patSong = await _patternSongCollection.Find(combineFilter).FirstOrDefaultAsync();
                     if (patSong == null)
@@ -108,10 +123,9 @@ namespace SinphinitySysStore.Repositories
                         {
                             PatternId = patInDb.Id,
                             PatternAsString = patternAsString,
-                            SongInfoId = patternMatrix.SongId,
-                            SongName = song.Name,
-                            BandName = song.Band.Name,
-                            StyleName = song.Style.Name
+                            SongInfoId = song.Id,
+                            BandId = song.Band.Id,
+                            StyleId = song.Style.Id
                         };
                         await _patternSongCollection.InsertOneAsync(ps);
                     }
@@ -122,14 +136,14 @@ namespace SinphinitySysStore.Repositories
                         var occurrence = new PatternOccurrence
                         {
                             PatternId = patInDb.Id,
-                            SongInfoId = occ.SongId,
+                            SongInfoId = song.Id,
                             Voice = occ.Voice,
                             BarNumber = (int)occ.BarNumber,
-                            Beat = (int)occ.Beat
+                            Beat = (int)occ.Beat,
+                            Tick=occ.Tick
                         };
                         await _patternOccurrencesCollection.InsertOneAsync(occurrence);
                     }
-                }
             }
         }
 

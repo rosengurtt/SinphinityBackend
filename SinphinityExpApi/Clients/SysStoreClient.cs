@@ -159,12 +159,12 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task InsertPatterns(PatternMatrix patternMatrix)
+        public async Task InsertPatterns(string songId, Dictionary<string, HashSet<Occurrence>> patterns)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
-            var content = new StringContent(JsonConvert.SerializeObject(patternMatrix));
+            var content = new StringContent(JsonConvert.SerializeObject(patterns));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var response = await httpClient.PostAsync($"{_appConfiguration.SysStoreUrl}/api/Patterns", content);
+            var response = await httpClient.PostAsync($"{_appConfiguration.SysStoreUrl}/api/Patterns/{songId}", content);
 
             if (response.StatusCode != HttpStatusCode.OK)
             {

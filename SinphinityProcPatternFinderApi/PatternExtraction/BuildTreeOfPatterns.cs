@@ -17,7 +17,7 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
         /// <param name="key"></param>
         /// <param name="maxPatternLength">Is the </param>
         /// <returns></returns>
-        public static Dictionary<string, HashSet<(int, long)>> BuildTreeOfPatterns(List<Note> notes, List<Bar> bars, Dictionary<string, HashSet<(int, long)>> tree,
+        public static Dictionary<string, HashSet<Occurrence>> BuildTreeOfPatterns(List<Note> notes, List<Bar> bars, Dictionary<string, HashSet<Occurrence>> tree,
             int minPatternLength = 2, int maxPatternLength = 15)
         {
             // the keys of the tree are successions of relative notes expressed as (deltaTick, deltaPitch) separated by semicolons
@@ -26,7 +26,7 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
 
             var sortedNotes = notes
                 .Clone()
-                .OrderBy(x => x.StartSinceBeginningOfSongInTicks)
+                .OrderBy(x => x.StartSinceBeginningOfSongInTicks).ThenByDescending(x=>x.Pitch)
                 .ToList();
 
             for (int i = 1; i < sortedNotes.Count; i++)
@@ -38,20 +38,40 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
                     if (i - depht < 0) break;
                     var key = GetKeyOfNote(bars, sortedNotes[i - depht]);
                     var rn = new RelativeNote(sortedNotes[i - depht + 1], sortedNotes[i - depht], 0, key).AsString;
+                    // if the note starts at the same time as the previous one, ignore it
+                    if (rn.StartsWith("(0,")) continue;
                     chain = rn + chain;
                     chainLength++;
                     if (chainLength < 2) continue;
                     if (!tree.ContainsKey(chain))
-                        tree[chain] = new HashSet<(int, long)>();
-                    tree[chain].Add((sortedNotes[i - depht].Voice, sortedNotes[i - depht].StartSinceBeginningOfSongInTicks));
+                        tree[chain] = new HashSet<Occurrence>();
+                    var tick = sortedNotes[i - depht].StartSinceBeginningOfSongInTicks;
+                    (int bar, int beat) = GetBarAndBeatOfTick(bars, tick);
+                    var oc = new Occurrence
+                    {
+                        Voice = notes[0].Voice,
+                        BarNumber = bar,
+                        Beat = beat,
+                        Tick = tick
+                    };
+                    tree[chain].Add(oc);
                 }
             }
             return tree;
+        }
+        private static (int, int) GetBarAndBeatOfTick(List<Bar> bars, long tick)
+        {
+            var barNo = bars.Where(b => b.TicksFromBeginningOfSong <= tick).Count();
+            var beatLength = 4 * 96 / bars[barNo - 1].TimeSignature.Denominator;
+            var beat = (int)(tick - bars[barNo - 1].TicksFromBeginningOfSong) / beatLength;
+            return (barNo, beat);
         }
 
         private static KeySignature GetKeyOfNote(List<Bar> bars, Note n)
         {
             var bar = bars.Where(x => x.TicksFromBeginningOfSong >= n.StartSinceBeginningOfSongInTicks).OrderBy(y => y.TicksFromBeginningOfSong).FirstOrDefault();
+            if (bar == null)
+                bar = bars.Last();
             return bar.KeySignature;
         }
     }

@@ -38,11 +38,11 @@ namespace SinphinityExpApi.Controllers
             var song = await _sysStoreClient.GetSongByIdAsync(songId);
 
 
-            var patternMatrix = await _procPatternClient.GetPatternMatrixOfSong(song);
-            await _sysStoreClient.InsertPatterns(patternMatrix);
+            var patterns = await _procPatternClient.GetPatternMatrixOfSong(song);
+            await _sysStoreClient.InsertPatterns(songId, patterns);
 
 
-            return Ok(new ApiOKResponse(patternMatrix));
+            return Ok(new ApiOKResponse(patterns));
         }
 
         // api/songs/patterns/batch
@@ -53,6 +53,7 @@ namespace SinphinityExpApi.Controllers
             var pageSize = 5;
             var page = 0;
             var alca = 1;
+            Log.Information($"Starting pattern extraction");
             while (keepLooping)
             {
                 PaginatedList<Song> songsBatch = await _sysStoreClient.GetSongsAsync(page, pageSize, contains);
@@ -68,8 +69,8 @@ namespace SinphinityExpApi.Controllers
                             if (song.SongSimplifications != null && song.SongSimplifications.Count > 0)
                             {
                                 var patternMatrix = await _procPatternClient.GetPatternMatrixOfSong(song);
-                                Log.Information($"ProcMidi completed OK for {song.Name}");
-                                await _sysStoreClient.InsertPatterns(patternMatrix);
+                                Log.Information($"Pattern extracion completed OK for {song.Name}");
+                                await _sysStoreClient.InsertPatterns(song.Id, patternMatrix);
                                 Log.Information($"Saved OK {song.Name}");
                             }
                         }

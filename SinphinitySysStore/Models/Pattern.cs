@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using Sinphinity.Models;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace SinphinitySysStore.Models
 {
@@ -41,7 +42,7 @@ namespace SinphinitySysStore.Models
         public Pattern(string asString)
         {
             AsString = asString;
-            var relativeNotes = asString.Split(";");
+
             var Duration = 0;
             int? highestNote = null;
             int? lowestNote = null;
@@ -49,15 +50,16 @@ namespace SinphinitySysStore.Models
             IsMonotone = true;
             bool? IsGoingUp = null;
             NumberOfNotes = 0;
-            foreach (var n in relativeNotes)
+            foreach (Match m in Regex.Matches(asString, @"(\([0-9]+,[-]?[0-9]+\))"))
             {
-                NumberOfNotes++;
-                var note = n.Replace("(", "").Replace(")", "");
-                var noteParts = note.Split(",");
-                var noteDuration = int.Parse(noteParts[0]);
-                var noteRelPitch = int.Parse(noteParts[1]);
+                var values = Regex.Matches(m.Value, @"[-]?[0-9]+");
+                var noteDuration = int.Parse(values[0].Value);
+                var noteRelPitch = int.Parse(values[1].Value);
                 if (IsGoingUp == null)
-                    IsGoingUp = noteRelPitch > 0;
+                {
+                    if (noteRelPitch != 0)
+                        IsGoingUp = noteRelPitch > 0;
+                }
                 else
                 {
                     if (((bool)IsGoingUp && noteRelPitch < 0) ||
@@ -78,7 +80,7 @@ namespace SinphinitySysStore.Models
                 };
             }
             NumberOfNotes -= 1;
-          DurationInTicks = Duration;
+            DurationInTicks = Duration;
             Range = (int)highestNote - (int)lowestNote;
             Step = noteAbsPitch;
         }

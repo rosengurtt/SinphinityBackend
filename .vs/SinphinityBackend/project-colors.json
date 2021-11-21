@@ -1,0 +1,61 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "497ca3eb-43a9-44b3-970b-5cb09a448103": {
+      "ProjectGuid": "497ca3eb-43a9-44b3-970b-5cb09a448103",
+      "DisplayName": "SinphinityProcPatternFinderApi",
+      "ColorIndex": 0
+    },
+    "e12fe928-c30b-4ada-9332-62414a1d091f": {
+      "ProjectGuid": "e12fe928-c30b-4ada-9332-62414a1d091f",
+      "DisplayName": "SinphinitySysStore",
+      "ColorIndex": 1
+    },
+    "65d95672-e691-4b8f-a3d0-6a603238cf98": {
+      "ProjectGuid": "65d95672-e691-4b8f-a3d0-6a603238cf98",
+      "DisplayName": "SinphinityModel",
+      "ColorIndex": 2
+    },
+    "0b3bb3cb-da0d-4742-9217-6bcaf49993e1": {
+      "ProjectGuid": "0b3bb3cb-da0d-4742-9217-6bcaf49993e1",
+      "DisplayName": "SinphinityProcPatternApi",
+      "ColorIndex": 3
+    },
+    "c1ac3cba-7e45-4939-9fed-dcdce13d7dc3": {
+      "ProjectGuid": "c1ac3cba-7e45-4939-9fed-dcdce13d7dc3",
+      "DisplayName": "SinphinityExpApi",
+      "ColorIndex": 4
+    },
+    "61a7cf2d-c494-4660-a717-8c8a6c475dfa": {
+      "ProjectGuid": "61a7cf2d-c494-4660-a717-8c8a6c475dfa",
+      "DisplayName": "Melanchall.DryWetMidi",
+      "ColorIndex": 5
+    },
+    "24e73f56-6b2b-437e-a488-e659d981dbfc": {
+      "ProjectGuid": "24e73f56-6b2b-437e-a488-e659d981dbfc",
+      "DisplayName": "SinphinityGraphApi",
+      "ColorIndex": 6
+    },
+    "8f5bda14-b875-452f-8c21-9b5c0d9b5f4a": {
+      "ProjectGuid": "8f5bda14-b875-452f-8c21-9b5c0d9b5f4a",
+      "DisplayName": "SinphinityProcMidi",
+      "ColorIndex": 7
+    },
+    "a573fb2e-2ae7-4d6c-b7d0-dbbfa63e7562": {
+      "ProjectGuid": "a573fb2e-2ae7-4d6c-b7d0-dbbfa63e7562",
+      "DisplayName": "CommonRestLib",
+      "ColorIndex": 8
+    },
+    "67a4604b-a530-4f3a-a07f-4ac1ec6f9d18": {
+      "ProjectGuid": "67a4604b-a530-4f3a-a07f-4ac1ec6f9d18",
+      "DisplayName": "NunitTests",
+      "ColorIndex": 9
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 10
+}
