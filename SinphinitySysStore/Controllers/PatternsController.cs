@@ -1,7 +1,6 @@
 ﻿using CommonRestLib.ErrorHandling;
 using Microsoft.AspNetCore.Mvc;
 using Sinphinity.Models;
-using Sinphinity.Models.Pattern;
 using SinphinitySysStore.Repositories;
 using System;
 using System.Collections.Generic;
@@ -20,7 +19,7 @@ namespace SinphinitySysStore.Controllers
         public PatternsController(PatternsRepository patternsRepository, SongsRepository songsRepository)
         {
             _patternsRepository = patternsRepository;
-                _songsRepository = songsRepository;
+            _songsRepository = songsRepository;
         }
 
         [HttpPost("{songId}"), DisableRequestSizeLimit]
@@ -36,8 +35,8 @@ namespace SinphinitySysStore.Controllers
         [HttpGet]
         public async Task<ActionResult> GetPatterns(string bandId, string styleId, string songInfoId, int pageNo = 0, int pageSize = 10)
         {
-            (int total, var patterns) = await _patternsRepository.GetPatternsAsync(pageNo, pageSize,  styleId, bandId, songInfoId);
-            var retObj = new 
+            (int total, var patterns) = await _patternsRepository.GetPatternsAsync(pageNo, pageSize, styleId, bandId, songInfoId);
+            var retObj = new
             {
                 pageNo,
                 pageSize,
@@ -48,28 +47,22 @@ namespace SinphinitySysStore.Controllers
             return Ok(new ApiOKResponse(retObj));
         }
 
-  
-        [HttpGet("{songInfoId}")]
-        public async Task<ActionResult> GetPatternsOfSong(string songInfoId)
+
+
+
+        [HttpGet("Occurrences")]
+        public async Task<ActionResult> GetPatternOccurrences(string patternId, int pageNo = 0, int pageSize = 10)
         {
-            var patterns = await _patternsRepository.GetPatternsOfSongAsync(songInfoId);
-            return Ok(new ApiOKResponse(patterns));
-        }
-        [HttpGet("PatternsSongs")]
-        public async Task<ActionResult> GetPatternsSongs(int pageNo, int pageSize, string contains)
-        {        
-            var totalPatternsSongs = await _patternsRepository.GetPatternsSongsCountAsync(contains);
-            var patternsSongs = await _patternsRepository.GetPatternsSongsAsync(pageSize, pageNo, contains);
+            (var totalOccurrences, var occurrences) = await _patternsRepository.GetPatternOccurrencesAsync(pageNo, pageSize, patternId);
             var retObj = new
             {
                 pageNo,
                 pageSize,
-                totalItems = totalPatternsSongs,
-                totalPages = (int)Math.Ceiling((double)totalPatternsSongs / pageSize),
-                items = patternsSongs
+                totalItems = totalOccurrences,
+                totalPages = (int)Math.Ceiling((double)totalOccurrences / pageSize),
+                items = occurrences
             };
             return Ok(new ApiOKResponse(retObj));
-
         }
     }
 }

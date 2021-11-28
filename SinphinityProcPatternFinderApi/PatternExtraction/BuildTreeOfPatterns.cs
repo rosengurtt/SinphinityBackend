@@ -1,5 +1,4 @@
 ﻿using Sinphinity.Models;
-using Sinphinity.Models.Pattern;
 using SinphinityModel.Helpers;
 using System;
 using System.Collections.Generic;

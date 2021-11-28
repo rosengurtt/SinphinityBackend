@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using Serilog;
 using Sinphinity.Models;
-using Sinphinity.Models.Pattern;
 using SinphinityExpApi.Models;
 using System;
 using System.Collections.Generic;

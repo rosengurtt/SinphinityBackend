@@ -28,8 +28,8 @@ namespace SinphinityExpApi.Controllers
                 _procPatternClient = procPatternClient;
             }
 
-        // api/songs/patterns?songId=60d577ef035c715d2ea7ef60
-        [HttpGet]
+        // api/songs/patterns/processSong?songId=60d577ef035c715d2ea7ef60
+        [HttpGet("processSong")]
         public async Task<IActionResult> ProcessPatternsForSong(string songId)
         {
             if (!Regex.IsMatch(songId, "^[0-9a-zA-Z]{20,28}$"))
@@ -39,7 +39,7 @@ namespace SinphinityExpApi.Controllers
 
 
             var patterns = await _procPatternClient.GetPatternMatrixOfSong(song);
-            await _sysStoreClient.InsertPatterns(songId, patterns);
+            await _sysStoreClient.InsertPatternsAsync(songId, patterns);
 
 
             return Ok(new ApiOKResponse(patterns));
@@ -70,7 +70,7 @@ namespace SinphinityExpApi.Controllers
                             {
                                 var patternMatrix = await _procPatternClient.GetPatternMatrixOfSong(song);
                                 Log.Information($"Pattern extracion completed OK for {song.Name}");
-                                await _sysStoreClient.InsertPatterns(song.Id, patternMatrix);
+                                await _sysStoreClient.InsertPatternsAsync(song.Id, patternMatrix);
                                 Log.Information($"Saved OK {song.Name}");
                             }
                         }
@@ -90,6 +90,24 @@ namespace SinphinityExpApi.Controllers
             return Ok(new ApiOKResponse(null));
         }
 
+        // api/patterns?songInfoId=6187a4cb1b0680d2e5e5ae60
+        [HttpGet]
+        public async Task<ActionResult> GetPatterns(string bandId, string styleId, string songInfoId, int pageNo = 0, int pageSize = 10)
+        {
+            var patterns = await _sysStoreClient.GetPatternsAsync(pageNo, pageSize, styleId, bandId, songInfoId);
+
+            return Ok(new ApiOKResponse(patterns));
+        }
+
+
+
+
+        [HttpGet("Occurrences")]
+        public async Task<ActionResult> GetPatternOccurrences(string patternId, int pageNo = 0, int pageSize = 10)
+        {
+            var occurrences = await _sysStoreClient.GetPatternOccurrencesAsync(pageNo, pageSize, patternId);
+            return Ok(new ApiOKResponse(occurrences));
+        }
     }
 }
 

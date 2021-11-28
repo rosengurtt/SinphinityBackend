@@ -1,4 +1,4 @@
-﻿namespace Sinphinity.Models.Pattern
+﻿namespace Sinphinity.Models
 {
     /// <summary>
     /// Represents a couple of passages in a song that are identical or similar

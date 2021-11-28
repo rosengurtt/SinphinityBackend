@@ -1,5 +1,4 @@
 ﻿using Sinphinity.Models;
-using Sinphinity.Models.Pattern;
 using SinphinityProcPatternFinderApi.Utilities;
 using System;
 using System.Collections.Generic;

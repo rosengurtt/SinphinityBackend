@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Serilog;
 using SinphinityGraphApi.Models;
-using SinphinityModel.Pattern;
+using SinphinityModel;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;

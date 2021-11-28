@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Sinphinity.Models.Pattern
+namespace Sinphinity.Models
 {
     /// <summary>
     /// Contains the patterns of a song and the places in the song where the patterns are used

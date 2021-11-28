@@ -1,5 +1,5 @@
 ﻿using Neo4j.Driver;
-using SinphinityModel.Pattern;
+using SinphinityModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

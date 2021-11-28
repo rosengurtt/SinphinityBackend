@@ -7,10 +7,8 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using Sinphinity.Models;
-using Sinphinity.Models.Pattern;
 using SinphinitySysStore.Models;
-
-
+using Pattern = SinphinitySysStore.Models.Pattern;
 
 namespace SinphinitySysStore.Repositories
 {
@@ -61,39 +59,29 @@ namespace SinphinitySysStore.Repositories
                 retObj.Add(pat);
             }
 
-            return (pats.Count(), retObj);
+            return (patsSongs.Count(), retObj);
         }
 
 
 
 
-        public async Task<IReadOnlyList<PatternSong>> GetPatternsOfSongAsync(string songInfoId)
+        public async Task<(long, IReadOnlyList<PatternOccurrence>)> GetPatternOccurrencesAsync(int pageNo, int pageSize, string patternId)
         {
-            var filter = Builders<PatternSong>.Filter.Eq(x => x.SongInfoId, songInfoId);
+            var filter = Builders<PatternOccurrence>.Filter.Eq(x => x.PatternId, patternId);
 
-            var patternsSong = await _patternSongCollection
+            var patternsOccurrences = await _patternOccurrencesCollection
                 .Find(filter)
-                .ToListAsync();
-
-            return patternsSong;
-        }
-        public async Task<long> GetPatternsSongsCountAsync(string contains = ".*")
-        {
-            var nameFilter = Builders<PatternSong>.Filter.Regex(s => s.PatternAsString, @$"/.*{contains}.*/i");
-            return await _patternSongCollection.Find(nameFilter).CountDocumentsAsync();
-        }
-        public async Task<IReadOnlyList<PatternSong>> GetPatternsSongsAsync(int pageSize, int page, string contains)
-        {
-
-            var patternsSong = await _patternSongCollection
-                .Find(_ => true)
-                .SortBy(e => e.PatternAsString)
-                .ThenBy(x=>x.SongInfoId)
+                .SortBy(e => e.Tick)
+                .ThenBy(x => x.Voice)
                 .Limit(pageSize)
-                .Skip(pageSize * page)
+                .Skip(pageSize * pageNo)
                 .ToListAsync();
 
-            return patternsSong;
+            var totalOccurrences = await _patternOccurrencesCollection
+                .Find(filter)
+                .CountDocumentsAsync();
+
+            return (totalOccurrences, patternsOccurrences);
         }
 
         public async Task InsertPatternsOfSongAsync(Dictionary<string, HashSet<Occurrence>> patterns, SongInfo song)

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Sinphinity.Models.Pattern
+namespace Sinphinity.Models
 {
     public class MelodyPattern
     {

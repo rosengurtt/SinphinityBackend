@@ -1,6 +1,6 @@
 ﻿using Sinphinity.Models;
 
-namespace SinphinityModel.Pattern
+namespace SinphinityModel
 {
     /// <summary>
     /// Represents an association of a pattern with a song

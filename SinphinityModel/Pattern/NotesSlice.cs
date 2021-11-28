@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Sinphinity.Models.Pattern
+namespace Sinphinity.Models
 {
     /// <summary>
     /// Represents the notes of some time interval in a voice

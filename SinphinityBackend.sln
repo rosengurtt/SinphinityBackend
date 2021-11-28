@@ -13,8 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinityProcMidi", "Sinph
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinitySysStore", "SinphinitySysStore\SinphinitySysStore.csproj", "{E12FE928-C30B-4ADA-9332-62414A1D091F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinityProcPatternApi", "SinphinityProcPatternApi\SinphinityProcPatternApi.csproj", "{0B3BB3CB-DA0D-4742-9217-6BCAF49993E1}"
-EndProject
+
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonRestLib", "CommonRestLib\CommonRestLib.csproj", "{A573FB2E-2AE7-4D6C-B7D0-DBBFA63E7562}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinityGraphApi", "SinphinityGraphApi\SinphinityGraphApi.csproj", "{24E73F56-6B2B-437E-A488-E659D981DBFC}"
