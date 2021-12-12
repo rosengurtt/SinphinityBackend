@@ -9,7 +9,7 @@ namespace Sinphinity.Models
 {
     public class Pattern
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         public string AsString { get; set; }
 
@@ -62,12 +62,6 @@ namespace Sinphinity.Models
                     highestNote = noteAbsPitch;
                 if (lowestNote == null || lowestNote > noteAbsPitch)
                     lowestNote = noteAbsPitch;
-
-                var relNote = new RelativeNote
-                {
-                    DeltaPitch = noteRelPitch,
-                    DeltaTick = noteDuration
-                };
             }
             NumberOfNotes -= 1;
             DurationInTicks = Duration;

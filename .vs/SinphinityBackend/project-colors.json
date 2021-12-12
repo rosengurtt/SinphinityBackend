@@ -55,7 +55,17 @@
       "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
       "DisplayName": "Miscellaneous Files",
       "ColorIndex": -1
+    },
+    "a5ddef43-7866-480d-a11e-2bcc259f22ad": {
+      "ProjectGuid": "a5ddef43-7866-480d-a11e-2bcc259f22ad",
+      "DisplayName": "SinphinitySysStore",
+      "ColorIndex": 10
+    },
+    "be73869b-7561-4609-996f-ecf930668906": {
+      "ProjectGuid": "be73869b-7561-4609-996f-ecf930668906",
+      "DisplayName": "SinphinitySysStore",
+      "ColorIndex": 11
     }
   },
-  "NextColorIndex": 10
+  "NextColorIndex": 12
 }

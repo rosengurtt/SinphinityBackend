@@ -1,14 +1,10 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Sinphinity.Models
 {
     public class Song
     {
-        public virtual string Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public string MidiBase64Encoded { get; set; }
         public bool IsSongProcessed { get; set; }

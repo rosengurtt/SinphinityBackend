@@ -31,14 +31,14 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetSongs(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null, string bandId = null)
+        public async Task<ActionResult> GetSongs(int pageNo = 0, int pageSize = 10, string contains = null, long styleId = 0, long bandId = 0)
         {
             return Ok(new ApiOKResponse(await _sysStoreClient.GetSongsAsync(pageNo, pageSize, contains, styleId, bandId)));
         }
 
         // GET: api/Songs/5
         [HttpGet("{songId}")]
-        public async Task<IActionResult> GetSong(string songId, int? simplificationVersion)
+        public async Task<IActionResult> GetSong(long songId, int? simplificationVersion)
         {
             Song song = await _sysStoreClient.GetSongByIdAsync(songId, simplificationVersion);
             if (song == null)
@@ -63,8 +63,8 @@ namespace SinphinitySysStore.Controllers
             var song = new Song
             {
                 Name = Request.Form["songName"],
-                Band = new Band { Id = Request.Form["bandId"], Name = Request.Form["bandName"] },
-                Style = new Style { Id = Request.Form["styleId"], Name = Request.Form["styleName"] },
+                Band = new Band { Id =long.Parse(Request.Form["bandId"]), Name = Request.Form["bandName"] },
+                Style = new Style { Id = long.Parse(Request.Form["styleId"]), Name = Request.Form["styleName"] },
                 MidiBase64Encoded = Convert.ToBase64String(bytes)
             };
             var processedSong = await _procMidiClient.ProcessSong(song);
@@ -83,7 +83,7 @@ namespace SinphinitySysStore.Controllers
 
 
         [HttpGet("{songId}/midi")]
-        public async Task<IActionResult> GetSongMidi(string songId, int tempoInBeatsPerMinute, int simplificationVersion = 1, int startInSeconds = 0, string mutedTracks = null)
+        public async Task<IActionResult> GetSongMidi(long songId, int tempoInBeatsPerMinute, int simplificationVersion = 1, int startInSeconds = 0, string mutedTracks = null)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpGet("processSingle")]
-        public async Task<IActionResult> ProcessSingleSong(string songId)
+        public async Task<IActionResult> ProcessSingleSong(long songId)
         {
 
             var song = await _sysStoreClient.GetSongByIdAsync(songId);
@@ -166,7 +166,7 @@ namespace SinphinitySysStore.Controllers
 
 
         [HttpGet("processbatch")]
-        public async Task<IActionResult> ProcessBatch(string styleId, string bandId)
+        public async Task<IActionResult> ProcessBatch(long styleId, long bandId)
         {
             var keepLooping = true;
             var pageSize = 5;

@@ -5,7 +5,7 @@
     /// </summary>
     public class Occurrence
     {
-        public string SongInfoId { get; set; }
+        public string SongId { get; set; }
         public byte Voice { get; set; }
         public long BarNumber { get; set; }
         public long Beat { get; set; }

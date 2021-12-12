@@ -30,17 +30,12 @@ namespace SinphinityExpApi.Controllers
 
         // api/songs/patterns/processSong?songId=60d577ef035c715d2ea7ef60
         [HttpGet("processSong")]
-        public async Task<IActionResult> ProcessPatternsForSong(string songId)
+        public async Task<IActionResult> ProcessPatternsForSong(long songId)
         {
-            if (!Regex.IsMatch(songId, "^[0-9a-zA-Z]{20,28}$"))
-                return BadRequest(new ApiBadRequestResponse("Invalid songId"));
-
             var song = await _sysStoreClient.GetSongByIdAsync(songId);
-
 
             var patterns = await _procPatternClient.GetPatternMatrixOfSong(song);
             await _sysStoreClient.InsertPatternsAsync(songId, patterns);
-
 
             return Ok(new ApiOKResponse(patterns));
         }

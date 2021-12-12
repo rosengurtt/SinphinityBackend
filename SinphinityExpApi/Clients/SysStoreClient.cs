@@ -65,13 +65,13 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
-        public async Task<PaginatedList<Song>> GetSongsAsync(int pageNo = 0, int pageSize = 10,  string contains = null, string styleId = null, string bandId = null)
+        public async Task<PaginatedList<Song>> GetSongsAsync(int pageNo = 0, int pageSize = 10,  string contains = null, long styleId = 0, long bandId = 0)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var url = $"{_appConfiguration.SysStoreUrl}/api/Songs?pageNo={pageNo}&pageSize={pageSize}";
             if (!string.IsNullOrEmpty(contains)) url += $"&contains={contains}";
-            if (!string.IsNullOrEmpty(styleId)) url += $"&styleId={styleId}";
-            if (!string.IsNullOrEmpty(bandId)) url += $"&bandId={bandId}";
+            if (styleId!=0) url += $"&styleId={styleId}";
+            if (bandId!=0) url += $"&bandId={bandId}";
             var response = await httpClient.GetAsync(url);
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -87,7 +87,7 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
-        public async Task<Song> GetSongByIdAsync(string songId, int? SongSimplification = null)
+        public async Task<Song> GetSongByIdAsync(long songId, int? SongSimplification = null)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var url = $"{_appConfiguration.SysStoreUrl}/api/Songs/{songId}";
@@ -158,7 +158,7 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task InsertPatternsAsync(string songId, Dictionary<string, HashSet<Occurrence>> patterns)
+        public async Task InsertPatternsAsync(long songId, Dictionary<string, HashSet<Occurrence>> patterns)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(patterns));
