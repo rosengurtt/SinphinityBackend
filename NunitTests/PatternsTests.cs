@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using SinphinitySysStoreMongo.Models;
+using Sinphinity.Models;
 
 namespace NunitTests
 {

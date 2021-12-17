@@ -58,12 +58,18 @@ namespace SinphinitySysStore.Controllers
         {
             try
             {
-                if (song.Style.Id!=0 && !string.IsNullOrEmpty(song.Style.Name))
+                if (song.Style.Id == 0)
                 {
+                    if (string.IsNullOrEmpty(song.Style.Name))
+                        return BadRequest(new ApiBadRequestResponse("No style was provided"));
                     song.Style = await _stylesRepository.GetStyleByNameAsync(song.Style.Name);
+                    if (song.Style == null)
+                        return BadRequest(new ApiBadRequestResponse("The style doesn' exist"));
                 }
-                if (song.Band.Id!=0 && !string.IsNullOrEmpty(song.Band.Name))
+                if (song.Band.Id == 0)
                 {
+                    if (string.IsNullOrEmpty(song.Band.Name))
+                        return BadRequest(new ApiBadRequestResponse("No band was provided"));
                     song.Band = await _bandssRepository.GetBandByNameAsync(song.Band.Name);
                     if (song.Band == null)
                         return BadRequest(new ApiBadRequestResponse("The band doesn' exist"));

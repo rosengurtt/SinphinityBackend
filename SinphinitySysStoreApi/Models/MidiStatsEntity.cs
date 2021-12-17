@@ -5,8 +5,10 @@ namespace SinphinitySysStore.Models
     public class MidiStatsEntity
     {
         public MidiStatsEntity() { }
-        public MidiStatsEntity(MidiStats ms, long songId) {
-            SongId = songId;
+        public MidiStatsEntity(MidiStats ms, Song song)
+        {
+            if (song.MidiStats == null)
+                return;
             TotalTracks = ms.TotalTracks;
             TotalChannels = ms.TotalChannels;
             TotalEvents = ms.TotalEvents;
@@ -32,7 +34,6 @@ namespace SinphinitySysStore.Models
 
         public long Id { get; set; }
 
-        public long SongId { get; set; }
         public int TotalTracks { get; set; }
         public int TotalChannels { get; set; }
         public int TotalEvents { get; set; }

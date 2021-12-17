@@ -8,14 +8,16 @@ IF (OBJECT_ID('dbo.[FK_Band_Style_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.Bands DROP CONSTRAINT FK_Band_Style_Id
 	
 IF (OBJECT_ID('dbo.[FK_MidiStats_Song_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.MidiStats DROP CONSTRAINT FK_MidiStats_Song_Id
+	ALTER TABLE dbo.Songs DROP CONSTRAINT FK_MidiStats_Song_Id
 	
 IF (OBJECT_ID('dbo.[FK_BasicPatternsPatterns_Pattern_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.BasicPatternsPatterns DROP CONSTRAINT FK_BasicPatternsPatterns_Pattern_Id
 	
 IF (OBJECT_ID('dbo.[FK_BasicPatternsPatterns_BasicPattern_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.BasicPatternsPatterns DROP CONSTRAINT FK_BasicPatternsPatterns_BasicPattern_Id
-	
+
+IF (OBJECT_ID('dbo.[FK_SongsSimplifications_Song_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.SongsSimplifications DROP CONSTRAINT FK_SongsSimplifications_Song_Id
 
 
 IF OBJECT_ID('dbo.Styles', 'U') IS NOT NULL 
@@ -37,7 +39,37 @@ CREATE TABLE Bands(
 	StyleId BIGINT NOT NULL,	
     CONSTRAINT FK_Band_Style_Id FOREIGN KEY  (StyleId) REFERENCES Styles(Id)
 )
-
+IF OBJECT_ID('dbo.MidiStats', 'U') IS NOT NULL 
+  DROP TABLE dbo.MidiStats
+  
+CREATE TABLE MidiStats(
+	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL ,
+	DurationInSeconds INT NULL,
+	DurationInTicks BIGINT NULL,
+	HasMoreThanOneChannelPerTrack bit NULL,
+	HasMoreThanOneInstrumentPerTrack bit NULL,
+	HighestPitch INT NULL,
+	LowestPitch INT NULL,
+	TempoInBeatsPerMinute INT NULL,
+	TotalTracks INT NULL,
+    TotalTracksWithoutNotes INT NULL,
+    TotalBassTracks INT NULL,
+	TotalChordTracks INT NULL,
+	TotalMelodicTracks INT NULL,
+    TotalPercussionTracks INT NULL,
+	TotalInstruments INT NULL,
+    InstrumentsAsString NVARCHAR(400)  NULL,
+	TotalPercussionInstruments INT NULL,
+    TotalChannels INT NULL,
+	TotalTempoChanges INT NULL,
+    TotalEvents INT NULL,
+	TotalNoteEvents INT NULL,
+	TotalPitchBendEvents INT NULL,
+	TotalControlChangeEvents INT NULL,
+    TotalProgramChangeEvents INT NULL,
+	TotalSustainPedalEvents INT NULL,
+	TotalChannelIndependentEvents INT NULL
+)
 	
 IF OBJECT_ID('dbo.Songs', 'U') IS NOT NULL 
   DROP TABLE dbo.Songs
@@ -47,57 +79,31 @@ CREATE TABLE Songs(
 	[Name] nvarchar(500) NOT NULL,
 	BandId BIGINT NULL,
 	StyleId BIGINT NOT NULL,
+	MidiStatsId BIGINT NOT NULL,
 	MidiBase64Encoded nvarchar(max) NOT NULL,
 	IsSongProcessed BIT NOT NULL DEFAULT 0,
 	ArePatternsExtracted BIT NOT NULL DEFAULT 0,
 	IsMidiCorrect BIT NOT NULL DEFAULT 0,
 	CantBeProcessed BIT NOT NULL DEFAULT 0,
-	Bars NVARCHAR(MAX) NULL,
-	TempoChanges NVARCHAR(MAX) NULL,
-	DurationInTicks BIGINT NULL,
-	DurationInSeconds BIGINT NULL,
-	AverageTempoInBeatsPerMinute BIGINT NULL
+	Bars VARCHAR(MAX) NULL,
+	TempoChanges VARCHAR(MAX) NULL,
+	AverageTempoInBeatsPerMinute BIGINT NULL,
+    CONSTRAINT FK_MidiStats_Song_Id FOREIGN KEY (MidiStatsId) REFERENCES MidiStats(Id)
 )
 
-	
-IF OBJECT_ID('dbo.MidiStats', 'U') IS NOT NULL 
-  DROP TABLE dbo.MidiStats
-  
-CREATE TABLE MidiStats(
-	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-    SongId BIGINT NOT NULL,
-	DurationInSeconds BIGINT NULL,
-	HasMoreThanOneChannelPerTrack bit NULL,
-	HasMoreThanOneInstrumentPerTrack bit NULL,
-	HighestPitch BIGINT NULL,
-	LowestPitch BIGINT NULL,
-	NumberBars BIGINT NULL,
-	NumberOfTicks BIGINT NULL,
-	TempoInBeatsPerMinute BIGINT NULL,
-	TempoInMicrosecondsPerBeat BIGINT NULL,
-	TimeSignatureId BIGINT NULL,
-	TotalDifferentPitches BIGINT NULL,
-	TotalUniquePitches BIGINT NULL,
-	TotalTracks BIGINT NULL,
-    TotalTracksWithoutNotes BIGINT NULL,
-    TotalBassTracks BIGINT NULL,
-	TotalChordTracks BIGINT NULL,
-	TotalMelodicTracks BIGINT NULL,
-    TotalPercussionTracks BIGINT NULL,
-	TotalInstruments BIGINT NULL,
-    InstrumentsAsString nvarchar(400)  NULL,
-	TotalPercussionInstruments BIGINT NULL,
-    TotalChannels BIGINT NULL,
-	TotalTempoChanges BIGINT NULL,
-    TotalEvents BIGINT NULL,
-	TotalNoteEvents BIGINT NULL,
-	TotalPitchBendEvents BIGINT NULL,
-	TotalControlChangeEvents BIGINT NULL,
-    TotalProgramChangeEvents BIGINT NULL,
-	TotalSustainPedalEvents BIGINT NULL,
-	TotalChannelIndependentEvents BIGINT NULL,
-    CONSTRAINT FK_MidiStats_Song_Id FOREIGN KEY (SongId) REFERENCES Songs(Id)
+IF OBJECT_ID('dbo.SongsSimplifications', 'U') IS NOT NULL 
+  DROP TABLE dbo.SongsSimplifications
+
+CREATE TABLE SongsSimplifications(
+	Id BIGINT IDENTITY(1,1) primary key clustered NOT NULL,
+	SongId BIGINT NOT NULL,
+	Version BIGINT NOT NULL,
+	Notes VARCHAR(MAX) NOT NULL,
+	NumberOfVoices BIGINT NOT NULL,
+    CONSTRAINT FK_SongsSimplifications_Song_Id FOREIGN KEY (SongId) REFERENCES Songs(Id)
 )
+	
+
 
 IF OBJECT_ID('dbo.Patterns', 'U') IS NOT NULL 
   DROP TABLE dbo.Patterns

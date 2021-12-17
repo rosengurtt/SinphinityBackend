@@ -19,8 +19,6 @@ namespace Sinphinity.Models
         public List<SongSimplification> SongSimplifications { get; set; }
         public List<Bar> Bars { get; set; }
         public List<TempoChange> TempoChanges { get; set; }
-        public long DurationInSeconds { get; set; }
-        public long DurationInTicks { get; set; }
         public long AverageTempoInBeatsPerMinute { get; set; }
     }
 }

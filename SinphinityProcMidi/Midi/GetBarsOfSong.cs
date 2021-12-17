@@ -203,13 +203,15 @@ namespace SinphinityProcMidi.Midi
             var timePitchIsHighestNote = new long[12];
             var timePitchIsLowestNote = new long[12];
             var probability = new double[12];
+            // To avoid overflowing we divide by the following number
+            var divisor = notes.Count * 1000;
             for (var i = 0; i < 12; i++)
             {
-                totalUseOfPitch[i] = notes.Where(x => x.Pitch % 12 == i).Select(y => y.Volume * y.DurationInTicks).Sum();
+                totalUseOfPitch[i] = notes.Where(x => x.Pitch % 12 == i).Select(y => y.Volume * y.DurationInTicks / divisor).Sum();
                 timePitchIsHighestNote[i] = GetHighestOrLowestPitchesOfNotes(notes, "high")
-                    .Where(x => x.Pitch % 12 == i).Select(y => y.Volume * y.DurationInTicks).Sum();
+                    .Where(x => x.Pitch % 12 == i).Select(y => y.Volume * y.DurationInTicks / divisor).Sum();
                 timePitchIsLowestNote[i] = GetHighestOrLowestPitchesOfNotes(notes, "low")
-                    .Where(x => x.Pitch % 12 == i).Select(y => y.Volume * y.DurationInTicks).Sum();
+                    .Where(x => x.Pitch % 12 == i).Select(y => y.Volume * y.DurationInTicks / divisor).Sum();
             }
             long totalUseForAllNotes = totalUseOfPitch.Sum();
             long totalPitchIsHighesttNote = timePitchIsHighestNote.Sum();

@@ -7,6 +7,7 @@ namespace Sinphinity.Models
 {
     public class Bar
     {   
+
         public long BarNumber { get; set; }
         public long TicksFromBeginningOfSong { get; set; }
 

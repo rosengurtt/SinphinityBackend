@@ -187,6 +187,7 @@ namespace SinphinitySysStore.Controllers
                             {
                                 Log.Information($"{alca} - Start with song: {song.Name}");
                                 processedSong = await _procMidiClient.ProcessSong(song);
+                                processedSong.IsSongProcessed = true;
                                 Log.Information($"ProcMidi completed OK for {song.Name}");
                                 await _sysStoreClient.UpdateSong(processedSong);
                                 Log.Information($"Saved OK {song.Name}");

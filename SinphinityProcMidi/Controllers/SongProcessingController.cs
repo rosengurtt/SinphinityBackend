@@ -91,15 +91,13 @@ namespace SinphinityProcMidi.Controllers
         {
             song.MidiBase64Encoded = MidiUtilities.NormalizeTicksPerQuarterNote(song.MidiBase64Encoded);
             song.MidiStats = MidiUtilities.GetMidiStats(song.MidiBase64Encoded);
-            song.DurationInSeconds = song.MidiStats.DurationInSeconds;
-            song.DurationInTicks = song.MidiStats.DurationInTicks;
      
 
             var simplificationZero = MidiUtilities.GetSimplificationZeroOfSong(song.MidiBase64Encoded);
             song.Bars = MidiUtilities.GetBarsOfSong(song.MidiBase64Encoded, simplificationZero);
        
             song.TempoChanges = MidiUtilities.GetTempoChanges(song.MidiBase64Encoded);
-            song.AverageTempoInBeatsPerMinute = MidiUtilities.GetAverageTempoInBeatsPerMinute(song.TempoChanges, song.DurationInTicks);
+            song.AverageTempoInBeatsPerMinute = MidiUtilities.GetAverageTempoInBeatsPerMinute(song.TempoChanges, song.MidiStats.DurationInTicks);
 
             song.SongSimplifications = new List<SongSimplification>();
             song.SongSimplifications.Add(simplificationZero);

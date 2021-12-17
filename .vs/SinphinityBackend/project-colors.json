@@ -65,7 +65,17 @@
       "ProjectGuid": "be73869b-7561-4609-996f-ecf930668906",
       "DisplayName": "SinphinitySysStore",
       "ColorIndex": 11
+    },
+    "3cc14b9c-d3c1-431d-a686-68000632a948": {
+      "ProjectGuid": "3cc14b9c-d3c1-431d-a686-68000632a948",
+      "DisplayName": "SinphinitySysStore",
+      "ColorIndex": 12
+    },
+    "28617f44-f8bf-439f-9917-e82e9e838f3d": {
+      "ProjectGuid": "28617f44-f8bf-439f-9917-e82e9e838f3d",
+      "DisplayName": "SinphinitySysStoreApi",
+      "ColorIndex": 13
     }
   },
-  "NextColorIndex": 12
+  "NextColorIndex": 14
 }
