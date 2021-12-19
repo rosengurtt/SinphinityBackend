@@ -27,7 +27,7 @@ namespace SinphinityExpApi.Clients
         public async Task<Song> ProcessSong(Song song)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
-            httpClient.Timeout = TimeSpan.FromMinutes(5);
+            httpClient.Timeout = TimeSpan.FromMinutes(10);
             var content = new StringContent(JsonConvert.SerializeObject(song));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 

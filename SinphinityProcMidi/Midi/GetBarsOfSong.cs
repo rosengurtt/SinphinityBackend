@@ -194,17 +194,17 @@ namespace SinphinityProcMidi.Midi
         {
             // totalUseOfPitch is a value that takes in consideration the times a pitch is used, the volume and the duration of
             // time it is played. We calculate it for each pitch
-            var totalUseOfPitch = new long[12];
+            var totalUseOfPitch = new float[12];
             var firstRoot = GetTonicOfFirstAndLastChords(notes, "first");
             var lastRoot = GetTonicOfFirstAndLastChords(notes, "last");
 
             // when several notes are played at the same timethe higher notes and the lower notes are heard more than middle notes
             // the percentage of time a pitch is the highest (or the lowest) pitch heard gives information about its importance
-            var timePitchIsHighestNote = new long[12];
-            var timePitchIsLowestNote = new long[12];
+            var timePitchIsHighestNote = new float[12];
+            var timePitchIsLowestNote = new float[12];
             var probability = new double[12];
             // To avoid overflowing we divide by the following number
-            var divisor = notes.Count * 1000;
+            float divisor = notes.Count * 100;
             for (var i = 0; i < 12; i++)
             {
                 totalUseOfPitch[i] = notes.Where(x => x.Pitch % 12 == i).Select(y => y.Volume * y.DurationInTicks / divisor).Sum();
@@ -213,9 +213,9 @@ namespace SinphinityProcMidi.Midi
                 timePitchIsLowestNote[i] = GetHighestOrLowestPitchesOfNotes(notes, "low")
                     .Where(x => x.Pitch % 12 == i).Select(y => y.Volume * y.DurationInTicks / divisor).Sum();
             }
-            long totalUseForAllNotes = totalUseOfPitch.Sum();
-            long totalPitchIsHighesttNote = timePitchIsHighestNote.Sum();
-            long totalPitchIsLowestNote = timePitchIsLowestNote.Sum();
+            float totalUseForAllNotes = totalUseOfPitch.Sum();
+            float totalPitchIsHighesttNote = timePitchIsHighestNote.Sum();
+            float totalPitchIsLowestNote = timePitchIsLowestNote.Sum();
 
             for (var i = 0; i < 12; i++)
             {

@@ -32,6 +32,10 @@ namespace SinphinitySysStore.Models
             }
             if (song.TempoChanges != null && song.TempoChanges.Count > 0)
                 TempoChanges = JsonConvert.SerializeObject(song.TempoChanges);
+            if (song.Bars !=null && song.Bars.Count > 0)
+            {
+                Bars = JsonConvert.SerializeObject(song.Bars);
+            }
             AverageTempoInBeatsPerMinute = song.AverageTempoInBeatsPerMinute;
         }
 

@@ -13,7 +13,7 @@ namespace Sinphinity.Models
 
         public string AsString { get; set; }
 
-        public int DurationInTicks { get; set; }
+        public long DurationInTicks { get; set; }
         public int NumberOfNotes { get; set; }
         /// <summary>
         /// The difference between the highest pitch and the lowest pitch
@@ -42,6 +42,7 @@ namespace Sinphinity.Models
             NumberOfNotes = 0;
             foreach (Match m in Regex.Matches(asString, @"(\([0-9]+,[-]?[0-9]+\))"))
             {
+                NumberOfNotes++;
                 var values = Regex.Matches(m.Value, @"[-]?[0-9]+");
                 var noteDuration = int.Parse(values[0].Value);
                 var noteRelPitch = int.Parse(values[1].Value);

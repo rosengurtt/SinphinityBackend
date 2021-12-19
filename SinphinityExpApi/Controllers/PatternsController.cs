@@ -57,7 +57,7 @@ namespace SinphinityExpApi.Controllers
                     foreach (var s in songsBatch.items)
                     {
                         var song = await _sysStoreClient.GetSongByIdAsync(s.Id, null);
-                        if (song.ArePatternsExtracted) continue;
+                        if (!song.IsSongProcessed || song.ArePatternsExtracted) continue;
                         try
                         {
                             Log.Information($"{alca} - Start with song: {song.Name}");

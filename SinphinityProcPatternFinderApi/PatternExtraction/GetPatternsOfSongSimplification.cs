@@ -10,7 +10,6 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
 {
     public static partial class PatternsExtraction
     {
-
         public static Dictionary<string, HashSet<Occurrence>> GetPatternsOfSongSimplification(Song song, int simplification = 1)
         {
             var voices = UtilitiesCompadre.GetVoices(song.SongSimplifications[simplification].Notes);
@@ -79,7 +78,7 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
 
 
         private static Dictionary<string, HashSet<Occurrence>> RemovePatternsThatOccurLessThanNtimes(Dictionary<string, HashSet<Occurrence>> tree, int minPatternOccurrences = 4,
-            int maxPatternsPerSong = 50)
+            int maxPatternsPerSong = 100)
         {
             var stringsToRemove = new HashSet<string>();
             foreach (var pat in tree.Keys)

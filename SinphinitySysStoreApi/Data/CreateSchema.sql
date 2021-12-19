@@ -19,6 +19,13 @@ IF (OBJECT_ID('dbo.[FK_BasicPatternsPatterns_BasicPattern_Id]', 'F') IS NOT NULL
 IF (OBJECT_ID('dbo.[FK_SongsSimplifications_Song_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.SongsSimplifications DROP CONSTRAINT FK_SongsSimplifications_Song_Id
 
+IF (OBJECT_ID('dbo.[FK_PatternsSongs_Pattern_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PatternsSongs DROP CONSTRAINT FK_PatternsSongs_Pattern_Id
+
+IF (OBJECT_ID('dbo.[FK_PatternsSongs_Song_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PatternsSongs DROP CONSTRAINT FK_PatternsSongs_Song_Id
+	
+	
 
 IF OBJECT_ID('dbo.Styles', 'U') IS NOT NULL 
   DROP TABLE dbo.Styles
@@ -117,9 +124,12 @@ CREATE TABLE Patterns (
 	IsMonotone BIT NOT NULL,
 	Step INT NOT NULL
 )
+CREATE INDEX IX_Patterns_AsString ON Patterns (AsString)
+
+
 
 IF OBJECT_ID('dbo.BasicPatterns', 'U') IS NOT NULL 
-  DROP TABLE dbo.BasicPatterns
+	DROP TABLE dbo.BasicPatterns
   
 CREATE TABLE BasicPatterns (
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
@@ -129,6 +139,8 @@ CREATE TABLE BasicPatterns (
 	IsMonotone BIT NOT NULL,
 	Step INT NOT NULL
 )
+
+CREATE INDEX IX_BasicPatterns_AsString ON BasicPatterns (AsString)
 
 IF OBJECT_ID('dbo.BasicPatternsPatterns', 'U') IS NOT NULL 
   DROP TABLE dbo.BasicPatternsPatterns
@@ -156,6 +168,23 @@ CREATE TABLE PatternOccurrences (
     CONSTRAINT FK_PatternOccurrences_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
 )
 
+CREATE INDEX IX_PatternOccurrences_Tick ON PatternOccurrences (Tick)
+CREATE INDEX IX_PatternOccurrences_Voice ON PatternOccurrences (Voice)
+CREATE INDEX IX_PatternOccurrences_SongId ON PatternOccurrences (SongId)
+CREATE INDEX IX_PatternOccurrences_PatternId ON PatternOccurrences (PatternId)
+
+
+
+IF OBJECT_ID('dbo.PatternsSongs', 'U') IS NOT NULL 
+  DROP TABLE dbo.PatternsSongs
+  
+CREATE TABLE PatternsSongs(
+	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
+	SongId BIGINT NOT NULL,
+	PatternId BIGINT NOT NULL,
+    CONSTRAINT FK_PatternsSongs_Pattern_Id FOREIGN KEY (PatternId) REFERENCES Patterns(Id),
+    CONSTRAINT FK_PatternsSongs_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
+)
 
 
 SET IDENTITY_INSERT Styles ON

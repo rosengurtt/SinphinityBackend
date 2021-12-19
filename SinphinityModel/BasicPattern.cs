@@ -36,41 +36,41 @@ namespace Sinphinity.Models
         public int Step { get; set; }
 
         public BasicPattern() { }
-        public BasicPattern(string asString)
+        public BasicPattern(string asString): this(new Pattern(asString))
         {
-            AsString = asString;
+            //AsString = asString;
 
-            int? highestNote = null;
-            int? lowestNote = null;
-            var noteAbsPitch = 0;
-            IsMonotone = true;
-            bool? IsGoingUp = null;
-            NumberOfNotes = 0;
-            foreach (Match m in Regex.Matches(asString, @"(\([0-9]+,[-]?[0-9]+\))"))
-            {
-                var values = Regex.Matches(m.Value, @"[-]?[0-9]+");
-                var noteRelPitch = int.Parse(values[1].Value);
-                if (IsGoingUp == null)
-                {
-                    if (noteRelPitch != 0)
-                        IsGoingUp = noteRelPitch > 0;
-                }
-                else
-                {
-                    if (((bool)IsGoingUp && noteRelPitch < 0) ||
-                        (!(bool)IsGoingUp && noteRelPitch < 0))
-                        IsMonotone = false;
-                }
-                noteAbsPitch += noteRelPitch;
-                if (highestNote == null || highestNote < noteAbsPitch)
-                    highestNote = noteAbsPitch;
-                if (lowestNote == null || lowestNote > noteAbsPitch)
-                    lowestNote = noteAbsPitch;
+            //int? highestNote = null;
+            //int? lowestNote = null;
+            //var noteAbsPitch = 0;
+            //IsMonotone = true;
+            //bool? IsGoingUp = null;
+            //NumberOfNotes = 0;
+            //foreach (Match m in Regex.Matches(asString, @"(\([0-9]+,[-]?[0-9]+\))"))
+            //{
+            //    var values = Regex.Matches(m.Value, @"[-]?[0-9]+");
+            //    var noteRelPitch = int.Parse(values[1].Value);
+            //    if (IsGoingUp == null)
+            //    {
+            //        if (noteRelPitch != 0)
+            //            IsGoingUp = noteRelPitch > 0;
+            //    }
+            //    else
+            //    {
+            //        if (((bool)IsGoingUp && noteRelPitch < 0) ||
+            //            (!(bool)IsGoingUp && noteRelPitch < 0))
+            //            IsMonotone = false;
+            //    }
+            //    noteAbsPitch += noteRelPitch;
+            //    if (highestNote == null || highestNote < noteAbsPitch)
+            //        highestNote = noteAbsPitch;
+            //    if (lowestNote == null || lowestNote > noteAbsPitch)
+            //        lowestNote = noteAbsPitch;
 
-            }
-            NumberOfNotes -= 1;
-            Range = (int)highestNote - (int)lowestNote;
-            Step = noteAbsPitch;
+            //}
+            //NumberOfNotes -= 1;
+            //Range = (int)highestNote - (int)lowestNote;
+            //Step = noteAbsPitch;
         }
         public BasicPattern(Pattern p)
         {

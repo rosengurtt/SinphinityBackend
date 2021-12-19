@@ -10,6 +10,7 @@ builder.Services.AddDbContext<SinphinityDbContext>(options => options.UseSqlServ
 builder.Services.AddTransient<StylesRepository>();
 builder.Services.AddTransient<BandsRepository>();
 builder.Services.AddTransient<SongsRepository>();
+builder.Services.AddTransient<PatternsRepository>();
 
 var app = builder.Build();
 

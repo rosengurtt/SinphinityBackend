@@ -163,6 +163,7 @@ namespace SinphinityExpApi.Clients
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(patterns));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            httpClient.Timeout = TimeSpan.FromMinutes(10);
             var response = await httpClient.PostAsync($"{_appConfiguration.SysStoreUrl}/api/Patterns/{songId}", content);
 
             if (response.StatusCode != HttpStatusCode.OK)

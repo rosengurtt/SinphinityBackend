@@ -15,6 +15,7 @@ namespace SinphinitySysStore.Data
         public DbSet<MidiStatsEntity> MidiStats { get; set; }
         public DbSet<SongSimplificationEntity> SongsSimplifications { get; set; }
         public DbSet<Pattern> Patterns { get; set; }
+        public DbSet<PatternSong> PatternsSongs { get; set; }
         public DbSet<BasicPattern> BasicPatterns { get; set; }
         public DbSet<BasicPatternPattern> BasicPatternsPatterns { get; set; }
         public DbSet<PatternOccurrence> PatternOccurrences { get; set; }
@@ -24,6 +25,8 @@ namespace SinphinitySysStore.Data
             modelBuilder.Entity<Band>().ToTable("Bands");
             modelBuilder.Entity<SongEntity>().ToTable("Songs");
             modelBuilder.Entity<MidiStatsEntity>().ToTable("MidiStats");
+            modelBuilder.Entity<Pattern>().ToTable("Patterns");
+            modelBuilder.Entity<PatternSong>().ToTable("PatternsSongs");
             modelBuilder.Entity<BasicPattern>().ToTable("BasicPatterns");
             modelBuilder.Entity<BasicPatternPattern>().ToTable("BasicPatternsPatterns");
             modelBuilder.Entity<PatternOccurrence>().ToTable("PatternOccurrences");

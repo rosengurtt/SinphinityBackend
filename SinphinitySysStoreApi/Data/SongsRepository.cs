@@ -20,25 +20,32 @@ namespace SinphinitySysStore.Data
            long? styleId = null,
            long? bandId = null)
         {
-            var source = _dbContext.Songs.AsQueryable()
-                    .Include(z => z.Style)
-                    .Include(y => y.Band)
-                    .Include(z => z.MidiStats)
-                    .Where(x =>
-                (styleId == null || x.Style.Id == styleId) &&
-                (bandId == null || x.Band.Id == bandId) &&
-                (contains == null || x.Name.Contains(contains))
-            );
-            var total = await source.CountAsync();
+            try
+            {
+                var source = _dbContext.Songs.AsQueryable()
+                        .Include(z => z.Style)
+                        .Include(y => y.Band)
+                        .Include(z => z.MidiStats)
+                        .Where(x =>
+                    (styleId == null || x.Style.Id == styleId) &&
+                    (bandId == null || x.Band.Id == bandId) &&
+                    (contains == null || x.Name.Contains(contains))
+                );
+                var total = await source.CountAsync();
 
-            var pageSongs = await source
-                .OrderBy(x => x.Name)
-                .Skip((pageNo) * pageSize)
-                .Take(pageSize)
-                .Select(x => x.AsSong())
-                .ToListAsync();
-            return (total, pageSongs);
-
+                var pageSongs = await source
+                    .OrderBy(x => x.Name)
+                    .Skip((pageNo) * pageSize)
+                    .Take(pageSize)
+                    .Select(x => x.AsSong())
+                    .ToListAsync();
+                return (total, pageSongs);
+            }
+            catch(Exception fsadf)
+            {
+                
+            }
+            return (0,null);
         }
 
 
@@ -86,6 +93,7 @@ namespace SinphinitySysStore.Data
             currentSong.MidiStats = new MidiStatsEntity(song.MidiStats, song);
             currentSong.SongSimplifications = song.SongSimplifications.Select(x => new SongSimplificationEntity(x, song)).ToList();
             currentSong.TempoChanges = JsonConvert.SerializeObject(song.TempoChanges);
+            currentSong.Bars = JsonConvert.SerializeObject(song.Bars);
 
             _dbContext.Songs.Update(currentSong);
             await _dbContext.SaveChangesAsync();
