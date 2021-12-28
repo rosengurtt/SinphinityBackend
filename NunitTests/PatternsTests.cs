@@ -26,5 +26,14 @@ namespace NunitTests
             var basPat = new BasicPattern(pat);
             Assert.AreEqual("(3,0)(4,0)(2,-4)(2,1)(5,1)(9,-2)(2,0)(3,1)(2,3)(3,0)(4,0)(2,-4)(4,1)(4,1)", basPat.AsString);
         }
+
+        [Test]
+        public void RangeOfPatternIsCalculatedCorrectly()
+        {
+            var asString = "(144,-1)(192,-1)";
+            var pat = new Pattern(asString);
+            var basPat = new BasicPattern(pat);
+            Assert.AreEqual(2, basPat.Range);
+        }
     }
 }

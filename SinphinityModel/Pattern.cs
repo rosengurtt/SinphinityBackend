@@ -34,12 +34,12 @@ namespace Sinphinity.Models
             AsString = asString;
 
             var Duration = 0;
-            int? highestNote = null;
-            int? lowestNote = null;
+            int? highestNote = 0;
+            int? lowestNote = 0;
             var noteAbsPitch = 0;
             IsMonotone = true;
             bool? IsGoingUp = null;
-            NumberOfNotes = 0;
+            NumberOfNotes = 1;
             foreach (Match m in Regex.Matches(asString, @"(\([0-9]+,[-]?[0-9]+\))"))
             {
                 NumberOfNotes++;
@@ -59,12 +59,11 @@ namespace Sinphinity.Models
                 }
                 noteAbsPitch += noteRelPitch;
                 Duration += noteDuration;
-                if (highestNote == null || highestNote < noteAbsPitch)
+                if (highestNote < noteAbsPitch)
                     highestNote = noteAbsPitch;
-                if (lowestNote == null || lowestNote > noteAbsPitch)
+                if (lowestNote > noteAbsPitch)
                     lowestNote = noteAbsPitch;
             }
-            NumberOfNotes -= 1;
             DurationInTicks = Duration;
             Range = (int)highestNote - (int)lowestNote;
             Step = noteAbsPitch;

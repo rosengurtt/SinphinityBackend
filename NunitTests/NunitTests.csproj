@@ -15,7 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SinphinitySysStoreMongo\SinphinitySysStoreMongo.csproj" />
+    <ProjectReference Include="..\SinphinityGraphApi\SinphinityGraphApi.csproj" />
+    <ProjectReference Include="..\SinphinityModel\SinphinityModel.csproj" />
   </ItemGroup>
 
 </Project>

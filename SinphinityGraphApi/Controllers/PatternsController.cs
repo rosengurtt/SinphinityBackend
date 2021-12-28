@@ -43,5 +43,49 @@ namespace SinphinityGraphApi.Controllers
 
             return Ok("Job done");
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetPatternsOfSong(long songId)
+        {
+
+           var pats= await _graphDbRepository.GetPatternsOfSong(songId);
+
+            return Ok(pats);
+        }
+
+        [HttpGet("usage")]
+        public async Task<ActionResult> GetUsageOfPattern(string asString)
+        {
+
+            var  pats = await _graphDbRepository.GetUsageOfPattern(asString);
+
+            return Ok(pats);
+        }
+
+        [HttpGet("basicPatternApplications")]
+        public async Task<ActionResult> GetApplicationsOfBasicPattern(string asString)
+        {
+
+            var  pats = await _graphDbRepository.GetApplicationsOfBasicPattern(asString);
+
+            return Ok(pats);
+        }
+
+        [HttpGet("bands")]
+        public async Task<ActionResult> GePatternsOfBand(long bandId, int? numberOfNotes, int? step, int? range, bool? isMonotone, int? durationInTicks)
+        {
+
+            var pats = await _graphDbRepository.GePatternsOfBand(bandId, numberOfNotes, step, range, isMonotone, durationInTicks);
+
+            return Ok(pats.Select(x=>new {Pattern=x.Item1, Quant=x.Item2}));
+        }
+        [HttpGet("bandsSimilarityMatrix")]
+        public async Task<ActionResult> GetSimilarityMatrixForBand(long bandId)
+        {
+
+            var info = await _graphDbRepository.GetSimilarityMatrixForBand(bandId);
+
+            return Ok(info.Select(x => new { Band = x.Item1, Quant = x.Item2 }));
+        }
     }
 }
