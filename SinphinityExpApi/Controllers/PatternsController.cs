@@ -20,13 +20,15 @@ namespace SinphinityExpApi.Controllers
             private SysStoreClient _sysStoreClient;
             private ProcMidiClient _procMidiClient;
             private ProcPatternClient _procPatternClient;
+        private GraphApiClient _graphApiClient;
 
-            public PatternsController(SysStoreClient sysStoreClient, ProcMidiClient procMidiClient, ProcPatternClient procPatternClient)
-            {
-                _sysStoreClient = sysStoreClient;
-                _procMidiClient = procMidiClient;
-                _procPatternClient = procPatternClient;
-            }
+        public PatternsController(SysStoreClient sysStoreClient, ProcMidiClient procMidiClient, ProcPatternClient procPatternClient, GraphApiClient graphApiClient)
+        {
+            _sysStoreClient = sysStoreClient;
+            _procMidiClient = procMidiClient;
+            _procPatternClient = procPatternClient;
+            _graphApiClient = graphApiClient;
+        }
 
         // api/songs/patterns/processSong?songId=60d577ef035c715d2ea7ef60
         [HttpGet("processSong")]
@@ -87,9 +89,9 @@ namespace SinphinityExpApi.Controllers
 
         // api/patterns?songInfoId=6187a4cb1b0680d2e5e5ae60
         [HttpGet]
-        public async Task<ActionResult> GetPatterns(string bandId, string styleId, string songInfoId, int pageNo = 0, int pageSize = 10)
+        public async Task<ActionResult> GetPatternsAsync(long? styleId, long? bandId, long? songId, string contains, int pageNo = 0, int pageSize = 10)
         {
-            var patterns = await _sysStoreClient.GetPatternsAsync(pageNo, pageSize, styleId, bandId, songInfoId);
+            var patterns = await _graphApiClient.GetPatternsAsync(styleId, bandId, songId, contains, pageNo, pageSize);
 
             return Ok(new ApiOKResponse(patterns));
         }

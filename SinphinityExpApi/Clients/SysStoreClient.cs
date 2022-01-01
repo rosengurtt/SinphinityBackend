@@ -173,28 +173,7 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
-        public async Task<PaginatedList<Pattern>> GetPatternsAsync(int pageNo, int pageSize, string styleId, string bandId, string songInfoId)
-        {
-            HttpClient httpClient = _clientFactory.CreateClient();
-            var url = $"{_appConfiguration.SysStoreUrl}/api/Patterns?pageNo={pageNo}&pageSize={pageSize}";
-            if (styleId != null) url += $"&styleId={styleId}";
-            if (bandId != null) url += $"&bandId={bandId}";
-            if (songInfoId != null) url += $"&songInfoId={songInfoId}";
-            var response = await httpClient.GetAsync(url);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
-                var result = JsonConvert.SerializeObject(apiResponse.result);
-                return JsonConvert.DeserializeObject<PaginatedList<Pattern>>(result);
-            }
-            else
-            {
-                var errorMessage = $"Couldn't get patterns for sytleId={styleId}&bandId={bandId}&songInfoId={songInfoId}";
-                Log.Error(errorMessage);
-                throw new ApplicationException(errorMessage);
-            }
-        }
+    
         public async Task<PaginatedList<Occurrence>> GetPatternOccurrencesAsync(int pageNo, int pageSize, string patternId)
         {
             HttpClient httpClient = _clientFactory.CreateClient();

@@ -77,6 +77,20 @@ CREATE TABLE MidiStats(
 	TotalSustainPedalEvents INT NULL,
 	TotalChannelIndependentEvents INT NULL
 )
+
+IF OBJECT_ID('dbo.SongData', 'U') IS NOT NULL 
+  DROP TABLE dbo.SongData
+
+CREATE TABLE SongData(
+	Id BIGINT IDENTITY(1,1) primary key clustered NOT NULL,
+	SongId BIGINT NOT NULL,
+	MidiBase64Encoded nvarchar(max) NOT NULL,
+	Bars VARCHAR(MAX) NULL,
+	TempoChanges VARCHAR(MAX) NULL,
+    CONSTRAINT FK_SongData_Songs_Id FOREIGN KEY (SongId) REFERENCES Songs(Id)
+)
+	
+	
 	
 IF OBJECT_ID('dbo.Songs', 'U') IS NOT NULL 
   DROP TABLE dbo.Songs
@@ -103,11 +117,11 @@ IF OBJECT_ID('dbo.SongsSimplifications', 'U') IS NOT NULL
 
 CREATE TABLE SongsSimplifications(
 	Id BIGINT IDENTITY(1,1) primary key clustered NOT NULL,
-	SongId BIGINT NOT NULL,
+	SongDataId BIGINT NOT NULL,
 	Version BIGINT NOT NULL,
 	Notes VARCHAR(MAX) NOT NULL,
 	NumberOfVoices BIGINT NOT NULL,
-    CONSTRAINT FK_SongsSimplifications_Song_Id FOREIGN KEY (SongId) REFERENCES Songs(Id)
+    CONSTRAINT FK_SongsSimplifications_SongData_Id FOREIGN KEY (SongDataId) REFERENCES SongsData(Id)
 )
 	
 

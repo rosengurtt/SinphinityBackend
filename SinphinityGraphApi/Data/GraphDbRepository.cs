@@ -37,22 +37,50 @@ namespace SinphinityGraphApi.Data
                 throw;
             }
         }
-        public async Task<List<Pattern>> GetPatternsOfSong(long songId)
+        /// <summary>
+        /// Returns the number of patterns that match the criteria and the selected page of patterns
+        /// </summary>
+        /// <param name="songId"></param>
+        /// <returns></returns>
+        public async Task<(long, List<Pattern>)> GetPatternsAsync(long? styleId, long? bandId, long? songId, string contains, int page = 0, int pageSize = 10)
         {
-
+            long totalPatterns;
             var retObj = new List<Pattern>();
             try
             {
                 IAsyncSession session = _driver.AsyncSession(o => o.WithDatabase("neo4j"));
-                var command = @$"MATCH (:Song {{songId:{songId} }})<-[:USED_IN]-(p:Pattern) RETURN p";
+                var command = "(p:Pattern)";
 
-                var cursor = await session.RunAsync(command);
+                if (!string.IsNullOrEmpty(contains))
+                    command += $" WHERE p.asString CONTAINS '{contains}' ";
+                if (songId != null)
+                    command = $"(:Song {{songId: {songId}}})-[:USED_IN]-" + command;
+                else
+                    command = $"(:Song)-[:USED_IN]-" + command;
+                if (bandId != null)
+                    command = $"(:Band {{bandId: {bandId}}})-[:COMPOSED_BY]-" + command;
+                else
+                    command = $"(:Band)-[:COMPOSED_BY]-" + command;
+
+                if (styleId != null)
+                    command = $"(:Style {{styleId: {styleId}}})-[:PLAYS]-" + command;
+                else
+                    command = $"(:Style)-[:PLAYS]-" + command;
+
+                var commandTotal = "MATCH " + command + " RETURN count(p) AS Total";
+                var commandItems = "MATCH " + command + $" RETURN p ORDER BY p.numberOfNotes, p.asString SKIP {page*pageSize} LIMIT {pageSize}";
+
+                var cursor = await session.RunAsync(commandTotal);
+                await cursor.FetchAsync();
+                totalPatterns = (long)cursor.Current["Total"];
+
+                cursor = await session.RunAsync(commandItems);
                 while (await cursor.FetchAsync())
                 {
                     var node = cursor.Current["p"].As<INode>();
                     retObj.Add(new Pattern { Id = (long)node.Properties["patternId"], AsString = (string)node.Properties["asString"] });
                 }
-                return retObj;
+                return (totalPatterns, retObj);
             }
             catch (Exception ex)
             {
@@ -108,34 +136,7 @@ namespace SinphinityGraphApi.Data
             }
         }
 
-        public async Task<List<(Pattern, long)>> GePatternsOfBand(long bandId, int? numberOfNotes, int? step, int? range, bool? isMonotone, int? durationInTicks)
-        {
-
-            var retObj = new List<(Pattern, long)>();
-            try
-            {
-                IAsyncSession session = _driver.AsyncSession(o => o.WithDatabase("neo4j"));
-                var filter = GetFilter(numberOfNotes, step, range, isMonotone, durationInTicks);
-                var command = @$"MATCH (p:Pattern {filter})-[:USED_IN]->(:Song)-[:COMPOSED_BY]->(:Band {{bandId: {bandId}}}) 
-RETURN p.asString AS AsString, p.patternId AS PatternId, count(p) as Quant
-ORDER BY Quant DESC";
-
-                var cursor = await session.RunAsync(command);
-                while (await cursor.FetchAsync())
-                {
-                    var node = cursor.Current;
-                    var pato = new Pattern((string)node["AsString"]);
-                    pato.Id = (long)node["PatternId"];
-                    retObj.Add((pato, (long)node["Quant"]));
-                }
-                return retObj;
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, $"Thrown an exception when trying to retrieve patterns for band with id  {bandId}");
-                throw;
-            }
-        }
+   
         public async Task<List<(Band, long)>> GetSimilarityMatrixForBand(long bandId)
         {
             var retObj = new List<(Band, long)>();

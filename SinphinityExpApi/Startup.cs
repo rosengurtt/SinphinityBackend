@@ -34,11 +34,13 @@ namespace SinphinityExpApi
                 options.ProcMidiUrl = Configuration.GetSection("ProcMidiUrl").Value;
                 options.SysStoreUrl = Configuration.GetSection("SysStoreUrl").Value;
                 options.ProcPatternUrl = Configuration.GetSection("ProcPatternUrl").Value;
+                options.GraphApiUrl = Configuration.GetSection("GraphApiUrl").Value;
             });
 
             services.AddSingleton<SysStoreClient>();
             services.AddSingleton<ProcMidiClient>();
             services.AddSingleton<ProcPatternClient>();
+            services.AddSingleton<GraphApiClient>();
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(

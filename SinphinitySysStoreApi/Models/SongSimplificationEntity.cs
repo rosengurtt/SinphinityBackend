@@ -7,16 +7,16 @@ namespace SinphinitySysStore.Models
     {
         public SongSimplificationEntity() { }
 
-        public SongSimplificationEntity(SongSimplification ss, Song song)
+        public SongSimplificationEntity(SongSimplification ss, Song song, SongData songData)
         {
             NumberOfVoices = ss.NumberOfVoices;
             Notes = JsonConvert.SerializeObject(ss.Notes);
             Version = ss.Version;
-            Song = new SongEntity() { Id = song.Id };
+            SongData = songData;
         }
 
         public long Id { get; set; }
-        public SongEntity Song { get; set; }
+        public SongData SongData { get; set; }
         public long Version { get; set; }
         public string Notes { get; set; }
 

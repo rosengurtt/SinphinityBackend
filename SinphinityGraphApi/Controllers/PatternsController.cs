@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CommonRestLib.ErrorHandling;
+using Microsoft.AspNetCore.Mvc;
 using Neo4j.Driver;
 using SinphinityGraphApi.Clients;
 using SinphinityGraphApi.Data;
@@ -45,12 +46,18 @@ namespace SinphinityGraphApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetPatternsOfSong(long songId)
+        public async Task<ActionResult> GetPatterns(long? styleId, long? bandId, long? songId, string contains, int page = 0, int pageSize = 10)
         {
-
-           var pats= await _graphDbRepository.GetPatternsOfSong(songId);
-
-            return Ok(pats);
+            (var totalPats, var pats) = await _graphDbRepository.GetPatternsAsync(styleId, bandId, songId, contains, page, pageSize);
+            var retObj = new
+            {
+                page,
+                pageSize,
+                totalItems = totalPats,
+                totalPages = (int)Math.Ceiling((double)totalPats / pageSize),
+                items = pats
+            };
+            return Ok(new ApiOKResponse(retObj));
         }
 
         [HttpGet("usage")]
@@ -71,14 +78,7 @@ namespace SinphinityGraphApi.Controllers
             return Ok(pats);
         }
 
-        [HttpGet("bands")]
-        public async Task<ActionResult> GePatternsOfBand(long bandId, int? numberOfNotes, int? step, int? range, bool? isMonotone, int? durationInTicks)
-        {
-
-            var pats = await _graphDbRepository.GePatternsOfBand(bandId, numberOfNotes, step, range, isMonotone, durationInTicks);
-
-            return Ok(pats.Select(x=>new {Pattern=x.Item1, Quant=x.Item2}));
-        }
+   
         [HttpGet("bandsSimilarityMatrix")]
         public async Task<ActionResult> GetSimilarityMatrixForBand(long bandId)
         {

@@ -23,10 +23,9 @@ namespace SinphinitySysStoreApi.Controllers
         [HttpPost("{songId}"), DisableRequestSizeLimit]
         public async Task<ActionResult> UploadPatternMatrix(long songId, Dictionary<string, HashSet<Occurrence>> patterns)
         {
-            await _patternsRepository.SavePatternsOfSong(patterns, songId);
+            await _patternsRepository.SavePatternsOfSongAsync(patterns, songId);
             return Ok(new ApiOKResponse(null));
         }
-
     }
 }
 

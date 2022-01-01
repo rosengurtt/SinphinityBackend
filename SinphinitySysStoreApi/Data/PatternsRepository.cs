@@ -14,7 +14,7 @@ namespace SinphinitySysStore.Data
             _dbContext = dbcontext;
         }
 
-        public async Task SavePatternsOfSong(Dictionary<string, HashSet<Occurrence>> patterns, long songId)
+        public async Task SavePatternsOfSongAsync(Dictionary<string, HashSet<Occurrence>> patterns, long songId)
         {
             try
             {
@@ -101,5 +101,7 @@ namespace SinphinitySysStore.Data
 
             }
         }
+   
+       
     }
 }

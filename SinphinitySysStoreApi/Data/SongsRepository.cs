@@ -37,29 +37,33 @@ namespace SinphinitySysStore.Data
                     .OrderBy(x => x.Name)
                     .Skip((pageNo) * pageSize)
                     .Take(pageSize)
-                    .Select(x => x.AsSong())
+                    .Select(x => x.AsSong(null))
                     .ToListAsync();
                 return (total, pageSongs);
             }
-            catch(Exception fsadf)
+            catch (Exception fsadf)
             {
-                
+
             }
-            return (0,null);
+            return (0, null);
         }
 
 
         public async Task<Song> GetSongByIdAsync(long songId, int? simplificationVersion)
         {
             var songsSimplifications = await _dbContext.SongsSimplifications
-                .Where(x => x.Song.Id == songId && (simplificationVersion == null || x.Version == simplificationVersion)).ToListAsync();
-            var song = await _dbContext.Songs
+                .Where(x => x.SongData.SongId == songId && (simplificationVersion == null || x.Version == simplificationVersion)).ToListAsync();
+            var songEntity = await _dbContext.Songs
                 .Include(x => x.MidiStats)
-                .Include(k=>k.Style)
-                .Include(m=>m.Band)
+                .Include(k => k.Style)
+                .Include(m => m.Band)
                 .Where(y => y.Id == songId)
-                .Select(z => z.AsSong())
                 .FirstOrDefaultAsync();
+            var songData = await _dbContext.SongsData
+                .Where(y => y.SongId == songId)
+                .FirstOrDefaultAsync();
+            var song = songEntity?.AsSong(songData);
+
             if (songsSimplifications != null && songsSimplifications.Count > 0)
                 song.SongSimplifications = songsSimplifications.Select(x => x.AsSongSimplification()).ToList();
             return song;
@@ -75,6 +79,10 @@ namespace SinphinitySysStore.Data
             try
             {
                 await _dbContext.SaveChangesAsync();
+                var songData = new SongData(song);
+                songData.SongId = song.Id;
+                _dbContext.SongsData.Add(songData);
+                await _dbContext.SaveChangesAsync();
             }
             catch (Exception fdsdsfsad)
             {
@@ -85,20 +93,33 @@ namespace SinphinitySysStore.Data
 
         public async Task<Song> UpdateSong(Song song)
         {
-            var currentSong = await _dbContext.Songs.Where(x => x.Id==song.Id).FirstOrDefaultAsync();
-            if (currentSong==null) throw new SongDoesntExistException();
+            var currentSong = await _dbContext.Songs.Where(x => x.Id == song.Id).FirstOrDefaultAsync();
+            var currentSongData= await _dbContext.SongsData.Where(x => x.SongId == song.Id).FirstOrDefaultAsync();
+            if (currentSong == null || currentSongData == null) throw new SongDoesntExistException();
+
             currentSong.ArePatternsExtracted = song.ArePatternsExtracted;
             currentSong.AverageTempoInBeatsPerMinute = song.AverageTempoInBeatsPerMinute;
             currentSong.CantBeProcessed = song.CantBeProcessed;
             currentSong.IsMidiCorrect = song.IsMidiCorrect;
             currentSong.IsSongProcessed = song.IsSongProcessed;
             currentSong.MidiStats = new MidiStatsEntity(song.MidiStats, song);
-            currentSong.SongSimplifications = song.SongSimplifications.Select(x => new SongSimplificationEntity(x, song)).ToList();
-            currentSong.TempoChanges = JsonConvert.SerializeObject(song.TempoChanges);
-            currentSong.Bars = JsonConvert.SerializeObject(song.Bars);
+            currentSongData.SongSimplifications = song.SongSimplifications.Select(x => new SongSimplificationEntity(x, song, currentSongData)).ToList();
+            currentSongData.Bars= JsonConvert.SerializeObject(song.Bars); ;
+            currentSongData.TempoChanges = JsonConvert.SerializeObject(song.TempoChanges);
 
-            _dbContext.Songs.Update(currentSong);
-            await _dbContext.SaveChangesAsync();
+
+            try
+            {
+                _dbContext.Songs.Update(currentSong);
+                _dbContext.SongsData.Update(currentSongData);
+                await _dbContext.SaveChangesAsync();
+                return song;
+
+            }
+            catch (Exception fdsdsfsad)
+            {
+
+            }
             return song;
         }
     }
