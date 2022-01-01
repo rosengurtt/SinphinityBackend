@@ -55,6 +55,8 @@ namespace SinphinitySysStore.Data
                 .Where(x => x.Song.Id == songId && (simplificationVersion == null || x.Version == simplificationVersion)).ToListAsync();
             var song = await _dbContext.Songs
                 .Include(x => x.MidiStats)
+                .Include(k=>k.Style)
+                .Include(m=>m.Band)
                 .Where(y => y.Id == songId)
                 .Select(z => z.AsSong())
                 .FirstOrDefaultAsync();

@@ -158,7 +158,34 @@ ORDER BY patterns DESC";
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Thrown an exception when trying to retrieve patterns for band with id  {bandId}");
+                Log.Error(ex, $"Thrown an exception when trying to retrieve similarity matrix for band with id  {bandId}");
+                throw;
+            }
+        }
+
+        public async Task<List<(Band, long)>> GetSimilarityMatrixForSong(long songId)
+        {
+            var retObj = new List<(Band, long)>();
+            try
+            {
+                IAsyncSession session = _driver.AsyncSession(o => o.WithDatabase("neo4j"));
+                var command = @$"MATCH (b:Band)-[:COMPOSED_BY]-(:Song)-[:USED_IN]-(p:Pattern)-[:USED_IN]->(:Song {{songId: {songId}}}) 
+RETURN b.name AS name, b.bandId AS bandId, count(p) AS patterns
+ORDER BY patterns DESC";
+
+                var cursor = await session.RunAsync(command);
+                while (await cursor.FetchAsync())
+                {
+                    var node = cursor.Current;
+                    var banda = new Band { Name = (string)node["name"], Id = (long)node["bandId"] };
+                    var quant = (long)node["patterns"];
+                    retObj.Add((banda, quant));
+                }
+                return retObj;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Thrown an exception when trying to retrieve similarity matrix for song with id  {songId}");
                 throw;
             }
         }

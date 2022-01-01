@@ -85,7 +85,15 @@ namespace SinphinityGraphApi.Controllers
 
             var info = await _graphDbRepository.GetSimilarityMatrixForBand(bandId);
 
-            return Ok(info.Select(x => new { Band = x.Item1, Quant = x.Item2 }));
+            return Ok(info.Select(x => new { Band = x.Item1.Name, Quant = x.Item2 }));
+        }
+        [HttpGet("songsSimilarityMatrix")]
+        public async Task<ActionResult> GetSimilarityMatrixForSong(long songId)
+        {
+
+            var info = await _graphDbRepository.GetSimilarityMatrixForSong(songId);
+
+            return Ok(info.Select(x => new { Band = x.Item1.Name, Quant = x.Item2 }));
         }
     }
 }
