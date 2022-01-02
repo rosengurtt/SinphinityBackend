@@ -75,12 +75,13 @@ namespace SinphinitySysStore.Data
             var songExistsAlready = await _dbContext.Songs.Where(x => x.Name == song.Name && x.Band.Name == song.Band.Name).CountAsync() > 0;
             if (songExistsAlready) throw new SongAlreadyExistsException();
 
-            _dbContext.Songs.Add(new Models.SongEntity(song));
+            var songRecord = new Models.SongEntity(song);
+            _dbContext.Songs.Add(songRecord);
             try
             {
                 await _dbContext.SaveChangesAsync();
                 var songData = new SongData(song);
-                songData.SongId = song.Id;
+                songData.SongId = songRecord.Id;
                 _dbContext.SongsData.Add(songData);
                 await _dbContext.SaveChangesAsync();
             }
@@ -104,7 +105,7 @@ namespace SinphinitySysStore.Data
             currentSong.IsSongProcessed = song.IsSongProcessed;
             currentSong.MidiStats = new MidiStatsEntity(song.MidiStats, song);
             currentSongData.SongSimplifications = song.SongSimplifications.Select(x => new SongSimplificationEntity(x, song, currentSongData)).ToList();
-            currentSongData.Bars= JsonConvert.SerializeObject(song.Bars); ;
+            currentSongData.Bars= JsonConvert.SerializeObject(song.Bars); 
             currentSongData.TempoChanges = JsonConvert.SerializeObject(song.TempoChanges);
 
 

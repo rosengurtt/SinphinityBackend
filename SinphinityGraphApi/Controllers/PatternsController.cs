@@ -46,9 +46,11 @@ namespace SinphinityGraphApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetPatterns(long? styleId, long? bandId, long? songId, string contains, int page = 0, int pageSize = 10)
+        public async Task<ActionResult> GetPatterns(long? styleId, long? bandId, long? songId, int? numberOfNotes,
+            int? range, int? step, int? durationInTicks, bool? isMonotone, string? contains, int page = 0, int pageSize = 10)
         {
-            (var totalPats, var pats) = await _graphDbRepository.GetPatternsAsync(styleId, bandId, songId, contains, page, pageSize);
+            (var totalPats, var pats) = await _graphDbRepository.GetPatternsAsync(styleId, bandId, songId, numberOfNotes,
+                range, step, durationInTicks, isMonotone, contains, page, pageSize);
             var retObj = new
             {
                 page,

@@ -102,7 +102,7 @@ namespace SinphinitySysStore.Controllers
         }
 
 
-        [HttpGet("importbatch")]
+        [HttpGet("importBatch")]
         public async Task<IActionResult> ImportBatch(string folder = @"C:\music\test\midi")
         {
             foreach (var styleDir in Directory.GetDirectories(folder))
@@ -113,9 +113,12 @@ namespace SinphinitySysStore.Controllers
                     var band = Path.GetFileName(bandDir);
                     foreach (var songPath in Directory.GetFiles(bandDir, "*.mid"))
                     {
+                        var songName = Path.GetFileNameWithoutExtension(songPath);
+                        if (await _sysStoreClient.DoesSongExistAlready(songName, band)) 
+                            continue;
                         var song = new Song
                         {
-                            Name = Path.GetFileNameWithoutExtension(songPath),
+                            Name = songName,
                             Band = new Band { Name = band },
                             Style = new Style { Name = style },
                             MidiBase64Encoded = Convert.ToBase64String(System.IO.File.ReadAllBytes(songPath))
@@ -165,7 +168,7 @@ namespace SinphinitySysStore.Controllers
 
 
 
-        [HttpGet("processbatch")]
+        [HttpGet("processBatch")]
         public async Task<IActionResult> ProcessBatch(long styleId, long bandId)
         {
             var keepLooping = true;

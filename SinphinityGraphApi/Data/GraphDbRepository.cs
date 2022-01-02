@@ -42,14 +42,15 @@ namespace SinphinityGraphApi.Data
         /// </summary>
         /// <param name="songId"></param>
         /// <returns></returns>
-        public async Task<(long, List<Pattern>)> GetPatternsAsync(long? styleId, long? bandId, long? songId, string contains, int page = 0, int pageSize = 10)
+        public async Task<(long, List<Pattern>)> GetPatternsAsync(long? styleId, long? bandId, long? songId, int? numberOfNotes,
+            int? range, int? step, int? durationInTicks, bool? isMonotone, string? contains, int page = 0, int pageSize = 10)
         {
             long totalPatterns;
             var retObj = new List<Pattern>();
             try
             {
                 IAsyncSession session = _driver.AsyncSession(o => o.WithDatabase("neo4j"));
-                var command = "(p:Pattern)";
+                var command = $"(p:Pattern {GetPatternFilter(numberOfNotes, range, step, durationInTicks, isMonotone)})";
 
                 if (!string.IsNullOrEmpty(contains))
                     command += $" WHERE p.asString CONTAINS '{contains}' ";
@@ -78,7 +79,16 @@ namespace SinphinityGraphApi.Data
                 while (await cursor.FetchAsync())
                 {
                     var node = cursor.Current["p"].As<INode>();
-                    retObj.Add(new Pattern { Id = (long)node.Properties["patternId"], AsString = (string)node.Properties["asString"] });
+                    retObj.Add(new Pattern
+                    {
+                        Id = (long)node.Properties["patternId"],
+                        AsString = (string)node.Properties["asString"],
+                        Range = Convert.ToInt32(node.Properties["range"]),
+                        Step = Convert.ToInt32(node.Properties["step"]),
+                        DurationInTicks = Convert.ToInt32(node.Properties["durationInTicks"]),
+                        NumberOfNotes = Convert.ToInt32(node.Properties["numberOfNotes"]),
+                        IsMonotone = (bool)node.Properties["isMonotone"]
+                    });
                 }
                 return (totalPatterns, retObj);
             }
@@ -87,6 +97,29 @@ namespace SinphinityGraphApi.Data
                 Log.Error(ex, $"Thrown an exception when trying to retrieve patterns for song with id {songId}");
                 throw;
             }
+        }
+        private string GetPatternFilter(int? numberOfNotes, int? range, int? step, int? durationInTicks, bool? isMonotone)
+        {
+            if (numberOfNotes == null && range == null && step == null && durationInTicks == null && isMonotone == null)
+                return "";
+            var retObj = "{";
+            if (numberOfNotes != null)
+                retObj += $"numberOfNotes: {numberOfNotes},";
+            if (range != null)
+                retObj += $"range: {range},";
+            if (step != null)
+                retObj += $"step: {step},";
+            if (durationInTicks != null)
+                retObj += $"durationInTicks: {durationInTicks},";
+            if (isMonotone != null)
+                retObj += $"isMonotone: {isMonotone},";
+            retObj = RemoveLastCharacterOfString(retObj);
+            retObj += "}";
+            return retObj;
+        }
+        private string RemoveLastCharacterOfString(string text)
+        {
+            return text.Substring(0, text.Length - 1);
         }
 
         public async Task<List<Song>> GetUsageOfPattern(string asString)

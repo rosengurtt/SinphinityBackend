@@ -24,6 +24,14 @@ namespace SinphinityExpApi.Clients
             _clientFactory = clientFactory;
         }
 
+        public async Task<bool> DoesSongExistAlready(string songName, string bandName)
+        {
+            var bands = await GetBandsAsync(contains: bandName);
+            if (bands.totalItems == 0) return false;
+            var bandId = bands.items.FirstOrDefault().Id;
+            var songs = await GetSongsAsync(contains: songName, bandId: bandId);
+            return songs.totalItems > 0;
+        }
         public async Task<PaginatedList<Style>> GetStylesAsync(int page = 0, int pageSize = 10, string contains = "")
         {
             HttpClient httpClient = _clientFactory.CreateClient();

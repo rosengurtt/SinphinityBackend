@@ -21,14 +21,20 @@ namespace SinphinityExpApi.Clients
                 _clientFactory = clientFactory;
             }
 
-        public async Task<PaginatedList<Pattern>> GetPatternsAsync(long? styleId, long? bandId, long? songId, string contains, int page = 0, int pageSize = 10)
+        public async Task<PaginatedList<Pattern>> GetPatternsAsync(long? styleId, long? bandId, long? songId, int? numberOfNotes,
+            int? range, int? step, int? durationInTicks, bool? isMonotone, string? contains, int page = 0, int pageSize = 10)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var url = $"{_appConfiguration.GraphApiUrl}/api/patterns?page={page}&pageSize={pageSize}";
-            if (!string.IsNullOrEmpty(contains)) url += $"&contains={contains}";
             if (styleId != null) url += $"&styleId={styleId}";
             if (bandId != null) url += $"&bandId={bandId}";
             if (songId != null) url += $"&songId={songId}";
+            if (numberOfNotes != null) url += $"&numberOfNotes={numberOfNotes}";
+            if (range != null) url += $"&range={range}";
+            if (step != null) url += $"&step={step}";
+            if (durationInTicks != null) url += $"&durationInTicks={durationInTicks}";
+            if (durationInTicks != null) url += $"&isMonotone={isMonotone}";
+            if (!string.IsNullOrEmpty(contains)) url += $"&contains={contains}";
             var response = await httpClient.GetAsync(url);
             if (response.StatusCode == HttpStatusCode.OK)
             {

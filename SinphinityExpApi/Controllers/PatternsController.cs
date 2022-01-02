@@ -89,9 +89,11 @@ namespace SinphinityExpApi.Controllers
 
         // api/patterns?songInfoId=6187a4cb1b0680d2e5e5ae60
         [HttpGet]
-        public async Task<ActionResult> GetPatternsAsync(long? styleId, long? bandId, long? songId, string contains, int pageNo = 0, int pageSize = 10)
+        public async Task<ActionResult> GetPatternsAsync(long? styleId, long? bandId, long? songId, int? numberOfNotes,
+            int? range, int? step, int? durationInTicks, bool? isMonotone, string? contains, int pageNo = 0, int pageSize = 10)
         {
-            var patterns = await _graphApiClient.GetPatternsAsync(styleId, bandId, songId, contains, pageNo, pageSize);
+            var patterns = await _graphApiClient.GetPatternsAsync(styleId, bandId, songId, numberOfNotes, range, step, durationInTicks, 
+                isMonotone, contains, pageNo, pageSize);
 
             return Ok(new ApiOKResponse(patterns));
         }
