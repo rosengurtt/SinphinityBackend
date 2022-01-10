@@ -37,11 +37,16 @@ namespace SinphinityExpApi.Controllers
             var song = await _sysStoreClient.GetSongByIdAsync(songId);
 
             var patterns = await _procPatternClient.GetPatternMatrixOfSong(song);
-            await _sysStoreClient.InsertPatternsAsync(songId, patterns);
+            await _sysStoreClient.InsertPatternsAsync(patterns, songId);
 
             return Ok(new ApiOKResponse(patterns));
         }
 
+        /// <summary>
+        /// Gets all songs that have the flag ArePatternsExtracted=false and extracts their patterns 
+        /// </summary>
+        /// <param name="contains"></param>
+        /// <returns></returns>
         // api/songs/patterns/batch
         [HttpGet("batch")]
         public async Task<IActionResult> ProcessPatternsForAllSongs(string contains)
@@ -67,7 +72,7 @@ namespace SinphinityExpApi.Controllers
                             {
                                 var patternMatrix = await _procPatternClient.GetPatternMatrixOfSong(song);
                                 Log.Information($"Pattern extracion completed OK for {song.Name}");
-                                await _sysStoreClient.InsertPatternsAsync(song.Id, patternMatrix);
+                                await _sysStoreClient.InsertPatternsAsync(patternMatrix, song.Id);
                                 Log.Information($"Saved OK {song.Name}");
                             }
                         }
@@ -85,6 +90,72 @@ namespace SinphinityExpApi.Controllers
                     keepLooping = false;
             }
             return Ok(new ApiOKResponse(null));
+        }
+        /// <summary>
+        /// Looks at all the patterns in the db and finds if a pattern is part of another pattern. If that is the case adds occurrences of the short
+        /// pattern to the songs that have occurrences of the longer pattern
+        /// </summary>
+        /// <param name="contains"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> DoPatternsPostProcess()
+        {
+            var keepLooping = true;
+            var pageSize = 10;
+            var pagePatterns = 0;
+            var alca = 1;
+            Log.Information($"Starting pattern post processing");
+            while (keepLooping)
+            {
+                PaginatedList<Pattern> patternsBatch = await _sysStoreClient.GetPatternsPaginatedAsync(pagePatterns, pageSize, null);
+                if (patternsBatch.items?.Count > 0)
+                {
+                    var patternMatrix = new Dictionary<string, HashSet<Occurrence>>();
+                    foreach (var p1 in patternsBatch.items)
+                    {
+                        // All patterns end with ,0), that means the last element is there to mark the duration of the last note
+                        // When pattern 'a' is part of pattern 'b', we may have something like a=(48,1)(48,2)(96,0) and b=(48,1)(48,2)(96,-1)(96,0)
+                        // We want to match the 2, and if we don't remove the last ",0)" characters in a, they will not match
+                        var patternAsStringWithLastPitchRemoved = p1.AsString.Substring(0, p1.AsString.LastIndexOf(","));
+                        {
+                            var patternsMatched = await _sysStoreClient.GetPatternsAsync(patternAsStringWithLastPitchRemoved);
+
+
+                            foreach (Pattern p2 in patternsMatched)
+                            {
+                                var difInTicks = StartDifferenceInTicks(p1, p2);
+                                var occurrences = await _sysStoreClient.GetOccurrencesOfPatternAsync(p2.Id);
+                                patternMatrix[p1.AsString] = occurrences
+                                    .Select(x=>new Occurrence { BarNumber=x.BarNumber, Beat=x.Beat, SongId=x.SongId, Tick=x.Tick+ difInTicks, Voice=x.Voice})
+                                    .ToHashSet();
+                            }
+                        }
+                        await _sysStoreClient.InsertPatternsAsync(patternMatrix);
+                    }
+
+                    pagePatterns++;
+                }
+                else
+                    keepLooping = false;
+            }
+            return Ok(new ApiOKResponse(null));
+        }
+
+        private long StartDifferenceInTicks(Pattern pat1, Pattern pat2)
+        {
+            var shorter = pat1.AsString.Length < pat2.AsString.Length ? pat1.AsString : pat2.AsString;
+            var longer = pat1.AsString.Length < pat2.AsString.Length ? pat2.AsString : pat1.AsString;
+            var notesBeforeSubPattern = longer.Substring(0, longer.IndexOf(shorter));
+            if (notesBeforeSubPattern.Length == 0) return 0;
+
+            var matches = Regex.Matches(notesBeforeSubPattern, @"[(][0-9]+,[-]?[0-9]+[)]");
+
+            long retNumber = 0;
+            var relativeNotesAsStrings = matches.Select(x => x.Value).ToList();
+            for (var i = 0; i < relativeNotesAsStrings.Count; i++) {
+                var noteDuration = long.Parse(relativeNotesAsStrings[i].Substring(1, relativeNotesAsStrings[i].IndexOf(",")));
+                retNumber += noteDuration;
+            }
+            return retNumber;
         }
 
         // api/patterns?songInfoId=6187a4cb1b0680d2e5e5ae60

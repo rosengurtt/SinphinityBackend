@@ -246,6 +246,9 @@ insert into bands([Name], StyleId) values ('Joseph Haydn', 1)
 insert into bands([Name], StyleId) values ('Franz Schubert', 1)
 insert into bands([Name], StyleId) values ('Franz Liszt', 1)
 insert into bands([Name], StyleId) values ('Johannes Brahms', 1)
+
+
+insert into bands([Name], StyleId) values ('Abba', 2)
 insert into bands([Name], StyleId) values ('AC DC', 2)
 insert into bands([Name], StyleId) values ('Aerosmith', 2)
 insert into bands([Name], StyleId) values ('Aha', 2)

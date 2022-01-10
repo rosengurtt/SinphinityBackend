@@ -28,7 +28,7 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable>> GetSongsAsync(int pageNo = 0, int pageSize = 10, string? contains = null, long? styleId = null, long? bandId = null)
+        public async Task<ActionResult> GetSongsAsync(int pageNo = 0, int pageSize = 10, string? contains = null, long? styleId = null, long? bandId = null)
         {
             (var totalSongs, var songs) = await _songsRepository.GetSongsAsync(pageNo, pageSize, contains, styleId, bandId);
             var retObj = new

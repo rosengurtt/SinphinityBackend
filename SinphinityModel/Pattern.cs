@@ -39,7 +39,7 @@ namespace Sinphinity.Models
             var noteAbsPitch = 0;
             IsMonotone = true;
             bool? IsGoingUp = null;
-            NumberOfNotes = 1;
+            NumberOfNotes = 0;
             foreach (Match m in Regex.Matches(asString, @"(\([0-9]+,[-]?[0-9]+\))"))
             {
                 NumberOfNotes++;

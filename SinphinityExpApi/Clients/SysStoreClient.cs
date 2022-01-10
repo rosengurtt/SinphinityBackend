@@ -95,6 +95,100 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
+
+        public async Task<PaginatedList<Pattern>> GetPatternsPaginatedAsync(int pageNo = 0, int pageSize = 10, string contains = null)
+        {
+            HttpClient httpClient = _clientFactory.CreateClient();
+            var url = $"{_appConfiguration.SysStoreUrl}/api/patterns?pageNo={pageNo}&pageSize={pageSize}";
+            if (!string.IsNullOrEmpty(contains)) url += $"&contains={contains}";
+            var response = await httpClient.GetAsync(url);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
+                var result = JsonConvert.SerializeObject(apiResponse.result);
+                return JsonConvert.DeserializeObject<PaginatedList<Pattern>>(result);
+            }
+            else
+            {
+                var errorMessage = $"Couldn't get patterns";
+                Log.Error(errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
+        }
+        public async Task<HashSet<Pattern>> GetPatternsAsync(string contains = null)
+        {
+            HttpClient httpClient = _clientFactory.CreateClient();
+            var keepLooping = true;
+            var page = 0;
+            var retObj = new HashSet<Pattern>();
+            while (keepLooping)
+            {
+                var url = $"{_appConfiguration.SysStoreUrl}/api/patterns/patterns?pageNo={page}&pageSize=10";
+                if (!string.IsNullOrEmpty(contains)) url += $"&contains={contains}";
+                var response = await httpClient.GetAsync(url);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
+                    var result = JsonConvert.SerializeObject(apiResponse.result);
+                    var pageData = JsonConvert.DeserializeObject<PaginatedList<Pattern>>(result);
+
+                    if (pageData.items?.Count > 0)
+                    {
+                        foreach (Pattern o in pageData.items)
+                            retObj.Add(o);
+                    }
+                    else
+                        keepLooping = false;
+                    page++;
+                }
+                else
+                {
+                    var errorMessage = $"Couldn't get patterns";
+                    Log.Error(errorMessage);
+                    throw new ApplicationException(errorMessage);
+                }
+
+            }
+            return retObj;
+        }
+        public async Task<HashSet<Occurrence>> GetOccurrencesOfPatternAsync(long patternId)
+        {
+            HttpClient httpClient = _clientFactory.CreateClient();
+            var keepLooping = true;
+            var page = 0;
+            var retObj = new HashSet<Occurrence>();
+            while (keepLooping)
+            {
+                var url = $"{_appConfiguration.SysStoreUrl}/api/patterns/occurrences?patternId={patternId}&pageNo={page}&pageSize=10";
+                var response = await httpClient.GetAsync(url);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
+                    var result = JsonConvert.SerializeObject(apiResponse.result);
+                   var pageData = JsonConvert.DeserializeObject<PaginatedList<Occurrence>>(result);
+
+                    if (pageData.items?.Count > 0)
+                    {
+                        foreach (Occurrence o in pageData.items)
+                            retObj.Add(o);
+                    }
+                    else
+                        keepLooping = false;
+                    page++;
+                }
+                else
+                {
+                    var errorMessage = $"Couldn't get occurrences of pattern {patternId}";
+                    Log.Error(errorMessage);
+                    throw new ApplicationException(errorMessage);
+                }
+
+            }
+            return retObj;
+        }
         public async Task<Song> GetSongByIdAsync(long songId, int? SongSimplification = null)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
@@ -166,13 +260,16 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task InsertPatternsAsync(long songId, Dictionary<string, HashSet<Occurrence>> patterns)
+        public async Task InsertPatternsAsync( Dictionary<string, HashSet<Occurrence>> patterns, long? songId=null)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(patterns));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            httpClient.Timeout = TimeSpan.FromMinutes(10);
-            var response = await httpClient.PostAsync($"{_appConfiguration.SysStoreUrl}/api/Patterns/{songId}", content);
+            httpClient.Timeout = TimeSpan.FromMinutes(30);
+            var url = $"{_appConfiguration.SysStoreUrl}/api/Patterns";
+            if (songId != null)
+                url += $"?songId={songId}";
+            var response = await httpClient.PostAsync(url, content);
 
             if (response.StatusCode != HttpStatusCode.OK)
             {

@@ -1,5 +1,8 @@
 using NUnit.Framework;
 using Sinphinity.Models;
+using SinphinityProcPatternFinderApi.PatternExtraction;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NunitTests
 {
@@ -34,6 +37,84 @@ namespace NunitTests
             var pat = new Pattern(asString);
             var basPat = new BasicPattern(pat);
             Assert.AreEqual(2, basPat.Range);
+        }
+
+        [Test]
+        public void ExtractionWorksAsExpected()
+        {
+            var notes = new List<Note>() { new Note { StartSinceBeginningOfSongInTicks=0, EndSinceBeginningOfSongInTicks=24, Pitch=60},
+                new Note { StartSinceBeginningOfSongInTicks=24, EndSinceBeginningOfSongInTicks=96, Pitch=62, Voice=0},
+                new Note { StartSinceBeginningOfSongInTicks=96, EndSinceBeginningOfSongInTicks=192, Pitch=65, Voice=0},
+                new Note { StartSinceBeginningOfSongInTicks=192, EndSinceBeginningOfSongInTicks=240, Pitch=60, Voice=0},
+                new Note { StartSinceBeginningOfSongInTicks=240, EndSinceBeginningOfSongInTicks=288, Pitch=62, Voice=0},
+                new Note { StartSinceBeginningOfSongInTicks=288, EndSinceBeginningOfSongInTicks=384, Pitch=69, Voice=0},
+                new Note { StartSinceBeginningOfSongInTicks=384, EndSinceBeginningOfSongInTicks=432, Pitch=71, Voice=0},
+                new Note { StartSinceBeginningOfSongInTicks=432, EndSinceBeginningOfSongInTicks=480, Pitch=72, Voice=0},
+                new Note { StartSinceBeginningOfSongInTicks=480, EndSinceBeginningOfSongInTicks=576, Pitch=74, Voice=0}
+            };
+            var bars = new List<Bar>() { new Bar { BarNumber=1, TicksFromBeginningOfSong=0,
+                    TimeSignature=new TimeSignature{ Denominator=4, Numerator=4 },
+                    KeySignature=new KeySignature { key=0, scale= Sinphinity.Models.Enums.ScaleType.major} },
+                new Bar { BarNumber=2, TicksFromBeginningOfSong=384,
+                    TimeSignature=new TimeSignature{ Denominator=4, Numerator=4 },
+                    KeySignature=new KeySignature { key=0, scale= Sinphinity.Models.Enums.ScaleType.major} },
+                new Bar { BarNumber=3, TicksFromBeginningOfSong=768,
+                    TimeSignature=new TimeSignature{ Denominator=4, Numerator=4 },
+                    KeySignature=new KeySignature { key=0, scale= Sinphinity.Models.Enums.ScaleType.major} }
+            };
+
+            var extraction = PatternsExtraction.BuildTreeOfPatterns(notes, bars, new Dictionary<string, HashSet<Occurrence>>());
+
+            Assert.Contains("(24,1)(72,0)", extraction.Keys);
+            Assert.Contains("(24,1)(72,2)(96,0)", extraction.Keys);
+            Assert.Contains("(72,2)(96,0)", extraction.Keys);
+            Assert.Contains("(24,1)(72,2)(96,-3)(48,0)", extraction.Keys);
+            Assert.Contains("(72,2)(96,-3)(48,0)", extraction.Keys);
+            Assert.Contains("(24,1)(72,2)(96,-3)(48,1)(48,0)", extraction.Keys);
+        }
+
+        [Test]
+        public void RemovalOfPatternsThatAreRepetitionsOfOtherPatternsWorksCorrectly()
+        {
+            var patToRemove1 = "(24,1)(24,-1)(24,1)(24,-1)";
+            var patToRemove2 = "(12,2)(24,-3)(36,1)(12,2)(24,-3)(36,1)(12,2)(24,-3)(36,1)";
+            var patToKeep1 = "(6,1)(12,2)(6,1)(12,2)(6,1)(12,2)";
+            var patToKeep2 = "(6,1)(6,1)(6,1)(6,1)(6,1)(6,1)(6,1)";
+            var patToKeep3 = "(12,0)(12,0)";
+
+            var tree = new Dictionary<string, HashSet<Occurrence>>();
+            tree[patToRemove1] = new HashSet<Occurrence>();
+            tree[patToRemove2] = new HashSet<Occurrence>();
+            tree[patToKeep1] = new HashSet<Occurrence>();
+            tree[patToKeep2] = new HashSet<Occurrence>();
+            tree[patToKeep3] = new HashSet<Occurrence>();
+
+            var result = PatternsExtraction.RemovePatternsTharAreArepetitionOfAnotherPattern(tree);
+            Assert.IsFalse(result.Keys.Contains(patToRemove1));
+            Assert.IsFalse(result.Keys.Contains(patToRemove2));
+            Assert.IsTrue(result.Keys.Contains(patToKeep1));
+            Assert.IsTrue(result.Keys.Contains(patToKeep2));
+            Assert.IsTrue(result.Keys.Contains(patToKeep3));
+        }
+        [Test]
+        public void RemovalOfPatternsWithlongNotesWorksCorrectly()
+        {
+            var patToRemove1 = "(2400,1)(24,-1)(24,1)(24,-1)";
+            var patToRemove2 = "(10,2)(24,-3)(36,1)(1000,2)(24,-3)(36,1)(12,2)(24,-3)(36,1)";
+            var patToKeep1 = "(6,1)(12,2)(6,1)(12,2)(6,1)(12,2)";
+            var patToKeep2 = "(12,0)(12,0)";
+
+            var tree = new Dictionary<string, HashSet<Occurrence>>();
+            tree[patToRemove1] = new HashSet<Occurrence>();
+            tree[patToRemove2] = new HashSet<Occurrence>();
+            tree[patToKeep1] = new HashSet<Occurrence>();
+            tree[patToKeep2] = new HashSet<Occurrence>();
+
+            var result = PatternsExtraction.RemovePatternsThatHaveVeryLongNotes(tree);
+            Assert.IsFalse(result.Keys.Contains(patToRemove1));
+            Assert.IsFalse(result.Keys.Contains(patToRemove2));
+            Assert.IsTrue(result.Keys.Contains(patToKeep1));
+            Assert.IsTrue(result.Keys.Contains(patToKeep2));
         }
     }
 }

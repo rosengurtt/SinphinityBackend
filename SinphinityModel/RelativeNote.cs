@@ -29,6 +29,48 @@ namespace Sinphinity.Models
         public long TicksFromSliceStart { get; set; }
         public long DeltaTick { get; set; }
 
+        public long DeltaTickNormalized
+        {
+            get
+            {
+                if (DeltaTick < 6) return DeltaTick;
+                if (DeltaTick < 48) return NormalizeDeltaTick(DeltaTick, 2);
+               return NormalizeDeltaTick(DeltaTick, 6);
+            }
+        }
+        /// <summary>
+        /// The idea is to aproximate a delta tick like 47 to 48 (basically, submultiples of 96)
+        /// 
+        /// </summary>
+        /// <param name="deltaTick"></param>
+        /// <param name="imprecision"></param>
+        /// <returns></returns>
+        private long NormalizeDeltaTick(long deltaTick, long imprecision)
+        {
+            long dif = deltaTick % imprecision;
+            if (dif == 0) return deltaTick;
+            long candidateTop = deltaTick + imprecision - dif;
+            long candidateBottom = deltaTick - dif;
+            if ( dif < imprecision - dif) return candidateTop;
+            if (dif > imprecision - dif) return deltaTick + candidateBottom;
+            if (GreatestCommonDivisor(candidateTop, 96) > GreatestCommonDivisor(candidateBottom, 96))
+                return candidateTop;
+            else
+                return candidateBottom;
+        }
+        private static long GreatestCommonDivisor(long a, long b)
+        {
+            while (a != 0 && b != 0)
+            {
+                if (a > b)
+                    a %= b;
+                else
+                    b %= a;
+            }
+
+            return a | b;
+        }
+
         /// <summary>
         /// Represents the difference between the previous pitch and this one
         /// </summary>
@@ -44,6 +86,13 @@ namespace Sinphinity.Models
             get
             {
                 return $"({DeltaTick},{DeltaPitch})";
+            }
+        }
+        public string AsNormalizedString
+        {
+            get
+            {
+                return $"({DeltaTickNormalized},{DeltaPitch})";
             }
         }
 
