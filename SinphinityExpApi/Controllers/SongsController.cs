@@ -172,7 +172,7 @@ namespace SinphinitySysStore.Controllers
         public async Task<IActionResult> ProcessBatch(long styleId, long bandId)
         {
             var keepLooping = true;
-            var pageSize = 5;
+            var pageSize = 40;
             var page = 0;
             var alca = 1;
             while (keepLooping)
@@ -182,6 +182,8 @@ namespace SinphinitySysStore.Controllers
                 {
                     foreach (var s in songsBatch.items)
                     {
+                        if (!s.IsMidiCorrect || s.IsSongProcessed || s.CantBeProcessed)
+                            continue;
                         var song = await _sysStoreClient.GetSongByIdAsync(s.Id, null);
                         try
                         {

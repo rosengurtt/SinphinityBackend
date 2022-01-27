@@ -23,7 +23,7 @@ namespace SinphinityExpApi.Clients
             _clientFactory = clientFactory;
         }
 
-        public async Task<Dictionary<string, HashSet<Occurrence>>> GetPatternMatrixOfSong(Song song)
+        public async Task<HashSet<string>> GetPatternMatrixOfSong(Song song)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             httpClient.Timeout = TimeSpan.FromMinutes(500);
@@ -37,7 +37,7 @@ namespace SinphinityExpApi.Clients
                 var responseContent = await response.Content.ReadAsStringAsync();
                 dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
                 var result = JsonConvert.SerializeObject(apiResponse.result);
-                return JsonConvert.DeserializeObject<Dictionary<string, HashSet<Occurrence>>>(result);
+                return JsonConvert.DeserializeObject<HashSet<string>>(result);
             }
             else
             {

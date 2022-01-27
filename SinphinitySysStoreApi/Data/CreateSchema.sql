@@ -138,7 +138,7 @@ CREATE TABLE Patterns (
 	IsMonotone BIT NOT NULL,
 	Step INT NOT NULL
 )
-CREATE INDEX IX_Patterns_AsString ON Patterns (AsString)
+CREATE UNIQUE INDEX IX_Patterns_AsString ON Patterns (AsString)
 
 
 
@@ -154,7 +154,7 @@ CREATE TABLE BasicPatterns (
 	Step INT NOT NULL
 )
 
-CREATE INDEX IX_BasicPatterns_AsString ON BasicPatterns (AsString)
+CREATE UNIQUE INDEX IX_BasicPatterns_AsString ON BasicPatterns (AsString)
 
 IF OBJECT_ID('dbo.BasicPatternsPatterns', 'U') IS NOT NULL 
   DROP TABLE dbo.BasicPatternsPatterns
@@ -166,6 +166,7 @@ CREATE TABLE BasicPatternsPatterns (
     CONSTRAINT FK_BasicPatternsPatterns_Pattern_Id FOREIGN KEY (PatternId) REFERENCES Patterns(Id),
     CONSTRAINT FK_BasicPatternsPatterns_BasicPattern_Id FOREIGN KEY (BasicPatternId) REFERENCES BasicPatterns(Id)	
 )
+CREATE UNIQUE INDEX IX_BasicPatternsPatterns on BasicPatternsPatterns(PatternId, BasicPatternId);
 
 IF OBJECT_ID('dbo.PatternOccurrences', 'U') IS NOT NULL 
   DROP TABLE dbo.PatternOccurrences
@@ -199,6 +200,8 @@ CREATE TABLE PatternsSongs(
     CONSTRAINT FK_PatternsSongs_Pattern_Id FOREIGN KEY (PatternId) REFERENCES Patterns(Id),
     CONSTRAINT FK_PatternsSongs_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
 )
+
+CREATE UNIQUE INDEX IX_PatternsSongs on PatternsSongs(SongId, PatternId);
 
 
 SET IDENTITY_INSERT Styles ON

@@ -21,9 +21,9 @@ namespace SinphinitySysStoreApi.Controllers
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<ActionResult> UploadPatternMatrix(long? songId, Dictionary<string, HashSet<Occurrence>> patterns)
+        public async Task<ActionResult> UploadPatternMatrix(long songId, HashSet<string> patternsSet)
         {
-            await _patternsRepository.SavePatternsOfSongAsync(patterns, songId);
+            await _patternsRepository.SavePatternsOfSongAsync(patternsSet, songId);
             return Ok(new ApiOKResponse(null));
         }
 
@@ -42,20 +42,7 @@ namespace SinphinitySysStoreApi.Controllers
             return Ok(new ApiOKResponse(retObj));
         }
 
-        [HttpGet("occurrences")]
-        public async Task<ActionResult> GetPatternsOccurrencesPaginatedAsync(long patternId, int pageNo = 0, int pageSize = 10)
-        {
-            (var totaOccs, var occs) = await _patternsRepository.GetPatternOccurencesAsync(pageNo, pageSize, patternId);
-            var retObj = new
-            {
-                pageNo,
-                pageSize,
-                totalItems = totaOccs,
-                totalPages = (int)Math.Ceiling((double)totaOccs / pageSize),
-                items = occs
-            };
-            return Ok(new ApiOKResponse(retObj));
-        }
+
 
     }
 }

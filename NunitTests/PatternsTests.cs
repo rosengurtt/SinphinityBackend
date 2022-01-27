@@ -63,14 +63,14 @@ namespace NunitTests
                     KeySignature=new KeySignature { key=0, scale= Sinphinity.Models.Enums.ScaleType.major} }
             };
 
-            var extraction = PatternsExtraction.BuildTreeOfPatterns(notes, bars, new Dictionary<string, HashSet<Occurrence>>());
+            var extraction = PatternsExtraction.BuildSetOfPatterns(notes, bars, new HashSet<string>());
 
-            Assert.Contains("(24,1)(72,0)", extraction.Keys);
-            Assert.Contains("(24,1)(72,2)(96,0)", extraction.Keys);
-            Assert.Contains("(72,2)(96,0)", extraction.Keys);
-            Assert.Contains("(24,1)(72,2)(96,-3)(48,0)", extraction.Keys);
-            Assert.Contains("(72,2)(96,-3)(48,0)", extraction.Keys);
-            Assert.Contains("(24,1)(72,2)(96,-3)(48,1)(48,0)", extraction.Keys);
+            Assert.Contains("(24,1)(72,0)", extraction.ToList());
+            Assert.Contains("(24,1)(72,2)(96,0)", extraction.ToList());
+            Assert.Contains("(72,2)(96,0)", extraction.ToList());
+            Assert.Contains("(24,1)(72,2)(96,-3)(48,0)", extraction.ToList());
+            Assert.Contains("(72,2)(96,-3)(48,0)", extraction.ToList());
+            Assert.Contains("(24,1)(72,2)(96,-3)(48,1)(48,0)", extraction.ToList());
         }
 
         [Test]
@@ -82,19 +82,19 @@ namespace NunitTests
             var patToKeep2 = "(6,1)(6,1)(6,1)(6,1)(6,1)(6,1)(6,1)";
             var patToKeep3 = "(12,0)(12,0)";
 
-            var tree = new Dictionary<string, HashSet<Occurrence>>();
-            tree[patToRemove1] = new HashSet<Occurrence>();
-            tree[patToRemove2] = new HashSet<Occurrence>();
-            tree[patToKeep1] = new HashSet<Occurrence>();
-            tree[patToKeep2] = new HashSet<Occurrence>();
-            tree[patToKeep3] = new HashSet<Occurrence>();
+            var tree = new HashSet<string>();
+            tree.Add(patToRemove1);
+            tree.Add(patToRemove2);
+            tree.Add(patToKeep1);
+            tree.Add(patToKeep2);
+            tree.Add(patToKeep3);
 
             var result = PatternsExtraction.RemovePatternsTharAreArepetitionOfAnotherPattern(tree);
-            Assert.IsFalse(result.Keys.Contains(patToRemove1));
-            Assert.IsFalse(result.Keys.Contains(patToRemove2));
-            Assert.IsTrue(result.Keys.Contains(patToKeep1));
-            Assert.IsTrue(result.Keys.Contains(patToKeep2));
-            Assert.IsTrue(result.Keys.Contains(patToKeep3));
+            Assert.IsFalse(result.ToList().Contains(patToRemove1));
+            Assert.IsFalse(result.ToList().Contains(patToRemove2));
+            Assert.IsTrue(result.ToList().Contains(patToKeep1));
+            Assert.IsTrue(result.ToList().Contains(patToKeep2));
+            Assert.IsTrue(result.ToList().Contains(patToKeep3));
         }
         [Test]
         public void RemovalOfPatternsWithlongNotesWorksCorrectly()
@@ -104,17 +104,18 @@ namespace NunitTests
             var patToKeep1 = "(6,1)(12,2)(6,1)(12,2)(6,1)(12,2)";
             var patToKeep2 = "(12,0)(12,0)";
 
-            var tree = new Dictionary<string, HashSet<Occurrence>>();
-            tree[patToRemove1] = new HashSet<Occurrence>();
-            tree[patToRemove2] = new HashSet<Occurrence>();
-            tree[patToKeep1] = new HashSet<Occurrence>();
-            tree[patToKeep2] = new HashSet<Occurrence>();
+            var tree = new HashSet<string>();
+            tree.Add(patToRemove1);
+            tree.Add(patToRemove2);
+            tree.Add(patToKeep1);
+            tree.Add(patToKeep2);
+
 
             var result = PatternsExtraction.RemovePatternsThatHaveVeryLongNotes(tree);
-            Assert.IsFalse(result.Keys.Contains(patToRemove1));
-            Assert.IsFalse(result.Keys.Contains(patToRemove2));
-            Assert.IsTrue(result.Keys.Contains(patToKeep1));
-            Assert.IsTrue(result.Keys.Contains(patToKeep2));
+            Assert.IsFalse(result.ToList().Contains(patToRemove1));
+            Assert.IsFalse(result.ToList().Contains(patToRemove2));
+            Assert.IsTrue(result.ToList().Contains(patToKeep1));
+            Assert.IsTrue(result.ToList().Contains(patToKeep2));
         }
     }
 }

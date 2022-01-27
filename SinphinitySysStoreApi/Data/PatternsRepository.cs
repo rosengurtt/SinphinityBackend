@@ -14,14 +14,16 @@ namespace SinphinitySysStore.Data
             _dbContext = dbcontext;
         }
 
-        public async Task SavePatternsOfSongAsync(Dictionary<string, HashSet<Occurrence>> patterns, long? songId)
+        public async Task SavePatternsOfSongAsync(HashSet<string> patternsSet, long songId)
         {
+            var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
+            if (song == null) throw new Exception($"Song with id = {songId} does not exist");
             try
             {
-                foreach (var pat in patterns)
+                foreach (var pat in patternsSet)
                 {
                     // Insert basic pattern if it is not in collection already
-                    var basicPattern = new BasicPattern(pat.Key);
+                    var basicPattern = new BasicPattern(pat);
                     var basicPatternAsString = basicPattern.AsString;
                     var basPatInDb = await _dbContext.BasicPatterns.Where(x => x.AsString == basicPatternAsString).FirstOrDefaultAsync();
                     if (basPatInDb == null)
@@ -32,11 +34,10 @@ namespace SinphinitySysStore.Data
                     }
 
                     // Insert pattern if it is not in collection already
-                    var patternAsString = pat.Key;
-                    var patInDb = await _dbContext.Patterns.Where(x => x.AsString == patternAsString).FirstOrDefaultAsync();
+                    var patInDb = await _dbContext.Patterns.Where(x => x.AsString == pat).FirstOrDefaultAsync();
                     if (patInDb == null)
                     {
-                        var paton = new Pattern(patternAsString);
+                        var paton = new Pattern(pat);
                         _dbContext.Patterns.Add(paton);
                         await _dbContext.SaveChangesAsync();
                         patInDb = paton;
@@ -53,57 +54,24 @@ namespace SinphinitySysStore.Data
                         basPatPatInDb = basPatPat;
                     }
 
-                    long? previousSongId = null;
-                    // Insert occurrences
-                    foreach (var occ in pat.Value)
+                    var patSong = await _dbContext.PatternsSongs.Where(x => x.SongId == songId && x.PatternId == patInDb.Id).FirstOrDefaultAsync();
+                    if (patSong == null)
                     {
-                        // Insert record to PatternsSongs if not there
-                        if (previousSongId == null || occ.SongId != previousSongId)
+                        var ps = new PatternSong()
                         {
-                            var patSong = await _dbContext.PatternsSongs.Where(x => x.SongId == occ.SongId && x.PatternId == patInDb.Id).FirstOrDefaultAsync();
-                            if (patSong == null)
-                            {
-                                var ps = new PatternSong()
-                                {
-                                    PatternId = patInDb.Id,
-                                    SongId = occ.SongId
-                                };
-                                _dbContext.PatternsSongs.Add(ps);
-                                await _dbContext.SaveChangesAsync();
-                            }
-                            previousSongId = occ.SongId;
-                        }
-                        var currentOc = await _dbContext.PatternOccurrences
-                            .Where(x => x.PatternId == patInDb.Id &&
-                            x.SongId == occ.SongId &&
-                            x.Voice == occ.Voice &&
-                            x.Tick == occ.Tick).FirstOrDefaultAsync();
-                        if (currentOc == null)
-                        {
-                            var occurrence = new PatternOccurrence
-                            {
-                                PatternId = patInDb.Id,
-                                SongId = occ.SongId,
-                                Voice = occ.Voice,
-                                BarNumber = (int)occ.BarNumber,
-                                Beat = (int)occ.Beat,
-                                Tick = occ.Tick
-                            };
-                            _dbContext.PatternOccurrences.Add(occurrence);
-                            await _dbContext.SaveChangesAsync();
-                        }
+                            PatternId = patInDb.Id,
+                            SongId = songId
+                        };
+                        _dbContext.PatternsSongs.Add(ps);
+                        await _dbContext.SaveChangesAsync();
                     }
                 }
-                if (songId != null)
-                {
-                    var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
-                    if (song == null) throw new Exception($"Song with id = {songId} does not exist");
-                    song.ArePatternsExtracted = true;
-                    _dbContext.Songs.Update(song);
-                    await _dbContext.SaveChangesAsync();
-                }
+                song.ArePatternsExtracted = true;
+                _dbContext.Entry(song).Property("ArePatternsExtracted").IsModified = true;
+                await _dbContext.SaveChangesAsync();
+
             }
-            catch(Exception fadfasd)
+            catch (Exception fadfasd)
             {
 
             }

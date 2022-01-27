@@ -91,54 +91,7 @@ namespace SinphinityExpApi.Controllers
             }
             return Ok(new ApiOKResponse(null));
         }
-        /// <summary>
-        /// Looks at all the patterns in the db and finds if a pattern is part of another pattern. If that is the case adds occurrences of the short
-        /// pattern to the songs that have occurrences of the longer pattern
-        /// </summary>
-        /// <param name="contains"></param>
-        /// <returns></returns>
-        public async Task<IActionResult> DoPatternsPostProcess()
-        {
-            var keepLooping = true;
-            var pageSize = 10;
-            var pagePatterns = 0;
-            var alca = 1;
-            Log.Information($"Starting pattern post processing");
-            while (keepLooping)
-            {
-                PaginatedList<Pattern> patternsBatch = await _sysStoreClient.GetPatternsPaginatedAsync(pagePatterns, pageSize, null);
-                if (patternsBatch.items?.Count > 0)
-                {
-                    var patternMatrix = new Dictionary<string, HashSet<Occurrence>>();
-                    foreach (var p1 in patternsBatch.items)
-                    {
-                        // All patterns end with ,0), that means the last element is there to mark the duration of the last note
-                        // When pattern 'a' is part of pattern 'b', we may have something like a=(48,1)(48,2)(96,0) and b=(48,1)(48,2)(96,-1)(96,0)
-                        // We want to match the 2, and if we don't remove the last ",0)" characters in a, they will not match
-                        var patternAsStringWithLastPitchRemoved = p1.AsString.Substring(0, p1.AsString.LastIndexOf(","));
-                        {
-                            var patternsMatched = await _sysStoreClient.GetPatternsAsync(patternAsStringWithLastPitchRemoved);
-
-
-                            foreach (Pattern p2 in patternsMatched)
-                            {
-                                var difInTicks = StartDifferenceInTicks(p1, p2);
-                                var occurrences = await _sysStoreClient.GetOccurrencesOfPatternAsync(p2.Id);
-                                patternMatrix[p1.AsString] = occurrences
-                                    .Select(x=>new Occurrence { BarNumber=x.BarNumber, Beat=x.Beat, SongId=x.SongId, Tick=x.Tick+ difInTicks, Voice=x.Voice})
-                                    .ToHashSet();
-                            }
-                        }
-                        await _sysStoreClient.InsertPatternsAsync(patternMatrix);
-                    }
-
-                    pagePatterns++;
-                }
-                else
-                    keepLooping = false;
-            }
-            return Ok(new ApiOKResponse(null));
-        }
+     
 
         private long StartDifferenceInTicks(Pattern pat1, Pattern pat2)
         {
@@ -172,12 +125,6 @@ namespace SinphinityExpApi.Controllers
 
 
 
-        [HttpGet("Occurrences")]
-        public async Task<ActionResult> GetPatternOccurrences(string patternId, int pageNo = 0, int pageSize = 10)
-        {
-            var occurrences = await _sysStoreClient.GetPatternOccurrencesAsync(pageNo, pageSize, patternId);
-            return Ok(new ApiOKResponse(occurrences));
-        }
     }
 }
 

@@ -10,14 +10,14 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
     public static partial class PatternsExtraction
     {
         /// <summary>
-        /// 
+        /// Collects al succession of relative notes of length up to maxPatternLength present in the song
         /// </summary>
         /// <param name="notes"></param>
-        /// <param name="key"></param>
-        /// <param name="maxPatternLength">Is the </param>
+        /// <param name="bars"></param>
+        /// <param name="patternsSet"></param>
+        /// <param name="maxPatternLength"></param>
         /// <returns></returns>
-        public static Dictionary<string, HashSet<Occurrence>> BuildTreeOfPatterns(List<Note> notes, List<Bar> bars, Dictionary<string, HashSet<Occurrence>> tree,
-            long songId, int minPatternLength = 2, int maxPatternLength = 15, int minTicks = 96)
+        public static HashSet<string> BuildSetOfPatterns(List<Note> notes, List<Bar> bars, HashSet<string> patternsSet, int maxPatternLength = 10)
         {
             // the keys of the tree are successions of relative notes expressed as (deltaTick, deltaPitch) 
             // like (24,1)(24,-2)(24,1)
@@ -42,39 +42,35 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
 
                     chain = rn + chain;
                     chainLength++;
-                    if (chainLength < 2) continue;
-
-                    var tick = sortedNotes[i - depht].StartSinceBeginningOfSongInTicks;
-                    (int bar, int beat) = GetBarAndBeatOfTick(bars, tick);
-                    var voice = notes[0].Voice;
-                    tree = AddOccurrence(tree, chain, tick, voice, bar, beat, songId);
+                    if (chainLength >= 2)
+                        patternsSet.Add(chain);
                 }
             }
-            return tree;
+            return patternsSet;
         }
-        private static Dictionary<string, HashSet<Occurrence>> AddOccurrence(Dictionary<string, HashSet<Occurrence>> tree, string chain, long tick, byte voice, int bar, int beat, long songId)
-        {
-            if (!tree.ContainsKey(chain))
-                tree[chain] = new HashSet<Occurrence>();
-            var oc = new Occurrence
-            {
-                Voice = voice,
-                BarNumber = bar,
-                Beat = beat,
-                Tick = tick,
-                SongId = songId
-            };
-            tree[chain].Add(oc);
-            return tree;
-        }
+        //private static Dictionary<string, HashSet<Occurrence>> AddOccurrence(Dictionary<string, HashSet<Occurrence>> tree, string chain, long tick, byte voice, int bar, int beat, long songId)
+        //{
+        //    if (!tree.ContainsKey(chain))
+        //        tree[chain] = new HashSet<Occurrence>();
+        //    var oc = new Occurrence
+        //    {
+        //        Voice = voice,
+        //        BarNumber = bar,
+        //        Beat = beat,
+        //        Tick = tick,
+        //        SongId = songId
+        //    };
+        //    tree[chain].Add(oc);
+        //    return tree;
+        //}
 
-        private static (int, int) GetBarAndBeatOfTick(List<Bar> bars, long tick)
-        {
-            var barNo = bars.Where(b => b.TicksFromBeginningOfSong <= tick).Count();
-            var beatLength = 4 * 96 / bars[barNo - 1].TimeSignature.Denominator;
-            var beat = (int)(tick - bars[barNo - 1].TicksFromBeginningOfSong) / beatLength;
-            return (barNo, beat);
-        }
+        //private static (int, int) GetBarAndBeatOfTick(List<Bar> bars, long tick)
+        //{
+        //    var barNo = bars.Where(b => b.TicksFromBeginningOfSong <= tick).Count();
+        //    var beatLength = 4 * 96 / bars[barNo - 1].TimeSignature.Denominator;
+        //    var beat = (int)(tick - bars[barNo - 1].TicksFromBeginningOfSong) / beatLength;
+        //    return (barNo, beat);
+        //}
 
         private static KeySignature GetKeyOfNote(List<Bar> bars, Note n)
         {

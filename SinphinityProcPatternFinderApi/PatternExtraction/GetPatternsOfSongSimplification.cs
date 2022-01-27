@@ -10,32 +10,29 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
 {
     public static partial class PatternsExtraction
     {
-        public static Dictionary<string, HashSet<Occurrence>> GetPatternsOfSongSimplification(Song song, int simplification = 1)
+        public static HashSet<string> GetPatternsOfSongSimplification(Song song, int simplification = 1)
         {
             var voices = UtilitiesCompadre.GetVoices(song.SongSimplifications[simplification].Notes);
-            var tree = new Dictionary<string, HashSet<Occurrence>>();
+            var patternsSet = new HashSet<string>();
             foreach (var v in voices.Keys)
             {
-                tree = BuildTreeOfPatterns(voices[v], song.Bars, tree, song.Id);
+                patternsSet = BuildSetOfPatterns(voices[v], song.Bars, patternsSet);
             }
-            tree = RemovePatternsShorterThanNticks(tree);
-            tree = RemovePatternsThatHaveVeryLongNotes(tree);
-            tree = RemovePatternsThatOccurLessThanNtimes(tree);
-            tree = RemovePatternsThatHappenOnlyInsideOtherPatterns(tree);
-            tree = RemovePatternsTharAreArepetitionOfAnotherPattern(tree);
-            tree = RemovePatternsIfTotalPatternsExceedsMaxPerSong(tree);
+            patternsSet = RemovePatternsShorterThanNticks(patternsSet);
+            patternsSet = RemovePatternsThatHaveVeryLongNotes(patternsSet);
+            patternsSet = RemovePatternsTharAreArepetitionOfAnotherPattern(patternsSet);
 
-            return tree;
+            return patternsSet;
         }
         /// <summary>
         /// Remove patterns like (2304,0)(24,0)
         /// </summary>
-        /// <param name="tree"></param>
+        /// <param name="patternsSet"></param>
         /// <returns></returns>
-        public static Dictionary<string, HashSet<Occurrence>> RemovePatternsThatHaveVeryLongNotes(Dictionary<string, HashSet<Occurrence>> tree, long maxNoteDuration = 384)
+        public static HashSet<string> RemovePatternsThatHaveVeryLongNotes(HashSet<string> patternsSet, long maxNoteDuration = 384)
         {
             var stringsToRemove = new HashSet<string>();
-            foreach (var pat in tree.Keys)
+            foreach (var pat in patternsSet)
             {
                 var numbers = Regex.Matches(pat, @"[0-9]+");
 
@@ -47,48 +44,48 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
                 }
             }
 
-            foreach (var pat in stringsToRemove) tree.Remove(pat);
-            return tree;
+            foreach (var pat in stringsToRemove) patternsSet.Remove(pat);
+            return patternsSet;
         }
         /// <summary>
         /// We don't want to have patterns that last less than a beat
         /// </summary>
-        /// <param name="tree"></param>
+        /// <param name="patternsSet"></param>
         /// <param name="minTicks"></param>
         /// <returns></returns>
-        public static Dictionary<string, HashSet<Occurrence>> RemovePatternsShorterThanNbeats(Dictionary<string, HashSet<Occurrence>> tree, long maxBeats = 8)
+        public static HashSet<string> RemovePatternsLongerThanNbeats(HashSet<string> patternsSet, long maxBeats = 8)
         {
             var stringsToRemove = new HashSet<string>();
 
-            foreach (var pat in tree.Keys)
+            foreach (var pat in patternsSet)
             {
                 var asPattern = new Pattern(pat);
                 if (asPattern.DurationInTicks > 96 * maxBeats)
                     stringsToRemove.Add(pat);
             }
 
-            foreach (var pat in stringsToRemove) tree.Remove(pat);
-            return tree;
+            foreach (var pat in stringsToRemove) patternsSet.Remove(pat);
+            return patternsSet;
         }
 
         /// <summary>
         /// We don't want to have patterns that last less than a beat
         /// </summary>
-        /// <param name="tree"></param>
+        /// <param name="patternsSet"></param>
         /// <param name="minTicks"></param>
         /// <returns></returns>
-        public static Dictionary<string, HashSet<Occurrence>> RemovePatternsShorterThanNticks(Dictionary<string, HashSet<Occurrence>> tree, long minTicks = 96)
+        public static HashSet<string> RemovePatternsShorterThanNticks(HashSet<string> patternsSet, long minTicks = 48)
         {
             var stringsToRemove = new HashSet<string>();
-            foreach (var pat in tree.Keys)
+            foreach (var pat in patternsSet)
             {
                 var asPattern = new Pattern(pat);
                 if (asPattern.DurationInTicks < minTicks)
                     stringsToRemove.Add(pat);
             }
 
-            foreach (var pat in stringsToRemove) tree.Remove(pat);
-            return tree;
+            foreach (var pat in stringsToRemove) patternsSet.Remove(pat);
+            return patternsSet;
         }
 
         /// <summary>
@@ -101,12 +98,12 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
         /// 
         /// So we look for a subpattern that has a step of 0, that is, it starts and ends in the same pitch
         /// </summary>
-        /// <param name="tree"></param>
+        /// <param name="patternsSet"></param>
         /// <returns></returns>
-        public static Dictionary<string, HashSet<Occurrence>> RemovePatternsTharAreArepetitionOfAnotherPattern(Dictionary<string, HashSet<Occurrence>> tree)
+        public static HashSet<string> RemovePatternsTharAreArepetitionOfAnotherPattern(HashSet<string> patternsSet)
         {
             var stringsToRemove = new HashSet<string>();
-            foreach (var pat in tree.Keys)
+            foreach (var pat in patternsSet)
             {
                 var matches = Regex.Matches(pat, @"[(][0-9]+,[-]?[0-9]+[)]");
 
@@ -121,8 +118,8 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
                 }      
             }
 
-            foreach (var pat in stringsToRemove) tree.Remove(pat);
-            return tree;
+            foreach (var pat in stringsToRemove) patternsSet.Remove(pat);
+            return patternsSet;
         }
         /// <summary>
         /// Returns the total difference in pitch between the end of the pattern and the beginning of the pattern. A value of 0
@@ -143,58 +140,9 @@ namespace SinphinityProcPatternFinderApi.PatternExtraction
 
 
 
-        private static Dictionary<string, HashSet<Occurrence>> RemovePatternsIfTotalPatternsExceedsMaxPerSong(Dictionary<string, HashSet<Occurrence>> tree, int maxPatternsPerSong = 3000)
-        {
-            if (tree.Keys.Count > maxPatternsPerSong)
-            {
-                var quantityToRemove = tree.Keys.Count - maxPatternsPerSong;
-                var stringsToRemove = new HashSet<string>();
-                var lastRemovedValue = 0;
-                while (stringsToRemove.Count < quantityToRemove)
-                {
-                    var nextValueToRemove = tree.Values.Where(x => x.Count > lastRemovedValue).Select(y => y.Count).Min();
-                    foreach (var p in tree.Keys)
-                    {
-                        if (tree[p].Count > nextValueToRemove) continue;
-                        if (stringsToRemove.Count < quantityToRemove)
-                            stringsToRemove.Add(p);
-                    }
-                    lastRemovedValue = nextValueToRemove;
-                }
-                foreach (var pat in stringsToRemove) tree.Remove(pat);
-            }
-            return tree;
-        }
 
 
-        private static Dictionary<string, HashSet<Occurrence>> RemovePatternsThatOccurLessThanNtimes(Dictionary<string, HashSet<Occurrence>> tree, int minPatternOccurrences = 3,
-            int maxPatternsPerSong = 100)
-        {
-            var stringsToRemove = new HashSet<string>();
-            foreach (var pat in tree.Keys)
-            {
-                if (tree[pat].Count < minPatternOccurrences)
-                    stringsToRemove.Add(pat);
-            }
-            foreach (var pat in stringsToRemove) tree.Remove(pat);
 
-            return tree;
 
-        }
-        private static Dictionary<string, HashSet<Occurrence>> RemovePatternsThatHappenOnlyInsideOtherPatterns(Dictionary<string, HashSet<Occurrence>> tree, int maxTimes = 6)
-        {
-
-            var stringsToRemove = new HashSet<string>();
-            foreach (var pat1 in tree.Keys)
-            {
-                foreach (var pat2 in tree.Keys.Where(x => x.Length > pat1.Length))
-                {
-                    if (pat2.Contains(pat1) && (tree[pat2].Count - tree[pat1].Count) <= tree[pat2].Count / maxTimes)
-                        stringsToRemove.Add(pat1);
-                }
-            }
-            foreach (var pat in stringsToRemove) tree.Remove(pat);
-            return tree;
-        }
     }
 }

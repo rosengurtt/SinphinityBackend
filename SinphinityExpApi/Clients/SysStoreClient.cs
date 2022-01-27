@@ -260,15 +260,13 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task InsertPatternsAsync( Dictionary<string, HashSet<Occurrence>> patterns, long? songId=null)
+        public async Task InsertPatternsAsync(HashSet<string> patterns, long songId)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(patterns));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            httpClient.Timeout = TimeSpan.FromMinutes(30);
-            var url = $"{_appConfiguration.SysStoreUrl}/api/Patterns";
-            if (songId != null)
-                url += $"?songId={songId}";
+            httpClient.Timeout = TimeSpan.FromMinutes(50);
+            var url = $"{_appConfiguration.SysStoreUrl}/api/Patterns?songId={songId}";
             var response = await httpClient.PostAsync(url, content);
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -279,24 +277,6 @@ namespace SinphinityExpApi.Clients
             }
         }
     
-        public async Task<PaginatedList<Occurrence>> GetPatternOccurrencesAsync(int pageNo, int pageSize, string patternId)
-        {
-            HttpClient httpClient = _clientFactory.CreateClient();
-            var url = $"{_appConfiguration.SysStoreUrl}/api/Patterns/Occurrences?pageNo={pageNo}&pageSize={pageSize}&patternId={patternId}";
-            var response = await httpClient.GetAsync(url);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
-                var result = JsonConvert.SerializeObject(apiResponse.result);
-                return JsonConvert.DeserializeObject<PaginatedList<Occurrence>>(result);
-            }
-            else
-            {
-                var errorMessage = $"Couldn't get occurrences or pattern {patternId}";
-                Log.Error(errorMessage);
-                throw new ApplicationException(errorMessage);
-            }
-        }
+
     }
 }
