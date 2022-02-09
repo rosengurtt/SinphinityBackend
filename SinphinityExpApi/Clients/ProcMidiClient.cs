@@ -66,7 +66,7 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task<string> GetMidiFragmentOfSong(Song song, int tempoInBeatsPerMinute, int simplificationVersion, int startInSeconds , string mutedTracks)
+        public async Task<string> GetMidiFragmentOfSong(Song song, int tempoInBeatsPerMinute, int simplificationVersion, int startInSeconds , string? mutedTracks)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(song));

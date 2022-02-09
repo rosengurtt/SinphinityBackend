@@ -31,7 +31,7 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetSongs(int pageNo = 0, int pageSize = 10, string contains = null, long styleId = 0, long bandId = 0)
+        public async Task<ActionResult> GetSongs(int pageNo = 0, int pageSize = 10, string? contains = null, long styleId = 0, long bandId = 0)
         {
             return Ok(new ApiOKResponse(await _sysStoreClient.GetSongsAsync(pageNo, pageSize, contains, styleId, bandId)));
         }
@@ -83,7 +83,7 @@ namespace SinphinitySysStore.Controllers
 
 
         [HttpGet("{songId}/midi")]
-        public async Task<IActionResult> GetSongMidi(long songId, int tempoInBeatsPerMinute, int simplificationVersion = 1, int startInSeconds = 0, string mutedTracks = null)
+        public async Task<IActionResult> GetSongMidi(long songId, int tempoInBeatsPerMinute, int simplificationVersion = 1, int startInSeconds = 0, string? mutedTracks = null)
         {
             try
             {

@@ -197,6 +197,7 @@ CREATE TABLE PatternsSongs(
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
 	SongId BIGINT NOT NULL,
 	PatternId BIGINT NOT NULL,
+	Repetitions INT NOT NULL,
     CONSTRAINT FK_PatternsSongs_Pattern_Id FOREIGN KEY (PatternId) REFERENCES Patterns(Id),
     CONSTRAINT FK_PatternsSongs_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
 )

@@ -1,25 +1,20 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Serilog;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace SinphinityProcMidi
+builder.Services.AddControllers();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-             Host.CreateDefaultBuilder(args)
-                  .ConfigureWebHostDefaults(webBuilder =>
-                  {
-                      webBuilder
-                      .UseIISIntegration()
-                      .UseStartup<Startup>()
-                      .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
-                      .ReadFrom.Configuration(hostingContext.Configuration));
-                  });
-    }
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
+;
+
+app.UseRouting();
+
+app.MapControllers();
+
+app.Run();

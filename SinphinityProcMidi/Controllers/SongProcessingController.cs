@@ -55,7 +55,7 @@ namespace SinphinityProcMidi.Controllers
         /// <param name="mutedTracks"></param>
         /// <returns></returns>
         [HttpPost("{songId}")]
-        public ActionResult GetSongMidi(Song song, string songId, int tempoInBeatsPerMinute, int simplificationVersion = 1, int startInSeconds = 0, string mutedTracks = null)
+        public ActionResult GetSongMidi(Song song, string songId, int tempoInBeatsPerMinute, int simplificationVersion = 1, int startInSeconds = 0, string? mutedTracks = null)
         {
 
             int[] tracksToMute = mutedTracks?.Split(',').Select(x => int.Parse(x)).ToArray();

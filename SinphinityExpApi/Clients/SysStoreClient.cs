@@ -52,7 +52,7 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
-        public async Task<PaginatedList<Band>> GetBandsAsync(int pageNo = 0, int pageSize = 10, string contains = null, string styleId = null)
+        public async Task<PaginatedList<Band>> GetBandsAsync(int pageNo = 0, int pageSize = 10, string? contains = null, string? styleId = null)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var url = $"{_appConfiguration.SysStoreUrl}/api/Bands?pageNo={pageNo}&pageSize={pageSize}";
@@ -73,7 +73,7 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
-        public async Task<PaginatedList<Song>> GetSongsAsync(int pageNo = 0, int pageSize = 10,  string contains = null, long styleId = 0, long bandId = 0)
+        public async Task<PaginatedList<Song>> GetSongsAsync(int pageNo = 0, int pageSize = 10,  string? contains = null, long styleId = 0, long bandId = 0)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var url = $"{_appConfiguration.SysStoreUrl}/api/Songs?pageNo={pageNo}&pageSize={pageSize}";
