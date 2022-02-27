@@ -25,7 +25,13 @@ namespace Sinphinity.Models
 
         public KeySignature KeySignature { get; set; }
 
-
+        public int LengthInTicks
+        {
+            get
+            {
+                return TimeSignature.Numerator * (96 * 4 / TimeSignature.Denominator);
+            }
+        }
 
 
         /// <summary>

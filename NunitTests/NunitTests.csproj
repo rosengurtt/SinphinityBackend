@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SinphinityGraphApi\SinphinityGraphApi.csproj" />
+    <ProjectReference Include="..\SinphinityMelodyAnalizer\SinphinityMelodyAnalizer.csproj" />
     <ProjectReference Include="..\SinphinityModel\SinphinityModel.csproj" />
     <ProjectReference Include="..\SinphinityProcPatternFinderApi\SinphinityProcPatternFinderApi.csproj" />
   </ItemGroup>

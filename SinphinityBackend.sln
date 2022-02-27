@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinityProcPatternFinder
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NunitTests", "NunitTests\NunitTests.csproj", "{67A4604B-A530-4F3A-A07F-4AC1EC6F9D18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SinphinitySysStoreApi", "SinphinitySysStoreApi\SinphinitySysStoreApi.csproj", "{28617F44-F8BF-439F-9917-E82E9E838F3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinitySysStoreApi", "SinphinitySysStoreApi\SinphinitySysStoreApi.csproj", "{28617F44-F8BF-439F-9917-E82E9E838F3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SinphinityMelodyAnalizer", "SinphinityMelodyAnalizer\SinphinityMelodyAnalizer.csproj", "{0CE1D377-753E-4517-B382-B63817B6404B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{28617F44-F8BF-439F-9917-E82E9E838F3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28617F44-F8BF-439F-9917-E82E9E838F3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28617F44-F8BF-439F-9917-E82E9E838F3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CE1D377-753E-4517-B382-B63817B6404B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CE1D377-753E-4517-B382-B63817B6404B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CE1D377-753E-4517-B382-B63817B6404B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CE1D377-753E-4517-B382-B63817B6404B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

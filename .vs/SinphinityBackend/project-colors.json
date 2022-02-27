@@ -75,7 +75,12 @@
       "ProjectGuid": "28617f44-f8bf-439f-9917-e82e9e838f3d",
       "DisplayName": "SinphinitySysStoreApi",
       "ColorIndex": 13
+    },
+    "0ce1d377-753e-4517-b382-b63817b6404b": {
+      "ProjectGuid": "0ce1d377-753e-4517-b382-b63817b6404b",
+      "DisplayName": "SinphinityMelodyAnalizer",
+      "ColorIndex": 14
     }
   },
-  "NextColorIndex": 14
+  "NextColorIndex": 15
 }
