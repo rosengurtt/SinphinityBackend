@@ -1,39 +1,47 @@
 ﻿using Sinphinity.Models;
-using SinphinityModel;
-using System.Collections.Generic;
 
-namespace SinphinityMelodyAnalizer.BusinessLogic
+namespace SinphinityProcMelodyAnalyser.BusinessLogic
 {
     public static class MelodyFinder
     {
-        public static List<(PhraseMetric, PhrasePitches)> FindAllPhrases(List<Note> notes, List<Bar> bars)
+        public static Dictionary<string, List<SongLocation>> FindAllPhrases(Song song, int songSimplification)
         {
-            var retObj = new List<(PhraseMetric, PhrasePitches)>();
+            var retObj = new Dictionary<string, List<SongLocation>>();
+            var notes = song.SongSimplifications[songSimplification].Notes;
 
             var voices = notes.Select(n => n.Voice).Distinct().OrderBy(v => v).ToList();
             foreach (var voice in voices)
             {
                 var voiceNotes = notes.Where(x => x.Voice == voice).OrderBy(y => y.StartSinceBeginningOfSongInTicks).ThenByDescending(z => z.Pitch).ToList();
-                var phraseEdges = GetPhrasesEdges(voiceNotes, bars).ToList();
+                var phraseEdges = GetPhrasesEdges(voiceNotes, song.Bars).OrderBy(x => x).ToList();
                 for (int i = 0; i < phraseEdges.Count - 1; i++)
                 {
-                    var phrase = GetPhraseBetweenEdges(voiceNotes, phraseEdges[i], phraseEdges[i + 1]);
-                    if (phrase.Item1 != null && phrase.Item2 != null)
-                        retObj.Add((phrase.Item1, phrase.Item2));
+                    (var phraseMetrics, var phrasePitches, var location) = GetPhraseBetweenEdges(voiceNotes, phraseEdges[i], phraseEdges[i + 1], song.Id, voice, song.Bars);
+                    if (phraseMetrics != null && phrasePitches != null && location!=null)
+                    {
+                        var phraseAsString = $"{phraseMetrics.AsString}/{phrasePitches.AsString}";
+                        if (!retObj.ContainsKey(phraseAsString))
+                            retObj.Add(phraseAsString, new List<SongLocation>());
+                        retObj[phraseAsString].Add(location);
+                    }
                 }
             }
             return retObj;
         }
 
-        private static (PhraseMetric?, PhrasePitches?) GetPhraseBetweenEdges(List<Note> notes, long start, long end)
+        private static (PhraseMetrics?, PhrasePitches?, SongLocation?) GetPhraseBetweenEdges(List<Note> notes, long start, long end, long songId, byte voice, List<Bar> bars)
         {
             var phraseNotes = notes
                 .Where(x => x.StartSinceBeginningOfSongInTicks >= start && x.StartSinceBeginningOfSongInTicks < end)
                 .OrderBy(y => y.StartSinceBeginningOfSongInTicks)
                 .ToList();
+
             if (phraseNotes.Count > 0)
-                return (new PhraseMetric(phraseNotes), new PhrasePitches(phraseNotes));
-            return (null, null);
+            {
+                var location = new SongLocation(songId, voice, start, bars);
+                return (new PhraseMetrics(phraseNotes), new PhrasePitches(phraseNotes), location);
+            }
+            return (null, null, null);
         }
 
         /// <summary>
@@ -52,6 +60,7 @@ namespace SinphinityMelodyAnalizer.BusinessLogic
 
             return retObj;
         }
+
 
         /// <summary>
         /// When there are 2 or more notes starting at the same time, we keep only he higher one and remove the rest
@@ -100,6 +109,7 @@ namespace SinphinityMelodyAnalizer.BusinessLogic
                 int noteDuration = group.Item3;
                 var groupEndTick = groupStartTick + numberOfConsecutiveNotes * noteDuration;
                 (var startBar, var startBeat) = GetBarAndBeatOfTick(bars, groupStartTick);
+                if (startBar >= bars.Count) break;
                 var minAllowableTotalDuration = bars[startBar].LengthInTicks / bars[startBar].TimeSignature.Numerator;
                 var maxAllowableTotalDuration = bars[startBar].LengthInTicks;
                 // if too short, ignore
@@ -194,11 +204,12 @@ namespace SinphinityMelodyAnalizer.BusinessLogic
         private static HashSet<long> BreakPhrasesThatAreTooLong(List<Note> notes, List<Bar> bars, HashSet<long> edgesSoFar)
         {
             var retObj = new HashSet<long>(edgesSoFar);
-            for (int i = 0; i < edgesSoFar.Count - 1; i++)
+            var edgesAsList = edgesSoFar.ToList().OrderBy(x => x).ToList();
+            for (int i = 0; i < edgesAsList.Count - 1; i++)
             {
-                var edgesAsList = edgesSoFar.ToList().OrderBy(x => x).ToList();
                 (var startBar, var startBeat) = GetBarAndBeatOfTick(bars, edgesAsList[i]);
                 (var endBar, var endBeat) = GetBarAndBeatOfTick(bars, edgesAsList[i + 1]);
+                if (startBar >= bars.Count) break;
                 if (edgesAsList[i + 1] - edgesAsList[i] > bars[startBar].LengthInTicks * 2)
                 {
                     for (var j = startBar + 1; j <= endBar; j++)
@@ -215,5 +226,6 @@ namespace SinphinityMelodyAnalizer.BusinessLogic
             var beat = (int)(tick - bars[barNo - 1].TicksFromBeginningOfSong) / beatLength;
             return (barNo, beat);
         }
+
     }
 }

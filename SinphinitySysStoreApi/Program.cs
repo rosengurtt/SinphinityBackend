@@ -10,7 +10,7 @@ builder.Services.AddDbContext<SinphinityDbContext>(options => options.UseSqlServ
 builder.Services.AddTransient<StylesRepository>();
 builder.Services.AddTransient<BandsRepository>();
 builder.Services.AddTransient<SongsRepository>();
-builder.Services.AddTransient<PatternsRepository>();
+builder.Services.AddTransient<PhrasesRepository>();
 
 var app = builder.Build();
 
@@ -21,7 +21,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-;
+
 
 app.UseRouting();
 

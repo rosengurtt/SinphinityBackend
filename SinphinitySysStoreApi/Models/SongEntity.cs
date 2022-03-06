@@ -12,7 +12,7 @@ namespace SinphinitySysStore.Models
             Id = song.Id;
             Name = song.Name;
             IsSongProcessed = song.IsSongProcessed;
-            ArePatternsExtracted = song.ArePatternsExtracted;
+            ArePhrasesExtracted = song.ArePhrasesExtracted;
             IsMidiCorrect = song.IsMidiCorrect;
             CantBeProcessed = song.CantBeProcessed;
             Band = song.Band;
@@ -25,7 +25,7 @@ namespace SinphinitySysStore.Models
         public string Name { get; set; }
         public bool IsSongProcessed { get; set; }
         public bool CantBeProcessed { get; set; }
-        public bool ArePatternsExtracted { get; set; }
+        public bool ArePhrasesExtracted { get; set; }
         public bool IsMidiCorrect { get; set; }
 
         //public bool CantBeProcessed { get; set; }
@@ -43,7 +43,7 @@ namespace SinphinitySysStore.Models
                 Id = this.Id,
                 Name = this.Name,
                 IsSongProcessed = this.IsSongProcessed,
-                ArePatternsExtracted = this.ArePatternsExtracted,
+                ArePhrasesExtracted = this.ArePhrasesExtracted,
                 IsMidiCorrect = this.IsMidiCorrect,
                 CantBeProcessed = this.CantBeProcessed,
                 AverageTempoInBeatsPerMinute = this.AverageTempoInBeatsPerMinute,

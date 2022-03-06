@@ -15,31 +15,31 @@ namespace SinphinityExpApi.Controllers
 
         [ApiController]
         [Route("api/[controller]")]
-        public class PatternsController : ControllerBase
+        public class PhrasesController : ControllerBase
         {
             private SysStoreClient _sysStoreClient;
             private ProcMidiClient _procMidiClient;
-            private ProcPatternClient _procPatternClient;
+            private ProcMelodyAnalyserClient _procMelodyAnalyserClient;
         private GraphApiClient _graphApiClient;
 
-        public PatternsController(SysStoreClient sysStoreClient, ProcMidiClient procMidiClient, ProcPatternClient procPatternClient, GraphApiClient graphApiClient)
+        public PhrasesController(SysStoreClient sysStoreClient, ProcMidiClient procMidiClient, ProcMelodyAnalyserClient procMelodyAnalyserClient, GraphApiClient graphApiClient)
         {
             _sysStoreClient = sysStoreClient;
             _procMidiClient = procMidiClient;
-            _procPatternClient = procPatternClient;
+            _procMelodyAnalyserClient = procMelodyAnalyserClient;
             _graphApiClient = graphApiClient;
         }
 
-        // api/songs/patterns/processSong?songId=60d577ef035c715d2ea7ef60
-        [HttpGet("processSong")]
-        public async Task<IActionResult> ProcessPatternsForSong(long songId)
+        // api/songs/patterns/processPhrases?songId=60d577ef035c715d2ea7ef60
+        [HttpGet("processPhrases")]
+        public async Task<IActionResult> ProcessPhrasesForSong(long songId)
         {
             var song = await _sysStoreClient.GetSongByIdAsync(songId);
 
-            var patterns = await _procPatternClient.GetPatternMatrixOfSong(song);
-            await _sysStoreClient.InsertPatternsAsync(patterns, songId);
+            var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(song);
+            await _sysStoreClient.InsertPhrasesAsync(phrases, songId);
 
-            return Ok(new ApiOKResponse(patterns));
+            return Ok(new ApiOKResponse("Salvamos las phrases papi"));
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace SinphinityExpApi.Controllers
         /// <returns></returns>
         // api/songs/patterns/batch
         [HttpGet("batch")]
-        public async Task<IActionResult> ProcessPatternsForAllSongs(string contains)
+        public async Task<IActionResult> ProcessPatternsForAllSongs(string? contains)
         {
             var keepLooping = true;
             var pageSize = 5;
@@ -64,15 +64,19 @@ namespace SinphinityExpApi.Controllers
                     foreach (var s in songsBatch.items)
                     {
                         var song = await _sysStoreClient.GetSongByIdAsync(s.Id, null);
-                        if (!song.IsSongProcessed || song.ArePatternsExtracted) continue;
+                        // we don't need MidiBase64Encoded
+                        song.MidiBase64Encoded = "";
+                        if (song.Bars == null)
+                            continue;
+                        if (!song.IsSongProcessed || song.ArePhrasesExtracted) continue;
                         try
                         {
                             Log.Information($"{alca} - Start with song: {song.Name}");
                             if (song.SongSimplifications != null && song.SongSimplifications.Count > 0)
                             {
-                                var patternMatrix = await _procPatternClient.GetPatternMatrixOfSong(song);
-                                Log.Information($"Pattern extracion completed OK for {song.Name}");
-                                await _sysStoreClient.InsertPatternsAsync(patternMatrix, song.Id);
+                                var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(song);
+                                Log.Information($"Phrase extracion completed OK for {song.Name}");
+                                await _sysStoreClient.InsertPhrasesAsync(phrases, song.Id);
                                 Log.Information($"Saved OK {song.Name}");
                             }
                         }

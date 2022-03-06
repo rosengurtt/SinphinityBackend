@@ -1,9 +1,10 @@
 ﻿using Sinphinity.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace SinphinityModel
+namespace Sinphinity.Models
 {
     /// <summary>
     /// The list of relative pitches used in a melodic phrase in the order they are played, without rythm information
@@ -69,6 +70,7 @@ namespace SinphinityModel
             }
         }
 
+        [NotMapped]
         public List<int> Items
         {
             get
@@ -86,17 +88,14 @@ namespace SinphinityModel
         }
         public PhrasePitches(List<Note> notes)
         {
-            AsString = "";
+            AsString = "0";
             if (notes.Count > 1)
             {
                 for (int i = 0; i < notes.Count - 1; i++)
                 {
-                    AsString += (notes[i + 1].Pitch - notes[i].Pitch).ToString() + ",";
+                    AsString += "," + (notes[i + 1].Pitch - notes[i].Pitch).ToString() ;
                 }
             }
-            // remove last comma
-            if (AsString.Contains(","))
-                AsString = AsString.Substring(0, AsString.Length - 1);
         }
     }
 }

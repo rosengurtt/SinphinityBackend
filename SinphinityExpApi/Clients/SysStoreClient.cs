@@ -260,13 +260,13 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task InsertPatternsAsync(HashSet<string> patterns, long songId)
+        public async Task InsertPhrasesAsync(Dictionary<string, List<SongLocation>>  phrases, long songId)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
-            var content = new StringContent(JsonConvert.SerializeObject(patterns));
+            var content = new StringContent(JsonConvert.SerializeObject(phrases));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             httpClient.Timeout = TimeSpan.FromMinutes(50);
-            var url = $"{_appConfiguration.SysStoreUrl}/api/Patterns?songId={songId}";
+            var url = $"{_appConfiguration.SysStoreUrl}/api/Phrases/{songId}";
             var response = await httpClient.PostAsync(url, content);
 
             if (response.StatusCode != HttpStatusCode.OK)

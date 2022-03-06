@@ -1,14 +1,15 @@
 ﻿using Sinphinity.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace SinphinityModel
+namespace Sinphinity.Models
 {
     /// <summary>
     /// Represents the metric of a melodic phrase
     /// </summary>
-    public class PhraseMetric
+    public class PhraseMetrics
     {
         /// <summary>
         /// The primary key of the record in the db
@@ -41,7 +42,7 @@ namespace SinphinityModel
                 return Items.Count;
             }
         }
-
+        [NotMapped]
         public List<int> Items
         {
             get
@@ -52,13 +53,13 @@ namespace SinphinityModel
 
 
 
-        public PhraseMetric() { }
-        public PhraseMetric(string asString)
+        public PhraseMetrics() { }
+        public PhraseMetrics(string asString)
         {
             AsString = asString;
         }
 
-        public PhraseMetric(List<Note> notes)
+        public PhraseMetrics(List<Note> notes)
         {
             AsString = "";
             for (int i = 0; i < notes.Count - 1; i++)

@@ -98,7 +98,7 @@ namespace SinphinitySysStore.Data
             var currentSongData= await _dbContext.SongsData.Where(x => x.SongId == song.Id).FirstOrDefaultAsync();
             if (currentSong == null || currentSongData == null) throw new SongDoesntExistException();
 
-            currentSong.ArePatternsExtracted = song.ArePatternsExtracted;
+            currentSong.ArePhrasesExtracted = song.ArePhrasesExtracted;
             currentSong.AverageTempoInBeatsPerMinute = song.AverageTempoInBeatsPerMinute;
             currentSong.CantBeProcessed = song.CantBeProcessed;
             currentSong.IsMidiCorrect = song.IsMidiCorrect;

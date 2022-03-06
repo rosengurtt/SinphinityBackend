@@ -10,22 +10,42 @@ IF (OBJECT_ID('dbo.[FK_Band_Style_Id]', 'F') IS NOT NULL)
 IF (OBJECT_ID('dbo.[FK_MidiStats_Song_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.Songs DROP CONSTRAINT FK_MidiStats_Song_Id
 	
-IF (OBJECT_ID('dbo.[FK_BasicPatternsPatterns_Pattern_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.BasicPatternsPatterns DROP CONSTRAINT FK_BasicPatternsPatterns_Pattern_Id
+IF (OBJECT_ID('dbo.[FK_SongData_Songs_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.SongData DROP CONSTRAINT FK_SongData_Songs_Id
+	/* BasicMetricsPhrasesMetrics */
+IF (OBJECT_ID('dbo.[FK_BasicMetricsPhrasesMetrics_BasicMetrics_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.BasicMetricsPhrasesMetrics DROP CONSTRAINT FK_BasicMetricsPhrasesMetrics_BasicMetrics_Id
 	
-IF (OBJECT_ID('dbo.[FK_BasicPatternsPatterns_BasicPattern_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.BasicPatternsPatterns DROP CONSTRAINT FK_BasicPatternsPatterns_BasicPattern_Id
-
-IF (OBJECT_ID('dbo.[FK_SongsSimplifications_Song_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.SongsSimplifications DROP CONSTRAINT FK_SongsSimplifications_Song_Id
-
-IF (OBJECT_ID('dbo.[FK_PatternsSongs_Pattern_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.PatternsSongs DROP CONSTRAINT FK_PatternsSongs_Pattern_Id
-
-IF (OBJECT_ID('dbo.[FK_PatternsSongs_Song_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.PatternsSongs DROP CONSTRAINT FK_PatternsSongs_Song_Id
+IF (OBJECT_ID('dbo.[FK_BasicMetricsPhrasesMetrics_PhraseMetrics_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.BasicMetricsPhrasesMetrics DROP CONSTRAINT FK_BasicMetricsPhrasesMetrics_PhraseMetrics_Id	
 	
+	/* PhrasesOccurrences */
+IF (OBJECT_ID('dbo.[FK_PhrasesOccurrences_Phrase_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhrasesOccurrences DROP CONSTRAINT FK_PhrasesOccurrences_Phrase_Id	
 	
+IF (OBJECT_ID('dbo.[FK_PhrasesOccurrences_Song_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhrasesOccurrences DROP CONSTRAINT FK_PhrasesOccurrences_Song_Id	
+	
+	/* PhrasesSongs */		
+IF (OBJECT_ID('dbo.[FK_PhrasesSongs_PhrasesMetrics_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhrasesSongs DROP CONSTRAINT FK_PhrasesSongs_PhrasesMetrics_Id
+	
+IF (OBJECT_ID('dbo.[FK_PhrasesSongs_Song_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhrasesSongs DROP CONSTRAINT FK_PhrasesSongs_Song_Id
+	
+	/* Phrases */
+IF (OBJECT_ID('dbo.[FK_Phrases_PhraseMetrics_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.Phrases DROP CONSTRAINT FK_Phrases_PhraseMetrics_Id
+	
+IF (OBJECT_ID('dbo.[FK_Phrases_PhrasePitches_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.Phrases DROP CONSTRAINT FK_Phrases_PhrasePitches_Id
+	
+	/* SongsSimplifications */
+IF (OBJECT_ID('dbo.[FK_SongsSimplifications_SongData_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.SongsSimplifications DROP CONSTRAINT FK_SongsSimplifications_SongData_Id
+
+
+
 
 IF OBJECT_ID('dbo.Styles', 'U') IS NOT NULL 
   DROP TABLE dbo.Styles
@@ -78,19 +98,6 @@ CREATE TABLE MidiStats(
 	TotalChannelIndependentEvents INT NULL
 )
 
-IF OBJECT_ID('dbo.SongData', 'U') IS NOT NULL 
-  DROP TABLE dbo.SongData
-
-CREATE TABLE SongData(
-	Id BIGINT IDENTITY(1,1) primary key clustered NOT NULL,
-	SongId BIGINT NOT NULL,
-	MidiBase64Encoded nvarchar(max) NOT NULL,
-	Bars VARCHAR(MAX) NULL,
-	TempoChanges VARCHAR(MAX) NULL,
-    CONSTRAINT FK_SongData_Songs_Id FOREIGN KEY (SongId) REFERENCES Songs(Id)
-)
-	
-	
 	
 IF OBJECT_ID('dbo.Songs', 'U') IS NOT NULL 
   DROP TABLE dbo.Songs
@@ -103,7 +110,7 @@ CREATE TABLE Songs(
 	MidiStatsId BIGINT NOT NULL,
 	MidiBase64Encoded nvarchar(max) NOT NULL,
 	IsSongProcessed BIT NOT NULL DEFAULT 0,
-	ArePatternsExtracted BIT NOT NULL DEFAULT 0,
+	ArePhrasesExtracted BIT NOT NULL DEFAULT 0,
 	IsMidiCorrect BIT NOT NULL DEFAULT 0,
 	CantBeProcessed BIT NOT NULL DEFAULT 0,
 	Bars VARCHAR(MAX) NULL,
@@ -111,6 +118,19 @@ CREATE TABLE Songs(
 	AverageTempoInBeatsPerMinute BIGINT NULL,
     CONSTRAINT FK_MidiStats_Song_Id FOREIGN KEY (MidiStatsId) REFERENCES MidiStats(Id)
 )
+
+IF OBJECT_ID('dbo.SongData', 'U') IS NOT NULL 
+  DROP TABLE dbo.SongData
+
+CREATE TABLE SongData(
+	Id BIGINT IDENTITY(1,1) primary key clustered NOT NULL,
+	SongId BIGINT NOT NULL,
+	MidiBase64Encoded nvarchar(max) NOT NULL,
+	Bars VARCHAR(MAX) NULL,
+	TempoChanges VARCHAR(MAX) NULL,
+    CONSTRAINT FK_SongData_Songs_Id FOREIGN KEY (SongId) REFERENCES Songs(Id)
+)
+	
 
 IF OBJECT_ID('dbo.SongsSimplifications', 'U') IS NOT NULL 
   DROP TABLE dbo.SongsSimplifications
@@ -121,88 +141,104 @@ CREATE TABLE SongsSimplifications(
 	Version BIGINT NOT NULL,
 	Notes VARCHAR(MAX) NOT NULL,
 	NumberOfVoices BIGINT NOT NULL,
-    CONSTRAINT FK_SongsSimplifications_SongData_Id FOREIGN KEY (SongDataId) REFERENCES SongsData(Id)
+    CONSTRAINT FK_SongsSimplifications_SongData_Id FOREIGN KEY (SongDataId) REFERENCES SongData(Id)
 )
 	
 
-
-IF OBJECT_ID('dbo.Patterns', 'U') IS NOT NULL 
-  DROP TABLE dbo.Patterns
+IF OBJECT_ID('dbo.PhrasesMetrics', 'U') IS NOT NULL 
+  DROP TABLE dbo.PhrasesMetrics
   
-CREATE TABLE Patterns (
+CREATE TABLE PhrasesMetrics (
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	AsString VARCHAR(4000) NOT NULL,
+	AsString VARCHAR(1000) NOT NULL,
 	DurationInTicks BIGINT NOT NULL,
-	NumberOfNotes INT NOT NULL, 
-	[Range] INT NOT NULL, 
+	NumberOfNotes INT NOT NULL
+)
+CREATE UNIQUE INDEX IX_PhrasesMetrics_AsString ON PhrasesMetrics (AsString)
+
+IF OBJECT_ID('dbo.BasicMetrics', 'U') IS NOT NULL 
+	DROP TABLE dbo.BasicMetrics
+  
+CREATE TABLE BasicMetrics (
+	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
+	AsString VARCHAR(1000) NOT NULL,
+	NumberOfNotes INT NOT NULL
+)
+
+CREATE UNIQUE INDEX IX_BasicMetrs_AsString ON BasicMetrics (AsString)
+
+IF OBJECT_ID('dbo.PhrasesPitches', 'U') IS NOT NULL 
+  DROP TABLE dbo.PhrasesPitches
+  
+CREATE TABLE PhrasesPitches (
+	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
+	AsString VARCHAR(1000) NOT NULL,
+	NumberOfNotes INT NOT NULL,
+	[Range] INT NOT NULL,
 	IsMonotone BIT NOT NULL,
 	Step INT NOT NULL
 )
-CREATE UNIQUE INDEX IX_Patterns_AsString ON Patterns (AsString)
+CREATE UNIQUE INDEX IX_PhrasesPitches_AsString ON PhrasesPitches (AsString)
 
-
-
-IF OBJECT_ID('dbo.BasicPatterns', 'U') IS NOT NULL 
-	DROP TABLE dbo.BasicPatterns
+IF OBJECT_ID('dbo.Phrases', 'U') IS NOT NULL 
+  DROP TABLE dbo.Phrases
   
-CREATE TABLE BasicPatterns (
+CREATE TABLE Phrases (
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	AsString VARCHAR(4000) NOT NULL,
-	NumberOfNotes INT NOT NULL, 
-	[Range] INT NOT NULL, 
-	IsMonotone BIT NOT NULL,
-	Step INT NOT NULL
+	PhraseMetricsId BIGINT NOT NULL,
+	PhrasePitchesId BIGINT NOT NULL,
+    CONSTRAINT FK_Phrases_PhraseMetrics_Id FOREIGN KEY (PhraseMetricsId) REFERENCES PhrasesMetrics(Id),
+    CONSTRAINT FK_Phrases_PhrasePitches_Id FOREIGN KEY (PhrasePitchesId) REFERENCES PhrasesPitches(Id)
 )
 
-CREATE UNIQUE INDEX IX_BasicPatterns_AsString ON BasicPatterns (AsString)
+IF OBJECT_ID('dbo.BasicMetricsPhrasesMetrics', 'U') IS NOT NULL 
+  DROP TABLE dbo.BasicMetricsPhrasesMetrics
 
-IF OBJECT_ID('dbo.BasicPatternsPatterns', 'U') IS NOT NULL 
-  DROP TABLE dbo.BasicPatternsPatterns
-  
-CREATE TABLE BasicPatternsPatterns (
+CREATE TABLE BasicMetricsPhrasesMetrics (
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	PatternId BIGINT NOT NULL,
-	BasicPatternId BIGINT NOT NULL,	
-    CONSTRAINT FK_BasicPatternsPatterns_Pattern_Id FOREIGN KEY (PatternId) REFERENCES Patterns(Id),
-    CONSTRAINT FK_BasicPatternsPatterns_BasicPattern_Id FOREIGN KEY (BasicPatternId) REFERENCES BasicPatterns(Id)	
+	PhraseMetricsId BIGINT NOT NULL,
+	BasicMetricsId BIGINT NOT NULL,	
+    CONSTRAINT FK_BasicMetricsPhrasesMetrics_BasicMetrics_Id FOREIGN KEY (BasicMetricsId) REFERENCES BasicMetrics(Id),
+    CONSTRAINT FK_BasicMetricsPhrasesMetrics_PhraseMetrics_Id FOREIGN KEY (PhraseMetricsId) REFERENCES PhrasesMetrics(Id)	
 )
-CREATE UNIQUE INDEX IX_BasicPatternsPatterns on BasicPatternsPatterns(PatternId, BasicPatternId);
+CREATE UNIQUE INDEX IX_BasicMetrics_PhrasesMetrics on BasicMetricsPhrasesMetrics(PhraseMetricsId, BasicMetricsId);
 
-IF OBJECT_ID('dbo.PatternOccurrences', 'U') IS NOT NULL 
-  DROP TABLE dbo.PatternOccurrences
+IF OBJECT_ID('dbo.PhrasesOccurrences', 'U') IS NOT NULL 
+  DROP TABLE dbo.PhrasesOccurrences
   
-CREATE TABLE PatternOccurrences (
+CREATE TABLE PhrasesOccurrences (
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
 	SongId BIGINT NOT NULL,
-	PatternId BIGINT NOT NULL,
+	PhraseId BIGINT NOT NULL,
 	Voice TINYINT NOT NULL,
-	BarNumber BIGINT NOT NULL,	
-	Beat BIGINT NOT NULL,
+	BarNumber INT NOT NULL,	
+	Beat INT NOT NULL,
 	Tick BIGINT NOT NULL
-    CONSTRAINT FK_PatternOccurrences_Pattern_Id FOREIGN KEY (PatternId) REFERENCES Patterns(Id),
-    CONSTRAINT FK_PatternOccurrences_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
+    CONSTRAINT FK_PhrasesOccurrences_Phrase_Id FOREIGN KEY (PhraseId) REFERENCES Phrases(Id),
+    CONSTRAINT FK_PhrasesOccurrences_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
 )
 
-CREATE INDEX IX_PatternOccurrences_Tick ON PatternOccurrences (Tick)
-CREATE INDEX IX_PatternOccurrences_Voice ON PatternOccurrences (Voice)
-CREATE INDEX IX_PatternOccurrences_SongId ON PatternOccurrences (SongId)
-CREATE INDEX IX_PatternOccurrences_PatternId ON PatternOccurrences (PatternId)
+CREATE INDEX IX_PhrasesOccurrences_Tick ON PhrasesOccurrences (Tick)
+CREATE INDEX IX_PhrasesOccurrences_Voice ON PhrasesOccurrences (Voice)
+CREATE INDEX IX_PhrasesOccurrences_SongId ON PhrasesOccurrences (SongId)
+CREATE INDEX IX_PhrasesOccurrences_PhraseId ON PhrasesOccurrences (PhraseId)
 
 
 
-IF OBJECT_ID('dbo.PatternsSongs', 'U') IS NOT NULL 
-  DROP TABLE dbo.PatternsSongs
+
+IF OBJECT_ID('dbo.PhrasesSongs', 'U') IS NOT NULL 
+  DROP TABLE dbo.PhrasesSongs
   
-CREATE TABLE PatternsSongs(
+CREATE TABLE PhrasesSongs(
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
 	SongId BIGINT NOT NULL,
-	PatternId BIGINT NOT NULL,
+	PhraseId BIGINT NOT NULL,
 	Repetitions INT NOT NULL,
-    CONSTRAINT FK_PatternsSongs_Pattern_Id FOREIGN KEY (PatternId) REFERENCES Patterns(Id),
-    CONSTRAINT FK_PatternsSongs_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
+    CONSTRAINT FK_PhrasesSongs_PhrasesMetrics_Id FOREIGN KEY (PhraseId) REFERENCES Phrases(Id),
+    CONSTRAINT FK_PhrasesSongs_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
 )
 
-CREATE UNIQUE INDEX IX_PatternsSongs on PatternsSongs(SongId, PatternId);
+CREATE UNIQUE INDEX IX_PhrasesSongs on PhrasesSongs(SongId, PhraseId);
 
 
 SET IDENTITY_INSERT Styles ON

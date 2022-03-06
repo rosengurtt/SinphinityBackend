@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SinphinityMelodyAnalizer.BusinessLogic;
 using Newtonsoft.Json;
 using Sinphinity.Models;
+using SinphinityProcMelodyAnalyser.BusinessLogic;
 
 namespace NunitTests
 {
-	internal class MelodyAnalyzerTests
+	internal class MelodyAnalyserTests
 	{
 		public static string invention1Notes = @"
 [
@@ -6003,14 +6003,24 @@ namespace NunitTests
 	}
 ]
 ";
+		public Song song;
 
+		[SetUp]
+		public void Init()
+        {
+			song = new Song
+			{
+				SongSimplifications = new List<SongSimplification>(),
+				Bars = JsonConvert.DeserializeObject<List<Bar>>(invention1Bars)
+			};
+			song.SongSimplifications.Add(new SongSimplification { Notes = JsonConvert.DeserializeObject<List<Note>>(invention1Notes) });
+        }
 
 		[Test]
 		public void PhraseFinderWorksAsExpected()
 		{
-			var inv1Notes = JsonConvert.DeserializeObject<List<Note>>(invention1Notes);
-			var inv1Bars = JsonConvert.DeserializeObject<List<Bar>>(invention1Bars);
-			var phrases = MelodyFinder.FindAllPhrases(inv1Notes, inv1Bars);
+			var phrases = MelodyFinder.FindAllPhrases(song, 0);
+
 			Assert.IsTrue(true);
 		}
 	}
