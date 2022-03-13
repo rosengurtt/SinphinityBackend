@@ -51,6 +51,13 @@ namespace Sinphinity.Models
         }
         public BasicMetrics() { }
 
+        public BasicMetrics(string asString)
+        {
+            var p = new PhraseMetrics(asString);
+            AsString = "";
+            var gdc = GreatestCommonDivisor(p.Items);
+            AsString += string.Join(',', p.Items.Select(x => x / gdc));
+        }
         public BasicMetrics(PhraseMetrics p)
         {
             AsString = "";

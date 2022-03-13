@@ -5,6 +5,17 @@ namespace SinphinitySysStore.Models
     public class PhrasePitchesEntity
     {
         public PhrasePitchesEntity() { }
+
+        public PhrasePitchesEntity(string asString)
+        {
+            var p = new PhrasePitches(asString);
+            Id = p.Id;
+            AsString = p.AsString;
+            Range = p.Range;
+            IsMonotone = p.IsMonotone;
+            Step = p.Step;
+            NumberOfNotes = p.NumberOfNotes;
+        }
         public PhrasePitchesEntity(PhrasePitches p)
         {
             Id = p.Id;
@@ -14,7 +25,6 @@ namespace SinphinitySysStore.Models
             Step = p.Step;
             NumberOfNotes = p.NumberOfNotes;
         }
-
         /// <summary>
         /// The primary key of the record in the db
         /// </summary>

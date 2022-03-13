@@ -260,7 +260,7 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task InsertPhrasesAsync(Dictionary<string, List<SongLocation>>  phrases, long songId)
+        public async Task InsertPhrasesAsync(List<Dictionary<string, List<SongLocation>>> phrases, long songId)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(phrases));

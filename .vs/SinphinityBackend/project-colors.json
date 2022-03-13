@@ -85,7 +85,12 @@
       "ProjectGuid": "7bd3e416-733a-4108-ae7c-e97c819d1d9d",
       "DisplayName": "SinphinityProcMelodyAnalyser",
       "ColorIndex": 15
+    },
+    "9a2a4aa9-93ce-49f7-a01a-3308eb6f23de": {
+      "ProjectGuid": "9a2a4aa9-93ce-49f7-a01a-3308eb6f23de",
+      "DisplayName": "SinphinityProcMelodyAnalyser",
+      "ColorIndex": 0
     }
   },
-  "NextColorIndex": 0
+  "NextColorIndex": 1
 }

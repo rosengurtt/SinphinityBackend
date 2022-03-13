@@ -63,12 +63,12 @@ namespace SinphinityExpApi.Controllers
                 {
                     foreach (var s in songsBatch.items)
                     {
+                        if (!s.IsSongProcessed || s.ArePhrasesExtracted) continue;
                         var song = await _sysStoreClient.GetSongByIdAsync(s.Id, null);
                         // we don't need MidiBase64Encoded
                         song.MidiBase64Encoded = "";
                         if (song.Bars == null)
                             continue;
-                        if (!song.IsSongProcessed || song.ArePhrasesExtracted) continue;
                         try
                         {
                             Log.Information($"{alca} - Start with song: {song.Name}");

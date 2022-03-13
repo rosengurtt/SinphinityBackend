@@ -4,29 +4,54 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
 {
     public static class MelodyFinder
     {
-        public static Dictionary<string, List<SongLocation>> FindAllPhrases(Song song, int songSimplification)
+        /// <summary>
+        /// Returns 3 dictionaries:
+        /// - the first has the phrases metrics and their locations (key is phrase metrics as string)
+        /// - the second has the phrases pitches and their locations (key is phrase pitches as string0
+        /// - the third has the phrases and their locations (key is phrase metric as string plus "/" plus phrase pitches as string
+        /// </summary>
+        /// <param name="song"></param>
+        /// <param name="songSimplification"></param>
+        /// <returns></returns>
+        public static List<Dictionary<string, List<SongLocation>>> FindAllPhrases(Song song, int songSimplification)
         {
-            var retObj = new Dictionary<string, List<SongLocation>>();
+            var retObjPhrases = new Dictionary<string, List<SongLocation>>();
+            var retObjPhrasesMetrics = new Dictionary<string, List<SongLocation>>();
+            var retObjPhrasesPitches = new Dictionary<string, List<SongLocation>>();
             var notes = song.SongSimplifications[songSimplification].Notes;
 
             var voices = notes.Select(n => n.Voice).Distinct().OrderBy(v => v).ToList();
             foreach (var voice in voices)
             {
                 var voiceNotes = notes.Where(x => x.Voice == voice).OrderBy(y => y.StartSinceBeginningOfSongInTicks).ThenByDescending(z => z.Pitch).ToList();
-                var phraseEdges = GetPhrasesEdges(voiceNotes, song.Bars).OrderBy(x => x).ToList();
+                var cleanedVoiceNotes = RemoveHarmony(notes);
+                var phraseEdges = GetPhrasesEdges(cleanedVoiceNotes, song.Bars).OrderBy(x => x).ToList();
                 for (int i = 0; i < phraseEdges.Count - 1; i++)
                 {
-                    (var phraseMetrics, var phrasePitches, var location) = GetPhraseBetweenEdges(voiceNotes, phraseEdges[i], phraseEdges[i + 1], song.Id, voice, song.Bars);
+                    (var phraseMetrics, var phrasePitches, var location) = GetPhraseBetweenEdges(cleanedVoiceNotes, phraseEdges[i], phraseEdges[i + 1], song.Id, voice, song.Bars);
                     if (phraseMetrics != null && phrasePitches != null && location!=null)
                     {
+                        for (int k = 1; k < phraseMetrics.Items.Count; k++)
+                        {
+                            if (phraseMetrics.Items[k] == 0)
+                            {
+
+                            }
+                        }
                         var phraseAsString = $"{phraseMetrics.AsString}/{phrasePitches.AsString}";
-                        if (!retObj.ContainsKey(phraseAsString))
-                            retObj.Add(phraseAsString, new List<SongLocation>());
-                        retObj[phraseAsString].Add(location);
+                        if (!retObjPhrases.ContainsKey(phraseAsString))
+                            retObjPhrases.Add(phraseAsString, new List<SongLocation>());
+                        retObjPhrases[phraseAsString].Add(location);
+                        if (!retObjPhrasesMetrics.ContainsKey(phraseMetrics.AsString))
+                            retObjPhrasesMetrics.Add(phraseMetrics.AsString, new List<SongLocation>());
+                        retObjPhrasesMetrics[phraseMetrics.AsString].Add(location);
+                        if (!retObjPhrasesPitches.ContainsKey(phrasePitches.AsString))
+                            retObjPhrasesPitches.Add(phrasePitches.AsString, new List<SongLocation>());
+                        retObjPhrasesPitches[phrasePitches.AsString].Add(location);
                     }
                 }
             }
-            return retObj;
+            return new List<Dictionary<string, List<SongLocation>>>() { retObjPhrasesMetrics, retObjPhrasesPitches, retObjPhrases };
         }
 
         private static (PhraseMetrics?, PhrasePitches?, SongLocation?) GetPhraseBetweenEdges(List<Note> notes, long start, long end, long songId, byte voice, List<Bar> bars)
@@ -39,7 +64,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             if (phraseNotes.Count > 0)
             {
                 var location = new SongLocation(songId, voice, start, bars);
-                return (new PhraseMetrics(phraseNotes), new PhrasePitches(phraseNotes), location);
+                return (new PhraseMetrics(phraseNotes, start, end), new PhrasePitches(phraseNotes), location);
             }
             return (null, null, null);
         }
@@ -52,9 +77,8 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// <returns></returns>
         private static HashSet<long> GetPhrasesEdges(List<Note> notes, List<Bar> bars)
         {
-            var cleanedNotes = RemoveHarmony(notes, bars);
             // First we find the points that separate the phrases in the song
-            var retObj = GetEdgesOfGroupsOfNotesWithIdenticalDuration(cleanedNotes, bars, new HashSet<long>());
+            var retObj = GetEdgesOfGroupsOfNotesWithIdenticalDuration(notes, bars, new HashSet<long>());
             retObj = GetEdgesOfSilencesAndLongNotes(notes, bars, retObj);
             retObj = BreakPhrasesThatAreTooLong(notes, bars, retObj);
 
@@ -67,7 +91,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        private static List<Note> RemoveHarmony(List<Note> notes, List<Bar> bars)
+        private static List<Note> RemoveHarmony(List<Note> notes)
         {
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ThenByDescending(y => y.Pitch).ToList();
             var retObj = new List<Note>();
@@ -195,7 +219,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         }
 
         /// <summary>
-        /// We don't want phrases that are longer than 1 bar. If there is one, we break it in bar boundaries
+        /// We don't want phrases that are longer than 2 bars. If there is one, we break it in bar boundaries
         /// </summary>
         /// <param name="notes"></param>
         /// <param name="bars"></param>
@@ -214,6 +238,14 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 {
                     for (var j = startBar + 1; j <= endBar; j++)
                         retObj.Add(bars[j - 1].TicksFromBeginningOfSong);
+                }
+            }
+            var retObjOrdered = retObj.ToList().OrderBy(x => x).ToList();
+            for (int i = 0; i < retObjOrdered.Count-1; i++)
+            {
+                if (retObjOrdered[i + 1] - retObjOrdered[i] > bars[0].LengthInTicks*2)
+                {
+
                 }
             }
             return retObj;

@@ -213,8 +213,8 @@ CREATE TABLE PhrasesOccurrences (
 	Voice TINYINT NOT NULL,
 	BarNumber INT NOT NULL,	
 	Beat INT NOT NULL,
-	Tick BIGINT NOT NULL
-    CONSTRAINT FK_PhrasesOccurrences_Phrase_Id FOREIGN KEY (PhraseId) REFERENCES Phrases(Id),
+	Tick BIGINT NOT NULL,
+	PhraseType INT NOT NULL,
     CONSTRAINT FK_PhrasesOccurrences_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
 )
 
@@ -234,11 +234,11 @@ CREATE TABLE PhrasesSongs(
 	SongId BIGINT NOT NULL,
 	PhraseId BIGINT NOT NULL,
 	Repetitions INT NOT NULL,
-    CONSTRAINT FK_PhrasesSongs_PhrasesMetrics_Id FOREIGN KEY (PhraseId) REFERENCES Phrases(Id),
+	PhraseType INT NOT NULL,
     CONSTRAINT FK_PhrasesSongs_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
 )
 
-CREATE UNIQUE INDEX IX_PhrasesSongs on PhrasesSongs(SongId, PhraseId);
+CREATE UNIQUE INDEX IX_PhrasesSongs on PhrasesSongs(SongId, PhraseId, PhraseType);
 
 
 SET IDENTITY_INSERT Styles ON

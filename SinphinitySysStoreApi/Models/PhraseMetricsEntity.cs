@@ -6,6 +6,14 @@ namespace SinphinitySysStore.Models
     {
         public PhraseMetricsEntity() { }
 
+        public PhraseMetricsEntity(string asString) {
+            var p = new PhraseMetrics(asString);
+            Id = p.Id;
+            AsString = p.AsString;
+            DurationInTicks = p.DurationInTicks;
+            NumberOfNotes = p.NumberOfNotes;
+        }
+
         public PhraseMetricsEntity(PhraseMetrics p)
         {
             Id = p.Id;

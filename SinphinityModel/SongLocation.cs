@@ -1,5 +1,4 @@
-﻿using Sinphinity.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Sinphinity.Models
@@ -18,6 +17,7 @@ namespace Sinphinity.Models
             Beat = (int)(tick - bars[BarNumber - 1].TicksFromBeginningOfSong) / beatLength;
             SongId = songId;
             Voice = voice;
+            Tick = tick;
         }
 
         public long SongId { get; set; }

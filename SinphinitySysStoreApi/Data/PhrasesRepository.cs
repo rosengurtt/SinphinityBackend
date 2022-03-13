@@ -13,31 +13,29 @@ namespace SinphinitySysStore.Data
             _dbContext = dbcontext;
         }
 
-        public async Task SavePhrasessOfSongAsync(Dictionary<string, List<SongLocation>> phrasesLocations, long songId)
+
+        public async Task SavePhrasessOfSongAsync(List<Dictionary<string, List<SongLocation>>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
+            var retObjPhrasesMetrics = phrasesLocations[0];
+            var retObjPhrasesPitches = phrasesLocations[1];
+            var retObjPhrases = phrasesLocations[2];
             try
             {
-                foreach (var p in phrasesLocations.Keys)
+                // Phrase metrics
+                foreach (var pm in retObjPhrasesMetrics.Keys)
                 {
-                    var phrase = new Phrase(p);
-                    var phraseMetrics = new PhraseMetricsEntity(phrase.PhraseMetrics);
+                    var phraseMetrics = new PhraseMetricsEntity(pm);
                     // Insert basic metrics if it is not in collection already
-                    var basicMetrics = new BasicMetricsEntity(new BasicMetrics(phrase.PhraseMetrics));
-                    var basicMetricsAsString = basicMetrics.AsString;
-                    var basMetInDb = await _dbContext.BasicMetrics.Where(x => x.AsString == basicMetricsAsString).FirstOrDefaultAsync();
+                    var basicMetrics = new BasicMetricsEntity(new BasicMetrics(pm));
+                    var basMetInDb = await _dbContext.BasicMetrics.Where(x => x.AsString == basicMetrics.AsString).FirstOrDefaultAsync();
                     if (basMetInDb == null)
                     {
-                        if (basicMetrics.AsString.Length > 300)
-                        {
-                            var sacamela = 4;
-                        }
                         _dbContext.BasicMetrics.Add(basicMetrics);
                         await _dbContext.SaveChangesAsync();
                         basMetInDb = basicMetrics;
                     }
-
                     // Insert phrase metrics if it is not in collection already
                     var phraseMetInDb = await _dbContext.PhrasesMetrics.Where(x => x.AsString == phraseMetrics.AsString).FirstOrDefaultAsync();
                     if (phraseMetInDb == null)
@@ -46,7 +44,6 @@ namespace SinphinitySysStore.Data
                         await _dbContext.SaveChangesAsync();
                         phraseMetInDb = phraseMetrics;
                     }
-
                     // Insert link between phrase metric and basic metric
                     var basMetPhraseMetInDb = await _dbContext.BasicMetricsPhrasesMetrics
                         .Where(x => x.PhraseMetricsId == phraseMetInDb.Id && x.BasicMetricsId == basMetInDb.Id).FirstOrDefaultAsync();
@@ -54,65 +51,63 @@ namespace SinphinitySysStore.Data
                     {
                         var basMetPhraseMet = new BasicMetricsPhraseMetrics { BasicMetricsId = basMetInDb.Id, PhraseMetricsId = phraseMetInDb.Id };
                         _dbContext.BasicMetricsPhrasesMetrics.Add(basMetPhraseMet);
-                        await _dbContext.SaveChangesAsync();
+                        try
+                        {
+                            await _dbContext.SaveChangesAsync();
+                        }
+                        catch (Exception fdsfds)
+                        {
+
+                        }
                         basMetPhraseMetInDb = basMetPhraseMet;
                     }
+                    await InsertSongPhrasesAndLocations(retObjPhrasesMetrics[pm], PhraseTypeEnum.Metrics, songId, phraseMetInDb.Id);
 
-                    // Insert phrase pitches
-                    try
-                    {
-                        var sacamela= new PhrasePitchesEntity(phrase.PhrasePitches);
-                    }
-                    catch(Exception ex)
-                    {
+                }
+                // Phrase pitches
+                foreach (var pp in retObjPhrasesPitches.Keys)
+                {
 
-                    }
-                    var phrasePitches = new PhrasePitchesEntity(phrase.PhrasePitches);
-                    var phrasePitInDb = await _dbContext.PhrasesPitches.Where(x => x.AsString == phrasePitches.AsString).FirstOrDefaultAsync();
+                    // Insert phrase pitches                    
+                    var phrasePitInDb = await _dbContext.PhrasesPitches.Where(x => x.AsString == pp).FirstOrDefaultAsync();
                     if (phrasePitInDb == null)
                     {
+                        var phrasePitches = new PhrasePitchesEntity(pp);
                         _dbContext.PhrasesPitches.Add(phrasePitches);
                         await _dbContext.SaveChangesAsync();
                         phrasePitInDb = phrasePitches;
                     }
 
-                    // Insert phrase
-                    phrase.PhraseMetricsId = phraseMetInDb.Id;
-                    phrase.PhrasePitchesId = phrasePitInDb.Id;
-                    var phraseInDb = await _dbContext.Phrases.Where(x => x.PhraseMetricsId == phrase.PhraseMetricsId&& x.PhrasePitchesId == phrase.PhrasePitchesId).FirstOrDefaultAsync();
+                    await InsertSongPhrasesAndLocations(retObjPhrasesPitches[pp], PhraseTypeEnum.Pitches, songId, phrasePitInDb.Id);
+                }
+                // Phrases
+                foreach (var p in retObjPhrases.Keys)
+                {
+                    var metricsAsString = p.Substring(0, p.IndexOf("/"));
+                    var pitchesAsString = p.Substring(p.IndexOf("/") + 1, p.Length - metricsAsString.Length - 1);
+                    var fraseMetInDb = await _dbContext.PhrasesMetrics.Where(x => x.AsString == metricsAsString).FirstOrDefaultAsync();
+                    var phrasePitInDb = await _dbContext.PhrasesPitches.Where(x => x.AsString == pitchesAsString).FirstOrDefaultAsync();
+
+                    if (fraseMetInDb == null || phrasePitInDb == null)
+                        throw new Exception("Me mandaron cualquier mierda");
+
+                    var phraseInDb = await _dbContext.Phrases.Where(x => x.PhraseMetricsId == fraseMetInDb.Id && x.PhrasePitchesId == phrasePitInDb.Id)
+                        .FirstOrDefaultAsync();
                     if (phraseInDb == null)
                     {
+                        var phrase = new Phrase(fraseMetInDb.Id, phrasePitInDb.Id);
                         _dbContext.Phrases.Add(phrase);
-                        await _dbContext.SaveChangesAsync();
-                        phraseInDb = phrase;
-                    }
-
-                    // Insert phraseSong
-                    var phraseSong = await _dbContext.PhrasesSongs.Where(x => x.SongId == songId && x.PhraseId == phraseInDb.Id).FirstOrDefaultAsync();
-                    if (phraseSong == null)
-                    {
-                        var ps = new PhraseSong()
+                        try
                         {
-                            PhraseId = phraseInDb.Id,
-                            SongId = songId,
-                            Repetitions= phrasesLocations.Count
-                        };
-                        _dbContext.PhrasesSongs.Add(ps);
-                        await _dbContext.SaveChangesAsync();
-                    }
-
-                    // Insert Occurrences
-
-                    foreach (var loc in phrasesLocations[p])
-                    {
-                        var occ = await _dbContext.PhrasesOccurrences.Where(x => x.SongId == songId && x.Voice == loc.Voice && x.Tick == loc.Tick).FirstOrDefaultAsync();
-                        if (occ == null)
-                        {
-                            var occur = new PhrasesOccurrence(loc, phraseInDb.Id);
-                            _dbContext.PhrasesOccurrences.Add(occur);
                             await _dbContext.SaveChangesAsync();
                         }
+                        catch(Exception fdsfsa)
+                        {
+
+                        }
+                        phraseInDb = phrase;
                     }
+                    await InsertSongPhrasesAndLocations(retObjPhrases[p], PhraseTypeEnum.Both, songId, phraseInDb.Id);
                 }
                 song.ArePhrasesExtracted = true;
                 _dbContext.Entry(song).Property("ArePhrasesExtracted").IsModified = true;
@@ -122,6 +117,37 @@ namespace SinphinitySysStore.Data
             catch (Exception fadfasd)
             {
 
+            }
+        }
+        private async Task InsertSongPhrasesAndLocations(List<SongLocation> locations, PhraseTypeEnum type, long songId, long phraseId)
+        {
+            // Insert phraseSong
+            var phraseSong = await _dbContext.PhrasesSongs.Where(x => x.SongId == songId && x.PhraseId == phraseId && x.PhraseType == type)
+                .FirstOrDefaultAsync();
+            if (phraseSong == null)
+            {
+                var ps = new PhraseSong()
+                {
+                    PhraseId = phraseId,
+                    SongId = songId,
+                    Repetitions = locations.Count,
+                    PhraseType = type
+                };
+                _dbContext.PhrasesSongs.Add(ps);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            // Insert Occurrences
+            foreach (var loc in locations)
+            {
+                var occ = await _dbContext.PhrasesOccurrences.Where(x => x.SongId == songId && x.Voice == loc.Voice && x.Tick == loc.Tick && x.PhraseType == type)
+                    .FirstOrDefaultAsync();
+                if (occ == null)
+                {
+                    var occur = new PhrasesOccurrence(loc, phraseId, type);
+                    _dbContext.PhrasesOccurrences.Add(occur);
+                    await _dbContext.SaveChangesAsync();
+                }
             }
         }
     }

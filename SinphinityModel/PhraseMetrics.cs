@@ -18,10 +18,12 @@ namespace Sinphinity.Models
         /// <summary>
         /// A string representation of the phrase metrics. It consists of numbers separated by commas
         /// The numbers represent the separations between the start of the notes
-        /// The last number is the duration of the last note
+        /// The first number is the duration in ticks from the beginning of the phrase to the first note
+        /// The last number is the duration from the beginning of the last note to the start of the next phrase
+        /// or the end of the bar if the next phrase doesnt start until more than a bar later
         /// 
-        /// 2 quarters followed by 2 sixteenths would be
-        /// 96,96,48,48
+        /// 2 quarters starting from 0 and followed by 2 sixteenths would be
+        /// 0,96,96,48,48
         /// 
         /// Accentuations can be indicated with a plus sign after a numer, like:
         /// 96,96+,48,48
@@ -39,7 +41,7 @@ namespace Sinphinity.Models
         {
             get
             {
-                return Items.Count;
+                return Items.Count - 1;
             }
         }
         [NotMapped]
@@ -59,14 +61,22 @@ namespace Sinphinity.Models
             AsString = asString;
         }
 
-        public PhraseMetrics(List<Note> notes)
+        /// <summary>
+        /// endTick is where the phrase should end (in most cases the start of the first note after the phrase)
+        /// But when there is a large gap before the next note, we end the phrase at the end of the bar
+        /// 
+        /// </summary>
+        /// <param name="notes"></param>
+        /// <param name="noteAfterPhrase"></param>
+        public PhraseMetrics(List<Note> notes, long start, long endTick)
         {
-            AsString = "";
-            for (int i = 0; i < notes.Count - 1; i++)
+            var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
+            AsString = $"{orderedNotes[0].StartSinceBeginningOfSongInTicks - start},";
+            for (int i = 0; i < orderedNotes.Count - 1; i++)
             {
-                AsString += (notes[i + 1].StartSinceBeginningOfSongInTicks - notes[i].StartSinceBeginningOfSongInTicks) + ",";
+                AsString += (orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks) + ",";
             }
-            AsString += notes[notes.Count - 1].DurationInTicks;
+            AsString += endTick - orderedNotes[orderedNotes.Count - 1].StartSinceBeginningOfSongInTicks;
         }
     }
 }

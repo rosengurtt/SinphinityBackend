@@ -23,7 +23,7 @@ namespace SinphinitySysStoreApi.Controllers
         }
 
         [HttpPost("{songId}"), DisableRequestSizeLimit]
-        public async Task<ActionResult> UploadPhrasesOfSong(long songId, Dictionary<string, List<SongLocation>> phrases)
+        public async Task<ActionResult> UploadPhrasesOfSong(long songId, List<Dictionary<string, List<SongLocation>>> phrases)
         {
             await _phrasesRepository.SavePhrasessOfSongAsync(phrases, songId);
             return Ok(new ApiOKResponse(null));
