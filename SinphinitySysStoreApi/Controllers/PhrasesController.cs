@@ -25,7 +25,17 @@ namespace SinphinitySysStoreApi.Controllers
         [HttpPost("{songId}"), DisableRequestSizeLimit]
         public async Task<ActionResult> UploadPhrasesOfSong(long songId, List<Dictionary<string, List<SongLocation>>> phrases)
         {
-            await _phrasesRepository.SavePhrasessOfSongAsync(phrases, songId);
+            if (phrases.Count != 6)
+                throw new Exception("Me mandaron cualquier mierda");
+            // PhrasesMetrics, PhrasesPitches, Phrases, EmbellishedPhrasesMetrics, EmbellishedPhrasesPitches, jEmbellishedPhrases
+            await _phrasesRepository.SavePhrasesMetricsOfSongAsync(phrases[0], songId);
+            await _phrasesRepository.SavePhrasesPitchesOfSongAsync(phrases[1], songId);
+            await _phrasesRepository.SavePhrasesOfSongAsync(phrases[2], songId);
+            await _phrasesRepository.SaveEmbellishedPhrasesMetricsOfSongAsync(phrases[3], songId);
+            await _phrasesRepository.SaveEmbellishedPhrasesPitchesOfSongAsync(phrases[4], songId);
+            await _phrasesRepository.SaveEmbellishedPhrasesOfSongAsync(phrases[5], songId);
+            await _phrasesRepository.UpateSong(songId);
+
             return Ok(new ApiOKResponse(null));
         }
 

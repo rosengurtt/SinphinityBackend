@@ -2,24 +2,16 @@
 
 namespace SinphinitySysStore.Models
 {
-    public class PhraseMetricsEntity
+    public class EmbellishedPhraseMetricsEntity
     {
-        public PhraseMetricsEntity() { }
+        public EmbellishedPhraseMetricsEntity() { }
 
-        public PhraseMetricsEntity(string asString) {
-            var p = new PhraseMetrics(asString);
-            Id = p.Id;
-            AsString = p.AsString;
-            DurationInTicks = p.DurationInTicks;
-            NumberOfNotes = p.NumberOfNotes;
-        }
 
-        public PhraseMetricsEntity(PhraseMetrics p)
+
+        public EmbellishedPhraseMetricsEntity(PhraseMetricsEntity p, string asString)
         {
-            Id = p.Id;
-            AsString = p.AsString;
-            DurationInTicks = p.DurationInTicks;
-            NumberOfNotes = p.NumberOfNotes;
+            AsString = asString;
+            PhraseMetricsWithoutOrnamentsId = p.Id;
         }
 
         /// <summary>
@@ -41,18 +33,8 @@ namespace SinphinitySysStore.Models
         public long DurationInTicks { get; set; }
         public int NumberOfNotes { get; set; }
         /// <summary>
-        /// Foreign key to related basic metrics
+        /// Link to the version of the phrase with the ornaments removed
         /// </summary>
-        public long BasicMetricId { get; set; }
-
-        public PhraseMetrics AsPhraseMetrics()
-        {
-            return new PhraseMetrics
-            {
-                Id = this.Id,
-                AsString = this.AsString,
-                BasicMetricId = this.BasicMetricId
-            };
-        }
+        public long PhraseMetricsWithoutOrnamentsId { get; set; }
     }
 }

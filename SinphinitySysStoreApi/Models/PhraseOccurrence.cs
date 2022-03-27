@@ -2,11 +2,11 @@
 
 namespace SinphinitySysStore.Models
 {
-    public class PhrasesOccurrence
+    public class PhraseOccurrence
     {
-        public PhrasesOccurrence() { }
+        public PhraseOccurrence() { }
 
-        public PhrasesOccurrence(SongLocation o, long phraseId, PhraseTypeEnum phraseType)
+        public PhraseOccurrence(SongLocation o, long phraseId, PhraseTypeEnum phraseType)
         {
             SongId = o.SongId;
             PhraseId = phraseId;

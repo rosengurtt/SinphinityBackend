@@ -17,10 +17,12 @@ namespace SinphinitySysStore.Data
         public DbSet<SongSimplificationEntity> SongsSimplifications { get; set; }
         public DbSet<BasicMetricsEntity> BasicMetrics { get; set; }
         public DbSet<PhraseMetricsEntity> PhrasesMetrics { get; set; }
+        public DbSet<EmbellishedPhraseMetricsEntity> EmbelishedPhrasesMetrics { get; set; }
         public DbSet<PhrasePitchesEntity> PhrasesPitches { get; set; }
+        public DbSet<EmbellishedPhrasePitchesEntity> EmbellishedPhrasesPitches { get; set; }
         public DbSet<Phrase> Phrases { get; set; }
-        public DbSet<BasicMetricsPhraseMetrics> BasicMetricsPhrasesMetrics { get; set; }
-        public DbSet<PhrasesOccurrence> PhrasesOccurrences { get; set; }
+        public DbSet<EmbellishedPhrase> EmbelishedPhrases { get; set; }
+        public DbSet<PhraseOccurrence> PhrasesOccurrences { get; set; }
         public DbSet<PhraseSong> PhrasesSongs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,10 +34,12 @@ namespace SinphinitySysStore.Data
             modelBuilder.Entity<MidiStatsEntity>().ToTable("MidiStats");
             modelBuilder.Entity<BasicMetricsEntity>().ToTable("BasicMetrics");
             modelBuilder.Entity<PhraseMetricsEntity>().ToTable("PhrasesMetrics");
+            modelBuilder.Entity<EmbellishedPhraseMetricsEntity>().ToTable("EmbellishedPhrasesMetrics");
             modelBuilder.Entity<PhrasePitchesEntity>().ToTable("PhrasesPitches");
+            modelBuilder.Entity<EmbellishedPhrasePitchesEntity>().ToTable("EmbellishedPhrasesPitches");
             modelBuilder.Entity<Phrase>().ToTable("Phrases");
-            modelBuilder.Entity<BasicMetricsPhraseMetrics>().ToTable("BasicMetricsPhrasesMetrics");
-            modelBuilder.Entity<PhrasesOccurrence>().ToTable("PhrasesOccurrences");
+            modelBuilder.Entity<EmbellishedPhrase>().ToTable("EmbellishedPhrases");
+            modelBuilder.Entity<PhraseOccurrence>().ToTable("PhrasesOccurrences");
             modelBuilder.Entity<PhraseSong>().ToTable("PhrasesSongs");
             modelBuilder.Entity<SongSimplificationEntity>().ToTable("SongsSimplifications");
         }

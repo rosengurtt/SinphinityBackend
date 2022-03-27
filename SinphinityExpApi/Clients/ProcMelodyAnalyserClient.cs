@@ -22,14 +22,14 @@ namespace SinphinityExpApi.Clients
             _clientFactory = clientFactory;
         }
 
-        public async Task<List<Dictionary<string, List<SongLocation>>>> GetPhrasesOfSong(Song song)
+        public async Task<List<Dictionary<string, List<SongLocation>>>> GetPhrasesOfSong(Song song, int songSimplification)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             httpClient.Timeout = TimeSpan.FromMinutes(500);
             var content = new StringContent(JsonConvert.SerializeObject(song));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            var response = await httpClient.PostAsync($"{_appConfiguration.ProcMelodyAnalyserUrl}/api/phrases", content);
+            var response = await httpClient.PostAsync($"{_appConfiguration.ProcMelodyAnalyserUrl}/api/phrases?songSimplification={songSimplification}", content);
 
             var responseContent = await response.Content.ReadAsStringAsync();
             if (response.StatusCode == HttpStatusCode.OK)

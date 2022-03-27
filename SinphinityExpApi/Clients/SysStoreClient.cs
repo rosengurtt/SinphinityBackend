@@ -265,7 +265,7 @@ namespace SinphinityExpApi.Clients
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(phrases));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            httpClient.Timeout = TimeSpan.FromMinutes(50);
+            httpClient.Timeout = TimeSpan.FromMinutes(60);
             var url = $"{_appConfiguration.SysStoreUrl}/api/Phrases/{songId}";
             var response = await httpClient.PostAsync(url, content);
 

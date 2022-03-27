@@ -44,6 +44,9 @@ namespace Sinphinity.Models
                 return Items.Count - 1;
             }
         }
+
+        public long BasicMetricId { get; set; }
+
         [NotMapped]
         public List<int> Items
         {

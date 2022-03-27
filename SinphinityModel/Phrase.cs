@@ -7,10 +7,10 @@ namespace Sinphinity.Models
         public long Id { get; set; }
         public long PhraseMetricsId { get; set; }
         [NotMapped]
-        public PhraseMetrics PhraseMetrics { get; set; }
+        public PhraseMetrics? PhraseMetrics { get; set; }
         public long PhrasePitchesId { get; set; }
         [NotMapped]
-        public PhrasePitches PhrasePitches { get; set; }
+        public PhrasePitches? PhrasePitches { get; set; }
 
         public Phrase() { }
         public Phrase(long phraseMetricsId, long phrasePitchesId)

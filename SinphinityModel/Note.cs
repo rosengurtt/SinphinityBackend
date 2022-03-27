@@ -25,7 +25,7 @@ namespace Sinphinity.Models
             }
         }
 
-        public List<PitchBendItem> PitchBending { get; set; }
+        public List<PitchBendItem>? PitchBending { get; set; }
 
         public object Clone()
         {

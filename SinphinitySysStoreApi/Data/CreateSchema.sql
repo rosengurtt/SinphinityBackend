@@ -1,9 +1,6 @@
-IF (OBJECT_ID('dbo.[FK_PatternOccurrences_Pattern_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.PatternOccurrences DROP CONSTRAINT FK_PatternOccurrences_Pattern_Id
-	
-IF (OBJECT_ID('dbo.[FK_PatternOccurrences_Song_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.PatternOccurrences DROP CONSTRAINT FK_PatternOccurrences_Song_Id
-	
+--------------------------------------------
+/* Remove all foreign keys */
+--------------------------------------------
 IF (OBJECT_ID('dbo.[FK_Band_Style_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.Bands DROP CONSTRAINT FK_Band_Style_Id
 	
@@ -12,40 +9,48 @@ IF (OBJECT_ID('dbo.[FK_MidiStats_Song_Id]', 'F') IS NOT NULL)
 	
 IF (OBJECT_ID('dbo.[FK_SongData_Songs_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.SongData DROP CONSTRAINT FK_SongData_Songs_Id
-	/* BasicMetricsPhrasesMetrics */
-IF (OBJECT_ID('dbo.[FK_BasicMetricsPhrasesMetrics_BasicMetrics_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.BasicMetricsPhrasesMetrics DROP CONSTRAINT FK_BasicMetricsPhrasesMetrics_BasicMetrics_Id
 	
-IF (OBJECT_ID('dbo.[FK_BasicMetricsPhrasesMetrics_PhraseMetrics_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.BasicMetricsPhrasesMetrics DROP CONSTRAINT FK_BasicMetricsPhrasesMetrics_PhraseMetrics_Id	
-	
-	/* PhrasesOccurrences */
+/* PhrasesOccurrences */
 IF (OBJECT_ID('dbo.[FK_PhrasesOccurrences_Phrase_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhrasesOccurrences DROP CONSTRAINT FK_PhrasesOccurrences_Phrase_Id	
 	
 IF (OBJECT_ID('dbo.[FK_PhrasesOccurrences_Song_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhrasesOccurrences DROP CONSTRAINT FK_PhrasesOccurrences_Song_Id	
 	
-	/* PhrasesSongs */		
+/* PhrasesSongs */		
 IF (OBJECT_ID('dbo.[FK_PhrasesSongs_PhrasesMetrics_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhrasesSongs DROP CONSTRAINT FK_PhrasesSongs_PhrasesMetrics_Id
 	
 IF (OBJECT_ID('dbo.[FK_PhrasesSongs_Song_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhrasesSongs DROP CONSTRAINT FK_PhrasesSongs_Song_Id
 	
-	/* Phrases */
+/* Phrases */
 IF (OBJECT_ID('dbo.[FK_Phrases_PhraseMetrics_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.Phrases DROP CONSTRAINT FK_Phrases_PhraseMetrics_Id
 	
 IF (OBJECT_ID('dbo.[FK_Phrases_PhrasePitches_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.Phrases DROP CONSTRAINT FK_Phrases_PhrasePitches_Id
 	
-	/* SongsSimplifications */
+/* SongsSimplifications */
 IF (OBJECT_ID('dbo.[FK_SongsSimplifications_SongData_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.SongsSimplifications DROP CONSTRAINT FK_SongsSimplifications_SongData_Id
+	
+/* EmbellishedPhrases */
+IF (OBJECT_ID('dbo.[FK_EmbellishedPhrases_EmbellishedPhraseMetrics_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.EmbellishedPhrases DROP CONSTRAINT FK_EmbellishedPhrases_EmbellishedPhraseMetrics_Id
+	
+IF (OBJECT_ID('dbo.[FK_EmbellishedPhrases_EmbellishedPhrasePitches_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.EmbellishedPhrases DROP CONSTRAINT FK_EmbellishedPhrases_EmbellishedPhrasePitches_Id
 
+/* EmbellishedPhrasesMetrics */
+IF (OBJECT_ID('dbo.[FK_EmbellishedPhrasesMetrics_PhrasesMetrics]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.EmbellishedPhrasesMetrics DROP CONSTRAINT FK_EmbellishedPhrasesMetrics_PhrasesMetrics
 
-
+/* EmbellishedPhrasesPitches */
+IF (OBJECT_ID('dbo.[FK_EmbellishedPhrasesPitches_PhrasesPitches]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.EmbellishedPhrasesPitches DROP CONSTRAINT FK_EmbellishedPhrasesPitches_PhrasesPitches
+	
+	
 
 IF OBJECT_ID('dbo.Styles', 'U') IS NOT NULL 
   DROP TABLE dbo.Styles
@@ -153,8 +158,20 @@ CREATE TABLE PhrasesMetrics (
 	AsString VARCHAR(1000) NOT NULL,
 	DurationInTicks BIGINT NOT NULL,
 	NumberOfNotes INT NOT NULL
+)	
+
+IF OBJECT_ID('dbo.EmbellishedPhrasesMetrics', 'U') IS NOT NULL 
+  DROP TABLE dbo.EmbellishedPhrasesMetrics
+  
+CREATE TABLE EmbellishedPhrasesMetrics (
+	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
+	AsString VARCHAR(1000) NOT NULL,
+	DurationInTicks BIGINT NOT NULL,
+	NumberOfNotes INT NOT NULL,
+	PhrasePitchesWithoutOrnamentsId BIGINT NOT NULL,
+    CONSTRAINT FK_EmbellishedPhrasesMetrics_PhrasesMetrics FOREIGN KEY (PhrasePitchesWithoutOrnamentsId) REFERENCES PhrasesMetrics(Id)
 )
-CREATE UNIQUE INDEX IX_PhrasesMetrics_AsString ON PhrasesMetrics (AsString)
+CREATE UNIQUE INDEX IX_EmbellishedPhrasesMetrics_AsString ON EmbellishedPhrasesMetrics (AsString)
 
 IF OBJECT_ID('dbo.BasicMetrics', 'U') IS NOT NULL 
 	DROP TABLE dbo.BasicMetrics
@@ -180,6 +197,22 @@ CREATE TABLE PhrasesPitches (
 )
 CREATE UNIQUE INDEX IX_PhrasesPitches_AsString ON PhrasesPitches (AsString)
 
+IF OBJECT_ID('dbo.EmbellishedPhrasesPitches', 'U') IS NOT NULL 
+  DROP TABLE dbo.EmbellishedPhrasesPitches
+  
+CREATE TABLE EmbellishedPhrasesPitches (
+	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
+	AsString VARCHAR(1000) NOT NULL,
+	NumberOfNotes INT NOT NULL,
+	[Range] INT NOT NULL,
+	IsMonotone BIT NOT NULL,
+	Step INT NOT NULL,
+	PhrasePitchesWithoutOrnamentsId BIGINT NOT NULL,
+    CONSTRAINT FK_EmbellishedPhrasesPitches_PhrasesPitches FOREIGN KEY (PhrasePitchesWithoutOrnamentsId) REFERENCES PhrasesPitches(Id)
+)
+CREATE UNIQUE INDEX IX_EmbellishedPhrasesPitches_AsString ON EmbellishedPhrasesPitches (AsString)
+
+
 IF OBJECT_ID('dbo.Phrases', 'U') IS NOT NULL 
   DROP TABLE dbo.Phrases
   
@@ -191,17 +224,17 @@ CREATE TABLE Phrases (
     CONSTRAINT FK_Phrases_PhrasePitches_Id FOREIGN KEY (PhrasePitchesId) REFERENCES PhrasesPitches(Id)
 )
 
-IF OBJECT_ID('dbo.BasicMetricsPhrasesMetrics', 'U') IS NOT NULL 
-  DROP TABLE dbo.BasicMetricsPhrasesMetrics
-
-CREATE TABLE BasicMetricsPhrasesMetrics (
+IF OBJECT_ID('dbo.EmbellishedPhrases', 'U') IS NOT NULL 
+  DROP TABLE dbo.EmbellishedPhrases
+  
+CREATE TABLE EmbellishedPhrases (
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	PhraseMetricsId BIGINT NOT NULL,
-	BasicMetricsId BIGINT NOT NULL,	
-    CONSTRAINT FK_BasicMetricsPhrasesMetrics_BasicMetrics_Id FOREIGN KEY (BasicMetricsId) REFERENCES BasicMetrics(Id),
-    CONSTRAINT FK_BasicMetricsPhrasesMetrics_PhraseMetrics_Id FOREIGN KEY (PhraseMetricsId) REFERENCES PhrasesMetrics(Id)	
+	EmbellishedPhraseMetricsId BIGINT NOT NULL,
+	EmbellishedPhrasePitchesId BIGINT NOT NULL,
+    CONSTRAINT FK_EmbellishedPhrases_EmbellishedPhraseMetrics_Id FOREIGN KEY (EmbellishedPhraseMetricsId) REFERENCES EmbellishedPhrasesMetrics(Id),
+    CONSTRAINT FK_EmbellishedPhrases_EmbellishedPhrasePitches_Id FOREIGN KEY (EmbellishedPhrasePitchesId) REFERENCES EmbellishedPhrasesPitches(Id)
 )
-CREATE UNIQUE INDEX IX_BasicMetrics_PhrasesMetrics on BasicMetricsPhrasesMetrics(PhraseMetricsId, BasicMetricsId);
+
 
 IF OBJECT_ID('dbo.PhrasesOccurrences', 'U') IS NOT NULL 
   DROP TABLE dbo.PhrasesOccurrences
@@ -222,6 +255,7 @@ CREATE INDEX IX_PhrasesOccurrences_Tick ON PhrasesOccurrences (Tick)
 CREATE INDEX IX_PhrasesOccurrences_Voice ON PhrasesOccurrences (Voice)
 CREATE INDEX IX_PhrasesOccurrences_SongId ON PhrasesOccurrences (SongId)
 CREATE INDEX IX_PhrasesOccurrences_PhraseId ON PhrasesOccurrences (PhraseId)
+CREATE INDEX IX_PhrasesOccurrences_PhraseType ON PhrasesOccurrences (PhraseType)
 
 
 

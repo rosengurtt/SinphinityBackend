@@ -32,11 +32,11 @@ namespace SinphinityExpApi.Controllers
 
         // api/songs/patterns/processPhrases?songId=60d577ef035c715d2ea7ef60
         [HttpGet("processPhrases")]
-        public async Task<IActionResult> ProcessPhrasesForSong(long songId)
+        public async Task<IActionResult> ProcessPhrasesForSong(long songId, int songSimplification)
         {
             var song = await _sysStoreClient.GetSongByIdAsync(songId);
 
-            var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(song);
+            var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(song, songSimplification);
             await _sysStoreClient.InsertPhrasesAsync(phrases, songId);
 
             return Ok(new ApiOKResponse("Salvamos las phrases papi"));
@@ -49,7 +49,7 @@ namespace SinphinityExpApi.Controllers
         /// <returns></returns>
         // api/songs/patterns/batch
         [HttpGet("batch")]
-        public async Task<IActionResult> ProcessPatternsForAllSongs(string? contains)
+        public async Task<IActionResult> ProcessPhrasesForAllSongs(string? contains)
         {
             var keepLooping = true;
             var pageSize = 5;
@@ -74,7 +74,7 @@ namespace SinphinityExpApi.Controllers
                             Log.Information($"{alca} - Start with song: {song.Name}");
                             if (song.SongSimplifications != null && song.SongSimplifications.Count > 0)
                             {
-                                var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(song);
+                                var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(song, 1);
                                 Log.Information($"Phrase extracion completed OK for {song.Name}");
                                 await _sysStoreClient.InsertPhrasesAsync(phrases, song.Id);
                                 Log.Information($"Saved OK {song.Name}");
