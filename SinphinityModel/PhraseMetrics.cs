@@ -45,9 +45,8 @@ namespace Sinphinity.Models
             }
         }
 
-        public long BasicMetricId { get; set; }
+        public long BasicMetricsId { get; set; }
 
-        [NotMapped]
         public List<int> Items
         {
             get

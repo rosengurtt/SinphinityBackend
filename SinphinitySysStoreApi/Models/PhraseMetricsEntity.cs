@@ -43,7 +43,7 @@ namespace SinphinitySysStore.Models
         /// <summary>
         /// Foreign key to related basic metrics
         /// </summary>
-        public long BasicMetricId { get; set; }
+        public long BasicMetricsId { get; set; }
 
         public PhraseMetrics AsPhraseMetrics()
         {
@@ -51,7 +51,7 @@ namespace SinphinitySysStore.Models
             {
                 Id = this.Id,
                 AsString = this.AsString,
-                BasicMetricId = this.BasicMetricId
+                BasicMetricsId = this.BasicMetricsId
             };
         }
     }

@@ -119,7 +119,7 @@ namespace SinphinitySysStore.Data
                     var embellishedPhraseInDb= await _dbContext.EmbelishedPhrases
                         .Where(x=>x.EmbellishedPhraseMetricsId== embellishedPhraseMetInDb.Id && x.EmbellishedPhrasePitchesId== embellishedPhrasePitchesInDb.Id)
                         .FirstOrDefaultAsync();
-                    if (embellishedPhraseInDb != null)
+                    if (embellishedPhraseInDb == null)
                     {
                         var embellishedPhrase = new EmbellishedPhrase(embellishedPhraseMetInDb.Id, embellishedPhrasePitchesInDb.Id);
                         _dbContext.EmbelishedPhrases.Add(embellishedPhrase);
@@ -259,7 +259,7 @@ namespace SinphinitySysStore.Data
             if (phraseMetInDb == null)
             {
                 var phraseMetrics = new PhraseMetricsEntity(phraseMetricsAsString);
-                phraseMetrics.BasicMetricId = basMetInDb.Id;
+                phraseMetrics.BasicMetricsId = basMetInDb.Id;
                 _dbContext.PhrasesMetrics.Add(phraseMetrics);
                 await _dbContext.SaveChangesAsync();
                 phraseMetInDb = phraseMetrics;

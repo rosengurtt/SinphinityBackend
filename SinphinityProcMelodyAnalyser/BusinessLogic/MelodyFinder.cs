@@ -21,7 +21,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             var retObjPhrasesPitches = new Dictionary<string, List<SongLocation>>();
             var retObjEmbellishedPhrasesMetrics = new Dictionary<string, List<SongLocation>>();
             var retObjEmbellishedPhrasesPitches = new Dictionary<string, List<SongLocation>>();
-            var notes = song.SongSimplifications[songSimplification].Notes;
+            var notes = song.SongSimplifications.Where(x=>x.Version==songSimplification).FirstOrDefault()?.Notes;
 
             var voices = notes.Select(n => n.Voice).Distinct().OrderBy(v => v).ToList();
             foreach (var voice in voices)

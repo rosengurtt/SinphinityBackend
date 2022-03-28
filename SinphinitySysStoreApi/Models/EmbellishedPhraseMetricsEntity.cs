@@ -6,12 +6,22 @@ namespace SinphinitySysStore.Models
     {
         public EmbellishedPhraseMetricsEntity() { }
 
-
-
         public EmbellishedPhraseMetricsEntity(PhraseMetricsEntity p, string asString)
         {
+            var embellishedPhraseMetrics = new EmbellishedPhraseMetrics() { AsString = asString, PhraseMetricsWithoutOrnamentsId = p.Id };
             AsString = asString;
-            PhraseMetricsWithoutOrnamentsId = p.Id;
+            DurationInTicks = embellishedPhraseMetrics.DurationInTicks;
+            NumberOfNotes = embellishedPhraseMetrics.NumberOfNotes;
+            PhraseMetricsWithoutOrnamentsId = embellishedPhraseMetrics.PhraseMetricsWithoutOrnamentsId;
+        }
+
+        public EmbellishedPhraseMetricsEntity(EmbellishedPhraseMetrics ep)
+        {
+            Id = ep.Id;
+            AsString = ep.AsString;
+            DurationInTicks = ep.DurationInTicks;
+            NumberOfNotes = ep.NumberOfNotes;
+            PhraseMetricsWithoutOrnamentsId = ep.PhraseMetricsWithoutOrnamentsId;
         }
 
         /// <summary>

@@ -49,6 +49,9 @@ namespace Sinphinity.Models
                 return Items.Count;
             }
         }
+
+        public List<PhraseMetrics> PhraseMetrics { get; set; }
+
         public BasicMetrics() { }
 
         public BasicMetrics(string asString)

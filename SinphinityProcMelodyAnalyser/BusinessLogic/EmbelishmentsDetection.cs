@@ -36,6 +36,10 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 retObj = RemoveShortEmbelishments(retObj, shortEmbellishments);
             }
 
+            if (retObj.Count == 0)
+            {
+
+            }
             return (areThereEmbellishments, retObj);
 
         }
@@ -78,7 +82,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 {
                     if (IsAnEmbelishment(previousNote, notes.GetRange(i, j)))
                     {
-                        retObj.Add(notes.GetRange(i, j));
+                        retObj.Add(notes.GetRange(i, j - 1));
                     }
                 }
             }
