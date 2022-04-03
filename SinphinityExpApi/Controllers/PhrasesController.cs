@@ -55,7 +55,7 @@ namespace SinphinityExpApi.Controllers
             var pageSize = 5;
             var page = 0;
             var alca = 1;
-            Log.Information($"Starting pattern extraction");
+            Log.Information($"Starting phrase extraction");
             while (keepLooping)
             {
                 PaginatedList<Song> songsBatch = await _sysStoreClient.GetSongsAsync(page, pageSize, contains);

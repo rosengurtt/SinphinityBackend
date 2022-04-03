@@ -12,17 +12,17 @@ namespace Sinphinity.Models
     /// </summary>
     public class EmbellishedPhraseMetrics
     {
-        public EmbellishedPhraseMetrics() { }
-        public EmbellishedPhraseMetrics(PhraseMetrics p, string asString)
+        public EmbellishedPhraseMetrics(string withoutEmbelishmentsAsString, string withEmbelishmentsAsString)
         {
-            PhraseMetricsWithoutOrnamentsId = p.Id;
-            AsString = asString;
+            AsStringWithoutOrnaments = withoutEmbelishmentsAsString;
+            AsString = withEmbelishmentsAsString;
         }
         /// <summary>
         /// The primary key of the record in the db
         /// </summary>
         public long Id { get; set; }
         public string AsString { get; set; }
+        public string AsStringWithoutOrnaments { get; set; }
         public long DurationInTicks
         {
             get
@@ -38,10 +38,6 @@ namespace Sinphinity.Models
             }
         }
 
-        /// <summary>
-        /// Link to the version of the phrase with the ornaments removed
-        /// </summary>
-        public long PhraseMetricsWithoutOrnamentsId { get; set; }
 
         public List<int> Items
         {

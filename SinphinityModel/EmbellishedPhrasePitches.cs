@@ -7,15 +7,79 @@
     /// - the simplified version of the phrase with the embellisments removed (that we store in a PhrasePitches object, that we link from here)
     /// 
     /// </summary>
-    public class EmbellishedPhrasePitches: PhrasePitches
+    public class EmbellishedPhrasePitches
     {
-    /// <summary>
-    /// Link to the version of the phrase with the ornaments removed
-    /// </summary>
-    public long PhrasePitchesWithoutOrnamentsId { get; set; }
-    /// <summary>
-    /// The AsString of the version without ornaments
-    /// </summary>
-    public string AsStringWithoutOrnaments { get; set; }
+        public EmbellishedPhrasePitches(string withoutEmbelishmentsAsString, string withEmbelishmentsAsString)
+        {
+            AsStringWithoutOrnaments = withoutEmbelishmentsAsString;
+            AsString = withEmbelishmentsAsString;
+        }
+        /// <summary>
+        /// The primary key of the record in the db
+        /// </summary>
+        public long Id { get; set; }
+        /// <summary>
+        /// A comma separated list of the relative pitches
+        /// </summary>
+        public string AsString { get; set; }
+        public string AsStringWithoutOrnaments { get; set; }
+
+        /// <summary>
+        /// The difference between the highest absolute pitch and the lowest absolute pitch
+        /// </summary>
+        public int Range
+        {
+            get
+            {
+                int MaxAccum = 0;
+                int MinAccum = 0;
+                int currentPitch = 0;
+                foreach (var item in Items)
+                {
+                    currentPitch += item;
+                    if (currentPitch > MaxAccum)
+                        MaxAccum = currentPitch;
+                    if (currentPitch < MinAccum)
+                        MinAccum = currentPitch;
+                }
+                return MaxAccum - MinAccum;
+            }
+        }
+        /// <summary>
+        /// If true notes never go up or never go down
+        /// </summary>
+        public bool IsMonotone
+        {
+            get
+            {
+                return Items.All(x => x >= 0) || Items.All((x => x <= 0));
+            }
+        }
+        /// <summary>
+        /// The difference between the pitch of the last and the first note
+        /// </summary>
+        public int Step
+        {
+            get
+            {
+                return Items.Sum();
+            }
+        }
+        public int NumberOfNotes
+        {
+            get
+            {
+                return Items.Count + 1;
+            }
+        }
+
+        public List<int> Items
+        {
+            get
+            {
+                return AsString.Split(',').Select(x => Convert.ToInt32(x)).ToList();
+            }
+        }
+
     }
 }

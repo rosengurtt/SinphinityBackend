@@ -5,20 +5,13 @@ namespace Sinphinity.Models
     public class Phrase
     {
         public long Id { get; set; }
-        public long PhraseMetricsId { get; set; }
-        [NotMapped]
-        public PhraseMetrics? PhraseMetrics { get; set; }
-        public long PhrasePitchesId { get; set; }
-        [NotMapped]
-        public PhrasePitches? PhrasePitches { get; set; }
+     
+        public PhraseMetrics PhraseMetrics { get; set; }
+  
+        public PhrasePitches PhrasePitches { get; set; }
 
         public Phrase() { }
-        public Phrase(long phraseMetricsId, long phrasePitchesId)
-        {
-            PhraseMetricsId = phraseMetricsId;
-            PhrasePitchesId = phrasePitchesId;
 
-        }
         public Phrase(string asString) {
             var parts = asString.Split('/');
             PhraseMetrics = new PhraseMetrics(parts[0]);

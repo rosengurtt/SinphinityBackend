@@ -6,7 +6,7 @@ namespace SinphinitySysStore.Models
     {
         public PhraseOccurrence() { }
 
-        public PhraseOccurrence(SongLocation o, long phraseId, PhraseTypeEnum phraseType)
+        public PhraseOccurrence(SongLocation o, long phraseId)
         {
             SongId = o.SongId;
             PhraseId = phraseId;
@@ -14,7 +14,6 @@ namespace SinphinitySysStore.Models
             BarNumber = o.BarNumber;
             Beat = o.Beat;
             Tick = o.Tick;
-            PhraseType = phraseType;
         }
 
         public long Id { get; set; }
@@ -25,6 +24,5 @@ namespace SinphinitySysStore.Models
         public int Beat { get; set; }
         public long Tick { get; set; }
 
-        public PhraseTypeEnum PhraseType { get; set; }
     }
 }

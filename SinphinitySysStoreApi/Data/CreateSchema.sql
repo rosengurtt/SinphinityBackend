@@ -10,48 +10,18 @@ IF (OBJECT_ID('dbo.[FK_MidiStats_Song_Id]', 'F') IS NOT NULL)
 IF (OBJECT_ID('dbo.[FK_SongData_Songs_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.SongData DROP CONSTRAINT FK_SongData_Songs_Id
 	
-/* PhrasesOccurrences */
-IF (OBJECT_ID('dbo.[FK_PhrasesOccurrences_Phrase_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.PhrasesOccurrences DROP CONSTRAINT FK_PhrasesOccurrences_Phrase_Id	
-	
-IF (OBJECT_ID('dbo.[FK_PhrasesOccurrences_Song_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.PhrasesOccurrences DROP CONSTRAINT FK_PhrasesOccurrences_Song_Id	
-	
-/* PhrasesSongs */		
-IF (OBJECT_ID('dbo.[FK_PhrasesSongs_PhrasesMetrics_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.PhrasesSongs DROP CONSTRAINT FK_PhrasesSongs_PhrasesMetrics_Id
-	
-IF (OBJECT_ID('dbo.[FK_PhrasesSongs_Song_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.PhrasesSongs DROP CONSTRAINT FK_PhrasesSongs_Song_Id
-	
-/* Phrases */
-IF (OBJECT_ID('dbo.[FK_PhrasesMetrics_BasicMetrics]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.PhrasesMetrics DROP CONSTRAINT FK_PhrasesMetrics_BasicMetrics
-
-IF (OBJECT_ID('dbo.[FK_Phrases_PhraseMetrics_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.Phrases DROP CONSTRAINT FK_Phrases_PhraseMetrics_Id
-	
-IF (OBJECT_ID('dbo.[FK_Phrases_PhrasePitches_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.Phrases DROP CONSTRAINT FK_Phrases_PhrasePitches_Id
-	
 /* SongsSimplifications */
 IF (OBJECT_ID('dbo.[FK_SongsSimplifications_SongData_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.SongsSimplifications DROP CONSTRAINT FK_SongsSimplifications_SongData_Id
 	
-/* EmbellishedPhrases */
-IF (OBJECT_ID('dbo.[FK_EmbellishedPhrases_EmbellishedPhraseMetrics_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.EmbellishedPhrases DROP CONSTRAINT FK_EmbellishedPhrases_EmbellishedPhraseMetrics_Id
+/* PhrasesOccurrences */
+IF (OBJECT_ID('dbo.[FK_PhrasesOccurrences_Songs_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhrasesOccurrences DROP CONSTRAINT FK_PhrasesOccurrences_Songs_Id
 	
-IF (OBJECT_ID('dbo.[FK_EmbellishedPhrases_EmbellishedPhrasePitches_Id]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.EmbellishedPhrases DROP CONSTRAINT FK_EmbellishedPhrases_EmbellishedPhrasePitches_Id
+IF (OBJECT_ID('dbo.[FK_PhrasesOccurrences_Phrases_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhrasesOccurrences DROP CONSTRAINT FK_PhrasesOccurrences_Phrases_Id
+	
 
-/* EmbellishedPhrasesMetrics */
-IF (OBJECT_ID('dbo.[FK_EmbellishedPhrasesMetrics_PhrasesMetrics]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.EmbellishedPhrasesMetrics DROP CONSTRAINT FK_EmbellishedPhrasesMetrics_PhrasesMetrics
-
-/* EmbellishedPhrasesPitches */
-IF (OBJECT_ID('dbo.[FK_EmbellishedPhrasesPitches_PhrasesPitches]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.EmbellishedPhrasesPitches DROP CONSTRAINT FK_EmbellishedPhrasesPitches_PhrasesPitches
 	
 	
 
@@ -153,94 +123,29 @@ CREATE TABLE SongsSimplifications(
 	NumberOfVoices BIGINT NOT NULL,
     CONSTRAINT FK_SongsSimplifications_SongData_Id FOREIGN KEY (SongDataId) REFERENCES SongData(Id)
 )
-	
-
-IF OBJECT_ID('dbo.BasicMetrics', 'U') IS NOT NULL 
-	DROP TABLE dbo.BasicMetrics
-  
-CREATE TABLE BasicMetrics (
-	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	AsString VARCHAR(1000) NOT NULL,
-	NumberOfNotes INT NOT NULL
-)
-IF OBJECT_ID('dbo.PhrasesMetrics', 'U') IS NOT NULL 
-  DROP TABLE dbo.PhrasesMetrics
-  
-CREATE TABLE PhrasesMetrics (
-	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	AsString VARCHAR(1000) NOT NULL,
-	BasicMetricsId BIGINT NOT NULL,
-	DurationInTicks BIGINT NOT NULL,
-	NumberOfNotes INT NOT NULL,
-    CONSTRAINT FK_PhrasesMetrics_BasicMetrics FOREIGN KEY (BasicMetricsId) REFERENCES BasicMetrics(Id)
-)	
-
-IF OBJECT_ID('dbo.EmbellishedPhrasesMetrics', 'U') IS NOT NULL 
-  DROP TABLE dbo.EmbellishedPhrasesMetrics
-  
-CREATE TABLE EmbellishedPhrasesMetrics (
-	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	AsString VARCHAR(1000) NOT NULL,
-	DurationInTicks BIGINT NOT NULL,
-	NumberOfNotes INT NOT NULL,
-	PhraseMetricsWithoutOrnamentsId BIGINT NOT NULL,
-    CONSTRAINT FK_EmbellishedPhrasesMetrics_PhrasesMetrics FOREIGN KEY (PhraseMetricsWithoutOrnamentsId) REFERENCES PhrasesMetrics(Id)
-)
-CREATE UNIQUE INDEX IX_EmbellishedPhrasesMetrics_AsString ON EmbellishedPhrasesMetrics (AsString)
-
-
-CREATE UNIQUE INDEX IX_BasicMetrs_AsString ON BasicMetrics (AsString)
-
-IF OBJECT_ID('dbo.PhrasesPitches', 'U') IS NOT NULL 
-  DROP TABLE dbo.PhrasesPitches
-  
-CREATE TABLE PhrasesPitches (
-	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	AsString VARCHAR(1000) NOT NULL,
-	NumberOfNotes INT NOT NULL,
-	[Range] INT NOT NULL,
-	IsMonotone BIT NOT NULL,
-	Step INT NOT NULL
-)
-CREATE UNIQUE INDEX IX_PhrasesPitches_AsString ON PhrasesPitches (AsString)
-
-IF OBJECT_ID('dbo.EmbellishedPhrasesPitches', 'U') IS NOT NULL 
-  DROP TABLE dbo.EmbellishedPhrasesPitches
-  
-CREATE TABLE EmbellishedPhrasesPitches (
-	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	AsString VARCHAR(1000) NOT NULL,
-	NumberOfNotes INT NOT NULL,
-	[Range] INT NOT NULL,
-	IsMonotone BIT NOT NULL,
-	Step INT NOT NULL,
-	PhrasePitchesWithoutOrnamentsId BIGINT NOT NULL,
-    CONSTRAINT FK_EmbellishedPhrasesPitches_PhrasesPitches FOREIGN KEY (PhrasePitchesWithoutOrnamentsId) REFERENCES PhrasesPitches(Id)
-)
-CREATE UNIQUE INDEX IX_EmbellishedPhrasesPitches_AsString ON EmbellishedPhrasesPitches (AsString)
-
 
 IF OBJECT_ID('dbo.Phrases', 'U') IS NOT NULL 
   DROP TABLE dbo.Phrases
   
 CREATE TABLE Phrases (
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	PhraseMetricsId BIGINT NOT NULL,
-	PhrasePitchesId BIGINT NOT NULL,
-    CONSTRAINT FK_Phrases_PhraseMetrics_Id FOREIGN KEY (PhraseMetricsId) REFERENCES PhrasesMetrics(Id),
-    CONSTRAINT FK_Phrases_PhrasePitches_Id FOREIGN KEY (PhrasePitchesId) REFERENCES PhrasesPitches(Id)
-)
+	AsString VARCHAR(1000) NOT NULL,
+	AsStringBasic VARCHAR(1000)  NULL,
+	AsStringWithoutOrnaments VARCHAR(1000)  NULL,
+	DurationInTicks BIGINT  NULL,
+	NumberOfNotes INT NOT NULL,
+	[Range] INT  NULL,
+	IsMonotone BIT  NULL,
+	Step INT  NULL,
+	PhraseType INT NOT NULL	
+)	
 
-IF OBJECT_ID('dbo.EmbellishedPhrases', 'U') IS NOT NULL 
-  DROP TABLE dbo.EmbellishedPhrases
-  
-CREATE TABLE EmbellishedPhrases (
-	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	EmbellishedPhraseMetricsId BIGINT NOT NULL,
-	EmbellishedPhrasePitchesId BIGINT NOT NULL,
-    CONSTRAINT FK_EmbellishedPhrases_EmbellishedPhraseMetrics_Id FOREIGN KEY (EmbellishedPhraseMetricsId) REFERENCES EmbellishedPhrasesMetrics(Id),
-    CONSTRAINT FK_EmbellishedPhrases_EmbellishedPhrasePitches_Id FOREIGN KEY (EmbellishedPhrasePitchesId) REFERENCES EmbellishedPhrasesPitches(Id)
-)
+CREATE INDEX IX_Phrases_PhraseType ON Phrases (PhraseType)
+CREATE INDEX IX_Phrases_AsString ON Phrases (AsString)
+CREATE INDEX IX_Phrases_AsStringBasic ON Phrases (AsStringBasic)
+CREATE INDEX IX_Phrases_AsStringWithoutOrnaments ON Phrases (AsStringWithoutOrnaments)
+
+	
 
 
 IF OBJECT_ID('dbo.PhrasesOccurrences', 'U') IS NOT NULL 
@@ -254,32 +159,13 @@ CREATE TABLE PhrasesOccurrences (
 	BarNumber INT NOT NULL,	
 	Beat INT NOT NULL,
 	Tick BIGINT NOT NULL,
-	PhraseType INT NOT NULL,
-    CONSTRAINT FK_PhrasesOccurrences_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
+    CONSTRAINT FK_PhrasesOccurrences_Songs_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id),
+    CONSTRAINT FK_PhrasesOccurrences_Phrases_Id  FOREIGN KEY (PhraseId) REFERENCES Phrases(Id)
 )
 
 CREATE INDEX IX_PhrasesOccurrences_Tick ON PhrasesOccurrences (Tick)
 CREATE INDEX IX_PhrasesOccurrences_Voice ON PhrasesOccurrences (Voice)
-CREATE INDEX IX_PhrasesOccurrences_SongId ON PhrasesOccurrences (SongId)
-CREATE INDEX IX_PhrasesOccurrences_PhraseId ON PhrasesOccurrences (PhraseId)
-CREATE INDEX IX_PhrasesOccurrences_PhraseType ON PhrasesOccurrences (PhraseType)
 
-
-
-
-IF OBJECT_ID('dbo.PhrasesSongs', 'U') IS NOT NULL 
-  DROP TABLE dbo.PhrasesSongs
-  
-CREATE TABLE PhrasesSongs(
-	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	SongId BIGINT NOT NULL,
-	PhraseId BIGINT NOT NULL,
-	Repetitions INT NOT NULL,
-	PhraseType INT NOT NULL,
-    CONSTRAINT FK_PhrasesSongs_Song_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id)
-)
-
-CREATE UNIQUE INDEX IX_PhrasesSongs on PhrasesSongs(SongId, PhraseId, PhraseType);
 
 
 SET IDENTITY_INSERT Styles ON
