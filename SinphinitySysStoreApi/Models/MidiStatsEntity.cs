@@ -30,6 +30,10 @@ namespace SinphinitySysStore.Models
             TotalPercussionInstruments = ms.TotalPercussionInstruments;
             DurationInTicks = ms.DurationInTicks;
             DurationInSeconds = ms.DurationInSeconds;
+            HighestPitch = ms.HighestPitch;
+            LowestPitch = ms.LowestPitch;
+            TotalDifferentPitches = ms.TotalDifferentPitches;
+            TotalUniquePitches = ms.TotalUniquePitches;
         }
 
         public long Id { get; set; }
@@ -55,6 +59,10 @@ namespace SinphinitySysStore.Models
         public int TotalPercussionInstruments { get; set; }
         public long DurationInTicks { get; set; }
         public int DurationInSeconds { get; set; }
+        public int HighestPitch { get; set; }
+        public int LowestPitch { get; set; }
+        public int TotalDifferentPitches { get; set; }
+        public int TotalUniquePitches { get; set; }
 
         public MidiStats AsMidiStats()
         {
@@ -80,7 +88,11 @@ namespace SinphinitySysStore.Models
                 TotalInstruments = this.TotalInstruments,
                 TotalPercussionInstruments = this.TotalPercussionInstruments,
                 DurationInTicks = this.DurationInTicks,
-                DurationInSeconds = this.DurationInSeconds
+                DurationInSeconds = this.DurationInSeconds,
+                HighestPitch = this.HighestPitch,
+                LowestPitch = this.LowestPitch,
+                TotalDifferentPitches = this.TotalDifferentPitches,
+                TotalUniquePitches = this.TotalChannels
             };
         }
     }

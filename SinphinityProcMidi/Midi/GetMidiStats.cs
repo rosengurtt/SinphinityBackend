@@ -17,17 +17,15 @@ namespace SinphinityProcMidi.Midi
 
             retObj.TotalTracks = midiFile.Chunks.Count;
             retObj.DurationInSeconds = GetSongDurationInSeconds(base64EncodedMidi);
-            //retObj.TimeSignature = GetMainTimeSignatureOfSong(base64EncodedMidi);
-            //retObj.InstrumentsAsString = MidiUtilities.GetInstrumentsAsString(base64EncodedMidi);
             var channels = new List<FourBitNumber>();
-            var pitches = new List<SevenBitNumber>();
-            var uniquePitches = new List<int>();
-            var instruments = new List<int>();
+            var pitches = new HashSet<SevenBitNumber>();
+            var uniquePitches = new HashSet<int>();
+            var instruments = new HashSet<int>();
             var percussionInstruments = new List<int>();
             var tempoChanges = new List<int>();
             long songDurationInTicks = 0;
-            var highestPitch = 0;
-            var lowestPitch = 127;
+            byte highestPitch = 0;
+            byte lowestPitch = 127;
 
             foreach (TrackChunk chunk in midiFile.Chunks)
             {
@@ -56,10 +54,8 @@ namespace SinphinityProcMidi.Midi
                             if (notEv.DeltaTime < 5)
                                 chunkNoteEventsWithNullDeltas++;
                             chunkNoteEvents++;
-                            if (!pitches.Contains(notEv.NoteNumber))
-                                pitches.Add(notEv.NoteNumber);
-                            if (!uniquePitches.Contains(notEv.NoteNumber.valor % 12))
-                                uniquePitches.Add(notEv.NoteNumber.valor % 12);
+                            pitches.Add(notEv.NoteNumber);
+                            uniquePitches.Add(notEv.NoteNumber.valor % 12);
                             if (notEv.NoteNumber.valor > highestPitch && notEv.Channel.valor != 9)
                                 highestPitch = notEv.NoteNumber.valor;
                             if (notEv.NoteNumber.valor < lowestPitch && notEv.Channel.valor != 9)
@@ -77,8 +73,7 @@ namespace SinphinityProcMidi.Midi
                         {
                             retObj.TotalProgramChangeEvents++;
                             var progChEv = (ProgramChangeEvent)chanEv;
-                            if (!instruments.Contains(progChEv.ProgramNumber))
-                                instruments.Add(progChEv.ProgramNumber);
+                            instruments.Add(progChEv.ProgramNumber);
                             if (hasProgramChangeEvent)
                                 retObj.HasMoreThanOneInstrumentPerTrack = true;
                             hasProgramChangeEvent = true;
@@ -130,17 +125,11 @@ namespace SinphinityProcMidi.Midi
             retObj.TotalChannels = channels.Count;
             retObj.TotalInstruments = instruments.Count;
             retObj.TotalPercussionInstruments = percussionInstruments.Count;
-       //     retObj.TotalDifferentPitches = pitches.Count;
-        //    retObj.TotalUniquePitches = uniquePitches.Count;
-        //    retObj.HighestPitch = highestPitch;
-       //     retObj.LowestPitch = lowestPitch;
+            retObj.TotalDifferentPitches = pitches.Count;
+            retObj.TotalUniquePitches = uniquePitches.Count;
+            retObj.HighestPitch = highestPitch;
+            retObj.LowestPitch = lowestPitch;
             retObj.TotalTempoChanges = tempoChanges.Count;
-            if (tempoChanges.Count > 0)
-            {
-       //         retObj.TempoInMicrosecondsPerBeat = (int)Math.Floor(tempoChanges.Average());
-        //        double microsoftIsShit = 120 * ((double)500000 / (double)retObj.TempoInMicrosecondsPerBeat);
-        //        retObj.TempoInBeatsPerMinute = (int)Math.Floor(microsoftIsShit);
-            }
 
             return retObj;
 

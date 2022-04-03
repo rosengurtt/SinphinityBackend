@@ -21,13 +21,11 @@ namespace SinphinitySysStore.Controllers
     {
         private SysStoreClient _sysStoreClient;
         private ProcMidiClient _procMidiClient;
-        private ProcPatternClient _procPatternClient;
 
-        public SongsController(SysStoreClient sysStoreClient, ProcMidiClient procMidiClient, ProcPatternClient procPatternClient)
+        public SongsController(SysStoreClient sysStoreClient, ProcMidiClient procMidiClient)
         {
             _sysStoreClient = sysStoreClient;
             _procMidiClient = procMidiClient;
-            _procPatternClient = procPatternClient;
         }
 
         [HttpGet]

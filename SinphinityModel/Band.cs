@@ -5,6 +5,6 @@
         public long  Id { get; set; }
         public string Name { get; set; }
 
-        public Style Style { get; set; }
+        public Style? Style { get; set; }
     }
 }

@@ -25,6 +25,9 @@ IF (OBJECT_ID('dbo.[FK_PhrasesSongs_Song_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhrasesSongs DROP CONSTRAINT FK_PhrasesSongs_Song_Id
 	
 /* Phrases */
+IF (OBJECT_ID('dbo.[FK_PhrasesMetrics_BasicMetrics]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhrasesMetrics DROP CONSTRAINT FK_PhrasesMetrics_BasicMetrics
+
 IF (OBJECT_ID('dbo.[FK_Phrases_PhraseMetrics_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.Phrases DROP CONSTRAINT FK_Phrases_PhraseMetrics_Id
 	
@@ -82,6 +85,8 @@ CREATE TABLE MidiStats(
 	HasMoreThanOneInstrumentPerTrack bit NULL,
 	HighestPitch INT NULL,
 	LowestPitch INT NULL,
+	TotalDifferentPitches INT NULL,
+	TotalUniquePitches INT NULL,	
 	TempoInBeatsPerMinute INT NULL,
 	TotalTracks INT NULL,
     TotalTracksWithoutNotes INT NULL,
@@ -150,14 +155,24 @@ CREATE TABLE SongsSimplifications(
 )
 	
 
+IF OBJECT_ID('dbo.BasicMetrics', 'U') IS NOT NULL 
+	DROP TABLE dbo.BasicMetrics
+  
+CREATE TABLE BasicMetrics (
+	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
+	AsString VARCHAR(1000) NOT NULL,
+	NumberOfNotes INT NOT NULL
+)
 IF OBJECT_ID('dbo.PhrasesMetrics', 'U') IS NOT NULL 
   DROP TABLE dbo.PhrasesMetrics
   
 CREATE TABLE PhrasesMetrics (
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
 	AsString VARCHAR(1000) NOT NULL,
+	BasicMetricsId BIGINT NOT NULL,
 	DurationInTicks BIGINT NOT NULL,
-	NumberOfNotes INT NOT NULL
+	NumberOfNotes INT NOT NULL,
+    CONSTRAINT FK_PhrasesMetrics_BasicMetrics FOREIGN KEY (BasicMetricsId) REFERENCES BasicMetrics(Id)
 )	
 
 IF OBJECT_ID('dbo.EmbellishedPhrasesMetrics', 'U') IS NOT NULL 
@@ -168,19 +183,11 @@ CREATE TABLE EmbellishedPhrasesMetrics (
 	AsString VARCHAR(1000) NOT NULL,
 	DurationInTicks BIGINT NOT NULL,
 	NumberOfNotes INT NOT NULL,
-	PhrasePitchesWithoutOrnamentsId BIGINT NOT NULL,
-    CONSTRAINT FK_EmbellishedPhrasesMetrics_PhrasesMetrics FOREIGN KEY (PhrasePitchesWithoutOrnamentsId) REFERENCES PhrasesMetrics(Id)
+	PhraseMetricsWithoutOrnamentsId BIGINT NOT NULL,
+    CONSTRAINT FK_EmbellishedPhrasesMetrics_PhrasesMetrics FOREIGN KEY (PhraseMetricsWithoutOrnamentsId) REFERENCES PhrasesMetrics(Id)
 )
 CREATE UNIQUE INDEX IX_EmbellishedPhrasesMetrics_AsString ON EmbellishedPhrasesMetrics (AsString)
 
-IF OBJECT_ID('dbo.BasicMetrics', 'U') IS NOT NULL 
-	DROP TABLE dbo.BasicMetrics
-  
-CREATE TABLE BasicMetrics (
-	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	AsString VARCHAR(1000) NOT NULL,
-	NumberOfNotes INT NOT NULL
-)
 
 CREATE UNIQUE INDEX IX_BasicMetrs_AsString ON BasicMetrics (AsString)
 

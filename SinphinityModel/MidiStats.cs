@@ -23,5 +23,9 @@
         public int TotalPercussionInstruments { get; set; }
         public long DurationInTicks { get; set; }
         public int DurationInSeconds { get; set; }
+        public int HighestPitch { get; set; }
+        public int LowestPitch { get; set; }
+        public int TotalDifferentPitches { get; set; }
+        public int TotalUniquePitches { get; set; }
     }
 }

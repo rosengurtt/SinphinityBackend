@@ -15,8 +15,8 @@ namespace SinphinitySysStore.Models
             ArePhrasesExtracted = song.ArePhrasesExtracted;
             IsMidiCorrect = song.IsMidiCorrect;
             CantBeProcessed = song.CantBeProcessed;
-            Band = song.Band;
-            Style = song.Style;
+            BandId = song.Band.Id;
+            StyleId = song.Style.Id;
             MidiStats = new MidiStatsEntity(song.MidiStats, song);
             AverageTempoInBeatsPerMinute = song.AverageTempoInBeatsPerMinute;
         }
@@ -28,8 +28,9 @@ namespace SinphinitySysStore.Models
         public bool ArePhrasesExtracted { get; set; }
         public bool IsMidiCorrect { get; set; }
 
-        //public bool CantBeProcessed { get; set; }
+        public long BandId { get; set; }
         public Band Band { get; set; }
+        public long StyleId { get; set; }
         public Style Style { get; set; }
         public MidiStatsEntity MidiStats { get; set; }
 
@@ -38,7 +39,7 @@ namespace SinphinitySysStore.Models
 
         public Song AsSong(SongData? sd)
         {
-            var songi= new Song
+            var songi = new Song
             {
                 Id = this.Id,
                 Name = this.Name,
@@ -50,17 +51,18 @@ namespace SinphinitySysStore.Models
                 Band = this.Band,
                 Style = this.Style,
                 MidiStats = this.MidiStats?.AsMidiStats(),
-                SongSimplifications= new List<SongSimplification>()
+                SongSimplifications = new List<SongSimplification>()
 
             };
-            if (sd != null){
+            if (sd != null)
+            {
                 songi.Bars = string.IsNullOrEmpty(sd.Bars) ? new List<Bar>() : JsonConvert.DeserializeObject<List<Bar>>(sd.Bars);
                 songi.TempoChanges = string.IsNullOrEmpty(sd.TempoChanges) ?
                     new List<TempoChange>() :
                     JsonConvert.DeserializeObject<List<TempoChange>>(sd.TempoChanges);
                 songi.MidiBase64Encoded = sd.MidiBase64Encoded;
                 songi.SongSimplifications = sd.SongSimplifications?.Select(x => x.AsSongSimplification()).ToList();
-     
+
             }
             return songi;
         }
