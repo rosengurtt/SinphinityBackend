@@ -1,4 +1,4 @@
-﻿namespace SinphinitySysStore.Models
+﻿namespace Sinphinity.Models
 {
     public enum PhraseTypeEnum
     {

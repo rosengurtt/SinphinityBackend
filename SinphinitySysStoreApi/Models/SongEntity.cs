@@ -29,12 +29,14 @@ namespace SinphinitySysStore.Models
         public bool IsMidiCorrect { get; set; }
 
         public long BandId { get; set; }
-        public Band Band { get; set; }
+        public BandEntity Band { get; set; }
         public long StyleId { get; set; }
-        public Style Style { get; set; }
+        public StyleEntity Style { get; set; }
         public MidiStatsEntity MidiStats { get; set; }
 
         public long AverageTempoInBeatsPerMinute { get; set; }
+
+        public ICollection<PhraseEntity> Phrases { get; set; }
 
 
         public Song AsSong(SongData? sd)
@@ -48,8 +50,8 @@ namespace SinphinitySysStore.Models
                 IsMidiCorrect = this.IsMidiCorrect,
                 CantBeProcessed = this.CantBeProcessed,
                 AverageTempoInBeatsPerMinute = this.AverageTempoInBeatsPerMinute,
-                Band = this.Band,
-                Style = this.Style,
+                Band = this.Band.AsBand(),
+                Style = this.Style.AsStyle(),
                 MidiStats = this.MidiStats?.AsMidiStats(),
                 SongSimplifications = new List<SongSimplification>()
 

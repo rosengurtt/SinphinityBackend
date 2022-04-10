@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sinphinity.Models;
+using SinphinitySysStore.Models;
 
 namespace SinphinitySysStore.Data
 {
@@ -23,22 +24,22 @@ namespace SinphinitySysStore.Data
                         (styleId == null || x.Style.Id == styleId) && (contains == null || x.Name.Contains(contains))
                         );
             var total = await source.CountAsync();
-            var pageBands = await source.OrderBy(x => x.Name).Skip((pageNo) * pageSize).Take(pageSize).ToListAsync();
+            var pageBands = await source.OrderBy(x => x.Name).Skip((pageNo) * pageSize).Take(pageSize).Select(b=>b.AsBand()).ToListAsync();
             return (total, pageBands);
         }
 
 
         public async Task<Band?> GetBandByIdAsync(long bandId)
         {
-            return await _dbContext.Bands.FindAsync(bandId);
+            return (await _dbContext.Bands.FindAsync(bandId)).AsBand();
         }
         public async Task<Band?> GetBandByNameAsync(string name)
         {
-            return await _dbContext.Bands.Where(s => s.Name.ToLower() == name.ToLower()).FirstOrDefaultAsync();
+            return await _dbContext.Bands.Where(s => s.Name.ToLower() == name.ToLower()).Select(b=>b.AsBand()).FirstOrDefaultAsync();
         }
         public async Task<Band> AddBandAsync(Band band)
         {
-            _dbContext.Bands.Add(band);
+            _dbContext.Bands.Add(new BandEntity(band));
             await _dbContext.SaveChangesAsync();
             return band;
         }

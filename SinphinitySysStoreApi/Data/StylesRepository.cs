@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sinphinity.Models;
+using SinphinitySysStore.Models;
 using System.Linq.Dynamic.Core;
 
 namespace SinphinitySysStore.Data
@@ -19,7 +20,7 @@ namespace SinphinitySysStore.Data
         {
             var source = _dbContext.Styles.AsQueryable().Where(x => contains == null || x.Name.Contains(contains));
             var total = await source.CountAsync();
-            var pagedStyles = await source.OrderBy(x => x.Name).Skip((pageNo) * pageSize).Take(pageSize).ToListAsync();
+            var pagedStyles = await source.OrderBy(x => x.Name).Skip((pageNo) * pageSize).Take(pageSize).Select(y=>y.AsStyle()).ToListAsync();
             return (total, pagedStyles);
         }
 
@@ -27,15 +28,15 @@ namespace SinphinitySysStore.Data
  
         public async Task<Style> GetStyleByIdAsync(long styleId)
         {
-            return await _dbContext.Styles.FindAsync(styleId);
+            return (await _dbContext.Styles.FindAsync(styleId)).AsStyle();
         }
         public async Task<Style> GetStyleByNameAsync(string name)
         {
-            return await _dbContext.Styles.Where(s => s.Name.ToLower() == name.ToLower()).FirstOrDefaultAsync();
+            return await _dbContext.Styles.Where(s => s.Name.ToLower() == name.ToLower()).Select(x=>x.AsStyle()).FirstOrDefaultAsync();
         }
         public async Task<Style> AddStyleAsync(Style style)
         {
-            _dbContext.Styles.Add(style);
+            _dbContext.Styles.Add(new StyleEntity(style));
             await _dbContext.SaveChangesAsync();
             return style;
         }

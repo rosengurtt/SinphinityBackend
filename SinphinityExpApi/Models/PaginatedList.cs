@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SinphinityExpApi.Models
 {
-    public class PaginatedList<T> where T:new()
+    public class PaginatedList<T> 
     {
         public long totalItems { get; set; }
         public long totalPages { get; set; }

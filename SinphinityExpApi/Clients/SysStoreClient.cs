@@ -116,41 +116,65 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
-        public async Task<HashSet<Pattern>> GetPatternsAsync(string contains = null)
+        public async Task<PaginatedList<string>> GetPhrasesAsync(
+            long? styleId,
+            long? bandId,
+            long? songId,
+            PhraseTypeEnum type,
+            string? contains,
+            int? numberOfNotes,
+            long? durationInTicks,
+            int? range,
+            bool? isMonotone,
+            int? step,
+            int pageNo = 0,
+            int pageSize = 10)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
-            var keepLooping = true;
-            var page = 0;
-            var retObj = new HashSet<Pattern>();
-            while (keepLooping)
+            var url = $"{_appConfiguration.SysStoreUrl}/api/phrases" +
+                BuildGetPhraseQueryString(styleId, bandId, songId, type, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
+           
+            var response = await httpClient.GetAsync(url);
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                var url = $"{_appConfiguration.SysStoreUrl}/api/patterns/patterns?pageNo={page}&pageSize=10";
-                if (!string.IsNullOrEmpty(contains)) url += $"&contains={contains}";
-                var response = await httpClient.GetAsync(url);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
-                    var result = JsonConvert.SerializeObject(apiResponse.result);
-                    var pageData = JsonConvert.DeserializeObject<PaginatedList<Pattern>>(result);
-
-                    if (pageData.items?.Count > 0)
-                    {
-                        foreach (Pattern o in pageData.items)
-                            retObj.Add(o);
-                    }
-                    else
-                        keepLooping = false;
-                    page++;
-                }
-                else
-                {
-                    var errorMessage = $"Couldn't get patterns";
-                    Log.Error(errorMessage);
-                    throw new ApplicationException(errorMessage);
-                }
+                var responseContent = await response.Content.ReadAsStringAsync();
+                dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
+                var result = JsonConvert.SerializeObject(apiResponse.result);
+                return JsonConvert.DeserializeObject<PaginatedList<string>>(result);
 
             }
+            else
+            {
+                var errorMessage = $"Couldn't get phrases";
+                Log.Error(errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
+        }
+        private string BuildGetPhraseQueryString(
+            long? styleId,
+            long? bandId,
+            long? songId,
+            PhraseTypeEnum type,
+            string? contains,
+            int? numberOfNotes,
+            long? durationInTicks,
+            int? range,
+            bool? isMonotone,
+            int? step,
+            int pageNo,
+            int pageSize)
+        {
+            var retObj = $"?pageNo={pageNo}&pageSize={pageSize}";
+            if (styleId != null) retObj += $"&styleId={styleId}";
+            if (bandId != null) retObj += $"&bandId={bandId}";
+            if (songId != null) retObj += $"&songId={songId}";
+            retObj += $"&type={type}";
+            if (numberOfNotes != null) retObj += $"&numberOfNotes={numberOfNotes}";
+            if (contains != null) retObj += $"&contains={contains}";
+            if (durationInTicks != null) retObj += $"&durationInTicks={durationInTicks}";
+            if (range != null) retObj += $"&range={range}";
+            if (isMonotone != null) retObj += $"&isMonotone={isMonotone}";
+            if (step != null) retObj += $"&step={step}";
             return retObj;
         }
         public async Task<HashSet<Occurrence>> GetOccurrencesOfPatternAsync(long patternId)

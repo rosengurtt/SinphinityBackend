@@ -45,7 +45,11 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             var retObj = GetEdgesOfGroupsOfNotesWithIdenticalDuration(notes, bars, new HashSet<long>());
             retObj = GetEdgesOfSilencesAndLongNotes(notes, bars, retObj);
             retObj = BreakPhrasesThatAreTooLong(notes, bars, retObj);
-
+            if (retObj==null || retObj.Count == 0)
+            {
+                retObj.Add(notes.Min(x => x.StartSinceBeginningOfSongInTicks));
+                retObj.Add(notes.Max(x => x.EndSinceBeginningOfSongInTicks));
+            }
             return retObj;
         }
 

@@ -30,10 +30,32 @@ namespace SinphinitySysStore.Data
                         await _dbContext.SaveChangesAsync();
                         currentPhrase = phraseEntity;
                     }
+                    await SaveAssociationsOfPhrase(currentPhrase.Id, song);
                     await InsertOccurrences(phrasesLocations[pm], songId, currentPhrase.Id);
                 }
             }
             catch (Exception sePudrioPapi)
+            {
+
+            }
+        }
+
+        private async Task SaveAssociationsOfPhrase(long phraseId, SongEntity song)
+        {
+            var bandId = song.BandId;
+            var styleId = await _dbContext.Bands.Where(b => b.Id == song.BandId).Include(y => y.Style).Select(x => x.Style.Id).FirstOrDefaultAsync();
+            try
+            {
+                await _dbContext.Songs
+                                .FromSqlRaw(@$"IF ((SELECT count(*) FROM PhraseEntitySongEntity WHERE SongsId={song.Id} AND PhrasesId={phraseId})=0) 
+                                                    INSERT INTO PhraseEntitySongEntity(SongsId, PhrasesId) VALUES ({song.Id},{phraseId})
+                                                    IF ((SELECT count(*) FROM PhraseEntityBandEntity WHERE BandsId={bandId} AND PhrasesId={phraseId})=0) 
+                                                    INSERT INTO PhraseEntityBandEntity(BandsId, PhrasesId) VALUES ({bandId},{phraseId})
+                                                    IF ((SELECT count(*) FROM PhraseEntityStyleEntity WHERE StylesId={styleId} AND PhrasesId={phraseId})=0) 
+                                                    INSERT INTO PhraseEntityStyleEntity(StylesId, PhrasesId) VALUES ({styleId},{phraseId})
+                                                    SELECT TOP 1 * FROM Songs").ToListAsync();
+            }
+            catch (Exception fsfsad)
             {
 
             }
@@ -56,6 +78,7 @@ namespace SinphinitySysStore.Data
                         await _dbContext.SaveChangesAsync();
                         currentPhrase = phraseEntity;
                     }
+                    await SaveAssociationsOfPhrase(currentPhrase.Id, song);
                     await InsertOccurrences(phrasesLocations[pp], songId, currentPhrase.Id);
                 }
             }
@@ -93,6 +116,7 @@ namespace SinphinitySysStore.Data
                         await _dbContext.SaveChangesAsync();
                         currentEmbellishedPhraseMetrics = phraseEntity;
                     }
+                    await SaveAssociationsOfPhrase(currentEmbellishedPhraseMetrics.Id, song);
                     await InsertOccurrences(phrasesLocations[ep], songId, currentEmbellishedPhraseMetrics.Id);
                 }
             }
@@ -129,6 +153,7 @@ namespace SinphinitySysStore.Data
                         await _dbContext.SaveChangesAsync();
                         currentEmbellishedPhrasePitches = phraseEntity;
                     }
+                    await SaveAssociationsOfPhrase(currentEmbellishedPhrasePitches.Id, song);
                     await InsertOccurrences(phrasesLocations[ep], songId, currentEmbellishedPhrasePitches.Id);
                 }
             }
@@ -167,6 +192,7 @@ namespace SinphinitySysStore.Data
                         await _dbContext.SaveChangesAsync();
                         currentPhrase = phraseEntity;
                     }
+                    await SaveAssociationsOfPhrase(currentPhrase.Id, song);
                     await InsertOccurrences(phrasesLocations[ep], songId, currentPhrase.Id);
 
                 }
@@ -199,8 +225,10 @@ namespace SinphinitySysStore.Data
                     {
                         var phraseEntity = new PhraseEntity(new Phrase(p));
                         _dbContext.Phrases.Add(phraseEntity);
+                        await _dbContext.SaveChangesAsync();
                         currentPhrase = phraseEntity;
                     }
+                    await SaveAssociationsOfPhrase(currentPhrase.Id, song);
                     await InsertOccurrences(phrasesLocations[p], songId, currentPhrase.Id);
                 }
             }

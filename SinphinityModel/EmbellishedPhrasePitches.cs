@@ -9,10 +9,11 @@
     /// </summary>
     public class EmbellishedPhrasePitches
     {
-        public EmbellishedPhrasePitches(string withoutEmbelishmentsAsString, string withEmbelishmentsAsString)
+        public EmbellishedPhrasePitches(string withoutEmbelishmentsAsString, string withEmbelishmentsAsString, long? id=null)
         {
             AsStringWithoutOrnaments = withoutEmbelishmentsAsString;
             AsString = withEmbelishmentsAsString;
+            Id = id == null ? 0 : (long)id;
         }
         /// <summary>
         /// The primary key of the record in the db

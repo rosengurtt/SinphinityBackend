@@ -12,7 +12,7 @@ namespace NunitTests
 {
 	internal class MelodyAnalyserTests
 	{
-		public static string invention1Notes = @"
+		private static string invention1Notes = @"
 [
 	{
 		""Pitch"": 60,
@@ -5669,7 +5669,7 @@ namespace NunitTests
 ]
 
 ";
-		public static string invention1Bars = @"
+		private static string invention1Bars = @"
 [
 	{
 		""BarNumber"": 1,
@@ -6003,18 +6003,35 @@ namespace NunitTests
 	}
 ]
 ";
-		public Song song;
+		private Song song;
+		private List<Note> notes;
+		private List<Bar> bars;
+
 
 		[SetUp]
 		public void Init()
         {
+
+			notes = new List<Note>(new Note[]{
+										 new Note { StartSinceBeginningOfSongInTicks=0,EndSinceBeginningOfSongInTicks=96, Pitch=64, Voice=1},
+										 new Note { StartSinceBeginningOfSongInTicks=96,EndSinceBeginningOfSongInTicks=102, Pitch=54, Voice=1},
+										 new Note { StartSinceBeginningOfSongInTicks=102,EndSinceBeginningOfSongInTicks=144, Pitch=63, Voice=1},
+										 new Note { StartSinceBeginningOfSongInTicks=144,EndSinceBeginningOfSongInTicks=196, Pitch=63, Voice=1},
+										 new Note { StartSinceBeginningOfSongInTicks=196,EndSinceBeginningOfSongInTicks=240, Pitch=61, Voice=1},
+										 new Note { StartSinceBeginningOfSongInTicks=240,EndSinceBeginningOfSongInTicks=288, Pitch=61, Voice=1},
+										 new Note { StartSinceBeginningOfSongInTicks=288,EndSinceBeginningOfSongInTicks=291, Pitch=59, Voice=1},
+										 new Note { StartSinceBeginningOfSongInTicks=291,EndSinceBeginningOfSongInTicks=336, Pitch=54, Voice=1},
+										 new Note { StartSinceBeginningOfSongInTicks=336,EndSinceBeginningOfSongInTicks=384, Pitch=59, Voice=1}});
+			bars = new List<Bar>(new Bar[] { new Bar { BarNumber = 1, TicksFromBeginningOfSong = 0, TimeSignature = new TimeSignature { Denominator = 4, Numerator = 4 } } });
 			song = new Song
 			{
 				SongSimplifications = new List<SongSimplification>(),
-				Bars = JsonConvert.DeserializeObject<List<Bar>>(invention1Bars)
+				Bars = bars
 			};
-			song.SongSimplifications.Add(new SongSimplification { Notes = JsonConvert.DeserializeObject<List<Note>>(invention1Notes) });
-        }
+			song.SongSimplifications.Add(new SongSimplification { Notes = notes });
+		}
+
+
 
 		[Test]
 		public void PhraseFinderWorksAsExpected()

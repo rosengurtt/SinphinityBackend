@@ -80,5 +80,36 @@ namespace SinphinitySysStore.Models
         public bool IsMonotone { get; set; }
         public int Step { get; set; }
         public PhraseTypeEnum PhraseType { get; set; }
+
+        public ICollection<SongEntity> Songs { get; set; }
+        public ICollection<Band> Bands { get; set; }
+        public ICollection<Style> Styles { get; set; }
+
+
+  
+        public PhraseMetrics AsPhraseMetrics()
+        {
+            return new PhraseMetrics(AsString, Id);
+        }
+        public PhrasePitches AsPhrasePirches()
+        {
+            return new PhrasePitches(AsString, Id);
+        }
+        public Phrase AsPhrase()
+        {
+            return new Phrase(AsString, Id);
+        }
+        public EmbellishedPhraseMetrics AsEmbellishedPhraseMetrics()
+        {
+            return new EmbellishedPhraseMetrics(AsStringWithoutOrnaments, AsString, Id);
+        }
+        public EmbellishedPhrasePitches AsEmbellishePhrasePitches()
+        {
+            return new EmbellishedPhrasePitches(AsStringWithoutOrnaments, AsString, Id);
+        }
+        public EmbellishedPhrase AsEmbellishePhrase()
+        {
+            return new EmbellishedPhrase(AsStringWithoutOrnaments, AsString, Id);
+        }
     }
 }

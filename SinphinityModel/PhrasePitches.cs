@@ -82,9 +82,10 @@ namespace Sinphinity.Models
 
 
         public PhrasePitches() { }
-        public PhrasePitches(string asString)
+        public PhrasePitches(string asString, long? id = null)
         {
             AsString = asString;
+            Id = id == null ? 0 : (long)id;
         }
         public PhrasePitches(List<Note> notes)
         {

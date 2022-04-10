@@ -58,9 +58,10 @@ namespace Sinphinity.Models
 
 
         public PhraseMetrics() { }
-        public PhraseMetrics(string asString)
+        public PhraseMetrics(string asString, long? id = null)
         {
             AsString = asString;
+            Id = id == null ? 0 : (long)id;
         }
 
         /// <summary>

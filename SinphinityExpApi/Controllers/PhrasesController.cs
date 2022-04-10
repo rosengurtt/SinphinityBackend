@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 namespace SinphinityExpApi.Controllers
 {
 
-        [ApiController]
-        [Route("api/[controller]")]
-        public class PhrasesController : ControllerBase
-        {
-            private SysStoreClient _sysStoreClient;
-            private ProcMidiClient _procMidiClient;
-            private ProcMelodyAnalyserClient _procMelodyAnalyserClient;
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PhrasesController : ControllerBase
+    {
+        private SysStoreClient _sysStoreClient;
+        private ProcMidiClient _procMidiClient;
+        private ProcMelodyAnalyserClient _procMelodyAnalyserClient;
         private GraphApiClient _graphApiClient;
 
         public PhrasesController(SysStoreClient sysStoreClient, ProcMidiClient procMidiClient, ProcMelodyAnalyserClient procMelodyAnalyserClient, GraphApiClient graphApiClient)
@@ -95,40 +95,27 @@ namespace SinphinityExpApi.Controllers
             }
             return Ok(new ApiOKResponse(null));
         }
-     
 
-        private long StartDifferenceInTicks(Pattern pat1, Pattern pat2)
-        {
-            var shorter = pat1.AsString.Length < pat2.AsString.Length ? pat1.AsString : pat2.AsString;
-            var longer = pat1.AsString.Length < pat2.AsString.Length ? pat2.AsString : pat1.AsString;
-            var notesBeforeSubPattern = longer.Substring(0, longer.IndexOf(shorter));
-            if (notesBeforeSubPattern.Length == 0) return 0;
 
-            var matches = Regex.Matches(notesBeforeSubPattern, @"[(][0-9]+,[-]?[0-9]+[)]");
 
-            long retNumber = 0;
-            var relativeNotesAsStrings = matches.Select(x => x.Value).ToList();
-            for (var i = 0; i < relativeNotesAsStrings.Count; i++) {
-                var noteDuration = long.Parse(relativeNotesAsStrings[i].Substring(1, relativeNotesAsStrings[i].IndexOf(",")));
-                retNumber += noteDuration;
-            }
-            return retNumber;
-        }
+        //[HttpGet]
+        //public async Task<ActionResult> GetPhrasesAsync(long? styleId, long? bandId, long? songId, int? numberOfNotes,
+        //       int? range, int? step, int? durationInTicks, bool? isMonotone, string? contains, int pageNo = 0, int pageSize = 10)
+        //{
+        //    var patterns = await _graphApiClient.GetPatternsAsync(styleId, bandId, songId, numberOfNotes, range, step, durationInTicks,
+        //        isMonotone, contains, pageNo, pageSize);
 
-        // api/patterns?songInfoId=6187a4cb1b0680d2e5e5ae60
+        //    return Ok(new ApiOKResponse(patterns));
+        //}
+
         [HttpGet]
-        public async Task<ActionResult> GetPatternsAsync(long? styleId, long? bandId, long? songId, int? numberOfNotes,
-            int? range, int? step, int? durationInTicks, bool? isMonotone, string? contains, int pageNo = 0, int pageSize = 10)
+        public async Task<ActionResult> GetPhrasesAsync(long? styleId, long? bandId, long? songId, string type, string contains, int? numberOfNotes,
+            int? durationInTicks, int? range, bool? isMonotone, int? step, int pageNo = 0, int pageSize = 10)
         {
-            var patterns = await _graphApiClient.GetPatternsAsync(styleId, bandId, songId, numberOfNotes, range, step, durationInTicks, 
-                isMonotone, contains, pageNo, pageSize);
-
-            return Ok(new ApiOKResponse(patterns));
+            var phraseType = type == null ? PhraseTypeEnum.Metrics : (PhraseTypeEnum)Enum.Parse(typeof(PhraseTypeEnum), type, true);
+            return Ok(new ApiOKResponse(await _sysStoreClient.GetPhrasesAsync(styleId, bandId, songId, phraseType, contains, numberOfNotes, durationInTicks,
+              range, isMonotone, step, pageNo, pageSize)));
         }
-
-
-
-
     }
 }
 

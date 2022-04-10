@@ -12,10 +12,11 @@ namespace Sinphinity.Models
 
         public Phrase() { }
 
-        public Phrase(string asString) {
+        public Phrase(string asString, long? id=null) {
             var parts = asString.Split('/');
             PhraseMetrics = new PhraseMetrics(parts[0]);
             PhrasePitches = new PhrasePitches(parts[1]);
+            Id = Id;
         }
         public Phrase(PhraseMetrics phraseMetrics, PhrasePitches phrasePitches) {
             PhraseMetrics = phraseMetrics;
