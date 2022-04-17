@@ -27,7 +27,7 @@ namespace Sinphinity.Models
         {
             get
             {
-                return $"{PhraseMetrics}/{PhrasePitches}";
+                return $"{PhraseMetrics.AsString}/{PhrasePitches.AsString}";
             }
         }
 

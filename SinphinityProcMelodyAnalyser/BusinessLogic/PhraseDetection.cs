@@ -1,4 +1,5 @@
-﻿using Sinphinity.Models;
+﻿using Newtonsoft.Json;
+using Sinphinity.Models;
 using SinphinityProcMelodyAnalyser.Models;
 
 namespace SinphinityProcMelodyAnalyser.BusinessLogic
@@ -8,6 +9,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
       
         public static PhraseInfo? GetPhraseBetweenEdges(List<Note> notes, long start, long end, long songId, byte voice, List<Bar> bars)
         {
+            var borrame = JsonConvert.SerializeObject(bars);
             var phraseNotes = notes
                 .Where(x => x.StartSinceBeginningOfSongInTicks >= start && x.StartSinceBeginningOfSongInTicks < end)
                 .OrderBy(y => y.StartSinceBeginningOfSongInTicks)

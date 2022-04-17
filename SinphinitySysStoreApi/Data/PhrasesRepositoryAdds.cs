@@ -172,7 +172,7 @@ namespace SinphinitySysStore.Data
                 foreach (var ep in phrasesLocations.Keys)
                 {
                     // Extract the embellished version and the version without embelllishments from the string
-                    ((var embellishedPhraseMetricsAsString, var embellishedPhrasePitchesAsString),(var phraseMetricsAsString, var phrasePitchesAsString)) = DecomposeEmbellishedPhrase(ep);
+                    ((var embellishedPhraseMetricsAsString, var embellishedPhrasePitchesAsString), (var phraseMetricsAsString, var phrasePitchesAsString)) = DecomposeEmbellishedPhrase(ep);
 
                     var fraseMetInDb = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.EmbelishedMetrics && x.AsString == embellishedPhraseMetricsAsString)
                         .FirstOrDefaultAsync();
@@ -257,7 +257,7 @@ namespace SinphinitySysStore.Data
                 Log.Error(sePudrioPapi, "Exception raised when trying to set ArePhrasesExtracted flag to true");
             }
         }
-        
+
         public string GetEmbellishedPhrase(string p)
         {
             var parts = p.Split('|');
@@ -281,10 +281,10 @@ namespace SinphinitySysStore.Data
         /// </summary>
         /// <param name="phraseAsString"></param>
         /// <returns></returns>
-        private  (string, string) DecomposeEmbellishedPhrasePart(string phraseAsString)
+        private (string, string) DecomposeEmbellishedPhrasePart(string phraseAsString)
         {
             var parts = phraseAsString.Split('|');
-            return  (parts[0], parts[1]);
+            return (parts[0], parts[1]);
         }
 
 
@@ -296,7 +296,7 @@ namespace SinphinitySysStore.Data
             // Insert Occurrences
             foreach (var loc in locations)
             {
-                var occ = await _dbContext.PhrasesOccurrences.Where(x => x.SongId == songId && x.Voice == loc.Voice && x.Tick == loc.Tick )
+                var occ = await _dbContext.PhrasesOccurrences.Where(x => x.SongId == songId && x.PhraseId == phraseId && x.Voice == loc.Voice && x.Tick == loc.Tick)
                     .FirstOrDefaultAsync();
                 if (occ == null)
                 {
@@ -306,6 +306,5 @@ namespace SinphinitySysStore.Data
                 }
             }
         }
-  
     }
 }
