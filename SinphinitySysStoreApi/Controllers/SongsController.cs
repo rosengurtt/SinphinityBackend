@@ -54,7 +54,7 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<ActionResult<Song>> AddSong(Song song)
+        public async Task<ActionResult<Sinphinity.Models.Song>> AddSong(Sinphinity.Models.Song song)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpPut, DisableRequestSizeLimit]
-        public async Task<ActionResult> UpdateSong(Song song)
+        public async Task<ActionResult> UpdateSong(Sinphinity.Models.Song song)
         {
             Log.Information($"Me llego para updatear la song {song.Name}");
             await _songsRepository.UpdateSong(song);

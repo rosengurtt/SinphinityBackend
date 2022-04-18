@@ -1,12 +1,10 @@
-﻿using Sinphinity.Models;
-
-namespace SinphinitySysStore.Models
+﻿namespace SinphinitySysStore.Models
 {
     public class PhraseOccurrence
     {
         public PhraseOccurrence() { }
 
-        public PhraseOccurrence(SongLocation o, long phraseId)
+        public PhraseOccurrence(Sinphinity.Models.SongLocation o, long phraseId)
         {
             SongId = o.SongId;
             PhraseId = phraseId;

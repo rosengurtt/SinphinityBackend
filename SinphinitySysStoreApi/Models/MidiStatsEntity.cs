@@ -1,11 +1,9 @@
-﻿using Sinphinity.Models;
-
-namespace SinphinitySysStore.Models
+﻿namespace SinphinitySysStore.Models
 {
     public class MidiStatsEntity
     {
         public MidiStatsEntity() { }
-        public MidiStatsEntity(MidiStats ms, Song song)
+        public MidiStatsEntity(Sinphinity.Models.MidiStats ms, Sinphinity.Models.Song song)
         {
             if (song.MidiStats == null)
                 return;
@@ -64,9 +62,9 @@ namespace SinphinitySysStore.Models
         public int TotalDifferentPitches { get; set; }
         public int TotalUniquePitches { get; set; }
 
-        public MidiStats AsMidiStats()
+        public Sinphinity.Models.MidiStats AsMidiStats()
         {
-            return new MidiStats
+            return new Sinphinity.Models.MidiStats
             {
                 TotalTracks = this.TotalTracks,
                 TotalChannels = this.TotalChannels,

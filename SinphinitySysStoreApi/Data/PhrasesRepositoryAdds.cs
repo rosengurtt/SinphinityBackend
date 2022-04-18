@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Sinphinity.Models;
 using SinphinitySysStore.Models;
 
 namespace SinphinitySysStore.Data
@@ -14,7 +13,7 @@ namespace SinphinitySysStore.Data
             _dbContext = dbcontext;
         }
 
-        public async Task SavePhrasesMetricsOfSongAsync(Dictionary<string, List<SongLocation>> phrasesLocations, long songId)
+        public async Task SavePhrasesMetricsOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -22,10 +21,10 @@ namespace SinphinitySysStore.Data
             {
                 foreach (var pm in phrasesLocations.Keys)
                 {
-                    var currentPhrase = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.Metrics && x.AsString == pm).FirstOrDefaultAsync();
+                    var currentPhrase = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.Metrics && x.AsString == pm).FirstOrDefaultAsync();
                     if (currentPhrase == null)
                     {
-                        var phraseEntity = new PhraseEntity(new PhraseMetrics(pm));
+                        var phraseEntity = new Phrase(new Sinphinity.Models.PhraseMetrics(pm));
                         _dbContext.Phrases.Add(phraseEntity);
                         await _dbContext.SaveChangesAsync();
                         currentPhrase = phraseEntity;
@@ -40,19 +39,19 @@ namespace SinphinitySysStore.Data
             }
         }
 
-        private async Task SaveAssociationsOfPhrase(long phraseId, SongEntity song)
+        private async Task SaveAssociationsOfPhrase(long phraseId, Song song)
         {
             var bandId = song.BandId;
             var styleId = await _dbContext.Bands.Where(b => b.Id == song.BandId).Include(y => y.Style).Select(x => x.Style.Id).FirstOrDefaultAsync();
             try
             {
                 await _dbContext.Songs
-                                .FromSqlRaw(@$"IF ((SELECT count(*) FROM PhraseEntitySongEntity WHERE SongsId={song.Id} AND PhrasesId={phraseId})=0) 
-                                                    INSERT INTO PhraseEntitySongEntity(SongsId, PhrasesId) VALUES ({song.Id},{phraseId})
-                                                    IF ((SELECT count(*) FROM PhraseEntityBandEntity WHERE BandsId={bandId} AND PhrasesId={phraseId})=0) 
-                                                    INSERT INTO PhraseEntityBandEntity(BandsId, PhrasesId) VALUES ({bandId},{phraseId})
-                                                    IF ((SELECT count(*) FROM PhraseEntityStyleEntity WHERE StylesId={styleId} AND PhrasesId={phraseId})=0) 
-                                                    INSERT INTO PhraseEntityStyleEntity(StylesId, PhrasesId) VALUES ({styleId},{phraseId})
+                                .FromSqlRaw(@$"IF ((SELECT count(*) FROM PhraseSong WHERE SongsId={song.Id} AND PhrasesId={phraseId})=0) 
+                                                    INSERT INTO PhraseSong(SongsId, PhrasesId) VALUES ({song.Id},{phraseId})
+                                                    IF ((SELECT count(*) FROM BandPhrase WHERE BandsId={bandId} AND PhrasesId={phraseId})=0) 
+                                                    INSERT INTO BandPhrase(BandsId, PhrasesId) VALUES ({bandId},{phraseId})
+                                                    IF ((SELECT count(*) FROM PhraseStyle WHERE StylesId={styleId} AND PhrasesId={phraseId})=0) 
+                                                    INSERT INTO PhraseStyle(StylesId, PhrasesId) VALUES ({styleId},{phraseId})
                                                     SELECT TOP 1 * FROM Songs").ToListAsync();
             }
             catch (Exception fsfsad)
@@ -62,7 +61,7 @@ namespace SinphinitySysStore.Data
         }
 
 
-        public async Task SavePhrasesPitchesOfSongAsync(Dictionary<string, List<SongLocation>> phrasesLocations, long songId)
+        public async Task SavePhrasesPitchesOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -70,10 +69,10 @@ namespace SinphinitySysStore.Data
             {
                 foreach (var pp in phrasesLocations.Keys)
                 {
-                    var currentPhrase = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.Pitches && x.AsString == pp).FirstOrDefaultAsync();
+                    var currentPhrase = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.Pitches && x.AsString == pp).FirstOrDefaultAsync();
                     if (currentPhrase == null)
                     {
-                        var phraseEntity = new PhraseEntity(new PhrasePitches(pp));
+                        var phraseEntity = new Phrase(new Sinphinity.Models.PhrasePitches(pp));
                         _dbContext.Phrases.Add(phraseEntity);
                         await _dbContext.SaveChangesAsync();
                         currentPhrase = phraseEntity;
@@ -89,7 +88,7 @@ namespace SinphinitySysStore.Data
         }
 
 
-        public async Task SaveEmbellishedPhrasesMetricsOfSongAsync(Dictionary<string, List<SongLocation>> phrasesLocations, long songId)
+        public async Task SaveEmbellishedPhrasesMetricsOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -100,18 +99,19 @@ namespace SinphinitySysStore.Data
                     // Extract the embellished version and the version without embelllishments from the string
                     (var embellishedPhraseMetricsAsString, var phraseMetricsAsString) = DecomposeEmbellishedPhrasePart(ep);
 
-                    var currentPhraseMetrics = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.Metrics && x.AsString == phraseMetricsAsString).FirstOrDefaultAsync();
+                    var currentPhraseMetrics = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.Metrics && x.AsString == phraseMetricsAsString).FirstOrDefaultAsync();
                     if (currentPhraseMetrics == null)
                     {
-                        var phraseEntity = new PhraseEntity(new PhraseMetrics(phraseMetricsAsString));
+                        var phraseEntity = new Phrase(new Sinphinity.Models.PhraseMetrics(phraseMetricsAsString));
                         _dbContext.Phrases.Add(phraseEntity);
                         await _dbContext.SaveChangesAsync();
                         currentPhraseMetrics = phraseEntity;
                     }
-                    var currentEmbellishedPhraseMetrics = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.EmbelishedMetrics && x.AsString == embellishedPhraseMetricsAsString).FirstOrDefaultAsync();
+                    var currentEmbellishedPhraseMetrics = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.EmbelishedMetrics && 
+                        x.AsString == embellishedPhraseMetricsAsString).FirstOrDefaultAsync();
                     if (currentEmbellishedPhraseMetrics == null)
                     {
-                        var phraseEntity = new PhraseEntity(new EmbellishedPhraseMetrics(phraseMetricsAsString, embellishedPhraseMetricsAsString));
+                        var phraseEntity = new Phrase(new Sinphinity.Models.EmbellishedPhraseMetrics(phraseMetricsAsString, embellishedPhraseMetricsAsString));
                         _dbContext.Phrases.Add(phraseEntity);
                         await _dbContext.SaveChangesAsync();
                         currentEmbellishedPhraseMetrics = phraseEntity;
@@ -125,7 +125,7 @@ namespace SinphinitySysStore.Data
 
             }
         }
-        public async Task SaveEmbellishedPhrasesPitchesOfSongAsync(Dictionary<string, List<SongLocation>> phrasesLocations, long songId)
+        public async Task SaveEmbellishedPhrasesPitchesOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -137,18 +137,18 @@ namespace SinphinitySysStore.Data
                     (var embellishedPhrasePitchesAsString, var phrasePitchesAsString) = DecomposeEmbellishedPhrasePart(ep);
 
 
-                    var currentPhrasePitches = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.Pitches && x.AsString == phrasePitchesAsString).FirstOrDefaultAsync();
+                    var currentPhrasePitches = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.Pitches && x.AsString == phrasePitchesAsString).FirstOrDefaultAsync();
                     if (currentPhrasePitches == null)
                     {
-                        var phraseEntity = new PhraseEntity(new PhrasePitches(phrasePitchesAsString));
+                        var phraseEntity = new Phrase(new Sinphinity.Models.PhrasePitches(phrasePitchesAsString));
                         _dbContext.Phrases.Add(phraseEntity);
                         await _dbContext.SaveChangesAsync();
                         currentPhrasePitches = phraseEntity;
                     }
-                    var currentEmbellishedPhrasePitches = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.EmbelishedPitches && x.AsString == embellishedPhrasePitchesAsString).FirstOrDefaultAsync();
+                    var currentEmbellishedPhrasePitches = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.EmbelishedPitches && x.AsString == embellishedPhrasePitchesAsString).FirstOrDefaultAsync();
                     if (currentEmbellishedPhrasePitches == null)
                     {
-                        var phraseEntity = new PhraseEntity(new EmbellishedPhrasePitches(phrasePitchesAsString, embellishedPhrasePitchesAsString));
+                        var phraseEntity = new Phrase(new Sinphinity.Models.EmbellishedPhrasePitches(phrasePitchesAsString, embellishedPhrasePitchesAsString));
                         _dbContext.Phrases.Add(phraseEntity);
                         await _dbContext.SaveChangesAsync();
                         currentEmbellishedPhrasePitches = phraseEntity;
@@ -163,7 +163,7 @@ namespace SinphinitySysStore.Data
             }
         }
 
-        public async Task SaveEmbellishedPhrasesOfSongAsync(Dictionary<string, List<SongLocation>> phrasesLocations, long songId)
+        public async Task SaveEmbellishedPhrasesOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -174,9 +174,9 @@ namespace SinphinitySysStore.Data
                     // Extract the embellished version and the version without embelllishments from the string
                     ((var embellishedPhraseMetricsAsString, var embellishedPhrasePitchesAsString), (var phraseMetricsAsString, var phrasePitchesAsString)) = DecomposeEmbellishedPhrase(ep);
 
-                    var fraseMetInDb = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.EmbelishedMetrics && x.AsString == embellishedPhraseMetricsAsString)
+                    var fraseMetInDb = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.EmbelishedMetrics && x.AsString == embellishedPhraseMetricsAsString)
                         .FirstOrDefaultAsync();
-                    var phrasePitInDb = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.EmbelishedPitches && x.AsString == embellishedPhrasePitchesAsString)
+                    var phrasePitInDb = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.EmbelishedPitches && x.AsString == embellishedPhrasePitchesAsString)
                         .FirstOrDefaultAsync();
 
                     if (fraseMetInDb == null || phrasePitInDb == null)
@@ -184,10 +184,10 @@ namespace SinphinitySysStore.Data
 
                     var embellishedPhrase = GetEmbellishedPhrase(ep);
 
-                    var currentPhrase = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.EmbellishedBoth && x.AsString == embellishedPhrase).FirstOrDefaultAsync();
+                    var currentPhrase = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.EmbellishedBoth && x.AsString == embellishedPhrase).FirstOrDefaultAsync();
                     if (currentPhrase == null)
                     {
-                        var phraseEntity = new PhraseEntity(new EmbellishedPhrase(ep));
+                        var phraseEntity = new Phrase(new Sinphinity.Models.EmbellishedPhrase(ep));
                         _dbContext.Phrases.Add(phraseEntity);
                         await _dbContext.SaveChangesAsync();
                         currentPhrase = phraseEntity;
@@ -205,7 +205,7 @@ namespace SinphinitySysStore.Data
 
 
 
-        public async Task SavePhrasesOfSongAsync(Dictionary<string, List<SongLocation>> phrasesLocations, long songId)
+        public async Task SavePhrasesOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -214,16 +214,16 @@ namespace SinphinitySysStore.Data
                 foreach (var p in phrasesLocations.Keys)
                 {
                     var parts = p.Split('/');
-                    var fraseMetInDb = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.Metrics && x.AsString == parts[0]).FirstOrDefaultAsync();
-                    var phrasePitInDb = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.Pitches && x.AsString == parts[1]).FirstOrDefaultAsync();
+                    var fraseMetInDb = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.Metrics && x.AsString == parts[0]).FirstOrDefaultAsync();
+                    var phrasePitInDb = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.Pitches && x.AsString == parts[1]).FirstOrDefaultAsync();
 
                     if (fraseMetInDb == null || phrasePitInDb == null)
                         throw new Exception("Me mandaron cualquier mierda");
 
-                    var currentPhrase = await _dbContext.Phrases.Where(x => x.PhraseType == PhraseTypeEnum.Both && x.AsString == p).FirstOrDefaultAsync();
+                    var currentPhrase = await _dbContext.Phrases.Where(x => x.PhraseType == Sinphinity.Models.PhraseTypeEnum.Both && x.AsString == p).FirstOrDefaultAsync();
                     if (currentPhrase == null)
                     {
-                        var phraseEntity = new PhraseEntity(new Phrase(p));
+                        var phraseEntity = new Phrase(new Sinphinity.Models.Phrase(p));
                         _dbContext.Phrases.Add(phraseEntity);
                         await _dbContext.SaveChangesAsync();
                         currentPhrase = phraseEntity;
@@ -291,7 +291,7 @@ namespace SinphinitySysStore.Data
 
 
 
-        private async Task InsertOccurrences(List<SongLocation> locations, long songId, long phraseId)
+        private async Task InsertOccurrences(List<Sinphinity.Models.SongLocation> locations, long songId, long phraseId)
         {
             // Insert Occurrences
             foreach (var loc in locations)

@@ -1,4 +1,6 @@
-﻿namespace Sinphinity.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Sinphinity.Models
 {
     /// <summary>
     /// When the original version of a phrase has embellishments we create 2 objects
@@ -74,6 +76,7 @@
             }
         }
 
+        [JsonIgnore]
         public List<int> Items
         {
             get

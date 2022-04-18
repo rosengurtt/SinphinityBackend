@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Text.Json.Serialization;
 
 namespace Sinphinity.Models
 {
@@ -40,6 +40,7 @@ namespace Sinphinity.Models
         }
 
 
+        [JsonIgnore]
         public List<int> Items
         {
             get

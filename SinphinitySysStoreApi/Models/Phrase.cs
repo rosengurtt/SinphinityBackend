@@ -1,22 +1,21 @@
-﻿using Sinphinity.Models;
-
+﻿
 namespace SinphinitySysStore.Models
 {
-    public class PhraseEntity
+    public class Phrase
     {
-        public PhraseEntity() { }
-        public PhraseEntity(PhraseMetrics pm)
+        public Phrase() { }
+        public Phrase(Sinphinity.Models.PhraseMetrics pm)
         {
-            PhraseType = PhraseTypeEnum.Metrics;
+            PhraseType = Sinphinity.Models.PhraseTypeEnum.Metrics;
             AsString = pm.AsString;
-            AsStringBasic = (new BasicMetrics(pm)).AsString;
+            AsStringBasic = (new Sinphinity.Models.BasicMetrics(pm)).AsString;
             AsStringWithoutOrnaments = null;
             NumberOfNotes = pm.NumberOfNotes;
             DurationInTicks = pm.DurationInTicks;
         }
-        public PhraseEntity(PhrasePitches pp)
+        public Phrase(Sinphinity.Models.PhrasePitches pp)
         {
-            PhraseType = PhraseTypeEnum.Pitches;
+            PhraseType = Sinphinity.Models.PhraseTypeEnum.Pitches;
             AsString = pp.AsString;
             AsStringBasic = null;
             AsStringWithoutOrnaments = null;
@@ -25,11 +24,11 @@ namespace SinphinitySysStore.Models
             IsMonotone = pp.IsMonotone;
             Step = pp.Step;
         }
-        public PhraseEntity(Phrase p)
+        public Phrase(Sinphinity.Models.Phrase p)
         {
-            PhraseType = PhraseTypeEnum.Both;
+            PhraseType = Sinphinity.Models.PhraseTypeEnum.Both;
             AsString = p.AsString;
-            AsStringBasic = (new BasicMetrics(p.PhraseMetrics)).AsString;
+            AsStringBasic = (new Sinphinity.Models.BasicMetrics(p.PhraseMetrics)).AsString;
             AsStringWithoutOrnaments = null;
             NumberOfNotes = p.PhraseMetrics.NumberOfNotes;
             DurationInTicks = p.PhraseMetrics.DurationInTicks;
@@ -37,18 +36,18 @@ namespace SinphinitySysStore.Models
             IsMonotone = p.PhrasePitches.IsMonotone;
             Step = p.PhrasePitches.Step;
         }
-        public PhraseEntity(EmbellishedPhraseMetrics epm)
+        public Phrase(Sinphinity.Models.EmbellishedPhraseMetrics epm)
         {
-            PhraseType = PhraseTypeEnum.EmbelishedMetrics;
+            PhraseType = Sinphinity.Models.PhraseTypeEnum.EmbelishedMetrics;
             AsString = epm.AsString;
-            AsStringBasic = (new BasicMetrics(epm.AsStringWithoutOrnaments)).AsString;
+            AsStringBasic = (new Sinphinity.Models.BasicMetrics(epm.AsStringWithoutOrnaments)).AsString;
             AsStringWithoutOrnaments = epm.AsStringWithoutOrnaments;
             NumberOfNotes = epm.NumberOfNotes;
             DurationInTicks = epm.DurationInTicks;
         }
-        public PhraseEntity(EmbellishedPhrasePitches epp)
+        public Phrase(Sinphinity.Models.EmbellishedPhrasePitches epp)
         {
-            PhraseType = PhraseTypeEnum.EmbelishedPitches;
+            PhraseType = Sinphinity.Models.PhraseTypeEnum.EmbelishedPitches;
             AsString = epp.AsString;
             AsStringBasic = null;
             AsStringWithoutOrnaments = epp.AsStringWithoutOrnaments;
@@ -57,11 +56,11 @@ namespace SinphinitySysStore.Models
             IsMonotone = epp.IsMonotone;
             Step = epp.Step;
         }
-        public PhraseEntity(EmbellishedPhrase ep)
+        public Phrase(Sinphinity.Models.EmbellishedPhrase ep)
         {
-            PhraseType = PhraseTypeEnum.EmbellishedBoth;
+            PhraseType = Sinphinity.Models.PhraseTypeEnum.EmbellishedBoth;
             AsString = ep.AsString;
-            AsStringBasic = (new BasicMetrics(ep.EmbellishedPhraseMetrics.AsStringWithoutOrnaments)).AsString;
+            AsStringBasic = (new Sinphinity.Models.BasicMetrics(ep.EmbellishedPhraseMetrics.AsStringWithoutOrnaments)).AsString;
             AsStringWithoutOrnaments = ep.AsStringWithoutOrnaments;
             NumberOfNotes = ep.EmbellishedPhraseMetrics.NumberOfNotes;
             DurationInTicks = ep.EmbellishedPhraseMetrics.DurationInTicks;
@@ -79,37 +78,37 @@ namespace SinphinitySysStore.Models
         public int Range { get; set; }
         public bool IsMonotone { get; set; }
         public int Step { get; set; }
-        public PhraseTypeEnum PhraseType { get; set; }
+        public Sinphinity.Models.PhraseTypeEnum PhraseType { get; set; }
 
-        public ICollection<SongEntity> Songs { get; set; }
+        public ICollection<Song> Songs { get; set; }
         public ICollection<Band> Bands { get; set; }
         public ICollection<Style> Styles { get; set; }
 
 
   
-        public PhraseMetrics AsPhraseMetrics()
+        public Sinphinity.Models.PhraseMetrics AsPhraseMetrics()
         {
-            return new PhraseMetrics(AsString, Id);
+            return new Sinphinity.Models.PhraseMetrics(AsString, Id);
         }
-        public PhrasePitches AsPhrasePirches()
+        public Sinphinity.Models.PhrasePitches AsPhrasePirches()
         {
-            return new PhrasePitches(AsString, Id);
+            return new Sinphinity.Models.PhrasePitches(AsString, Id);
         }
-        public Phrase AsPhrase()
+        public Sinphinity.Models.Phrase AsPhrase()
         {
-            return new Phrase(AsString, Id);
+            return new Sinphinity.Models.Phrase(AsString, Id);
         }
-        public EmbellishedPhraseMetrics AsEmbellishedPhraseMetrics()
+        public Sinphinity.Models.EmbellishedPhraseMetrics AsEmbellishedPhraseMetrics()
         {
-            return new EmbellishedPhraseMetrics(AsStringWithoutOrnaments, AsString, Id);
+            return new Sinphinity.Models.EmbellishedPhraseMetrics(AsStringWithoutOrnaments, AsString, Id);
         }
-        public EmbellishedPhrasePitches AsEmbellishePhrasePitches()
+        public Sinphinity.Models.EmbellishedPhrasePitches AsEmbellishePhrasePitches()
         {
-            return new EmbellishedPhrasePitches(AsStringWithoutOrnaments, AsString, Id);
+            return new Sinphinity.Models.EmbellishedPhrasePitches(AsStringWithoutOrnaments, AsString, Id);
         }
-        public EmbellishedPhrase AsEmbellishePhrase()
+        public Sinphinity.Models.EmbellishedPhrase AsEmbellishePhrase()
         {
-            return new EmbellishedPhrase(AsStringWithoutOrnaments, AsString, Id);
+            return new Sinphinity.Models.EmbellishedPhrase(AsStringWithoutOrnaments, AsString, Id);
         }
     }
 }

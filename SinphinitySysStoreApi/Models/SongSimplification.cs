@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
-using Sinphinity.Models;
 
 namespace SinphinitySysStore.Models
 {
-    public class SongSimplificationEntity
+    public class SongSimplification
     {
-        public SongSimplificationEntity() { }
+        public SongSimplification() { }
 
-        public SongSimplificationEntity(SongSimplification ss, Song song, SongData songData)
+        public SongSimplification(Sinphinity.Models.SongSimplification ss, Sinphinity.Models.Song song, SongData songData)
         {
             NumberOfVoices = ss.NumberOfVoices;
             Notes = JsonConvert.SerializeObject(ss.Notes);
@@ -22,12 +21,12 @@ namespace SinphinitySysStore.Models
 
         public long NumberOfVoices { get; set; }
 
-        public SongSimplification AsSongSimplification()
+        public Sinphinity.Models.SongSimplification AsSongSimplification()
         {
-            return new SongSimplification
+            return new Sinphinity.Models.SongSimplification
             {
                 NumberOfVoices = this.NumberOfVoices,
-                Notes = JsonConvert.DeserializeObject<List<Note>>(this.Notes),
+                Notes = JsonConvert.DeserializeObject<List<Sinphinity.Models.Note>>(this.Notes),
                 Version = this.Version
             };
         }

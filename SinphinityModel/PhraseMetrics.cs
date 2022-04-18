@@ -1,8 +1,4 @@
-﻿using Sinphinity.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
+﻿using System.Text.Json.Serialization;
 
 namespace Sinphinity.Models
 {
@@ -45,8 +41,8 @@ namespace Sinphinity.Models
             }
         }
 
-        public long BasicMetricsId { get; set; }
 
+        [JsonIgnore]
         public List<int> Items
         {
             get

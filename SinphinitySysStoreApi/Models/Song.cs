@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
-using Sinphinity.Models;
 
 namespace SinphinitySysStore.Models
 {
-    public class SongEntity
+    public class Song
     {
-        public SongEntity() { }
+        public Song() { }
 
-        public SongEntity(Song song)
+        public Song(Sinphinity.Models.Song song)
         {
             Id = song.Id;
             Name = song.Name;
@@ -29,19 +28,19 @@ namespace SinphinitySysStore.Models
         public bool IsMidiCorrect { get; set; }
 
         public long BandId { get; set; }
-        public BandEntity Band { get; set; }
+        public Band Band { get; set; }
         public long StyleId { get; set; }
-        public StyleEntity Style { get; set; }
+        public Style Style { get; set; }
         public MidiStatsEntity MidiStats { get; set; }
 
         public long AverageTempoInBeatsPerMinute { get; set; }
 
-        public ICollection<PhraseEntity> Phrases { get; set; }
+        public ICollection<Phrase> Phrases { get; set; }
 
 
-        public Song AsSong(SongData? sd)
+        public Sinphinity.Models.Song AsSong(SongData? sd)
         {
-            var songi = new Song
+            var songi = new Sinphinity.Models.Song
             {
                 Id = this.Id,
                 Name = this.Name,
@@ -53,15 +52,15 @@ namespace SinphinitySysStore.Models
                 Band = this.Band.AsBand(),
                 Style = this.Style.AsStyle(),
                 MidiStats = this.MidiStats?.AsMidiStats(),
-                SongSimplifications = new List<SongSimplification>()
+                SongSimplifications = new List<Sinphinity.Models.SongSimplification>()
 
             };
             if (sd != null)
             {
-                songi.Bars = string.IsNullOrEmpty(sd.Bars) ? new List<Bar>() : JsonConvert.DeserializeObject<List<Bar>>(sd.Bars);
+                songi.Bars = string.IsNullOrEmpty(sd.Bars) ? new List<Sinphinity.Models.Bar>() : JsonConvert.DeserializeObject<List<Sinphinity.Models.Bar>>(sd.Bars);
                 songi.TempoChanges = string.IsNullOrEmpty(sd.TempoChanges) ?
-                    new List<TempoChange>() :
-                    JsonConvert.DeserializeObject<List<TempoChange>>(sd.TempoChanges);
+                    new List<Sinphinity.Models.TempoChange>() :
+                    JsonConvert.DeserializeObject<List<Sinphinity.Models.TempoChange>>(sd.TempoChanges);
                 songi.MidiBase64Encoded = sd.MidiBase64Encoded;
                 songi.SongSimplifications = sd.SongSimplifications?.Select(x => x.AsSongSimplification()).ToList();
 

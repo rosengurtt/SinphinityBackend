@@ -6,7 +6,7 @@ namespace SinphinitySysStore.Data
 {
     public partial class PhrasesRepository
     {
-        public async Task<(int, List<string>)> GetPhrases(
+        public async Task<(int, List<Models.Phrase>)> GetPhrases(
                    long? styleId,
                    long? bandId,
                    long? songId,
@@ -41,7 +41,6 @@ namespace SinphinitySysStore.Data
                     .OrderBy(x => x.AsString)
                     .Skip((pageNo) * pageSize)
                     .Take(pageSize)
-                    .Select(x => x.AsString)
                     .ToListAsync();
                 return (total, pages);
             }

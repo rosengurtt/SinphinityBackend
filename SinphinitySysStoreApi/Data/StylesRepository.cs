@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sinphinity.Models;
 using SinphinitySysStore.Models;
 using System.Linq.Dynamic.Core;
 
@@ -13,7 +12,7 @@ namespace SinphinitySysStore.Data
             _dbContext = dbcontext;
         }
 
-        public async Task<(int, List<Style>)> GetStylesAsync(
+        public async Task<(int, List<Sinphinity.Models.Style>)> GetStylesAsync(
             int pageNo = 0,
             int pageSize = 10,
             string? contains = null)
@@ -26,22 +25,22 @@ namespace SinphinitySysStore.Data
 
 
  
-        public async Task<Style> GetStyleByIdAsync(long styleId)
+        public async Task<Sinphinity.Models.Style> GetStyleByIdAsync(long styleId)
         {
             return (await _dbContext.Styles.FindAsync(styleId)).AsStyle();
         }
-        public async Task<Style> GetStyleByNameAsync(string name)
+        public async Task<Sinphinity.Models.Style> GetStyleByNameAsync(string name)
         {
             return await _dbContext.Styles.Where(s => s.Name.ToLower() == name.ToLower()).Select(x=>x.AsStyle()).FirstOrDefaultAsync();
         }
-        public async Task<Style> AddStyleAsync(Style style)
+        public async Task<Sinphinity.Models.Style> AddStyleAsync(Sinphinity.Models.Style style)
         {
-            _dbContext.Styles.Add(new StyleEntity(style));
+            _dbContext.Styles.Add(new Style(style));
             await _dbContext.SaveChangesAsync();
             return style;
         }
 
-        public async Task<Style> UpdateStyleAsync(Style style)
+        public async Task<Sinphinity.Models.Style> UpdateStyleAsync(Sinphinity.Models.Style style)
         {
             var styles = await _dbContext.Styles.FindAsync(style.Id);
             if (styles == null)

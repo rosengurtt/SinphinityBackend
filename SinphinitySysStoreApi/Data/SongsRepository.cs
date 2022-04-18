@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Sinphinity.Models;
 using SinphinitySysStore.Models;
 
 namespace SinphinitySysStore.Data
@@ -13,7 +12,7 @@ namespace SinphinitySysStore.Data
             _dbContext = dbcontext;
         }
 
-        public async Task<(int, List<Song>)> GetSongsAsync(
+        public async Task<(int, List<Sinphinity.Models.Song>)> GetSongsAsync(
            int pageNo = 0,
            int pageSize = 10,
            string? contains = null,
@@ -49,7 +48,7 @@ namespace SinphinitySysStore.Data
         }
 
 
-        public async Task<Song> GetSongByIdAsync(long songId, int? simplificationVersion)
+        public async Task<Sinphinity.Models.Song> GetSongByIdAsync(long songId, int? simplificationVersion)
         {
             var songsSimplifications = await _dbContext.SongsSimplifications
                 .Where(x => x.SongData.SongId == songId && (simplificationVersion == null || x.Version == simplificationVersion)).ToListAsync();
@@ -70,12 +69,12 @@ namespace SinphinitySysStore.Data
         }
 
 
-        public async Task<Song> AddSong(Song song)
+        public async Task<Sinphinity.Models.Song> AddSong(Sinphinity.Models.Song song)
         {
             var songExistsAlready = await _dbContext.Songs.Where(x => x.Name == song.Name && x.Band.Name == song.Band.Name).CountAsync() > 0;
             if (songExistsAlready) throw new SongAlreadyExistsException();
 
-            var songRecord = new SongEntity(song);
+            var songRecord = new Song(song);
             _dbContext.Songs.Add(songRecord);
             try
             {
@@ -92,7 +91,7 @@ namespace SinphinitySysStore.Data
             return song;
         }
 
-        public async Task<Song> UpdateSong(Song song)
+        public async Task<Sinphinity.Models.Song> UpdateSong(Sinphinity.Models.Song song)
         {
             var currentSong = await _dbContext.Songs.Where(x => x.Id == song.Id).FirstOrDefaultAsync();
             var currentSongData= await _dbContext.SongsData.Where(x => x.SongId == song.Id).FirstOrDefaultAsync();
@@ -104,7 +103,7 @@ namespace SinphinitySysStore.Data
             currentSong.IsMidiCorrect = song.IsMidiCorrect;
             currentSong.IsSongProcessed = song.IsSongProcessed;
             currentSong.MidiStats = new MidiStatsEntity(song.MidiStats, song);
-            currentSongData.SongSimplifications = song.SongSimplifications.Select(x => new SongSimplificationEntity(x, song, currentSongData)).ToList();
+            currentSongData.SongSimplifications = song.SongSimplifications.Select(x => new SongSimplification(x, song, currentSongData)).ToList();
             currentSongData.Bars= JsonConvert.SerializeObject(song.Bars); 
             currentSongData.TempoChanges = JsonConvert.SerializeObject(song.TempoChanges);
 

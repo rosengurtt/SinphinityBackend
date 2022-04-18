@@ -113,8 +113,29 @@ namespace SinphinityExpApi.Controllers
             int? durationInTicks, int? range, bool? isMonotone, int? step, int pageNo = 0, int pageSize = 10)
         {
             var phraseType = type == null ? PhraseTypeEnum.Metrics : (PhraseTypeEnum)Enum.Parse(typeof(PhraseTypeEnum), type, true);
-            return Ok(new ApiOKResponse(await _sysStoreClient.GetPhrasesAsync(styleId, bandId, songId, phraseType, contains, numberOfNotes, durationInTicks,
-              range, isMonotone, step, pageNo, pageSize)));
+            switch (phraseType)
+            {
+                case PhraseTypeEnum.Metrics:
+                    return Ok(new ApiOKResponse(await _sysStoreClient.GetPhraseMetricsAsync(styleId, bandId, songId,  contains, numberOfNotes, durationInTicks,
+                      range, isMonotone, step, pageNo, pageSize)));
+                case PhraseTypeEnum.Pitches:
+                    return Ok(new ApiOKResponse(await _sysStoreClient.GetPhrasePitchesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
+                      range, isMonotone, step, pageNo, pageSize)));
+                case PhraseTypeEnum.Both:
+                    return Ok(new ApiOKResponse(await _sysStoreClient.GetPhrasesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
+                      range, isMonotone, step, pageNo, pageSize)));
+                case PhraseTypeEnum.EmbelishedMetrics:
+                    return Ok(new ApiOKResponse(await _sysStoreClient.GetEmbellishedPhrasesMertricsAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
+                      range, isMonotone, step, pageNo, pageSize)));
+                case PhraseTypeEnum.EmbelishedPitches:
+                    return Ok(new ApiOKResponse(await _sysStoreClient.GetEmbellishedPhrasesPitchesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
+                      range, isMonotone, step, pageNo, pageSize)));
+                case PhraseTypeEnum.EmbellishedBoth:
+                    return Ok(new ApiOKResponse(await _sysStoreClient.GetEmbellishedPhrasesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
+                      range, isMonotone, step, pageNo, pageSize)));
+                default:
+                    throw new Exception("Que mierda esta pidiendo?");
+            }
         }
     }
 }

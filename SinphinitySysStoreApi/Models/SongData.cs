@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
-using Sinphinity.Models;
-using SinphinitySysStore.Models;
 
 namespace SinphinitySysStore.Models
 {
     public class SongData
     {
         public SongData() { }
-        public SongData(Song song)
+        public SongData(Sinphinity.Models.Song song)
         {
             SongId = song.Id;
             MidiBase64Encoded = song.MidiBase64Encoded;
@@ -15,10 +13,10 @@ namespace SinphinitySysStore.Models
                 Bars = JsonConvert.SerializeObject(song.Bars);
             if (song.SongSimplifications != null && song.SongSimplifications.Count > 0)
             {
-                SongSimplifications = new List<SongSimplificationEntity>();
+                SongSimplifications = new List<SongSimplification>();
                 foreach (var ss in song.SongSimplifications)
                 {
-                    SongSimplifications.Add(new SongSimplificationEntity(ss, song, this));
+                    SongSimplifications.Add(new SongSimplification(ss, song, this));
                 }
             }
             if (song.TempoChanges != null && song.TempoChanges.Count > 0)
@@ -31,7 +29,7 @@ namespace SinphinitySysStore.Models
         public long Id { get; set; }
 
         public long SongId { get; set; }
-        public List<SongSimplificationEntity>? SongSimplifications { get; set; }
+        public List<SongSimplification>? SongSimplifications { get; set; }
 
         public string? Bars { get; set; }
 
