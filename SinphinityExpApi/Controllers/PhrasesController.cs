@@ -98,22 +98,13 @@ namespace SinphinityExpApi.Controllers
 
 
 
-        //[HttpGet]
-        //public async Task<ActionResult> GetPhrasesAsync(long? styleId, long? bandId, long? songId, int? numberOfNotes,
-        //       int? range, int? step, int? durationInTicks, bool? isMonotone, string? contains, int pageNo = 0, int pageSize = 10)
-        //{
-        //    var patterns = await _graphApiClient.GetPatternsAsync(styleId, bandId, songId, numberOfNotes, range, step, durationInTicks,
-        //        isMonotone, contains, pageNo, pageSize);
-
-        //    return Ok(new ApiOKResponse(patterns));
-        //}
 
         [HttpGet]
-        public async Task<ActionResult> GetPhrasesAsync(long? styleId, long? bandId, long? songId, string type, string contains, int? numberOfNotes,
+        public async Task<ActionResult> GetPhrasesAsync(long? styleId, long? bandId, long? songId, string phraseType, string contains, int? numberOfNotes,
             int? durationInTicks, int? range, bool? isMonotone, int? step, int pageNo = 0, int pageSize = 10)
         {
-            var phraseType = type == null ? PhraseTypeEnum.Metrics : (PhraseTypeEnum)Enum.Parse(typeof(PhraseTypeEnum), type, true);
-            switch (phraseType)
+            var type = phraseType == null ? PhraseTypeEnum.Metrics : (PhraseTypeEnum)Enum.Parse(typeof(PhraseTypeEnum), phraseType, true);
+            switch (type)
             {
                 case PhraseTypeEnum.Metrics:
                     return Ok(new ApiOKResponse(await _sysStoreClient.GetPhraseMetricsAsync(styleId, bandId, songId,  contains, numberOfNotes, durationInTicks,
