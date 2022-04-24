@@ -85,17 +85,28 @@ namespace SinphinityProcMidi.Controllers
             var bytes = ms.ToArray();
             return Ok(new ApiOKResponse(Convert.ToBase64String(bytes)));
         }
-      
+
+        [HttpGet("phrase")]
+        public ActionResult GetPhraseMidi(PhraseTypeEnum phraseType, string asString, int tempoInBPM = 90, int instrument = 0, byte startingPitch=60)
+        {
+            var tempoChanges = new List<TempoChange> { new TempoChange { MicrosecondsPerQuarterNote = 500000 * 120 / tempoInBPM } };
+            var notes = PhraseConverter.GetPhraseNotes(phraseType, asString, instrument, startingPitch);
+            var base64encodedMidiBytes = MidiUtilities.GetMidiBytesFromNotes(notes, tempoChanges);
+            var ms = new MemoryStream(MidiUtilities.GetMidiBytesFromPointInTime(base64encodedMidiBytes, 0));
+            var bytes = ms.ToArray();
+            return Ok(new ApiOKResponse(Convert.ToBase64String(bytes)));
+        }
+
 
         private Song ProcesameLaSong(Song song)
         {
             song.MidiBase64Encoded = MidiUtilities.NormalizeTicksPerQuarterNote(song.MidiBase64Encoded);
             song.MidiStats = MidiUtilities.GetMidiStats(song.MidiBase64Encoded);
-     
+
 
             var simplificationZero = MidiUtilities.GetSimplificationZeroOfSong(song.MidiBase64Encoded);
             song.Bars = MidiUtilities.GetBarsOfSong(song.MidiBase64Encoded, simplificationZero);
-       
+
             song.TempoChanges = MidiUtilities.GetTempoChanges(song.MidiBase64Encoded);
             song.AverageTempoInBeatsPerMinute = MidiUtilities.GetAverageTempoInBeatsPerMinute(song.TempoChanges, song.MidiStats.DurationInTicks);
 

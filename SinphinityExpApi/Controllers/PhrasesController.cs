@@ -7,6 +7,7 @@ using SinphinityExpApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -107,7 +108,7 @@ namespace SinphinityExpApi.Controllers
             switch (type)
             {
                 case PhraseTypeEnum.Metrics:
-                    return Ok(new ApiOKResponse(await _sysStoreClient.GetPhraseMetricsAsync(styleId, bandId, songId,  contains, numberOfNotes, durationInTicks,
+                    return Ok(new ApiOKResponse(await _sysStoreClient.GetPhraseMetricsAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
                       range, isMonotone, step, pageNo, pageSize)));
                 case PhraseTypeEnum.Pitches:
                     return Ok(new ApiOKResponse(await _sysStoreClient.GetPhrasePitchesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
@@ -127,6 +128,26 @@ namespace SinphinityExpApi.Controllers
                 default:
                     throw new Exception("Que mierda esta pidiendo?");
             }
+        }
+
+
+        [HttpGet("midi")]
+        public async Task<ActionResult> GetPhraseMidiAsync(PhraseTypeEnum phraseType, string asString, int instrument = 0, int tempoInBPM = 90, byte startingPitch = 60)
+        {
+            try
+            {
+
+                var base64encodedMidiBytes = await _procMidiClient.GetMidiOfPhrase(phraseType, asString, instrument, tempoInBPM, startingPitch);
+                var ms = new MemoryStream(Convert.FromBase64String(base64encodedMidiBytes));
+
+                return File(ms, MediaTypeNames.Text.Plain, $"Phrase {asString}");
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
+
         }
     }
 }

@@ -66,7 +66,7 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task<string> GetMidiFragmentOfSong(Song song, int tempoInBeatsPerMinute, int simplificationVersion, int startInSeconds , string? mutedTracks)
+        public async Task<string> GetMidiFragmentOfSong(Song song, int tempoInBeatsPerMinute, int simplificationVersion, int startInSeconds = 0, string? mutedTracks = null)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(song));
@@ -74,6 +74,26 @@ namespace SinphinityExpApi.Clients
             var url = $"{_appConfiguration.ProcMidiUrl}/api/SongProcessing/{song.Id}?tempoInBeatsPerMinute={tempoInBeatsPerMinute}" +
                 $"&simplificationVersion={simplificationVersion}&startInSeconds={startInSeconds}&mutedTracks={mutedTracks}";
             var response = await httpClient.PostAsync(url, content);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
+                return apiResponse.result;
+            }
+            else
+            {
+                var errorMessage = $"Couldn't process song";
+                Log.Error(errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
+        }
+
+        public async Task<string> GetMidiOfPhrase(PhraseTypeEnum phraseType, string asString, int instrument, int tempoInBPM, byte startingPitch = 60)
+        {
+            HttpClient httpClient = _clientFactory.CreateClient();
+            var url = $"{_appConfiguration.ProcMidiUrl}/api/SongProcessing/phrase?phraseType={phraseType}&asString={asString}&tempoInBPM={tempoInBPM}&instrument={instrument}&startingPitch={startingPitch}";
+            var response = await httpClient.GetAsync(url);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
