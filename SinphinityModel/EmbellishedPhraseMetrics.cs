@@ -39,6 +39,14 @@ namespace Sinphinity.Models
             }
         }
 
+        public PhraseTypeEnum PhraseType
+        {
+            get
+            {
+                return PhraseTypeEnum.EmbelishedMetrics;
+            }
+        }
+
 
         [JsonIgnore]
         public List<int> Items

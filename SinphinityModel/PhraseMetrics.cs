@@ -40,7 +40,13 @@ namespace Sinphinity.Models
                 return Items.Count - 1;
             }
         }
-
+        public PhraseTypeEnum PhraseType
+        {
+            get
+            {
+                return PhraseTypeEnum.Metrics;
+            }
+        }
 
         [JsonIgnore]
         public List<int> Items

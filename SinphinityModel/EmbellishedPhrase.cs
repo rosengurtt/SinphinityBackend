@@ -51,5 +51,18 @@ namespace Sinphinity.Models
         public string AsStringWithoutOrnaments { get; set; }
         public string AsString { get; set; }
         public string AsStringBasic { get; set; }
+        public long DurationInTicks { get; set; }
+        public int NumberOfNotes { get; set; }
+        public int Range { get; set; }
+        public int Step { get; set; }
+        public bool IsMonotone { get; set; }
+
+        public PhraseTypeEnum PhraseType
+        {
+            get
+            {
+                return PhraseTypeEnum.EmbellishedBoth;
+            }
+        }
     }
 }

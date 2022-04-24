@@ -76,6 +76,13 @@ namespace Sinphinity.Models
         }
 
 
+        public PhraseTypeEnum PhraseType
+        {
+            get
+            {
+                return PhraseTypeEnum.Pitches;
+            }
+        }
 
         public PhrasePitches() { }
         public PhrasePitches(string asString, long? id = null)

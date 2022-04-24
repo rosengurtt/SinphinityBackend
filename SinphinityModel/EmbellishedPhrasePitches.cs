@@ -76,6 +76,14 @@ namespace Sinphinity.Models
             }
         }
 
+        public PhraseTypeEnum PhraseType
+        {
+            get
+            {
+                return PhraseTypeEnum.EmbelishedPitches;
+            }
+        }
+
         [JsonIgnore]
         public List<int> Items
         {

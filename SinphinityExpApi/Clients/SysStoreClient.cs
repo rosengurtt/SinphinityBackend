@@ -212,7 +212,7 @@ namespace SinphinityExpApi.Clients
             long? bandId,
             long? songId,
             PhraseTypeEnum type,
-            string? contains,
+            string contains,
             int? numberOfNotes,
             long? durationInTicks,
             int? range,
