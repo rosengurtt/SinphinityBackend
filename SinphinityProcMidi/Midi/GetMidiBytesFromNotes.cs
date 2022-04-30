@@ -88,6 +88,7 @@ namespace SinphinityProcMidi.Midi
         {
             var notita = (Note)n.Clone();
             notita.StartSinceBeginningOfSongInTicks -= noTicks;
+            notita.EndSinceBeginningOfSongInTicks -= noTicks;
             return notita;
         }
         private static TrackChunk AddSetTempoEvents(TrackChunk chunkito, List<TempoChange> tc)
