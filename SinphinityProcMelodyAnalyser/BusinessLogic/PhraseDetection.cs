@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Sinphinity.Models;
+using SinphinityModel.Helpers;
 using SinphinityProcMelodyAnalyser.Models;
 
 namespace SinphinityProcMelodyAnalyser.BusinessLogic
@@ -9,7 +10,6 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
       
         public static PhraseInfo? GetPhraseBetweenEdges(List<Note> notes, long start, long end, long songId, byte voice, List<Bar> bars)
         {
-            var borrame = JsonConvert.SerializeObject(bars);
             var phraseNotes = notes
                 .Where(x => x.StartSinceBeginningOfSongInTicks >= start && x.StartSinceBeginningOfSongInTicks < end)
                 .OrderBy(y => y.StartSinceBeginningOfSongInTicks)
@@ -43,15 +43,13 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// <returns></returns>
         public static HashSet<long> GetPhrasesEdges(List<Note> notes, List<Bar> bars)
         {
-            // First we find the points that separate the phrases in the song
-            var retObj = GetEdgesOfGroupsOfNotesWithIdenticalDuration(notes, bars, new HashSet<long>());
-            retObj = GetEdgesOfSilencesAndLongNotes(notes, bars, retObj);
+            var edgesSoFar = new HashSet<long>();
+            edgesSoFar.Add(notes[0].StartSinceBeginningOfSongInTicks);
+            edgesSoFar.Add(notes[notes.Count - 1].EndSinceBeginningOfSongInTicks);
+
+            var retObj = GetEdgesOfSilencesAndLongNotes(notes, bars, edgesSoFar);
+            retObj = GetEdgesOfGroupsOfNotesEvenlySpaced(notes, bars, retObj);
             retObj = BreakPhrasesThatAreTooLong(notes, bars, retObj);
-            if (retObj==null || retObj.Count == 0)
-            {
-                retObj.Add(notes.Min(x => x.StartSinceBeginningOfSongInTicks));
-                retObj.Add(notes.Max(x => x.EndSinceBeginningOfSongInTicks));
-            }
             return retObj;
         }
 
@@ -75,11 +73,59 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         }
 
         /// <summary>
-        /// Looks for group of consecutive notes of the same duration that have these properties
+        /// When we have to phrases with a metric of 27,24, 21 and another with a metric of 22,26,24, they are really the same thing and we should write them as 24,24,24
+        /// This function changes the starts of the notes 
+        /// </summary>
+        /// <param name="notes"></param>
+        /// <returns></returns>
+        public static List<Note> DiscretizeTiming(List<Note> notes, List<Bar> bars)
+        {
+            var retObj = new List<Note>();
+            retObj.Add((Note)notes[0].Clone());
+            var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ThenByDescending(y => y.Pitch).ToList();
+
+            for (var i = 1; i < orderedNotes.Count - 1; i++)
+            {
+                var left = orderedNotes[i - 1].StartSinceBeginningOfSongInTicks;
+                var middle = orderedNotes[i].StartSinceBeginningOfSongInTicks;
+                var right = orderedNotes[i + 1].StartSinceBeginningOfSongInTicks;
+                var calculatedBestPoint = ClosestDiscretePoint(left, middle, right);
+
+                var note = (Note)notes[i].Clone();
+                note.StartSinceBeginningOfSongInTicks = calculatedBestPoint;
+                retObj.Add(note);
+            }
+            retObj.Add((Note)notes[notes.Count - 1].Clone());
+            return retObj;
+        }
+
+
+        private static long ClosestDiscretePoint(long left, long middle, long right)
+        {
+            long averageDuration = (right - left) / 2;
+            long unit = GetUnit(averageDuration);
+            if (middle % unit == 0) return middle;
+            long lowerValue = middle - middle % unit;
+            long higherValue = lowerValue + unit;
+            return (middle - lowerValue < higherValue - middle) ? lowerValue : higherValue;
+        }
+        private static long GetUnit(long duration)
+        {
+            long candidate = duration * 2 / 3;
+            if (candidate < 9) return 6;
+            if (candidate < 15) return 12;
+            if (candidate < 19) return 16;
+            if (candidate < 30) return 24;
+            if (candidate < 35) return 32;
+            return 48;
+        }
+
+        /// <summary>
+        /// Looks for group of consecutive notes evenly spaced (that is: the distance in ticks between consecutive notes is constant) that have these properties
         /// - there are at least 3 notes
         /// - there are no more than 16 notes
         /// - the total duration of the group of notes is at leat 1 beat
-        /// - the total duration of the group of notes is not more than 1 bar
+        /// - the total duration of the group of notes is not more than 2 bars
         /// - when we have too many consecutive notes with the same duration, we separate them in points where the ticks from start are multiple of 48 or 96
         /// - we are greedy: if we have n consecutive notes that satisfy the previous condition, and the next note is of the same duration as the
         ///   previous one, and after adding it we still satisfy the conditions, we add it
@@ -87,13 +133,13 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// <param name="notes"></param>
         /// <param name="edgesSoFar"></param>
         /// <returns></returns>
-        public static HashSet<long> GetEdgesOfGroupsOfNotesWithIdenticalDuration(List<Note> notes, List<Bar> bars, HashSet<long> edgesSoFar)
+        public static HashSet<long> GetEdgesOfGroupsOfNotesEvenlySpaced(List<Note> notes, List<Bar> bars, HashSet<long> edgesSoFar)
         {
             var retObj = new HashSet<long>(edgesSoFar);
             var minAllowableConsecutiveNotes = 3;
             var maxAllowableConsecutiveNotes = 16;
 
-            var groups = GetGroupsOfConsecutiveNotesWithSameDuration(notes);
+            var groups = GetGroupsOfConsecutiveNotesEvenlySpaced(notes);
 
 
             foreach (var group in groups)
@@ -104,8 +150,8 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 var groupEndTick = groupStartTick + numberOfConsecutiveNotes * noteDuration;
                 (var startBar, var startBeat) = GetBarAndBeatOfTick(bars, groupStartTick);
                 if (startBar >= bars.Count) break;
-                var minAllowableTotalDuration = bars[startBar].LengthInTicks / bars[startBar].TimeSignature.Numerator;
-                var maxAllowableTotalDuration = bars[startBar].LengthInTicks;
+                var minAllowableTotalDuration = bars[startBar].LengthInTicks * 2 / bars[startBar].TimeSignature.Numerator;
+                var maxAllowableTotalDuration = 3 * bars[startBar].LengthInTicks;
                 // if too short, ignore
                 if (numberOfConsecutiveNotes < minAllowableConsecutiveNotes ||
                     numberOfConsecutiveNotes * noteDuration < minAllowableTotalDuration)
@@ -122,20 +168,16 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 // endBar is the last bar that has notes of this group
                 (var endBar, var endBeat) = GetBarAndBeatOfTick(bars, groupEndTick);
                 retObj.Add(groupStartTick);
-                for (var j = startBar + 1; j <= endBar; j++)
-                    retObj.Add(bars[j - 1].TicksFromBeginningOfSong);
+                for (var j = startBar + 1; j < endBar; j += 2)
+                    retObj.Add(bars[j].TicksFromBeginningOfSong);
 
             }
 
-            foreach (var edge in retObj)
-            {
-                (var bar, var beat) = GetBarAndBeatOfTick(bars, edge);
-            }
             return retObj;
         }
 
         /// <summary>
-        /// When there are large spaces with no notes played, we consider this a boundary of a phrase
+        /// When there are large spaces between consecutive starts of notes (compared with neighbooring notes) we break the melody
         /// </summary>
         /// <param name="notes"></param>
         /// <param name="bars"></param>
@@ -144,47 +186,97 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         public static HashSet<long> GetEdgesOfSilencesAndLongNotes(List<Note> notes, List<Bar> bars, HashSet<long> edgesSoFar)
         {
             var retObj = new HashSet<long>(edgesSoFar);
-            for (int i = 0; i < notes.Count - 1; i++)
+            var notesCleaned = GetNotesWithSilencesRemoved(notes);
+            var candidates = new List<Note>();
+            // We find the longest note in each bar. We look for a note that is longer to all other notes in the same bar
+            // We store these longest notes in the candidates list
+            for (var i = 0; i < bars.Count - 2; i += 2)
             {
-                (var currentBar, var currentBeat) = GetBarAndBeatOfTick(bars, notes[i].StartSinceBeginningOfSongInTicks);
-                // if 2 consecutive notes are serparated too much, add their starts
-                int whatIsConsideredLTooMuch = bars[currentBar - 1].LengthInTicks;
-                if (notes[i + 1].StartSinceBeginningOfSongInTicks - notes[i].StartSinceBeginningOfSongInTicks >= whatIsConsideredLTooMuch)
+                var neighboors = notesCleaned.Where(x => x.StartSinceBeginningOfSongInTicks >= bars[i].TicksFromBeginningOfSong && 
+                                                    x.StartSinceBeginningOfSongInTicks < bars[i + 2].TicksFromBeginningOfSong).ToList();
+                if (neighboors == null || neighboors.Count == 0) continue;
+                var longestNoteDuration = neighboors.Max(x => x.DurationInTicks);
+                var notesWithLongestDuration = neighboors.Where(x => x.DurationInTicks == longestNoteDuration).ToList();
+
+                var secondLongestNote = neighboors.Where(x => x.DurationInTicks < longestNoteDuration).FirstOrDefault();
+                if (secondLongestNote== null || longestNoteDuration > secondLongestNote.DurationInTicks)
                 {
-                    retObj.Add(notes[i].StartSinceBeginningOfSongInTicks);
-                    retObj.Add(notes[i + 1].StartSinceBeginningOfSongInTicks);
+                    var longestNote = neighboors.Where(x => x.DurationInTicks == longestNoteDuration).FirstOrDefault();
+                    candidates.Add(longestNote);
                 }
+            }
+            // We now check if we should remove some of these candidates
+            // When 2 candidates are close and one is much longer than the other we remove the shorter one
+            var candidatesToBeRemoved = new List<Note>();
+            for (int i = 0; i < candidates.Count - 1; i++)
+            {
+                (var bar, var beat) = GetBarAndBeatOfTick(bars, candidates[i].StartSinceBeginningOfSongInTicks);
+                var barlength = bars[bar - 1].LengthInTicks;
+                if (candidates[i + 1].StartSinceBeginningOfSongInTicks - candidates[i].StartSinceBeginningOfSongInTicks < barlength * 0.75)
+                {
+                    if (candidates[i].DurationInTicks >= 1.5 * candidates[i + 1].DurationInTicks)
+                        candidatesToBeRemoved.Add(candidates[i + 1]);
+                    else if (candidates[i + 1].DurationInTicks >= 1.5 * candidates[i].DurationInTicks)
+                        candidatesToBeRemoved.Add(candidates[i]);
+                }
+            }
+            for (int i = 0; i < candidatesToBeRemoved.Count; i++)
+            {
+                candidates.Remove(candidatesToBeRemoved[i]);
+            }
+            foreach(var n in candidates)
+            {
+                retObj.Add(n.EndSinceBeginningOfSongInTicks);
             }
             return retObj;
         }
+  
+
+        private static List<Note> GetNotesWithSilencesRemoved(List<Note> notes)
+        {
+            var retObj = notes.Clone();
+            for (int i=0; i < retObj.Count-1; i++)
+            {
+                retObj[i].EndSinceBeginningOfSongInTicks = retObj[i + 1].StartSinceBeginningOfSongInTicks;
+            }
+            return retObj.OrderBy(x=>x.StartSinceBeginningOfSongInTicks).ToList();
+        }
+
 
         /// <summary>
-        /// Looks for groups of consecutive notes with the same duration and for each returns the point where it starts, the number of consecutive notes and
-        /// the duration of the note
+        /// Looks for groups of consecutive notes evenly spaced (meaning that the distance in ticks between consecutive notes is constant) and for each 
+        /// returns the point where it starts, the number of consecutive notes and the duration of the note
+        /// Duration here is not the actual duration of the note, but the separation in ticks from the start of the note to the start of the following note
         /// </summary>
         /// <param name="notes"></param>
         /// <param name=""></param>
         /// <returns></returns>
-        public static List<(long, int, int)> GetGroupsOfConsecutiveNotesWithSameDuration(List<Note> notes)
+        public static List<(long, int, int)> GetGroupsOfConsecutiveNotesEvenlySpaced(List<Note> notes)
         {
             var retObj = new List<(long, int, int)>();
+            if (notes.Count <= 3) return retObj;
             long currentGroupStart = notes[0].StartSinceBeginningOfSongInTicks;
-            var currentGroupNoteDuration = notes[0].DurationInTicks;
-            var currentConsecutiveNotes = 0;
-            foreach (var note in notes)
+            int currentGroupNoteDuration = (int)(notes[1].StartSinceBeginningOfSongInTicks - notes[0].StartSinceBeginningOfSongInTicks);
+            var currentConsecutiveNotes = 1;
+            for (int i = 1; i < notes.Count; i++)
             {
-                if (note.DurationInTicks == currentGroupNoteDuration)
+                var start = notes[i].StartSinceBeginningOfSongInTicks;
+                var end = i < notes.Count - 1 ? notes[i + 1].StartSinceBeginningOfSongInTicks : notes[i].EndSinceBeginningOfSongInTicks;
+                if (end - start == currentGroupNoteDuration)
                 {
                     currentConsecutiveNotes++;
                 }
                 else
                 {
-                    retObj.Add((currentGroupStart, currentConsecutiveNotes, currentGroupNoteDuration));
+                    if (currentConsecutiveNotes > 3)
+                        retObj.Add((currentGroupStart, currentConsecutiveNotes, currentGroupNoteDuration));
                     currentConsecutiveNotes = 1;
-                    currentGroupStart = note.StartSinceBeginningOfSongInTicks;
-                    currentGroupNoteDuration = note.DurationInTicks;
+                    currentGroupStart = start;
+                    currentGroupNoteDuration = (int)(end - start);
                 }
             }
+            if (currentConsecutiveNotes > 1)
+                retObj.Add((currentGroupStart, currentConsecutiveNotes, currentGroupNoteDuration));
             return retObj;
         }
 
@@ -206,8 +298,8 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 if (startBar >= bars.Count) break;
                 if (edgesAsList[i + 1] - edgesAsList[i] > bars[startBar].LengthInTicks * 2)
                 {
-                    for (var j = startBar + 1; j <= endBar; j++)
-                        retObj.Add(bars[j - 1].TicksFromBeginningOfSong);
+                    for (var j = startBar + 1; j < endBar; j += 2)
+                        retObj.Add(bars[j].TicksFromBeginningOfSong);
                 }
             }
             return retObj;

@@ -71,6 +71,7 @@ namespace SinphinityProcMidi.Midi
                 return Convert.ToBase64String(bytes);
             }
         }
+
         /// <summary>
         /// If we have an arbitrary group of notes from a song, they could be from the middle of the
         /// song. We want to create a midi file where the first note starts at time zero, so we

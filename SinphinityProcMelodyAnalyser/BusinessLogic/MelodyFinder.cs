@@ -27,8 +27,12 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             foreach (var voice in voices)
             {
                 var voiceNotes = notes.Where(x => x.Voice == voice).OrderBy(y => y.StartSinceBeginningOfSongInTicks).ThenByDescending(z => z.Pitch).ToList();
+                if (voiceNotes[0].IsPercussion) continue;
                 var cleanedVoiceNotes = PhraseDetection.RemoveHarmony(voiceNotes);
-                var phraseEdges = PhraseDetection.GetPhrasesEdges(cleanedVoiceNotes, song.Bars).OrderBy(x => x).ToList();
+                cleanedVoiceNotes = PhraseDetection.DiscretizeTiming(cleanedVoiceNotes, song.Bars);
+                // We remove harmony again because it could have been introduced in the previous step
+                cleanedVoiceNotes = PhraseDetection.RemoveHarmony(cleanedVoiceNotes);
+                var phraseEdges = PhraseDetection.GetPhrasesEdges(cleanedVoiceNotes, song.Bars).OrderBy(x => x).ToList().OrderBy(x => x).ToList();
                 for (int i = 0; i < phraseEdges.Count - 1; i++)
                 {
                     var phraseInfo = PhraseDetection.GetPhraseBetweenEdges(cleanedVoiceNotes, phraseEdges[i], phraseEdges[i + 1], song.Id, voice, song.Bars);

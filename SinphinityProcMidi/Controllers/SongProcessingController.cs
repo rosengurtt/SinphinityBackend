@@ -91,6 +91,12 @@ namespace SinphinityProcMidi.Controllers
         {
             var tempoChanges = new List<TempoChange> { new TempoChange { MicrosecondsPerQuarterNote = 500000 * 120 / tempoInBPM } };
             var notes = PhraseConverter.GetPhraseNotes(phraseType, asString, instrument, startingPitch);
+            foreach(var n in notes)
+            {
+                n.StartSinceBeginningOfSongInTicks += 1;
+                n.EndSinceBeginningOfSongInTicks += 1;
+            }
+            notes.Add(new Note { StartSinceBeginningOfSongInTicks = 0, EndSinceBeginningOfSongInTicks = 1, Volume = 0 });
             var base64encodedMidiBytes = MidiUtilities.GetMidiBytesFromNotes(notes, tempoChanges);
             var ms = new MemoryStream(MidiUtilities.GetMidiBytesFromPointInTime(base64encodedMidiBytes, 0));
             var bytes = ms.ToArray();

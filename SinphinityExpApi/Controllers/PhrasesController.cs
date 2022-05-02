@@ -75,7 +75,7 @@ namespace SinphinityExpApi.Controllers
                             Log.Information($"{alca} - Start with song: {song.Name}");
                             if (song.SongSimplifications != null && song.SongSimplifications.Count > 0)
                             {
-                                var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(song, 1);
+                                var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(song, 0);
                                 Log.Information($"Phrase extracion completed OK for {song.Name}");
                                 await _sysStoreClient.InsertPhrasesAsync(phrases, song.Id);
                                 Log.Information($"Saved OK {song.Name}");
