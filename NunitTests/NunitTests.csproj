@@ -18,7 +18,15 @@
     <ProjectReference Include="..\SinphinityGraphApi\SinphinityGraphApi.csproj" />
     <ProjectReference Include="..\SinphinityModel\SinphinityModel.csproj" />
     <ProjectReference Include="..\SinphinityProcMelodyAnalyser\SinphinityProcMelodyAnalyser.csproj" />
-    <ProjectReference Include="..\SinphinityProcPatternFinderApi\SinphinityProcPatternFinderApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\Invention1notes.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Invention4notes.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

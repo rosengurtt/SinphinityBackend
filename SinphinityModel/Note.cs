@@ -6,7 +6,7 @@ namespace Sinphinity.Models
 {
     public class Note : ICloneable
     {
-        public Guid Guid { get; set; }
+        public Guid? Guid { get; set; }
         public byte Pitch { get; set; }
         public byte Volume { get; set; }
         public long StartSinceBeginningOfSongInTicks { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using SinphinityModel.Helpers;
+using System.Text.Json.Serialization;
 
 namespace Sinphinity.Models
 {
@@ -100,6 +101,7 @@ namespace Sinphinity.Models
                     AsString += "," + (notes[i + 1].Pitch - notes[i].Pitch).ToString() ;
                 }
             }
+            AsString = AsString.ExtractPattern();
         }
     }
 }

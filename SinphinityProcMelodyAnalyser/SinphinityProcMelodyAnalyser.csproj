@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CommonRestLib\CommonRestLib.csproj" />
     <ProjectReference Include="..\SinphinityModel\SinphinityModel.csproj" />
   </ItemGroup>

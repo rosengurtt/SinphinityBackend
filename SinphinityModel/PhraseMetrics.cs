@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using SinphinityModel.Helpers;
+using System.Text.Json.Serialization;
 
 namespace Sinphinity.Models
 {
@@ -82,6 +83,7 @@ namespace Sinphinity.Models
                 AsString += (orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks) + ",";
             }
             AsString += endTick - orderedNotes[orderedNotes.Count - 1].StartSinceBeginningOfSongInTicks;
+            AsString = AsString.ExtractPattern();
         }
     }
 }

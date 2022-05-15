@@ -120,7 +120,7 @@ namespace SinphinityProcMidi.Midi
                 {
                     ne = new NoteEvolution
                     {
-                        TempId = n.Guid,
+                        TempId =(Guid)n.Guid,
                         start = new List<long?>(),
                         end = new List<long?>(),
                         voice = new List<byte?>()

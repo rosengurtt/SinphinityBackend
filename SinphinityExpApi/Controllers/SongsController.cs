@@ -12,6 +12,7 @@ using System.Net.Mime;
 using Serilog;
 using CommonRestLib.ErrorHandling;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace SinphinitySysStore.Controllers
 {
@@ -39,6 +40,7 @@ namespace SinphinitySysStore.Controllers
         public async Task<IActionResult> GetSong(long songId, int? simplificationVersion)
         {
             Song song = await _sysStoreClient.GetSongByIdAsync(songId, simplificationVersion);
+            var mierda = JsonConvert.SerializeObject( song.SongSimplifications[0].Notes);
             if (song == null)
                 return NotFound(new ApiResponse(404));
 

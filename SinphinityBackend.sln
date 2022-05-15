@@ -15,7 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonRestLib", "CommonRest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinityGraphApi", "SinphinityGraphApi\SinphinityGraphApi.csproj", "{24E73F56-6B2B-437E-A488-E659D981DBFC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SinphinityProcPatternFinderApi", "SinphinityProcPatternFinderApi\SinphinityProcPatternFinderApi.csproj", "{497CA3EB-43A9-44B3-970B-5CB09A448103}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NunitTests", "NunitTests\NunitTests.csproj", "{67A4604B-A530-4F3A-A07F-4AC1EC6F9D18}"
 EndProject

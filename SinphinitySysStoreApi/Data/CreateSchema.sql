@@ -24,8 +24,8 @@ IF (OBJECT_ID('dbo.[FK_PhrasesOccurrences_Phrases_Id]', 'F') IS NOT NULL)
 IF (OBJECT_ID('dbo.[FK_PhraseSong_Phrases]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhraseSong DROP CONSTRAINT FK_PhraseSong_Phrases
 	
-IF (OBJECT_ID('dbo.[FK_PhraseBand_Phrases]', 'F') IS NOT NULL)
-	ALTER TABLE dbo.PhraseBand DROP CONSTRAINT FK_PhraseBand_Phrases
+IF (OBJECT_ID('dbo.[FK_BandPhrase_Phrases]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.BandPhrase DROP CONSTRAINT FK_BandPhrase_Phrases
 	
 IF (OBJECT_ID('dbo.[FK_PhraseStyle_Phrases]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhraseStyle DROP CONSTRAINT FK_PhraseStyle_Phrases
@@ -164,12 +164,13 @@ CREATE TABLE PhrasesOccurrences (
 	Voice TINYINT NOT NULL,
 	BarNumber INT NOT NULL,	
 	Beat INT NOT NULL,
-	Tick BIGINT NOT NULL,
+	StartTick BIGINT NOT NULL,
+	EndTick BIGINT NOT NULL,
     CONSTRAINT FK_PhrasesOccurrences_Songs_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id),
     CONSTRAINT FK_PhrasesOccurrences_Phrases_Id  FOREIGN KEY (PhraseId) REFERENCES Phrases(Id)
 )
 
-CREATE INDEX IX_PhrasesOccurrences_Tick ON PhrasesOccurrences (Tick)
+CREATE INDEX IX_PhrasesOccurrences_StartTick ON PhrasesOccurrences (StartTick)
 CREATE INDEX IX_PhrasesOccurrences_Voice ON PhrasesOccurrences (Voice)
 
 IF OBJECT_ID('dbo.PhraseSong', 'U') IS NOT NULL 
@@ -183,15 +184,15 @@ CREATE TABLE PhraseSong(
     CONSTRAINT [FK_PhraseSong_Songs] FOREIGN KEY (SongsId) REFERENCES Songs (Id) ON DELETE CASCADE
 )
 
-IF OBJECT_ID('dbo.PhraseBand', 'U') IS NOT NULL 
-  DROP TABLE dbo.PhraseBand
+IF OBJECT_ID('dbo.BandPhrase', 'U') IS NOT NULL 
+  DROP TABLE dbo.BandPhrase
   
-CREATE TABLE PhraseBand(
+CREATE TABLE BandPhrase(
 	PhrasesId bigint NOT NULL,
 	BandsId bigint NOT NULL,
     CONSTRAINT PK_PhraseBand PRIMARY KEY NONCLUSTERED (PhrasesId, BandsId),
-    CONSTRAINT [FK_PhraseBand_Phrases] FOREIGN KEY (PhrasesId) REFERENCES Phrases (Id) ON DELETE CASCADE,
-    CONSTRAINT [FK_PhraseBand_Bands] FOREIGN KEY (BandsId) REFERENCES Bands (Id) ON DELETE CASCADE
+    CONSTRAINT [FK_BandPhrase_Phrases] FOREIGN KEY (PhrasesId) REFERENCES Phrases (Id) ON DELETE CASCADE,
+    CONSTRAINT [FK_BandPhrase_Bands] FOREIGN KEY (BandsId) REFERENCES Bands (Id) ON DELETE CASCADE
 )
 
 IF OBJECT_ID('dbo.PhraseStyle', 'U') IS NOT NULL 

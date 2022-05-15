@@ -1,6 +1,6 @@
+/*
 using NUnit.Framework;
 using Sinphinity.Models;
-using SinphinityProcPatternFinderApi.PatternExtraction;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -119,3 +119,4 @@ namespace NunitTests
         }
     }
 }
+*/

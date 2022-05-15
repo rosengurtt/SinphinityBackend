@@ -8,8 +8,8 @@
   
     <ItemGroup>
     <PackageReference Include="Neo4j.Driver" Version="4.4.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
-    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
     <ProjectReference Include="..\CommonRestLib\CommonRestLib.csproj" />
     <ProjectReference Include="..\SinphinityModel\SinphinityModel.csproj" />
   </ItemGroup>

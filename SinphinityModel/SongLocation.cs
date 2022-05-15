@@ -10,20 +10,22 @@ namespace Sinphinity.Models
     public class SongLocation
     {
         public SongLocation() { }
-        public SongLocation(long songId, byte voice, long tick, List<Bar> bars) {
+        public SongLocation(long songId, byte voice, long startTick, long endTick, List<Bar> bars) {
 
-            BarNumber = bars.Where(b => b.TicksFromBeginningOfSong <= tick).Count();
+            BarNumber = bars.Where(b => b.TicksFromBeginningOfSong <= startTick).Count();
             var beatLength = 4 * 96 / bars[BarNumber - 1].TimeSignature.Denominator;
-            Beat = (int)(tick - bars[BarNumber - 1].TicksFromBeginningOfSong) / beatLength;
+            Beat = (int)(startTick - bars[BarNumber - 1].TicksFromBeginningOfSong) / beatLength;
             SongId = songId;
             Voice = voice;
-            Tick = tick;
+            StartTick = startTick;
+            EndTick = endTick;
         }
 
         public long SongId { get; set; }
         public byte Voice { get; set; }
         public int BarNumber { get; set; }
         public int Beat { get; set; }
-        public long Tick { get; set; }
+        public long StartTick { get; set; }
+        public long EndTick { get; set; }
     }
 }

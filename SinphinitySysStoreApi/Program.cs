@@ -1,7 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using SinphinitySysStore.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
+                                    .ReadFrom.Configuration(hostingContext.Configuration));
 
 builder.Services.AddControllers();
 var connection = builder.Configuration.GetConnectionString("Sinphinity");

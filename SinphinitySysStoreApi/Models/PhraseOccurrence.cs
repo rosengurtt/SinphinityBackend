@@ -11,7 +11,8 @@
             Voice = o.Voice;
             BarNumber = o.BarNumber;
             Beat = o.Beat;
-            Tick = o.Tick;
+            StartTick = o.StartTick;
+            EndTick = o.EndTick;
         }
 
         public long Id { get; set; }
@@ -20,7 +21,8 @@
         public byte Voice { get; set; }
         public int BarNumber { get; set; }
         public int Beat { get; set; }
-        public long Tick { get; set; }
+        public long StartTick { get; set; }
 
+        public long EndTick { get; set; }
     }
 }

@@ -2,8 +2,11 @@ using Neo4j.Driver;
 using SinphinityGraphApi.Clients;
 using SinphinityGraphApi.Data;
 using SinphinityGraphApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
+                                    .ReadFrom.Configuration(hostingContext.Configuration));
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();

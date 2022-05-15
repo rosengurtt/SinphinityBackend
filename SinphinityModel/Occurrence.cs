@@ -9,6 +9,7 @@
         public byte Voice { get; set; }
         public long BarNumber { get; set; }
         public long Beat { get; set; }
-        public long Tick { get; set; }
+        public long StartTick { get; set; }
+        public long EndTick { get; set; }
     }
 }

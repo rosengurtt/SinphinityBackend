@@ -296,7 +296,7 @@ namespace SinphinitySysStore.Data
             // Insert Occurrences
             foreach (var loc in locations)
             {
-                var occ = await _dbContext.PhrasesOccurrences.Where(x => x.SongId == songId && x.PhraseId == phraseId && x.Voice == loc.Voice && x.Tick == loc.Tick)
+                var occ = await _dbContext.PhrasesOccurrences.Where(x => x.SongId == songId && x.PhraseId == phraseId && x.Voice == loc.Voice && x.StartTick == loc.StartTick)
                     .FirstOrDefaultAsync();
                 if (occ == null)
                 {

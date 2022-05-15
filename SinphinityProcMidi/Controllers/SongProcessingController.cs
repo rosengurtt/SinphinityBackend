@@ -121,6 +121,10 @@ namespace SinphinityProcMidi.Controllers
             var simplificationOne = MidiUtilities.GetSimplification1ofSong(song);
             song.SongSimplifications.Add(simplificationOne);
 
+            //Remove the Guids of the notes because they make the object larger and they are not needed anymore
+            song.SongSimplifications[0].Notes.ForEach(n => n.Guid = null);
+            song.SongSimplifications[1].Notes.ForEach(n => n.Guid = null);
+
             return song;
         }
 
