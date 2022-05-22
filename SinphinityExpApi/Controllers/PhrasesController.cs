@@ -32,7 +32,7 @@ namespace SinphinityExpApi.Controllers
         }
 
         // api/songs/patterns/processPhrases?songId=60d577ef035c715d2ea7ef60
-        [HttpGet("processPhrases")]
+        [HttpGet("processSingle")]
         public async Task<IActionResult> ProcessPhrasesForSong(long songId, int songSimplification)
         {
             var song = await _sysStoreClient.GetSongByIdAsync(songId);

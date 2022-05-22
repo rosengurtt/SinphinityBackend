@@ -76,6 +76,14 @@ namespace SinphinityProcMidi.Helpers
             var phrasePitches = new PhrasePitches(pitchesAsString);
             long ticksFromStart = 0;
             byte currentPitch = startingPitch;
+            retObj.Add(new Note
+            {
+                Pitch = startingPitch,
+                StartSinceBeginningOfSongInTicks = 0,
+                EndSinceBeginningOfSongInTicks = phraseMetrics.Items[0],
+                Instrument = (byte)instrument,
+                Volume = 90
+            });
             for (int i = 0; i < phrasePitches.Items.Count; i++)
             {
                 currentPitch += (byte)phrasePitches.Items[i];

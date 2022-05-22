@@ -56,16 +56,20 @@ namespace Sinphinity.Models
 
         public BasicMetrics(string asString)
         {
-            var p = new PhraseMetrics(asString);
-            AsString = "";
-            var gdc = GreatestCommonDivisor(p.Items);
-            AsString += string.Join(',', p.Items.Select(x => x / gdc));
+            AsString = Simplify(asString);
         }
         public BasicMetrics(PhraseMetrics p)
         {
-            AsString = "";
-            var gdc = GreatestCommonDivisor(p.Items);
-            AsString += string.Join(',', p.Items.Select(x => x / gdc));
+            AsString = Simplify(p.AsString);
+        }
+        private string Simplify(string asString)
+        {
+            var asStringWithoutRepetitions = asString.Contains("*") ? asString.Substring(0, asString.IndexOf("*")) : asString;
+            var theItems = asStringWithoutRepetitions.Replace("+", "").Split(',').Select(x => Convert.ToInt32(x)).ToList();
+            var retString = "";
+            var gdc = GreatestCommonDivisor(theItems);
+            retString += string.Join(',', theItems.Select(x => x / gdc));
+            return retString;
         }
 
         private static long GreatestCommonDivisor(List<int> numbers)

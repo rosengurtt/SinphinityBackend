@@ -143,6 +143,7 @@ CREATE TABLE Phrases (
 	[Range] INT  NULL,
 	IsMonotone BIT  NULL,
 	Step INT  NULL,
+	IsUsedAsPattern BIT NULL,
 	PhraseType INT NOT NULL	
 )	
 

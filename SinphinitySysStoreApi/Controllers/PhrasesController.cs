@@ -28,7 +28,6 @@ namespace SinphinitySysStoreApi.Controllers
         {
             if (phrases.Count != 6)
                 throw new Exception("Me mandaron cualquier mierda");
-            // PhrasesMetrics, PhrasesPitches, Phrases, EmbellishedPhrasesMetrics, EmbellishedPhrasesPitches, jEmbellishedPhrases
             await _phrasesRepository.SavePhrasesMetricsOfSongAsync(phrases[0], songId);
             await _phrasesRepository.SavePhrasesPitchesOfSongAsync(phrases[1], songId);
             await _phrasesRepository.SavePhrasesOfSongAsync(phrases[2], songId);

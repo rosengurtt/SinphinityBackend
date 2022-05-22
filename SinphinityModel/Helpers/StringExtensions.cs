@@ -17,14 +17,31 @@ namespace SinphinityModel.Helpers
             }
             return ExtractPatternFromPart(AsString);
         }
+
+        public static string ExpandPattern(this string AsString)
+        {
+            if (!AsString.Contains('*'))
+                return AsString;
+            var asteriskLocation = AsString.IndexOf("*");
+            var pattern = AsString.Substring(0, asteriskLocation);
+            var repetitions = int.Parse(AsString.Substring(asteriskLocation + 1, AsString.Length - asteriskLocation - 1));
+            var retString = pattern;
+            for (var i = 1; i < repetitions; i++)
+                retString += $",{pattern}";
+            return retString;
+        }
         private static string ExtractPatternFromPart(string asString)
         {
+            // If patterns already extracted leave unchanged
+            if (asString.Contains('*'))
+                return asString;
+
             var items = asString.Split(',');
-            var patternLength = asString.Length;
+            var patternLength = items.Length;
             foreach (var i in GetDivisorsOf(items.Length))
             {
                 var isPatternOfLength_i = true;
-                for (var j = 0; j < items.Length / i; j++)
+                for (var j = 0; j < items.Length - i; j++)
                 {
                     if (items[j] != items[j + i])
                     {
@@ -38,17 +55,24 @@ namespace SinphinityModel.Helpers
                     break;
                 }
             }
-            return String.Join(",", items.Take(patternLength));
+            if (patternLength == items.Length)
+                return asString;
+            else
+            {
+                var pattern = String.Join(",", items.Take(patternLength));
+                var repetitions = items.Length / patternLength;
+                return $"{pattern}*{repetitions}";
+            }
         }
 
         private static List<int> GetDivisorsOf(int n)
         {
             var retObj = new List<int>();
-            for (var i = 2; i <= n / 2; i++)
+            for (var i = 1; i <= n; i++)
             {
                 if (n % i == 0) retObj.Add(i);
             }
-            return retObj.OrderByDescending(x => x).ToList();
+            return retObj.OrderBy(x => x).ToList();
         }
     }
 }

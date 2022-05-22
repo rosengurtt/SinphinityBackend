@@ -19,9 +19,9 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             if (phraseNotes.Count > 0)
             {
                 (var hasEmbellishments, var phraseWithoutEmbellishmentNotes) = EmbelishmentsDetection.GetPhraseWithoutEmbellishments(phraseNotes);
-                var metrics = hasEmbellishments ? new PhraseMetrics(phraseWithoutEmbellishmentNotes, start, end) : new PhraseMetrics(phraseNotes, start, end);
+                var metrics = hasEmbellishments ? new PhraseMetrics(phraseWithoutEmbellishmentNotes, end) : new PhraseMetrics(phraseNotes, end);
                 var pitches = hasEmbellishments ? new PhrasePitches(phraseWithoutEmbellishmentNotes) : new PhrasePitches(phraseNotes);
-                var embellishedMetrics = hasEmbellishments ? new PhraseMetrics(phraseNotes, start, end) : null;
+                var embellishedMetrics = hasEmbellishments ? new PhraseMetrics(phraseNotes, end) : null;
                 var embellishedPitches = hasEmbellishments ? new PhrasePitches(phraseNotes) : null;
                 var retObj = new PhraseInfo
                 {

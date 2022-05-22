@@ -72,7 +72,8 @@ namespace Sinphinity.Models
         {
             get
             {
-                return AsString.Split(',').Select(x => Convert.ToInt32(x)).ToList();
+                var expanded = AsString.ExpandPattern();
+                return expanded.Split(',').Select(x => Convert.ToInt32(x)).ToList();
             }
         }
 
@@ -90,17 +91,21 @@ namespace Sinphinity.Models
         {
             AsString = asString;
             Id = id == null ? 0 : (long)id;
+            AsString = AsString.ExtractPattern();
         }
         public PhrasePitches(List<Note> notes)
         {
-            AsString = "0";
             if (notes.Count > 1)
             {
                 for (int i = 0; i < notes.Count - 1; i++)
                 {
-                    AsString += "," + (notes[i + 1].Pitch - notes[i].Pitch).ToString() ;
+                    AsString += (notes[i + 1].Pitch - notes[i].Pitch).ToString();
+                    if (i < notes.Count - 2)
+                        AsString += ",";
                 }
             }
+            else
+                AsString = "0";
             AsString = AsString.ExtractPattern();
         }
     }

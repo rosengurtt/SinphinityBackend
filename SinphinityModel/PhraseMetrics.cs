@@ -38,7 +38,7 @@ namespace Sinphinity.Models
         {
             get
             {
-                return Items.Count - 1;
+                return Items.Count;
             }
         }
         public PhraseTypeEnum PhraseType
@@ -49,21 +49,21 @@ namespace Sinphinity.Models
             }
         }
 
+
         [JsonIgnore]
         public List<int> Items
         {
             get
             {
-                return AsString.Replace("+", "").Split(',').Select(x => Convert.ToInt32(x)).ToList();
+                var expanded = AsString.ExpandPattern();
+                return expanded.Replace("+", "").Split(',').Select(x => Convert.ToInt32(x)).ToList();
             }
         }
-
-
 
         public PhraseMetrics() { }
         public PhraseMetrics(string asString, long? id = null)
         {
-            AsString = asString;
+            AsString = asString.ExtractPattern();
             Id = id == null ? 0 : (long)id;
         }
 
@@ -74,10 +74,9 @@ namespace Sinphinity.Models
         /// </summary>
         /// <param name="notes"></param>
         /// <param name="noteAfterPhrase"></param>
-        public PhraseMetrics(List<Note> notes, long start, long endTick)
+        public PhraseMetrics(List<Note> notes, long endTick)
         {
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
-            AsString = $"{orderedNotes[0].StartSinceBeginningOfSongInTicks - start},";
             for (int i = 0; i < orderedNotes.Count - 1; i++)
             {
                 AsString += (orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks) + ",";
@@ -85,5 +84,6 @@ namespace Sinphinity.Models
             AsString += endTick - orderedNotes[orderedNotes.Count - 1].StartSinceBeginningOfSongInTicks;
             AsString = AsString.ExtractPattern();
         }
+      
     }
 }
