@@ -5,6 +5,72 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
 {
     public static class Preprocessor
     {
+
+        public static List<Note> RemoveDrumsAndChordsVoices(List<Note> notes)
+        {
+            var voices = notes.Select(n => n.Voice).Distinct().OrderBy(v => v).ToList();
+            var voicesToRemove =new List<int>();
+            foreach (var voice in voices)
+            {
+                var voiceNotes = notes.Where(x => x.Voice == voice).ToList();
+                if (voiceNotes.FirstOrDefault().IsPercussion)
+                    voicesToRemove.Add(voice);
+                if (GetPercentageOfChordNotes(voiceNotes)>70)
+                    voicesToRemove.Add(voice);
+            }
+            return notes.Where(x => !voicesToRemove.Contains(x.Voice)).ToList();
+        }
+
+        /// <summary>
+        /// A bass voice may have melodies but in rock it often doesn't
+        /// </summary>
+        /// <param name="notes"></param>
+        /// <returns></returns>
+        public static List<Note> RemoveBoringBassVoices(List<Note> notes)
+        {
+            var voices = notes.Select(n => n.Voice).Distinct().OrderBy(v => v).ToList();
+            var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
+            var voicesToRemove =new List<int>();
+            foreach (var voice in voices)
+            {
+                var voiceNotes = notes.Where(x => x.Voice == voice).ToList();
+                if (voiceNotes.Average(x => x.Pitch) < 55)
+                {
+                    var countPitchUnchanged = 0;
+                    for (var i = 0; i < orderedNotes.Count - 1; i++)
+                    {
+                        if (orderedNotes[i].Pitch == orderedNotes[i + 1].Pitch)
+                            countPitchUnchanged++;
+                        if (i > 0 && orderedNotes[i].Pitch != orderedNotes[i + 1].Pitch && orderedNotes[i - 1].Pitch == orderedNotes[i].Pitch)
+                            countPitchUnchanged++;
+                    }
+                    if (countPitchUnchanged * 100 > voiceNotes.Count * 50)
+                        voicesToRemove.Add(voice);
+                }
+            }
+            return notes.Where(x => !voicesToRemove.Contains(x.Voice)).ToList();
+        }
+
+        private static int GetPercentageOfChordNotes(List<Note> notes)
+        {
+            var totalNotesTime = 0;
+            var totalSyncNotesTime = 0;
+            foreach (var n in notes)
+            {
+                totalNotesTime += n.DurationInTicks;
+                if (notes.Where(x=> AreNotesSyncrhonous(n, x)).Count() > 2)
+                {
+                    totalSyncNotesTime += n.DurationInTicks;
+                }
+            }
+            return totalSyncNotesTime * 100 / totalNotesTime;
+        }
+        private static bool AreNotesSyncrhonous(Note n1, Note n2)
+        {
+            if (Math.Abs(n1.StartSinceBeginningOfSongInTicks - n2.StartSinceBeginningOfSongInTicks) < 4 && Math.Abs(n1.EndSinceBeginningOfSongInTicks - n2.EndSinceBeginningOfSongInTicks) < 4)
+                return true;
+            return false;
+        }
         /// <summary>
         /// If a track has more than 1 voice (for ex. a piano track where each hands plays an independent voice), it splits it in 2
         /// If a track is playing chords, it leaves it unchanged

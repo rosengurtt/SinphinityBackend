@@ -16,9 +16,11 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 .OrderBy(y => y.StartSinceBeginningOfSongInTicks)
                 .ToList();
 
-            if (phraseNotes.Count > 0)
+            if (phraseNotes.Count > 2)
             {
                 (var hasEmbellishments, var phraseWithoutEmbellishmentNotes) = EmbelishmentsDetection.GetPhraseWithoutEmbellishments(phraseNotes);
+                if (hasEmbellishments && phraseWithoutEmbellishmentNotes.Count <= 1)
+                    return null;
                 var metrics = hasEmbellishments ? new PhraseMetrics(phraseWithoutEmbellishmentNotes, end) : new PhraseMetrics(phraseNotes, end);
                 var pitches = hasEmbellishments ? new PhrasePitches(phraseWithoutEmbellishmentNotes) : new PhrasePitches(phraseNotes);
                 var embellishedMetrics = hasEmbellishments ? new PhraseMetrics(phraseNotes, end) : null;
@@ -52,7 +54,9 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             edgesSoFar = GetEdgesBetweenChangesInPacing(notes, bars, edgesSoFar);
             edgesSoFar = GetEdgesAtStartOrEndOfScales(notes, bars, edgesSoFar);
             edgesSoFar = GetEdgesBetweenGroupsOfNotesWithSmallSteps(notes, bars, edgesSoFar);
-            edgesSoFar = GetRepeatingPatterns(notes, edgesSoFar);
+            edgesSoFar = GetRepeatingPatterns(notes, edgesSoFar, "notes");
+            edgesSoFar = GetRepeatingPatterns(notes, edgesSoFar, "metrics");
+
             // edgesSoFar = BreakPhrasesThatAreTooLong(notes, bars, edgesSoFar);
             return edgesSoFar;
         }
@@ -177,7 +181,10 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             for (var i = 1; i < orderedNotes.Count; i++)
             {
                 if (orderedNotes[i].StartSinceBeginningOfSongInTicks != orderedNotes[i - 1].StartSinceBeginningOfSongInTicks)
-                    retObj.Add(orderedNotes[i]);
+                    retObj.Add((Note)orderedNotes[i].Clone());
+            }
+            if (retObj.Where(x => x.DurationInTicks <= 0).Any()){
+
             }
             return retObj;
         }
@@ -188,25 +195,60 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        public static List<Note> DiscretizeTiming(List<Note> notes, List<Bar> bars)
+        public static List<Note> DiscretizeTiming(List<Note> notes)
         {
+            var orderedNotes = SynchronizeNotesThatShoulsStartTogether(notes);
             var retObj = new List<Note>();
-            retObj.Add((Note)notes[0].Clone());
-            var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ThenByDescending(y => y.Pitch).ToList();
+            retObj.Add((Note)orderedNotes[0].Clone());
 
             for (var i = 1; i < orderedNotes.Count - 1; i++)
             {
+
                 var left = orderedNotes[i - 1].StartSinceBeginningOfSongInTicks;
                 var middle = orderedNotes[i].StartSinceBeginningOfSongInTicks;
                 var right = orderedNotes[i + 1].StartSinceBeginningOfSongInTicks;
                 var calculatedBestPoint = ClosestDiscretePoint(left, middle, right);
 
                 var note = (Note)notes[i].Clone();
-                note.StartSinceBeginningOfSongInTicks = calculatedBestPoint;
+                var shift = calculatedBestPoint - note.StartSinceBeginningOfSongInTicks;
+                // we change the start value if the note and its previous one are not very short notes, and if the shift is not so large that it would make the duration of the note or the previous one null or negative
+                if (calculatedBestPoint < note.EndSinceBeginningOfSongInTicks && note.DurationInTicks > 6 && retObj[i - 1].DurationInTicks > Math.Max(6, -shift))
+                {
+                    note.StartSinceBeginningOfSongInTicks += shift;
+                    if (retObj[i - 1].StartSinceBeginningOfSongInTicks < note.StartSinceBeginningOfSongInTicks)
+                        retObj[i - 1].EndSinceBeginningOfSongInTicks += shift;
+                }
+                if (note.DurationInTicks <= 0 || retObj[i - 1].DurationInTicks <= 0 || retObj[i - 1].StartSinceBeginningOfSongInTicks > note.StartSinceBeginningOfSongInTicks)
+                {
+
+                }
                 retObj.Add(note);
             }
             retObj.Add((Note)notes[notes.Count - 1].Clone());
             return retObj;
+        }
+        private static List<Note> SynchronizeNotesThatShoulsStartTogether(List<Note> notes)
+        {
+            var orderedNotes = notes.Clone().OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
+
+            var i = 0;
+            while (i < orderedNotes.Count)
+            {
+                var n = orderedNotes[i];
+                var notesThatShouldStartTogetherWithThis = orderedNotes
+                    .Where(x => (x.DurationInTicks >= 24 && Math.Abs(x.StartSinceBeginningOfSongInTicks - n.StartSinceBeginningOfSongInTicks) < 6) ||
+                    (x.DurationInTicks >= 10 && Math.Abs(x.StartSinceBeginningOfSongInTicks - n.StartSinceBeginningOfSongInTicks) < 3)).ToList();
+                if (notesThatShouldStartTogetherWithThis.Count > 1)
+                {
+                    var averageStart = (long)Math.Round(notesThatShouldStartTogetherWithThis.Average(x => x.StartSinceBeginningOfSongInTicks));
+                    foreach (var m in notesThatShouldStartTogetherWithThis)
+                    {
+                        m.StartSinceBeginningOfSongInTicks = averageStart;
+                    }
+                }
+                i += notesThatShouldStartTogetherWithThis.Count;
+            }
+            return orderedNotes;
         }
 
 
@@ -215,15 +257,15 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             long minDuration = Math.Min(right - middle, middle - left);
             long unit = GetUnit(minDuration);
             if (middle % unit == 0) return middle;
-            long lowerValue = middle - middle % unit;
-            long higherValue = lowerValue + unit;
+            long lowerValue = Math.Max( middle - middle % unit, left);
+            long higherValue = Math.Min( lowerValue + unit, right);
             return (middle - lowerValue < higherValue - middle) ? lowerValue : higherValue;
         }
         private static long GetUnit(long duration)
         {
-            for (var i = 1; i < 5; i++)
+            for (var i = 1; i < 6; i++)
             {
-                if (duration == 3 * Math.Pow(2, i))
+                if (duration == 3 * Math.Pow(2, i) || duration == Math.Pow(2, i))
                     return duration;
             }
             long candidate = duration * 2 / 3;
@@ -310,27 +352,48 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// <returns></returns>
         public static HashSet<long> GetEdgesOfSilencesAndLongNotes(List<Note> notes, List<Bar> bars, HashSet<long> edgesSoFar)
         {
-            var retObj = new HashSet<long>(edgesSoFar);
-            var notesCleaned = GetNotesWithSilencesRemoved(notes);
-            var candidates = new List<Note>();
-            // We find the longest note in each bar. We look for a note that is longer to all other notes in the same bar
-            // We store these longest notes in the candidates list
-            for (var i = 0; i < bars.Count - 2; i++)
-            {
-                var neighboors = notesCleaned.Where(x => x.StartSinceBeginningOfSongInTicks >= bars[i].TicksFromBeginningOfSong &&
-                                                    x.StartSinceBeginningOfSongInTicks < bars[i + 1].TicksFromBeginningOfSong).ToList();
-                if (neighboors == null || neighboors.Count == 0) continue;
-                var longestNoteDuration = neighboors.Max(x => x.DurationInTicks);
-                var notesWithLongestDuration = neighboors.Where(x => x.DurationInTicks == longestNoteDuration).ToList();
+            var retObj = new HashSet<long>(edgesSoFar);   
 
-                var secondLongestNote = neighboors.Where(x => x.DurationInTicks < longestNoteDuration).FirstOrDefault();
-                if (notesWithLongestDuration.Count == 1 && secondLongestNote != null && longestNoteDuration > secondLongestNote.DurationInTicks)
+            var longestNotes = notes.OrderByDescending(x => x.DurationInTicks).ThenBy(y=>y.StartSinceBeginningOfSongInTicks).ToList();
+
+            for (var i = 0; i < longestNotes.Count / 2; i++)
+            {                
+                var candidateLocation = longestNotes[i].StartSinceBeginningOfSongInTicks;
+                if (edgesSoFar.Contains(candidateLocation))
+                    continue;
+                // If note is as long as a full bar or longer, then add and edge
+                if (longestNotes[i].DurationInTicks >= 384)
                 {
-                    var longestNote = neighboors.Where(x => x.DurationInTicks == longestNoteDuration).FirstOrDefault();
-                    retObj.Add(longestNote.EndSinceBeginningOfSongInTicks);
+                    retObj.Add(longestNotes[i].EndSinceBeginningOfSongInTicks);
+                    continue;
                 }
+
+                var candidateDuration = longestNotes[i].DurationInTicks;               
+                var previousEdge = edgesSoFar.Where(x => x < candidateLocation).Max();
+                var followingEdge = edgesSoFar.Where(x => x > candidateLocation).Min();
+                var notesBefore = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= previousEdge && x.StartSinceBeginningOfSongInTicks < candidateLocation).Count();
+                var notesAfter = notes.Where(x => x.StartSinceBeginningOfSongInTicks < followingEdge && x.StartSinceBeginningOfSongInTicks > candidateLocation).Count();
+                var fourNotesBefore = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= previousEdge && x.StartSinceBeginningOfSongInTicks < candidateLocation)
+                                    .OrderByDescending(z=>z.StartSinceBeginningOfSongInTicks).Take(4);
+                var longestBefore = fourNotesBefore.Count() == 0 ? 0 : fourNotesBefore.Select(y => y.DurationInTicks).Max();
+                var fourNotesAfter = notes.Where(x => x.StartSinceBeginningOfSongInTicks < previousEdge && x.StartSinceBeginningOfSongInTicks > candidateLocation)
+                                    .OrderBy(z => z.StartSinceBeginningOfSongInTicks).Take(4);
+                var longestAfter = fourNotesAfter.Count() == 0 ? 0 : fourNotesAfter.Select(y => y.DurationInTicks).Max();
+
+                if (IsGoodCandidate(candidateLocation, candidateDuration, previousEdge, followingEdge, notesBefore, notesAfter, longestBefore, longestAfter))
+                    retObj.Add(candidateLocation);
             }
+
             return retObj;
+        }
+
+        private static bool IsGoodCandidate(long candidateLocation, int candidateDuration, long previousEdge, long followingEdge, int notesBefore, 
+            int notesAfter, int? longestBefore, int? longestAfter)
+        {
+            if (candidateLocation - previousEdge < 144 && notesBefore < 6) return false;
+            if (followingEdge - candidateLocation  < 144 && notesAfter < 6) return false;
+            if (longestBefore > 0.9 * candidateDuration || longestAfter > 0.9 * candidateDuration) return false;
+            return true;
         }
 
         /// <summary>
@@ -393,53 +456,164 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// <param name="notes"></param>
         /// <param name="edgesSoFar"></param>
         /// <returns></returns>
-        public static HashSet<long> GetRepeatingPatterns(List<Note> notes, HashSet<long> edgesSoFar)
+        public static HashSet<long> GetRepeatingPatterns(List<Note> notes, HashSet<long> edgesSoFar, string metricsOrNotes)
         {
             var edges = edgesSoFar.ToList().OrderBy(x => x).ToList();
+                var edgesToAdd=new  HashSet<long>();
             for (var i = 0; i < edges.Count - 1; i++)
             {
                 var intervalNotes = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= edges[i] && x.StartSinceBeginningOfSongInTicks < edges[i + 1]).ToList();
-                (long? start, long? end) = GetRepeatingPatternSection(intervalNotes);
-                if (start.HasValue && end.HasValue)
-                {
-                    edgesSoFar.Add(start.Value);
-                    edgesSoFar.Add(end.Value);
-                }
+                if (metricsOrNotes.ToLower() == "metrics")
+                    edgesToAdd = GetRepeatingMetricPatternSection(intervalNotes);
+                else
+                    edgesToAdd = GetRepeatingNotePatternSection(intervalNotes);
+   
             }
-            return edgesSoFar;
+            return edgesSoFar.Union(edgesToAdd).ToHashSet();
         }
         /// <summary>
         /// Given a group of consecutive notes, looks for a subset of them that consist of a repeating pattern and returns the start and end of the repeating pattern section
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        private static (long?, long?) GetRepeatingPatternSection(List<Note> notes)
+        private static HashSet<long> GetRepeatingNotePatternSection(List<Note> notes)
         {
+            var retObj = new HashSet<long>();
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
-            if (notes.Count < 8) return (null, null);
+            // if less than 8 notes leave it alone
+            if (notes.Count < 8) return retObj;
+            // if total duration less than 8 quarters leave it alone
+            if (orderedNotes.Max(x => x.EndSinceBeginningOfSongInTicks) - orderedNotes.Min(y => y.StartSinceBeginningOfSongInTicks) < 8 * 96)
+                return retObj;
+            // we use this variable to avoid testing the same value twice
+            var patternsAlreadyTested = new List<string>();
+
             var asString = GetNotesAsString(notes);
             for (var i = 1; i < notes.Count / 2; i++)
             {
+                // pat is a regex pattern to search for i consecutive notes
                 var pat = string.Concat(Enumerable.Repeat("[0-9]+,[-]?[0-9]+;", i));
                 foreach (Match match in Regex.Matches(asString, pat))
                 {
+                    // We add this test to avoid checking twice the same thing. the Regex.Matches doesn't return unique values
+                    if (patternsAlreadyTested.Contains(match.Value))
+                        continue;
+                    patternsAlreadyTested.Add(match.Value);
+
+                    // j is the times we repeat the pattern and then check if that repetition of patterns actually is present
                     for (var j = notes.Count / i; j > 2; j--)
                     {
-                        var pat2 = string.Concat(Enumerable.Repeat(match.Value,j));
+                        // pat2 is the sequence of i consecutive notes repeated j times
+                        // if the next "if" is true, it means the sequence "match.value" appear repeated j times
+                        var pat2 = string.Concat(Enumerable.Repeat(match.Value, j));
 
                         if (asString.Contains(pat2))
                         {
                             var start = asString.IndexOf(pat2);
                             var notesBeforeStart = asString.Substring(0, start).Count(x => x == ';');
-                            var notesInRepeatedPattern = pat2.Count(x => x == ';');
-                            if (notesInRepeatedPattern > 5)
-                                return (orderedNotes[notesBeforeStart].StartSinceBeginningOfSongInTicks, orderedNotes[notesBeforeStart + notesInRepeatedPattern].StartSinceBeginningOfSongInTicks);
-                       }
+                            var totalNotesInRepeatedPattern = pat2.Count(x => x == ';');
+                            // if we found something like x,x,x,x,x we don't want to search latter for x,x or x,x,x etc. so we add them to the patternsAlreadyTested list
+                            for (var k = 2; k <= j; k++)
+                                patternsAlreadyTested.Add(string.Concat(Enumerable.Repeat(match.Value, k)));
+
+                            if (totalNotesInRepeatedPattern > 5)
+                            {
+                                // we add the point where the repeated pattern starts to the list of edges
+                                retObj.Add(orderedNotes[notesBeforeStart].StartSinceBeginningOfSongInTicks);
+                                // we add the point where the repeated pattern end to the list of edges
+                                if (notesBeforeStart + totalNotesInRepeatedPattern < notes.Count)
+                                    retObj.Add(orderedNotes[notesBeforeStart + totalNotesInRepeatedPattern].EndSinceBeginningOfSongInTicks);
+
+                                // if pattern duration longer than 4 quarters, break at the beginning of each repetition
+                                if (orderedNotes[notesBeforeStart + i].EndSinceBeginningOfSongInTicks - orderedNotes[notesBeforeStart].StartSinceBeginningOfSongInTicks > 4 * 96)
+                                {
+                                    for (var m = 1; m < j; m++)
+                                    {
+                                        retObj.Add(orderedNotes[notesBeforeStart + m * i].StartSinceBeginningOfSongInTicks);
+                                    }
+                                }
+                            }
+                            // if we found j consecutive matches, there is no point to keep trying with smaller values of j, so break and continue with the next i
+                            break;
+                        }
                     }
                 }
             }
-            return (null, null);
+            return retObj;
         }
+
+
+
+        /// <summary>
+        ///  Given a group of consecutive notes, looks for a subset of them whose metrics consist of a repeating pattern and returns the start and end of the repeating pattern section
+        /// </summary>
+        /// <param name="notes"></param>
+        /// <returns></returns>
+        private static HashSet<long> GetRepeatingMetricPatternSection(List<Note> notes)
+        {
+            var retObj = new HashSet<long>();
+            var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
+            // if less than 8 notes leave it alone
+            if (notes.Count < 8) return retObj;
+            // if total duration less than 8 quarters leave it alone
+            if (orderedNotes.Max(x => x.EndSinceBeginningOfSongInTicks) - orderedNotes.Min(y => y.StartSinceBeginningOfSongInTicks) < 8 * 96)
+                return retObj;
+
+            // we use this variable to avoid testing the same value twice
+            var patternsAlreadyTested = new List<string>();
+
+            var asString = string.Join(",", orderedNotes.Select(x => x.DurationInTicks.ToString())) + ",";
+            for (var i = 1; i < notes.Count / 2; i++)
+            {
+                // pat is a regex pattern to search for i consecutive notes
+                var pat = string.Concat(Enumerable.Repeat("[0-9]+,", i));
+                foreach (Match match in Regex.Matches(asString, pat))
+                {
+                    // We add this test to avoid checking twice the same thing. the Regex.Matches doesn't return unique values
+                    if (patternsAlreadyTested.Contains(match.Value))
+                        continue;
+                    patternsAlreadyTested.Add(match.Value);
+
+                    // j is the times we repeat the pattern and then check if that repetition of patterns actually is present
+                    for (var j = notes.Count / i; j > 2; j--)
+                    {
+                        var pat2 = string.Concat(Enumerable.Repeat(match.Value, j));
+
+                        if (asString.Contains(pat2))
+                        {
+                            var start = asString.IndexOf(pat2);
+                            var notesBeforeStart = asString.Substring(0, start).Count(x => x == ',');
+                            var totalNotesInRepeatedPattern = pat2.Count(x => x == ',');
+                            // if we found something like x,x,x,x,x we don't want to search latter for x,x or x,x,x etc. so we add them to the patternsAlreadyTested list
+                            for (var k = 2; k <= j; k++)
+                                patternsAlreadyTested.Add(string.Concat(Enumerable.Repeat(match.Value, k)));
+
+                            if (totalNotesInRepeatedPattern > 5)
+                            {
+                                // we add the point where the repeated pattern starts to the list of edges
+                                retObj.Add(orderedNotes[notesBeforeStart].StartSinceBeginningOfSongInTicks);
+                                // we add the point where the repeated pattern end to the list of edges
+                                if (notesBeforeStart + totalNotesInRepeatedPattern < notes.Count)
+                                    retObj.Add(orderedNotes[notesBeforeStart + totalNotesInRepeatedPattern].EndSinceBeginningOfSongInTicks);
+
+                                // if pattern duration longer than 4 quarters, break at the beginning of each
+                                if (orderedNotes[notesBeforeStart + i].EndSinceBeginningOfSongInTicks - orderedNotes[notesBeforeStart].StartSinceBeginningOfSongInTicks > 4 * 96)
+                                {
+                                    for (var m = 1; m < j; m++)
+                                    {
+                                        retObj.Add(orderedNotes[notesBeforeStart + m * i].StartSinceBeginningOfSongInTicks);
+                                    }
+                                }
+                            }
+                            // if we found j consecutive matches, there is no point to keep trying with smaller values of j, so break and continue with the next i
+                            break;
+                        }
+                    }
+                }
+            }
+            return retObj;
+        }
+
         /// <summary>
         /// Creates strings like 48,3;24,-1;24,2
         /// that represent consecutive relative notes, using a comma to separate duration from pitch and semicolon between consecutive notes

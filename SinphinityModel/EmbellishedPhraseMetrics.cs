@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using SinphinityModel.Helpers;
+using System.Text.Json.Serialization;
 
 namespace Sinphinity.Models
 {
@@ -53,7 +54,8 @@ namespace Sinphinity.Models
         {
             get
             {
-                return AsString.Replace("+", "").Split(',').Select(x => Convert.ToInt32(x)).ToList();
+                var expanded = AsString.ExpandPattern();
+                return expanded.Replace("+", "").Split(',').Select(x => Convert.ToInt32(x)).ToList();
             }
         }
   

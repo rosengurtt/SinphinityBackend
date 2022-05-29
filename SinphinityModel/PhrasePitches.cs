@@ -105,7 +105,7 @@ namespace Sinphinity.Models
                 }
             }
             else
-                AsString = "0";
+                throw new Exception("Phrases of less than 2 notes not supported");
             AsString = AsString.ExtractPattern();
         }
     }

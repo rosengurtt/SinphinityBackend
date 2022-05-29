@@ -38,7 +38,7 @@ namespace Sinphinity.Models
         {
             get
             {
-                return Items.Count;
+                return Items.Count + 1;
             }
         }
         public PhraseTypeEnum PhraseType
@@ -76,12 +76,15 @@ namespace Sinphinity.Models
         /// <param name="noteAfterPhrase"></param>
         public PhraseMetrics(List<Note> notes, long endTick)
         {
+            if (notes.Count < 2)
+                throw new Exception("Phrases must have at least 2 notes");
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
             for (int i = 0; i < orderedNotes.Count - 1; i++)
             {
-                AsString += (orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks) + ",";
+                AsString += (orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks);
+                if (i < orderedNotes.Count - 2)
+                    AsString += ",";
             }
-            AsString += endTick - orderedNotes[orderedNotes.Count - 1].StartSinceBeginningOfSongInTicks;
             AsString = AsString.ExtractPattern();
         }
       

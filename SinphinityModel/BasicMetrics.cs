@@ -64,12 +64,26 @@ namespace Sinphinity.Models
         }
         private string Simplify(string asString)
         {
-            var asStringWithoutRepetitions = asString.Contains("*") ? asString.Substring(0, asString.IndexOf("*")) : asString;
-            var theItems = asStringWithoutRepetitions.Replace("+", "").Split(',').Select(x => Convert.ToInt32(x)).ToList();
-            var retString = "";
-            var gdc = GreatestCommonDivisor(theItems);
-            retString += string.Join(',', theItems.Select(x => x / gdc));
-            return retString;
+            if (asString.Contains("*") || asString.Contains("^"))
+            {
+                var symbol = asString.Contains("*") ? "*" : "^";
+                var symbolLocation = asString.IndexOf(symbol);
+                var pattern = asString.Substring(0, symbolLocation);
+                var repetitions = int.Parse(asString.Substring(symbolLocation + 1, asString.Length - symbolLocation - 1));
+                var theItems = pattern.Replace("+", "").Split(',').Select(x => Convert.ToInt32(x)).ToList();
+                var retString = "";
+                var gdc = GreatestCommonDivisor(theItems);
+                retString += string.Join(',', theItems.Select(x => x / gdc));
+                return $"{retString}{symbol}{repetitions}";
+            }
+            else
+            {
+                var theItems = asString.Replace("+", "").Split(',').Select(x => Convert.ToInt32(x)).ToList();
+                var retString = "";
+                var gdc = GreatestCommonDivisor(theItems);
+                retString += string.Join(',', theItems.Select(x => x / gdc));
+                return retString;
+            }
         }
 
         private static long GreatestCommonDivisor(List<int> numbers)

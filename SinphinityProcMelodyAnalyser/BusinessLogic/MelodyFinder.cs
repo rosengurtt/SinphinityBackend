@@ -23,19 +23,37 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             var retObjEmbellishedPhrasesMetrics = new Dictionary<string, List<SongLocation>>();
             var retObjEmbellishedPhrasesPitches = new Dictionary<string, List<SongLocation>>();
             var notes = song.SongSimplifications.Where(x => x.Version == songSimplification).FirstOrDefault()?.Notes;
-            var preprocessedNotes = Preprocessor.SplitMultiVoiceTracks(notes);
+            var preprocessedNotes = Preprocessor.RemoveDrumsAndChordsVoices(notes);
+            preprocessedNotes = Preprocessor.RemoveBoringBassVoices(preprocessedNotes);
+            preprocessedNotes = Preprocessor.SplitMultiVoiceTracks(preprocessedNotes);
 
             foreach (var voice in preprocessedNotes.Voices())
             {
                 var voiceNotes = preprocessedNotes.Where(x => x.Voice == voice).OrderBy(y => y.StartSinceBeginningOfSongInTicks).ThenByDescending(z => z.Pitch).ToList();
-                if (voiceNotes[0].IsPercussion) continue;
-                var cleanedVoiceNotes = PhraseDetection.RemoveHarmony(voiceNotes);
-                cleanedVoiceNotes = PhraseDetection.DiscretizeTiming(cleanedVoiceNotes, song.Bars);
+                if (voiceNotes.Where(x => x.DurationInTicks <= 0).Any())
+                {
+                }
+       
+
+                var cleanedVoiceNotes = PhraseDetection.DiscretizeTiming(voiceNotes);
+                if (cleanedVoiceNotes.Where(x => x.DurationInTicks <= 0).Any())
+                {
+                }
+
+                cleanedVoiceNotes = PhraseDetection.RemoveHarmony(cleanedVoiceNotes);
+                if (cleanedVoiceNotes.Where(x => x.DurationInTicks <= 0).Any())
+                {
+                }
                 cleanedVoiceNotes = PhraseDetection.GetNotesWithSilencesRemoved(cleanedVoiceNotes);
+                if (cleanedVoiceNotes.Where(x => x.DurationInTicks < 0).Any())
+                {
+                }
                 // We remove harmony again because it could have been introduced in the previous step
                 cleanedVoiceNotes = PhraseDetection.RemoveHarmony(cleanedVoiceNotes);
+                if (cleanedVoiceNotes.Where(x => x.DurationInTicks <= 0).Any())
+                {
+                }
                 var phraseEdges = PhraseDetection.GetPhrasesEdges(cleanedVoiceNotes, song.Bars).OrderBy(x => x).ToList().OrderBy(x => x).ToList();
-
 
                 var sorets = new List<(int, int, int)>();
                 foreach (var edgy in phraseEdges)
@@ -51,10 +69,17 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                    
                     if (phraseInfo != null)
                     {
-                        if (phraseInfo.MetricsAsString.Split(',').Length== phraseInfo.PitchesAsString.Split(',').Length)
+                        if (phraseInfo.MetricsAsString.Split(",").Length > 40)
+                        {
+                            (var bar, var beat, var tick) = GetBarBeatAndTickOfEdge(song.Bars, phraseEdges[i]);
+                            var instrument = cleanedVoiceNotes[0].Instrument;
+                        }
+                        if (phraseInfo.PhraseAsString== "24^4/1,-3,0,0")
                         {
 
-                        };
+                        }
+
+
                         if (!retObjPhrases.ContainsKey(phraseInfo.PhraseAsString))
                             retObjPhrases.Add(phraseInfo.PhraseAsString, new List<SongLocation>());
                         retObjPhrases[phraseInfo.PhraseAsString].Add(phraseInfo.Location);

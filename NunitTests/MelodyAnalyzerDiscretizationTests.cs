@@ -30,7 +30,7 @@ namespace NunitTests
 		[Test]
 		public void DiscretizeTimingWorksAsExpected()
 		{
-			var cleanedNotes = PhraseDetection.DiscretizeTiming(notes, bars);
+			var cleanedNotes = PhraseDetection.DiscretizeTiming(notes);
 			var antes = GetDurations(notes);
 			var despues = GetDurations(cleanedNotes);
 

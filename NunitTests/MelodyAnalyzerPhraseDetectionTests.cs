@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using Sinphinity.Models;
 using SinphinityProcMelodyAnalyser.BusinessLogic;
 using System.IO;
+using SinphinityModel.Helpers;
+using SinphinityProcMidi.Helpers;
 
 namespace NunitTests
 {
@@ -28,7 +30,7 @@ namespace NunitTests
 			bars = JsonConvert.DeserializeObject<List<Bar>>(barsInv4AsString);
 			var dir = Directory.GetCurrentDirectory();
 			var notesAsString = File.ReadAllText(@$"{dir}\Data\Invention4notes.txt");
-			notes= JsonConvert.DeserializeObject<List<Note>>(notesAsString);
+			notes = JsonConvert.DeserializeObject<List<Note>>(notesAsString);
 
 		}
 
@@ -36,14 +38,43 @@ namespace NunitTests
 
 		[Test]
 		public void ExpectedPhrasesAreExtractedForInvention1()
-        {
+		{
 			var songSimplifications = new List<SongSimplification>();
 			songSimplifications.Add(new SongSimplification { Notes = notes, NumberOfVoices = 2, Version = 0 });
 			var song = new Song { Bars = bars, SongSimplifications = songSimplifications };
 			MelodyFinder.FindAllPhrases(song, 0);
 			Assert.IsTrue(true);
-        }
-		
+		}
+
+		[Test]
+		public void ExtractMetrics()
+		{
+			var asString = "48,96,48,96,48";
+			var asRepeatingPattern = asString.ExtractPattern();
+			Assert.AreEqual("48,96^3", asRepeatingPattern);
+			var asStringAfter = asRepeatingPattern.ExpandPattern();
+			Assert.AreEqual(asString, asStringAfter);
+
+
+			asString = "48,96,48,96,48,96";
+			asRepeatingPattern = asString.ExtractPattern();
+			Assert.AreEqual("48,96*3", asRepeatingPattern);
+			asStringAfter = asRepeatingPattern.ExpandPattern();
+			Assert.AreEqual(asString, asStringAfter);
+
+			asString = "1,-1,1,-1,1,-1,1";
+			asRepeatingPattern = asString.ExtractPattern();
+			Assert.AreEqual("1,-1^4", asRepeatingPattern);
+			asStringAfter = asRepeatingPattern.ExpandPattern();
+			Assert.AreEqual(asString, asStringAfter);
+		}
+		[Test]
+		public void TestGetPhraseNotes()
+		{
+			var asString = "192,97,95,291,92,193,6/3,0,5,0,5,-19,-12";
+			var notes = PhraseConverter.GetPhraseNotes(PhraseTypeEnum.Both, asString, 0);
+
+		}
 	}
 }
 
