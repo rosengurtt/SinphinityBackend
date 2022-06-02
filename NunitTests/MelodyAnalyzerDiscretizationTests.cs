@@ -45,6 +45,19 @@ namespace NunitTests
 			}
 			return retObj;
 		}
+		[Test]
+		public void CheckFixStrangeDurations()
+        {
+			var badDurations = "29,32,90,91,92,93,94,95,96,97,98,99,101,102,188,193,194,196,190,192,197,3,5,92";
+			var quant = badDurations.Split(',').Length;
+			var goodDurations = "32,32,96,96,96,96,96,96,96,96,96,96,96,96,192,192,192,192,192,192,192,3,5,88";
+			var quanti = goodDurations.Split(',').Length;
+			var phrase = new PhraseMetrics(badDurations);
+			Assert.AreEqual(goodDurations, phrase.AsString);
+              
+
+		}
+
 	}
 }
 

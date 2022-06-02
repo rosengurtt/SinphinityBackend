@@ -21,9 +21,9 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 (var hasEmbellishments, var phraseWithoutEmbellishmentNotes) = EmbelishmentsDetection.GetPhraseWithoutEmbellishments(phraseNotes);
                 if (hasEmbellishments && phraseWithoutEmbellishmentNotes.Count <= 1)
                     return null;
-                var metrics = hasEmbellishments ? new PhraseMetrics(phraseWithoutEmbellishmentNotes, end) : new PhraseMetrics(phraseNotes, end);
+                var metrics = hasEmbellishments ? new PhraseMetrics(phraseWithoutEmbellishmentNotes) : new PhraseMetrics(phraseNotes);
                 var pitches = hasEmbellishments ? new PhrasePitches(phraseWithoutEmbellishmentNotes) : new PhrasePitches(phraseNotes);
-                var embellishedMetrics = hasEmbellishments ? new PhraseMetrics(phraseNotes, end) : null;
+                var embellishedMetrics = hasEmbellishments ? new PhraseMetrics(phraseNotes) : null;
                 var embellishedPitches = hasEmbellishments ? new PhrasePitches(phraseNotes) : null;
                 var retObj = new PhraseInfo
                 {
@@ -54,8 +54,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             edgesSoFar = GetEdgesBetweenChangesInPacing(notes, bars, edgesSoFar);
             edgesSoFar = GetEdgesAtStartOrEndOfScales(notes, bars, edgesSoFar);
             edgesSoFar = GetEdgesBetweenGroupsOfNotesWithSmallSteps(notes, bars, edgesSoFar);
-            edgesSoFar = GetRepeatingPatterns(notes, edgesSoFar, "notes");
-            edgesSoFar = GetRepeatingPatterns(notes, edgesSoFar, "metrics");
+            edgesSoFar = GetRepeatingPatterns(notes, edgesSoFar);
 
             // edgesSoFar = BreakPhrasesThatAreTooLong(notes, bars, edgesSoFar);
             return edgesSoFar;
@@ -227,6 +226,8 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             retObj.Add((Note)notes[notes.Count - 1].Clone());
             return retObj;
         }
+
+
         private static List<Note> SynchronizeNotesThatShoulsStartTogether(List<Note> notes)
         {
             var orderedNotes = notes.Clone().OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
@@ -235,9 +236,13 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             while (i < orderedNotes.Count)
             {
                 var n = orderedNotes[i];
+                // We include n in notesThatShouldStartTogetherWithThis
                 var notesThatShouldStartTogetherWithThis = orderedNotes
                     .Where(x => (x.DurationInTicks >= 24 && Math.Abs(x.StartSinceBeginningOfSongInTicks - n.StartSinceBeginningOfSongInTicks) < 6) ||
-                    (x.DurationInTicks >= 10 && Math.Abs(x.StartSinceBeginningOfSongInTicks - n.StartSinceBeginningOfSongInTicks) < 3)).ToList();
+                    (x.DurationInTicks >= 10 && Math.Abs(x.StartSinceBeginningOfSongInTicks - n.StartSinceBeginningOfSongInTicks) < 3))
+                    .ToHashSet()
+                    .Union(new HashSet<Note> { n })
+                    .ToList();
                 if (notesThatShouldStartTogetherWithThis.Count > 1)
                 {
                     var averageStart = (long)Math.Round(notesThatShouldStartTogetherWithThis.Average(x => x.StartSinceBeginningOfSongInTicks));
@@ -352,13 +357,14 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// <returns></returns>
         public static HashSet<long> GetEdgesOfSilencesAndLongNotes(List<Note> notes, List<Bar> bars, HashSet<long> edgesSoFar)
         {
-            var retObj = new HashSet<long>(edgesSoFar);   
+            var retObj = new HashSet<long>(edgesSoFar);
 
-            var longestNotes = notes.OrderByDescending(x => x.DurationInTicks).ThenBy(y=>y.StartSinceBeginningOfSongInTicks).ToList();
+            var longestNotes = notes.OrderByDescending(x => x.DurationInTicks).ThenBy(y => y.StartSinceBeginningOfSongInTicks).ToList();
 
             for (var i = 0; i < longestNotes.Count / 2; i++)
-            {                
-                var candidateLocation = longestNotes[i].StartSinceBeginningOfSongInTicks;
+            {
+                var candidateLocation = longestNotes[i].EndSinceBeginningOfSongInTicks;
+                var candidateNoteStart = longestNotes[i].StartSinceBeginningOfSongInTicks;
                 if (edgesSoFar.Contains(candidateLocation))
                     continue;
                 // If note is as long as a full bar or longer, then add and edge
@@ -368,20 +374,22 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                     continue;
                 }
 
-                var candidateDuration = longestNotes[i].DurationInTicks;               
+                var candidateDuration = longestNotes[i].DurationInTicks;
                 var previousEdge = edgesSoFar.Where(x => x < candidateLocation).Max();
                 var followingEdge = edgesSoFar.Where(x => x > candidateLocation).Min();
-                var notesBefore = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= previousEdge && x.StartSinceBeginningOfSongInTicks < candidateLocation).Count();
+                var notesBefore = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= previousEdge && x.StartSinceBeginningOfSongInTicks < candidateNoteStart).Count();
                 var notesAfter = notes.Where(x => x.StartSinceBeginningOfSongInTicks < followingEdge && x.StartSinceBeginningOfSongInTicks > candidateLocation).Count();
-                var fourNotesBefore = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= previousEdge && x.StartSinceBeginningOfSongInTicks < candidateLocation)
-                                    .OrderByDescending(z=>z.StartSinceBeginningOfSongInTicks).Take(4);
+                var fourNotesBefore = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= previousEdge && x.StartSinceBeginningOfSongInTicks < candidateNoteStart)
+                                    .OrderByDescending(z => z.StartSinceBeginningOfSongInTicks).Take(4);
                 var longestBefore = fourNotesBefore.Count() == 0 ? 0 : fourNotesBefore.Select(y => y.DurationInTicks).Max();
                 var fourNotesAfter = notes.Where(x => x.StartSinceBeginningOfSongInTicks < previousEdge && x.StartSinceBeginningOfSongInTicks > candidateLocation)
                                     .OrderBy(z => z.StartSinceBeginningOfSongInTicks).Take(4);
                 var longestAfter = fourNotesAfter.Count() == 0 ? 0 : fourNotesAfter.Select(y => y.DurationInTicks).Max();
 
                 if (IsGoodCandidate(candidateLocation, candidateDuration, previousEdge, followingEdge, notesBefore, notesAfter, longestBefore, longestAfter))
+                {
                     retObj.Add(candidateLocation);
+                }
             }
 
             return retObj;
@@ -456,27 +464,36 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// <param name="notes"></param>
         /// <param name="edgesSoFar"></param>
         /// <returns></returns>
-        public static HashSet<long> GetRepeatingPatterns(List<Note> notes, HashSet<long> edgesSoFar, string metricsOrNotes)
+        public static HashSet<long> GetRepeatingPatterns(List<Note> notes, HashSet<long> edgesSoFar)
+        {
+            edgesSoFar = GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Both);
+            edgesSoFar = GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Metrics);
+            edgesSoFar = GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Pitches);
+            return GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.PitchDirection);
+        }
+        public static HashSet<long> GetRepeatingPatternsOfType(List<Note> notes, HashSet<long> edgesSoFar, PhraseTypeEnum type)
         {
             var edges = edgesSoFar.ToList().OrderBy(x => x).ToList();
-                var edgesToAdd=new  HashSet<long>();
+            var edgesToAdd = new HashSet<long>();
             for (var i = 0; i < edges.Count - 1; i++)
             {
                 var intervalNotes = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= edges[i] && x.StartSinceBeginningOfSongInTicks < edges[i + 1]).ToList();
-                if (metricsOrNotes.ToLower() == "metrics")
-                    edgesToAdd = GetRepeatingMetricPatternSection(intervalNotes);
-                else
-                    edgesToAdd = GetRepeatingNotePatternSection(intervalNotes);
-   
+                var newEdges = GetRepeatingNotePatternSection(intervalNotes, type);
+                edgesToAdd = edgesToAdd.Union(newEdges).ToHashSet();
+
             }
             return edgesSoFar.Union(edgesToAdd).ToHashSet();
         }
+
+
         /// <summary>
-        /// Given a group of consecutive notes, looks for a subset of them that consist of a repeating pattern and returns the start and end of the repeating pattern section
+        /// Given a group of consecutive notes (or metric intervals or pitches, depending on the parameter "type"), looks for a subset of them that consist of a repeating pattern
+        /// and returns the start and end of the repeating pattern section
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        private static HashSet<long> GetRepeatingNotePatternSection(List<Note> notes)
+
+        private static HashSet<long> GetRepeatingNotePatternSection(List<Note> notes, PhraseTypeEnum type)
         {
             var retObj = new HashSet<long>();
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
@@ -488,11 +505,36 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             // we use this variable to avoid testing the same value twice
             var patternsAlreadyTested = new List<string>();
 
-            var asString = GetNotesAsString(notes);
+            // pat is a regex pattern to search for i consecutive notes
+            string asString= GetNotesAsString(notes, type);
+               
+            
             for (var i = 1; i < notes.Count / 2; i++)
             {
                 // pat is a regex pattern to search for i consecutive notes
-                var pat = string.Concat(Enumerable.Repeat("[0-9]+,[-]?[0-9]+;", i));
+                string pat;
+                char noteSeparator;
+                switch (type)
+                {
+                    case PhraseTypeEnum.Both:
+                        pat = string.Concat(Enumerable.Repeat("[0-9]+,[-]?[0-9]+;", i));
+                        noteSeparator = ';';
+                        break;
+                    case PhraseTypeEnum.Metrics:
+                        pat = string.Concat(Enumerable.Repeat("[0-9]+,", i));
+                        noteSeparator = ',';
+                        break;
+                    case PhraseTypeEnum.Pitches:
+                        pat = string.Concat(Enumerable.Repeat("[-]?[0-9]+,", i));
+                        noteSeparator = ',';
+                        break;
+                    case PhraseTypeEnum.PitchDirection:
+                        pat = string.Concat(Enumerable.Repeat("[-+0],", i));
+                        noteSeparator = ',';
+                        break;
+                    default:
+                        throw new Exception("Que mierda me mandaron?");
+                }
                 foreach (Match match in Regex.Matches(asString, pat))
                 {
                     // We add this test to avoid checking twice the same thing. the Regex.Matches doesn't return unique values
@@ -510,8 +552,8 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                         if (asString.Contains(pat2))
                         {
                             var start = asString.IndexOf(pat2);
-                            var notesBeforeStart = asString.Substring(0, start).Count(x => x == ';');
-                            var totalNotesInRepeatedPattern = pat2.Count(x => x == ';');
+                            var notesBeforeStart = asString.Substring(0, start).Count(x => x == noteSeparator);
+                            var totalNotesInRepeatedPattern = pat2.Count(x => x == noteSeparator);
                             // if we found something like x,x,x,x,x we don't want to search latter for x,x or x,x,x etc. so we add them to the patternsAlreadyTested list
                             for (var k = 2; k <= j; k++)
                                 patternsAlreadyTested.Add(string.Concat(Enumerable.Repeat(match.Value, k)));
@@ -544,75 +586,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
 
 
 
-        /// <summary>
-        ///  Given a group of consecutive notes, looks for a subset of them whose metrics consist of a repeating pattern and returns the start and end of the repeating pattern section
-        /// </summary>
-        /// <param name="notes"></param>
-        /// <returns></returns>
-        private static HashSet<long> GetRepeatingMetricPatternSection(List<Note> notes)
-        {
-            var retObj = new HashSet<long>();
-            var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
-            // if less than 8 notes leave it alone
-            if (notes.Count < 8) return retObj;
-            // if total duration less than 8 quarters leave it alone
-            if (orderedNotes.Max(x => x.EndSinceBeginningOfSongInTicks) - orderedNotes.Min(y => y.StartSinceBeginningOfSongInTicks) < 8 * 96)
-                return retObj;
 
-            // we use this variable to avoid testing the same value twice
-            var patternsAlreadyTested = new List<string>();
-
-            var asString = string.Join(",", orderedNotes.Select(x => x.DurationInTicks.ToString())) + ",";
-            for (var i = 1; i < notes.Count / 2; i++)
-            {
-                // pat is a regex pattern to search for i consecutive notes
-                var pat = string.Concat(Enumerable.Repeat("[0-9]+,", i));
-                foreach (Match match in Regex.Matches(asString, pat))
-                {
-                    // We add this test to avoid checking twice the same thing. the Regex.Matches doesn't return unique values
-                    if (patternsAlreadyTested.Contains(match.Value))
-                        continue;
-                    patternsAlreadyTested.Add(match.Value);
-
-                    // j is the times we repeat the pattern and then check if that repetition of patterns actually is present
-                    for (var j = notes.Count / i; j > 2; j--)
-                    {
-                        var pat2 = string.Concat(Enumerable.Repeat(match.Value, j));
-
-                        if (asString.Contains(pat2))
-                        {
-                            var start = asString.IndexOf(pat2);
-                            var notesBeforeStart = asString.Substring(0, start).Count(x => x == ',');
-                            var totalNotesInRepeatedPattern = pat2.Count(x => x == ',');
-                            // if we found something like x,x,x,x,x we don't want to search latter for x,x or x,x,x etc. so we add them to the patternsAlreadyTested list
-                            for (var k = 2; k <= j; k++)
-                                patternsAlreadyTested.Add(string.Concat(Enumerable.Repeat(match.Value, k)));
-
-                            if (totalNotesInRepeatedPattern > 5)
-                            {
-                                // we add the point where the repeated pattern starts to the list of edges
-                                retObj.Add(orderedNotes[notesBeforeStart].StartSinceBeginningOfSongInTicks);
-                                // we add the point where the repeated pattern end to the list of edges
-                                if (notesBeforeStart + totalNotesInRepeatedPattern < notes.Count)
-                                    retObj.Add(orderedNotes[notesBeforeStart + totalNotesInRepeatedPattern].EndSinceBeginningOfSongInTicks);
-
-                                // if pattern duration longer than 4 quarters, break at the beginning of each
-                                if (orderedNotes[notesBeforeStart + i].EndSinceBeginningOfSongInTicks - orderedNotes[notesBeforeStart].StartSinceBeginningOfSongInTicks > 4 * 96)
-                                {
-                                    for (var m = 1; m < j; m++)
-                                    {
-                                        retObj.Add(orderedNotes[notesBeforeStart + m * i].StartSinceBeginningOfSongInTicks);
-                                    }
-                                }
-                            }
-                            // if we found j consecutive matches, there is no point to keep trying with smaller values of j, so break and continue with the next i
-                            break;
-                        }
-                    }
-                }
-            }
-            return retObj;
-        }
 
         /// <summary>
         /// Creates strings like 48,3;24,-1;24,2
@@ -620,15 +594,45 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        private static string GetNotesAsString(List<Note> notes)
+        private static string GetNotesAsString(List<Note> notes, PhraseTypeEnum type)
         {
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
-            var asString = $"";
-            for (var i = 0; i < orderedNotes.Count - 1; i++)
+                    var asString = "";
+            switch (type)
             {
-                asString += $"{orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks},{orderedNotes[i + 1].Pitch - orderedNotes[i].Pitch};";
+                case PhraseTypeEnum.Both:
+                    for (var i = 0; i < orderedNotes.Count - 1; i++)
+                    {
+                        asString += $"{orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks},{orderedNotes[i + 1].Pitch - orderedNotes[i].Pitch};";
+                    }
+                    return asString;
+                case PhraseTypeEnum.Metrics:
+                    return string.Join(",", orderedNotes.Select(x => x.DurationInTicks.ToString())) + ",";
+                case PhraseTypeEnum.Pitches:
+                    return string.Join(",", orderedNotes.Select(x => x.Pitch.ToString())) + ",";
+                case PhraseTypeEnum.PitchDirection:
+                    for (var j = 1; j < orderedNotes.Count; j++)
+                    {
+                        var value = Math.Sign(orderedNotes[j].Pitch - orderedNotes[j - 1].Pitch);
+                        switch (value)
+                        {
+                            case -1:
+                                asString += "-,";
+                                break;
+                            case 0:
+                                asString += "0,";
+                                break;
+                            case 1:
+                                asString += "+,";
+                                break;
+                            default:
+                                throw new Exception("Que mierda me mandaron?");
+                        }
+                    }
+                    return asString;
+                default:
+                    throw new Exception("Que mierda me mandaron?");
             }
-            return asString;
         }
 
         /// <summary>

@@ -87,17 +87,18 @@ namespace SinphinityProcMidi.Controllers
         }
 
         [HttpGet("phrase")]
-        public ActionResult GetPhraseMidi(PhraseTypeEnum phraseType, string asString, int tempoInBPM = 90, int instrument = 0, byte startingPitch=60)
+        public ActionResult GetPhraseMidi(PhraseTypeEnum phraseType, string asString, int tempoInBPM = 90, int instrument = 0, byte startingPitch = 60)
         {
             var tempoChanges = new List<TempoChange> { new TempoChange { MicrosecondsPerQuarterNote = 500000 * 120 / tempoInBPM } };
             var notes = PhraseConverter.GetPhraseNotes(phraseType, asString, instrument, startingPitch);
-            foreach(var n in notes)
+            foreach (var n in notes)
             {
                 n.StartSinceBeginningOfSongInTicks += 1;
                 n.EndSinceBeginningOfSongInTicks += 1;
             }
             notes.Add(new Note { StartSinceBeginningOfSongInTicks = 0, EndSinceBeginningOfSongInTicks = 1, Volume = 0 });
-            var base64encodedMidiBytes = MidiUtilities.GetMidiBytesFromNotes(notes, tempoChanges);
+           // notes.Add(new Note { StartSinceBeginningOfSongInTicks = notes.Max(x => x.EndSinceBeginningOfSongInTicks) + 1, EndSinceBeginningOfSongInTicks = notes.Max(x => x.EndSinceBeginningOfSongInTicks) + 200, Pitch = 60, Volume = 0 });
+            var base64encodedMidiBytes = MidiUtilities.GetMidiBytesFromNotes(notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList(), tempoChanges);
             var ms = new MemoryStream(MidiUtilities.GetMidiBytesFromPointInTime(base64encodedMidiBytes, 0));
             var bytes = ms.ToArray();
             return Ok(new ApiOKResponse(Convert.ToBase64String(bytes)));

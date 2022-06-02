@@ -90,7 +90,9 @@ namespace SinphinityProcMidi.Helpers
                 retObj.Add(new Note
                 {
                     StartSinceBeginningOfSongInTicks = ticksFromStart + phraseMetrics.Items[i],
-                    EndSinceBeginningOfSongInTicks =i+1< phrasePitches.Items.Count? ticksFromStart + phraseMetrics.Items[i] + phraseMetrics.Items[i + 1]:96,
+                    EndSinceBeginningOfSongInTicks = i + 1 < phrasePitches.Items.Count ?
+                        ticksFromStart + phraseMetrics.Items[i] + phraseMetrics.Items[i + 1] :
+                        ticksFromStart + phraseMetrics.Items[i] + 96,
                     Pitch = currentPitch,
                     Instrument = (byte)instrument,
                     Volume = 90
