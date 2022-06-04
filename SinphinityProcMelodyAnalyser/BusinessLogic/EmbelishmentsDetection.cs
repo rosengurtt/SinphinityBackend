@@ -90,28 +90,34 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             return retObj;
         }
 
-        /// <summary>
         /// It checks if notes consists of 3 or less short notes followed by 1 long note (where short means less than a sixteenth and long a sixteen or longer)
         /// The note before the group of notes must be a long note (more than a sixteenth)
         /// </summary>
-        /// <param name="notes"></param>
+        /// <param name="previousNote">The note before the group of notes, if there is one</param>
+        /// <param name="notes">Group of notes that may be an embelishment. If we return true, it means they really are</param>
+        /// <param name="followingNote">The note after the group of notes, if there is one</param>
         /// <returns></returns>
         private static bool IsAnEmbelishment(Note? previousNote, List<Note> notes, Note? followingNote)
         {
+            // If the time between the start of the previous note and the group of notes is shorter than a sixteenth, then we don't consider it an embellishments, but a rapid passage
             if (previousNote != null && notes.Min(x => x.StartSinceBeginningOfSongInTicks) - previousNote.StartSinceBeginningOfSongInTicks < 21)
                 return false;
+            // if the number of notes in the group is not between 2 and 4 we don't consider it an embelishment
+            if (notes.Count > 4 || notes.Count < 2) 
+                return false;
+
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
-            if (notes.Count > 4 || notes.Count < 2) return false;
             var lastNote = orderedNotes[orderedNotes.Count - 1];
             var firstNotes = orderedNotes.GetRange(0, orderedNotes.Count - 1);
-            // If last note is not a "long" note (at least a sixteenth, then it is not an embellised
+            // If last note in the group is not a "long" note (at least a sixteenth), then it is not an embellishment
             if ((followingNote != null && followingNote.StartSinceBeginningOfSongInTicks - lastNote.StartSinceBeginningOfSongInTicks < 21) ||
             (followingNote == null && lastNote.DurationInTicks < 21))
                 return false;
+
             // If any of the first group of notes (all but the last) is longer than a 32nd, then it is not an embellishment
             for (var i = 0; i < orderedNotes.Count - 1; i++)
             {
-                if (orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks > 15)
+                if (orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks >= 10)
                     return false;
             }
             // The pitch step to the long note should not exceed an octave and a half
@@ -150,14 +156,14 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         {
             var retObj = new List<List<Note>>();
             var orderedNotes = PhraseDetection.RemoveHarmony(notes);
-            for (int i = 0; i < orderedNotes.Count - 8; i++)
+            for (int i = 0; i < orderedNotes.Count - 5; i++)
             {
                 var j = 1;
                 while (j + i < orderedNotes.Count && IsAtrill(orderedNotes.GetRange(i, j)))
                 {
                     j++;
                 }
-                if (j > 8)
+                if (j > 5)
                 {
                     retObj.Add(orderedNotes.GetRange(i, j));
                 }

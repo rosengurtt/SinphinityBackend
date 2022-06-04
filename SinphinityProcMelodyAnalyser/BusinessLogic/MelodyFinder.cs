@@ -74,7 +74,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                             (var bar, var beat, var tick) = GetBarBeatAndTickOfEdge(song.Bars, phraseEdges[i]);
                             var instrument = cleanedVoiceNotes[0].Instrument;
                         }
-                        if (phraseInfo.PitchesAsString== "-12,0,0,22,-22,0,0,21,-21,0,0,20,-8,0,0,7,-7,0,0,15,-15,0,0,14,-14,0,0,7,-7,12,-12,0,0,0,0,0,0,8,-8,-4,0,0,0,11,-12,0,0,5,-12,0,0,0,0,0,0")
+                        if (phraseInfo.EmbellishedPitchesAsString == "2,-2,2,-2,2,-2,2,-2,2,-2,2,-2,2,-2,2,-2,2,-2,2,-2,2,0,-2,2,-2,2,-2,2,-2,2,-2")
                         {
 
                         }
