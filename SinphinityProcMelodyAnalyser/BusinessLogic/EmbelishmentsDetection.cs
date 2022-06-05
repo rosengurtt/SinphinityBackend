@@ -121,8 +121,8 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                     return false;
             }
             // The pitch step to the long note should not exceed an octave and a half
-            if (Math.Abs(notes.Max(x => x.Pitch) - lastNote.Pitch) > 18 || Math.Abs(notes.Min(x => x.Pitch) - lastNote.Pitch) > 18)
-                return false;
+           // if (Math.Abs(notes.Max(x => x.Pitch) - lastNote.Pitch) > 18 || Math.Abs(notes.Min(x => x.Pitch) - lastNote.Pitch) > 18)
+           //     return false;
             return true;
         }
 

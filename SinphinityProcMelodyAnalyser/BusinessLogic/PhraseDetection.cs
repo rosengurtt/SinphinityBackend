@@ -19,7 +19,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             if (phraseNotes.Count > 2)
             {
                 (var hasEmbellishments, var phraseWithoutEmbellishmentNotes) = EmbelishmentsDetection.GetPhraseWithoutEmbellishments(phraseNotes);
-                if (hasEmbellishments && phraseWithoutEmbellishmentNotes.Count <= 1)
+                if (hasEmbellishments && phraseWithoutEmbellishmentNotes.Count <= 3)
                     return null;
                 var metrics = hasEmbellishments ? new PhraseMetrics(phraseWithoutEmbellishmentNotes) : new PhraseMetrics(phraseNotes);
                 var pitches = hasEmbellishments ? new PhrasePitches(phraseWithoutEmbellishmentNotes) : new PhrasePitches(phraseNotes);
@@ -271,6 +271,9 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             var retObj = new HashSet<long>();
             (var startBar, var startBeat) = GetBarAndBeatOfTick(bars, startTick);
             (var endBar, var endBeat) = GetBarAndBeatOfTick(bars, endTick);
+            // if startBar and endBar are contiguos, don't break the interval
+            if (startBar + 1 == endBar)
+                return retObj;
             var middleBar = (startBar + endBar) / 2;
             if (middleBar == startBar)
                 middleBar += 1;

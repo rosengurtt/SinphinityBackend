@@ -125,8 +125,8 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
 
                                 var patternDuration = orderedNotes[notesBeforeStart + i].EndSinceBeginningOfSongInTicks - orderedNotes[notesBeforeStart].StartSinceBeginningOfSongInTicks;
                                 var patternSectionDuration = endOfPatternSection - beginningOfPatternSection;
-                                // break at the beginning of each repetition if we are going to have a phrase that is too long
-                                if (patternDuration > 4 * 96 || patternSectionDuration > 12 * 96)
+                                // break at the beginning of each repetition if we are going to have a phrase that is too long or if the pattern is repeated too many times
+                                if (patternDuration > 4 * 96 || patternSectionDuration > 12 * 96 || j > 4)
                                 {
                                     for (var m = 1; m < j; m++)
                                     {
@@ -165,7 +165,11 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 case PhraseTypeEnum.Metrics:
                     return string.Join(",", orderedNotes.Select(x => x.DurationInTicks.ToString())) + ",";
                 case PhraseTypeEnum.Pitches:
-                    return string.Join(",", orderedNotes.Select(x => x.Pitch.ToString())) + ",";
+                    for (var i=0;i< orderedNotes.Count - 1; i++)
+                    {
+                        asString += (orderedNotes[i + 1].Pitch - orderedNotes[i].Pitch).ToString() + ",";
+                    }
+                    return asString;
                 case PhraseTypeEnum.PitchDirection:
                     for (var j = 1; j < orderedNotes.Count; j++)
                     {
