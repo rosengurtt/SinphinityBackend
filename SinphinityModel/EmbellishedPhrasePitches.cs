@@ -10,7 +10,7 @@ namespace Sinphinity.Models
     /// - the simplified version of the phrase with the embellisments removed (that we store in a PhrasePitches object, that we link from here)
     /// 
     /// </summary>
-    public class EmbellishedPhrasePitches
+    public class EmbellishedPhrasePitches : IPhrase
     {
         public EmbellishedPhrasePitches(string withoutEmbelishmentsAsString, string withEmbelishmentsAsString, long? id=null)
         {
@@ -94,6 +94,13 @@ namespace Sinphinity.Models
                 return expanded.Split(',').Select(x => Convert.ToInt32(x)).ToList();
             }
         }
-
+        public Song AsSong
+        {
+            get
+            {
+                var asPhrasePitches = new PhrasePitches(AsString);
+                return asPhrasePitches.AsSong;
+            }
+        }
     }
 }

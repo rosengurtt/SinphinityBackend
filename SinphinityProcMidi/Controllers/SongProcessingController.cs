@@ -96,8 +96,10 @@ namespace SinphinityProcMidi.Controllers
                 n.StartSinceBeginningOfSongInTicks += 1;
                 n.EndSinceBeginningOfSongInTicks += 1;
             }
+            // What follows is a hack, becauser for some reason the midi player omits the first note if we don't add this dummy
             notes.Add(new Note { StartSinceBeginningOfSongInTicks = 0, EndSinceBeginningOfSongInTicks = 1, Volume = 0 });
            // notes.Add(new Note { StartSinceBeginningOfSongInTicks = notes.Max(x => x.EndSinceBeginningOfSongInTicks) + 1, EndSinceBeginningOfSongInTicks = notes.Max(x => x.EndSinceBeginningOfSongInTicks) + 200, Pitch = 60, Volume = 0 });
+           
             var base64encodedMidiBytes = MidiUtilities.GetMidiBytesFromNotes(notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList(), tempoChanges);
             var ms = new MemoryStream(MidiUtilities.GetMidiBytesFromPointInTime(base64encodedMidiBytes, 0));
             var bytes = ms.ToArray();

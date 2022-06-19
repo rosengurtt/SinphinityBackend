@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Sinphinity.Models
 {
@@ -62,6 +63,26 @@ namespace Sinphinity.Models
             get
             {
                 return PhraseTypeEnum.EmbellishedBoth;
+            }
+        }
+        [JsonIgnore]
+        public Phrase AsPhrase
+        {
+            get
+            {
+                var parts = AsString.Split("/");
+                var phraseMetrics = new PhraseMetrics(parts[0]);
+                var phrasePitches = new PhrasePitches(parts[1]);
+                return new Phrase(phraseMetrics, phrasePitches);
+            }
+        }
+
+        public Song AsSong
+        {
+            get
+            {
+                var asPhrase = new Phrase(AsString);
+                return asPhrase.AsSong;
             }
         }
     }

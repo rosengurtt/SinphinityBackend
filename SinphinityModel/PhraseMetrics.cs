@@ -6,7 +6,7 @@ namespace Sinphinity.Models
     /// <summary>
     /// Represents the metric of a melodic phrase
     /// </summary>
-    public class PhraseMetrics
+    public class PhraseMetrics : IPhrase
     {
         /// <summary>
         /// The primary key of the record in the db
@@ -148,6 +148,30 @@ namespace Sinphinity.Models
             if (i < 4)
                 return embellishmentDuration;
             return 0;
+        }
+
+        public Song AsSong
+        {
+            get
+            {
+                var phrasePitches = GetPhrasePitches();
+                var phrase = new Phrase(this, phrasePitches);
+                return phrase.AsSong;
+            }
+        }
+
+
+
+        private PhrasePitches GetPhrasePitches()
+        {
+            string asString = "";
+            for (var i = 0; i < Items.Count; i++)
+            {
+                asString += "0";
+                if (i < Items.Count - 1)
+                    asString += ",";
+            }
+            return new PhrasePitches(asString);
         }
     }
 }

@@ -74,11 +74,6 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                             (var bar, var beat, var tick) = GetBarBeatAndTickOfEdge(song.Bars, phraseEdges[i]);
                             var instrument = cleanedVoiceNotes[0].Instrument;
                         }
-                        if (phraseInfo.EmbellishedMetricsAsString == "4,1,4,39,1,4,43,2,2,44,1,2,2,43,2,2,44,2,3,43,2,3,43,1,2,4,41,48,4,6,2,36,48,4,2,4,38,48,3,1,5,39,2,4,2,40,1")
-                        {
-
-                        }
-
 
                         if (!retObjPhrases.ContainsKey(phraseInfo.PhraseAsString))
                             retObjPhrases.Add(phraseInfo.PhraseAsString, new List<SongLocation>());

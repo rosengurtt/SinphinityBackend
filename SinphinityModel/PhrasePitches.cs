@@ -7,7 +7,7 @@ namespace Sinphinity.Models
     /// The list of relative pitches used in a melodic phrase in the order they are played, without rythm information
     /// Relative means that is the difference in pitch between consecutive notes, not the real pitch
     /// </summary>
-    public class PhrasePitches
+    public class PhrasePitches : IPhrase
     {
         /// <summary>
         /// The primary key of the record in the db
@@ -108,5 +108,29 @@ namespace Sinphinity.Models
                 throw new Exception("Phrases of less than 2 notes not supported");
             AsString = AsString.ExtractPattern();
         }
+        public Song AsSong
+        {
+            get
+            {
+                var phraseMetrics = GetPhraseMetrics();
+                var phrase = new Phrase(phraseMetrics, this);
+
+                return phrase.AsSong;
+            }
+        }
+
+
+        private PhraseMetrics GetPhraseMetrics()
+        {
+            string asString = "";
+            for (var i = 0; i < Items.Count; i++)
+            {
+                asString += "96";
+                if (i < Items.Count - 1)
+                    asString += ",";
+            }
+            return new PhraseMetrics(asString);
+        }
+
     }
 }

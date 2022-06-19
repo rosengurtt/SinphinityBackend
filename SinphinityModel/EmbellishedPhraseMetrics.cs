@@ -11,7 +11,7 @@ namespace Sinphinity.Models
     /// 
     /// 
     /// </summary>
-    public class EmbellishedPhraseMetrics
+    public class EmbellishedPhraseMetrics : IPhrase
     {
         public EmbellishedPhraseMetrics(string withoutEmbelishmentsAsString, string withEmbelishmentsAsString, long? id = null)
         {
@@ -58,6 +58,15 @@ namespace Sinphinity.Models
                 return expanded.Replace("+", "").Split(',').Select(x => Convert.ToInt32(x)).ToList();
             }
         }
-  
+
+        public Song AsSong
+        {
+            get
+            {
+                var asPhraseMetrics = new PhraseMetrics(AsString);
+                return asPhraseMetrics.AsSong;
+            }
+        }
+
     }
 }

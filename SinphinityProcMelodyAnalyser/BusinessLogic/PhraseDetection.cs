@@ -221,6 +221,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// <summary>
         /// If after all, there are still phrases that are too long (more than 2 bars) and/or have too many notes, break them arbitrarily at bar beginnings recursively until there
         /// are no phrases that are too long an/or have too many notes
+        /// We break at bar edges only if there is a note at the beginning of the bar
         /// </summary>
         /// <param name="notes"></param>
         /// <param name="bars"></param>
@@ -234,10 +235,6 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             for (int i = 0; i < edgesAsList.Count - 1; i++)
             {
                 var startTick = edgesAsList[i];
-                if (startTick > 40000)
-                {
-
-                }
                 var endTick = edgesAsList[i + 1];
                 if (MustIntervalBeBroken(notes, bars, startTick, endTick))
                     retObj = retObj.Union(BreakInterval(notes, bars, startTick, endTick)).ToHashSet();
@@ -277,15 +274,16 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             var middleBar = (startBar + endBar) / 2;
             if (middleBar == startBar)
                 middleBar += 1;
+
             var startMiddleBar = bars[middleBar - 1].TicksFromBeginningOfSong;
-            var notesFirstInterval= notes.Where(x=>x.StartSinceBeginningOfSongInTicks>=startTick && x.StartSinceBeginningOfSongInTicks<startMiddleBar).Count();
             retObj.Add(startMiddleBar);
+
+            // Recursively break left and right intervals
             if (MustIntervalBeBroken(notes, bars, startTick, startMiddleBar))
                 retObj = retObj.Union(BreakInterval(notes, bars, startTick, startMiddleBar)).ToHashSet();
             if (MustIntervalBeBroken(notes, bars, startMiddleBar, endTick))
                 retObj = retObj.Union(BreakInterval(notes, bars, startMiddleBar, endTick)).ToHashSet();
             return retObj;
-
         }
 
         public static (int, int) GetBarAndBeatOfTick(List<Bar> bars, long tick)
