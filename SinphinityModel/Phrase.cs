@@ -56,6 +56,7 @@ namespace Sinphinity.Models
                 };
                 var retObj = new Song
                 {
+                    Id = 0,
                     Name = $"Phrase_{AsString}",
                     SongSimplifications = new List<SongSimplification>() { new SongSimplification { Notes = this.Notes, NumberOfVoices = 1, Version = 1 } },
                     Bars = new List<Bar>() { bar },
@@ -66,7 +67,6 @@ namespace Sinphinity.Models
 
                 return retObj;
             }
-
         }
         [JsonIgnore]
         private List<Note> Notes

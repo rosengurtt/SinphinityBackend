@@ -15,7 +15,7 @@ namespace SinphinitySysStore.Data
         public DbSet<MidiStatsEntity> MidiStats { get; set; }
         public DbSet<SongSimplification> SongsSimplifications { get; set; }
         public DbSet<Phrase> Phrases { get; set; }
-        public DbSet<PhraseOccurrence> PhrasesOccurrences { get; set; }
+        public DbSet<PhraseOccurrenceEntity> PhrasesOccurrences { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,7 +25,7 @@ namespace SinphinitySysStore.Data
             modelBuilder.Entity<SongData>().ToTable("SongsData");
             modelBuilder.Entity<MidiStatsEntity>().ToTable("MidiStats");
             modelBuilder.Entity<Phrase>().ToTable("Phrases");
-            modelBuilder.Entity<PhraseOccurrence>().ToTable("PhrasesOccurrences");
+            modelBuilder.Entity<PhraseOccurrenceEntity>().ToTable("PhrasesOccurrences");
             modelBuilder.Entity<SongSimplification>().ToTable("SongsSimplifications");
         }
     }

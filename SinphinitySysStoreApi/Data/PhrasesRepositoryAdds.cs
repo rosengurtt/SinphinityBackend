@@ -300,7 +300,7 @@ namespace SinphinitySysStore.Data
                     .FirstOrDefaultAsync();
                 if (occ == null)
                 {
-                    var occur = new PhraseOccurrence(loc, phraseId);
+                    var occur = new PhraseOccurrenceEntity(loc, phraseId);
                     _dbContext.PhrasesOccurrences.Add(occur);
                     await _dbContext.SaveChangesAsync();
                 }

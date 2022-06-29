@@ -265,42 +265,29 @@ namespace SinphinityExpApi.Clients
             if (step != null) retObj += $"&step={step}";
             return retObj;
         }
-        public async Task<HashSet<Occurrence>> GetOccurrencesOfPatternAsync(long patternId)
+
+
+        public async Task<PaginatedList<PhraseOccurrence>> GetOccurrencesOfPhrase(long phraseId, long songId = 0, int pageNo = 0, int pageSize = 20)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
-            var keepLooping = true;
-            var page = 0;
-            var retObj = new HashSet<Occurrence>();
-            while (keepLooping)
+            var url = $"{_appConfiguration.SysStoreUrl}/api/phrases/{phraseId}/occurrences?songId={songId}&pageNo={pageNo}&pageSize={pageSize}";
+
+            var response = await httpClient.GetAsync(url);
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                var url = $"{_appConfiguration.SysStoreUrl}/api/patterns/occurrences?patternId={patternId}&pageNo={page}&pageSize=10";
-                var response = await httpClient.GetAsync(url);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
-                    var result = JsonConvert.SerializeObject(apiResponse.result);
-                   var pageData = JsonConvert.DeserializeObject<PaginatedList<Occurrence>>(result);
-
-                    if (pageData.items?.Count > 0)
-                    {
-                        foreach (Occurrence o in pageData.items)
-                            retObj.Add(o);
-                    }
-                    else
-                        keepLooping = false;
-                    page++;
-                }
-                else
-                {
-                    var errorMessage = $"Couldn't get occurrences of pattern {patternId}";
-                    Log.Error(errorMessage);
-                    throw new ApplicationException(errorMessage);
-                }
-
+                var responseContent = await response.Content.ReadAsStringAsync();
+                dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
+                var result = JsonConvert.SerializeObject(apiResponse.result);
+                return JsonConvert.DeserializeObject<PaginatedList<PhraseOccurrence>>(result);
             }
-            return retObj;
+            else
+            {
+                var errorMessage = $"Couldn't get phrases occurrences";
+                Log.Error(errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
         }
+
         public async Task<Song> GetSongByIdAsync(long songId, int? SongSimplification = null)
         {
             HttpClient httpClient = _clientFactory.CreateClient();

@@ -149,6 +149,11 @@ namespace SinphinityExpApi.Controllers
             return null;
 
         }
+        [HttpGet("{phraseId}/occurrences")]
+        public async Task<ActionResult> GetOccurrencesOfPhraseAsync(long phraseId, long songId = 0, int pageNo = 0, int pageSize = 20)
+        {
+            return Ok(new ApiOKResponse(await _sysStoreClient.GetOccurrencesOfPhrase(phraseId, songId, pageNo, pageSize)));
+        }
     }
 }
 

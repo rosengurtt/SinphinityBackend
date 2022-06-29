@@ -83,13 +83,20 @@ namespace SinphinitySysStore.Controllers
 
 
         [HttpGet("{songId}/midi")]
-        public async Task<IActionResult> GetSongMidi(long songId, int tempoInBeatsPerMinute, int simplificationVersion = 1, int startInSeconds = 0, string? mutedTracks = null)
+        public async Task<IActionResult> GetSongMidi(
+            long songId,
+            int tempoInBeatsPerMinute,
+            int simplificationVersion = 1,
+            int startInSeconds = 0,
+            string? mutedTracks = null,
+            long? fromTick = null,
+            long? toTick = null)
         {
             try
             {
                 Song song = await _sysStoreClient.GetSongByIdAsync(songId, simplificationVersion);
                 if (song == null) return null;
-                var base64encodedMidiBytes = await _procMidiClient.GetMidiFragmentOfSong(song, tempoInBeatsPerMinute, simplificationVersion, startInSeconds, mutedTracks);
+                var base64encodedMidiBytes = await _procMidiClient.GetMidiFragmentOfSong(song, tempoInBeatsPerMinute, simplificationVersion, startInSeconds, mutedTracks, fromTick, toTick);
                 var ms = new MemoryStream(Convert.FromBase64String(base64encodedMidiBytes));
 
                 return File(ms, MediaTypeNames.Text.Plain, song.Name);

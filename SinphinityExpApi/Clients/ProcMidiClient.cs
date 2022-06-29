@@ -66,13 +66,20 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task<string> GetMidiFragmentOfSong(Song song, int tempoInBeatsPerMinute, int simplificationVersion, int startInSeconds = 0, string? mutedTracks = null)
+        public async Task<string> GetMidiFragmentOfSong(
+            Song song,
+            int tempoInBeatsPerMinute,
+            int simplificationVersion,
+            int startInSeconds = 0,
+            string? mutedTracks = null,
+            long? fromTick = null,
+            long? toTick = null)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(song));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var url = $"{_appConfiguration.ProcMidiUrl}/api/SongProcessing/{song.Id}?tempoInBeatsPerMinute={tempoInBeatsPerMinute}" +
-                $"&simplificationVersion={simplificationVersion}&startInSeconds={startInSeconds}&mutedTracks={mutedTracks}";
+                $"&simplificationVersion={simplificationVersion}&startInSeconds={startInSeconds}&mutedTracks={mutedTracks}&fromTicks={fromTick}&toTick={toTick}";
             var response = await httpClient.PostAsync(url, content);
 
             if (response.StatusCode == HttpStatusCode.OK)

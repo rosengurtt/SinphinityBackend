@@ -24,7 +24,7 @@ namespace SinphinitySysStoreApi.Controllers
         }
 
         [HttpPost("{songId}"), DisableRequestSizeLimit]
-        public async Task<ActionResult> UploadPhrasesOfSong(long songId, List<Dictionary<string, List<SongLocation>>> phrases)
+        public async Task<ActionResult> UploadPhrasesOfSongAsync(long songId, List<Dictionary<string, List<SongLocation>>> phrases)
         {
             if (phrases.Count != 6)
                 throw new Exception("Me mandaron cualquier mierda");
@@ -40,7 +40,7 @@ namespace SinphinitySysStoreApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetPhrases(
+        public async Task<ActionResult> GetPhrasesAsync(
             long? styleId,
             long? bandId,
             long? songId,
@@ -55,7 +55,7 @@ namespace SinphinitySysStoreApi.Controllers
             int pageSize = 10)
         {
             var phraseType = type == null ? PhraseTypeEnum.Metrics : (PhraseTypeEnum)Enum.Parse(typeof(PhraseTypeEnum), type, true);
-            (var totaPhrases, var phrases) = await _phrasesRepository.GetPhrases(styleId, bandId, songId, phraseType, contains, numberOfNotes,
+            (var totaPhrases, var phrases) = await _phrasesRepository.GetPhrasesAsync(styleId, bandId, songId, phraseType, contains, numberOfNotes,
                 durationInTicks, range, isMonotone, step, pageNo, pageSize);
             var retObj = new
             {
@@ -67,7 +67,20 @@ namespace SinphinitySysStoreApi.Controllers
             };
             return Ok(new ApiOKResponse(retObj));
         }
-
+        [HttpGet("{phraseId}/occurrences")]
+        public async Task<ActionResult> GetOccurrencesOfPhraseAsync(long phraseId, long songId = 0, int pageNo = 0, int pageSize = 20)
+        {
+            (var totaOccs, var occurreces) = await _phrasesRepository.GetOccurrencesOfPhraseAsync(phraseId, songId, pageNo, pageSize);
+            var retObj = new
+            {
+                pageNo,
+                pageSize,
+                totalItems = totaOccs,
+                totalPages = (int)Math.Ceiling((double)totaOccs / pageSize),
+                items = occurreces
+            };
+            return Ok(new ApiOKResponse(retObj));
+        }
     }
 }
 

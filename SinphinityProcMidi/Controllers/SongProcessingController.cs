@@ -55,7 +55,14 @@ namespace SinphinityProcMidi.Controllers
         /// <param name="mutedTracks"></param>
         /// <returns></returns>
         [HttpPost("{songId}")]
-        public ActionResult GetSongMidi(Song song, string songId, int tempoInBeatsPerMinute, int simplificationVersion = 1, int startInSeconds = 0, string? mutedTracks = null)
+        public ActionResult GetSongMidi(
+            Song song,
+            int tempoInBeatsPerMinute,
+            int simplificationVersion = 1,
+            int startInSeconds = 0,
+            string? mutedTracks = null,
+            long? fromTick = null,
+            long? toTick = null)
         {
 
             int[] tracksToMute = mutedTracks?.Split(',').Select(x => int.Parse(x)).ToArray();
@@ -81,7 +88,8 @@ namespace SinphinityProcMidi.Controllers
             }
             songSimplification.Notes = songSimplification.Notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
             var base64encodedMidiBytes = MidiUtilities.GetMidiBytesFromNotes(songSimplification.Notes, tempoChanges);
-            var ms = new MemoryStream(MidiUtilities.GetMidiBytesFromPointInTime(base64encodedMidiBytes, startInSeconds));
+            var ms = fromTick==null? new MemoryStream(MidiUtilities.GetMidiBytesFromPointInTime(base64encodedMidiBytes, startInSeconds)):
+                new MemoryStream(MidiUtilities.GetMidiBytesFromPointInTime(base64encodedMidiBytes, null, fromTick, toTick));
             var bytes = ms.ToArray();
             return Ok(new ApiOKResponse(Convert.ToBase64String(bytes)));
         }
