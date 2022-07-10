@@ -64,7 +64,8 @@ namespace SinphinityProcMidi.Controllers
             long? fromTick = null,
             long? toTick = null)
         {
-
+            if (tempoInBeatsPerMinute == 0)
+                tempoInBeatsPerMinute = (int)song.AverageTempoInBeatsPerMinute;
             int[] tracksToMute = mutedTracks?.Split(',').Select(x => int.Parse(x)).ToArray();
 
 
@@ -79,17 +80,23 @@ namespace SinphinityProcMidi.Controllers
             }).ToList() :
             song.TempoChanges;
             var songSimplification = song.SongSimplifications.Where(x => x.Version == simplificationVersion).FirstOrDefault();
+
             if (mutedTracks != null)
             {
-                foreach (var i in tracksToMute)
-                {
-                    songSimplification.Notes = songSimplification.Notes.Where(x => x.Voice != i).ToList();
-                }
+                songSimplification.Notes = songSimplification.Notes.Where(x => !tracksToMute.Contains(x.Voice)).ToList();
             }
+            if (fromTick != null)
+                songSimplification.Notes = songSimplification.Notes.Where(x => x.StartSinceBeginningOfSongInTicks >= fromTick).ToList();
+            if (toTick != null)
+                songSimplification.Notes = songSimplification.Notes.Where(x => x.StartSinceBeginningOfSongInTicks < toTick).ToList();
+
             songSimplification.Notes = songSimplification.Notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
+
             var base64encodedMidiBytes = MidiUtilities.GetMidiBytesFromNotes(songSimplification.Notes, tempoChanges);
-            var ms = fromTick==null? new MemoryStream(MidiUtilities.GetMidiBytesFromPointInTime(base64encodedMidiBytes, startInSeconds)):
-                new MemoryStream(MidiUtilities.GetMidiBytesFromPointInTime(base64encodedMidiBytes, null, fromTick, toTick));
+
+            if (fromTick != null)
+                return Ok(new ApiOKResponse(base64encodedMidiBytes));
+            var ms = new MemoryStream(MidiUtilities.GetMidiBytesFromPointInTime(base64encodedMidiBytes, startInSeconds));
             var bytes = ms.ToArray();
             return Ok(new ApiOKResponse(Convert.ToBase64String(bytes)));
         }
@@ -99,15 +106,14 @@ namespace SinphinityProcMidi.Controllers
         {
             var tempoChanges = new List<TempoChange> { new TempoChange { MicrosecondsPerQuarterNote = 500000 * 120 / tempoInBPM } };
             var notes = PhraseConverter.GetPhraseNotes(phraseType, asString, instrument, startingPitch);
-            foreach (var n in notes)
-            {
-                n.StartSinceBeginningOfSongInTicks += 1;
-                n.EndSinceBeginningOfSongInTicks += 1;
-            }
-            // What follows is a hack, becauser for some reason the midi player omits the first note if we don't add this dummy
-            notes.Add(new Note { StartSinceBeginningOfSongInTicks = 0, EndSinceBeginningOfSongInTicks = 1, Volume = 0 });
-           // notes.Add(new Note { StartSinceBeginningOfSongInTicks = notes.Max(x => x.EndSinceBeginningOfSongInTicks) + 1, EndSinceBeginningOfSongInTicks = notes.Max(x => x.EndSinceBeginningOfSongInTicks) + 200, Pitch = 60, Volume = 0 });
-           
+            //foreach (var n in notes)
+            //{
+            //    n.StartSinceBeginningOfSongInTicks += 1;
+            //    n.EndSinceBeginningOfSongInTicks += 1;
+            //}
+            //// What follows is a hack, becauser for some reason the midi player omits the first note if we don't add this dummy
+            //notes.Add(new Note { StartSinceBeginningOfSongInTicks = 0, EndSinceBeginningOfSongInTicks = 1, Volume = 0 });
+   
             var base64encodedMidiBytes = MidiUtilities.GetMidiBytesFromNotes(notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList(), tempoChanges);
             var ms = new MemoryStream(MidiUtilities.GetMidiBytesFromPointInTime(base64encodedMidiBytes, 0));
             var bytes = ms.ToArray();

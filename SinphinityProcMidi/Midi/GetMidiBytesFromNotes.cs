@@ -21,7 +21,19 @@ namespace SinphinityProcMidi.Midi
         public static string GetMidiBytesFromNotes(List<Note> notes, List<TempoChange> tempoChanges = null)
         {
             var standardTicksPerQuarterNote = 96;
-            notes = ResetTimeOfNotes(notes);
+            var firstNote = notes?.OrderBy(n => n.StartSinceBeginningOfSongInTicks).First();
+
+            // What follows is a hack, because for some reason the midi player omits the first note if we don't add this dummy
+            var silentNote = new Note
+            {
+                StartSinceBeginningOfSongInTicks = firstNote.StartSinceBeginningOfSongInTicks,
+                EndSinceBeginningOfSongInTicks = firstNote.StartSinceBeginningOfSongInTicks + 1,
+                Volume = 0
+            };
+            notes.Add(silentNote);
+            notes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ThenBy(y => y.EndSinceBeginningOfSongInTicks).ToList();
+            var timeShift = notes?.Count() > 0 ? firstNote.StartSinceBeginningOfSongInTicks : 0;
+            notes = ResetTimeOfNotes(notes, timeShift);
             var mf = new MidiFile();
             mf.TimeDivision = new TicksPerQuarterNoteTimeDivision((short)standardTicksPerQuarterNote);
             var chunkitos = new Dictionary<GeneralMidi2Program, TrackChunk>();
@@ -52,7 +64,7 @@ namespace SinphinityProcMidi.Midi
             }
 
             var channelIndependentChunkito = new TrackChunk();
-            channelIndependentChunkito = AddSetTempoEvents(channelIndependentChunkito, tempoChanges);
+            channelIndependentChunkito = AddSetTempoEvents(channelIndependentChunkito, tempoChanges, timeShift);
             var allChunks = chunkitos.Values.ToList();
             if (percusionChunk != null)
                 allChunks.Add(percusionChunk);
@@ -79,11 +91,10 @@ namespace SinphinityProcMidi.Midi
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        private static List<Note> ResetTimeOfNotes(List<Note> notes)
+        private static List<Note> ResetTimeOfNotes(List<Note> notes, long timeShift)
         {
             if (notes == null || notes.Count == 0) return notes;
-            var firstNote = notes?.OrderBy(n => n.StartSinceBeginningOfSongInTicks).First();
-            return notes.Select(n => ResetTimeOfNote(n, firstNote.StartSinceBeginningOfSongInTicks)).ToList();
+            return notes.Select(n => ResetTimeOfNote(n, timeShift)).ToList();
         }
         private static Note ResetTimeOfNote(Note n, long noTicks)
         {
@@ -92,14 +103,14 @@ namespace SinphinityProcMidi.Midi
             notita.EndSinceBeginningOfSongInTicks -= noTicks;
             return notita;
         }
-        private static TrackChunk AddSetTempoEvents(TrackChunk chunkito, List<TempoChange> tc)
+        private static TrackChunk AddSetTempoEvents(TrackChunk chunkito, List<TempoChange> tc, long timeShift)
         {
             if (tc == null) return chunkito;
             foreach (var t in tc)
             {
                 var setTempoEvent = new SetTempoEvent()
                 {
-                    DeltaTime = t.TicksSinceBeginningOfSong,
+                    DeltaTime = t.TicksSinceBeginningOfSong > timeShift ? t.TicksSinceBeginningOfSong - timeShift : 0,
                     MicrosecondsPerQuarterNote = t.MicrosecondsPerQuarterNote
                 };
                 chunkito.Events.Add(setTempoEvent);

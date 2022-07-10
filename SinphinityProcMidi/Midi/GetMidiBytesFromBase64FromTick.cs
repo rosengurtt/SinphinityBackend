@@ -47,11 +47,13 @@ namespace SinphinityProcMidi.Midi
                 return memStream.ToArray();
             }
         }
+
+
         public static byte[] GetMidiBytesFromPointInTime(
-            string base64EncodedMidi, 
-            int? secondsFromBeginningOfSong=null, 
-            long? fromTick=null,
-            long? toTick=null)
+            string base64EncodedMidi,
+            int? secondsFromBeginningOfSong = null,
+            long? fromTick = null,
+            long? toTick = null)
         {
             if (secondsFromBeginningOfSong != null)
             {

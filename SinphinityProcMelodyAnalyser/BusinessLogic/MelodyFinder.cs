@@ -14,7 +14,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// <param name="song"></param>
         /// <param name="songSimplification"></param>
         /// <returns></returns>
-        public static List<Dictionary<string, List<SongLocation>>> FindAllPhrases(Song song, int songSimplification=0)
+        public static List<Dictionary<string, List<SongLocation>>> FindAllPhrases(Song song, int songSimplification = 0)
         {
             var retObjPhrases = new Dictionary<string, List<SongLocation>>();
             var retObjEmbellishedPhrases = new Dictionary<string, List<SongLocation>>();
@@ -33,7 +33,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 if (voiceNotes.Where(x => x.DurationInTicks <= 0).Any())
                 {
                 }
-       
+
 
                 var cleanedVoiceNotes = PhraseDetection.DiscretizeTiming(voiceNotes);
                 if (cleanedVoiceNotes.Where(x => x.DurationInTicks <= 0).Any())
@@ -66,7 +66,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 for (int i = 0; i < phraseEdges.Count - 1; i++)
                 {
                     var phraseInfo = PhraseDetection.GetPhraseBetweenEdges(cleanedVoiceNotes, phraseEdges[i], phraseEdges[i + 1], song.Id, voice, song.Bars);
-                   
+
                     if (phraseInfo != null)
                     {
                         if (phraseInfo.MetricsAsString.Split(",").Length > 40)

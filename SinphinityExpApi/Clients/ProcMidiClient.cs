@@ -79,7 +79,7 @@ namespace SinphinityExpApi.Clients
             var content = new StringContent(JsonConvert.SerializeObject(song));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var url = $"{_appConfiguration.ProcMidiUrl}/api/SongProcessing/{song.Id}?tempoInBeatsPerMinute={tempoInBeatsPerMinute}" +
-                $"&simplificationVersion={simplificationVersion}&startInSeconds={startInSeconds}&mutedTracks={mutedTracks}&fromTicks={fromTick}&toTick={toTick}";
+                $"&simplificationVersion={simplificationVersion}&startInSeconds={startInSeconds}&mutedTracks={mutedTracks}&fromTick={fromTick}&toTick={toTick}";
             var response = await httpClient.PostAsync(url, content);
 
             if (response.StatusCode == HttpStatusCode.OK)
