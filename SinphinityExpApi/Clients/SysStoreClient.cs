@@ -359,7 +359,7 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task InsertPhrasesAsync(List<Dictionary<string, List<SongLocation>>> phrases, long songId)
+        public async Task InsertPhrasesAsync(List<Dictionary<string, List<PhraseLocation>>> phrases, long songId)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(phrases));
@@ -375,7 +375,23 @@ namespace SinphinityExpApi.Clients
                 throw new ApplicationException(errorMessage);
             }
         }
-    
 
+
+
+        public async Task GeneratePhrasesLinksForSong(long songId)
+        {
+            HttpClient httpClient = _clientFactory.CreateClient();
+            var response = await httpClient.PostAsync($"{_appConfiguration.SysStoreUrl}/api/Phrases/PhrasesLinks?songId={songId}", null);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
+                var message = JsonConvert.SerializeObject(apiResponse.message);
+                Log.Error(message);
+                throw new ApplicationException(message);
+            }
+
+        }
     }
 }

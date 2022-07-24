@@ -27,7 +27,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 var embellishedPitches = hasEmbellishments ? new PhrasePitches(phraseNotes) : null;
                 var retObj = new PhraseInfo
                 {
-                    Location = new SongLocation(songId, voice, start, end, bars),
+                    Location = new PhraseLocation(songId, voice, start, end, phraseNotes[0].Instrument, phraseNotes[0].Pitch, bars),
                     MetricsAsString = metrics.AsString,
                     PitchesAsString = pitches.AsString,
                     EmbellishedMetricsAsString = hasEmbellishments ? embellishedMetrics.AsString : "",

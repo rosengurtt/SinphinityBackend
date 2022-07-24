@@ -154,6 +154,42 @@ namespace SinphinityExpApi.Controllers
         {
             return Ok(new ApiOKResponse(await _sysStoreClient.GetOccurrencesOfPhrase(phraseId, songId, pageNo, pageSize)));
         }
+
+        [HttpPost("processPhrasesLinksBatch")]
+        public async Task<IActionResult> ProcessBatch(long styleId, long bandId)
+        {
+            var keepLooping = true;
+            var pageSize = 40;
+            var page = 0;
+            var alca = 1;
+            while (keepLooping)
+            {
+                PaginatedList<Song> songsBatch = await _sysStoreClient.GetSongsAsync(page, pageSize, null, styleId, bandId);
+                if (songsBatch.items?.Count > 0)
+                {
+                    foreach (var s in songsBatch.items)
+                    {
+                        try
+                        {
+                            Log.Information($"{alca} - Start with song: {s.Name}");
+                            await _sysStoreClient.GeneratePhrasesLinksForSong(s.Id);
+                            Log.Information($"Processed OK {s.Name}");
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex, $"Couldn't process song {s.Name}");
+                        }
+                        alca++;
+                    }
+                    page += 1;
+                }
+                else
+                    keepLooping = false;
+            }
+            return Ok(new ApiOKResponse(null));
+        }
+
+
     }
 }
 

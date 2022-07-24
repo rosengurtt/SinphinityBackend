@@ -13,7 +13,7 @@ namespace SinphinitySysStore.Data
             _dbContext = dbcontext;
         }
 
-        public async Task SavePhrasesMetricsOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
+        public async Task SavePhrasesMetricsOfSongAsync(Dictionary<string, List<Sinphinity.Models.PhraseLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -30,7 +30,7 @@ namespace SinphinitySysStore.Data
                         currentPhrase = phraseEntity;
                     }
                     await SaveAssociationsOfPhrase(currentPhrase.Id, song);
-                    await InsertOccurrences(phrasesLocations[pm], songId, currentPhrase.Id);
+                    await InsertOccurrences(phrasesLocations[pm], songId, currentPhrase.Id, Sinphinity.Models.PhraseTypeEnum.Metrics);
                 }
             }
             catch (Exception sePudrioPapi)
@@ -61,7 +61,7 @@ namespace SinphinitySysStore.Data
         }
 
 
-        public async Task SavePhrasesPitchesOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
+        public async Task SavePhrasesPitchesOfSongAsync(Dictionary<string, List<Sinphinity.Models.PhraseLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -78,7 +78,7 @@ namespace SinphinitySysStore.Data
                         currentPhrase = phraseEntity;
                     }
                     await SaveAssociationsOfPhrase(currentPhrase.Id, song);
-                    await InsertOccurrences(phrasesLocations[pp], songId, currentPhrase.Id);
+                    await InsertOccurrences(phrasesLocations[pp], songId, currentPhrase.Id, Sinphinity.Models.PhraseTypeEnum.Pitches);
                 }
             }
             catch (Exception sePudrioPapi)
@@ -88,7 +88,7 @@ namespace SinphinitySysStore.Data
         }
 
 
-        public async Task SaveEmbellishedPhrasesMetricsOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
+        public async Task SaveEmbellishedPhrasesMetricsOfSongAsync(Dictionary<string, List<Sinphinity.Models.PhraseLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -117,7 +117,7 @@ namespace SinphinitySysStore.Data
                         currentEmbellishedPhraseMetrics = phraseEntity;
                     }
                     await SaveAssociationsOfPhrase(currentEmbellishedPhraseMetrics.Id, song);
-                    await InsertOccurrences(phrasesLocations[ep], songId, currentEmbellishedPhraseMetrics.Id);
+                    await InsertOccurrences(phrasesLocations[ep], songId, currentEmbellishedPhraseMetrics.Id, Sinphinity.Models.PhraseTypeEnum.EmbelishedMetrics);
                 }
             }
             catch (Exception sePudrioPapi)
@@ -125,7 +125,7 @@ namespace SinphinitySysStore.Data
 
             }
         }
-        public async Task SaveEmbellishedPhrasesPitchesOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
+        public async Task SaveEmbellishedPhrasesPitchesOfSongAsync(Dictionary<string, List<Sinphinity.Models.PhraseLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -154,7 +154,7 @@ namespace SinphinitySysStore.Data
                         currentEmbellishedPhrasePitches = phraseEntity;
                     }
                     await SaveAssociationsOfPhrase(currentEmbellishedPhrasePitches.Id, song);
-                    await InsertOccurrences(phrasesLocations[ep], songId, currentEmbellishedPhrasePitches.Id);
+                    await InsertOccurrences(phrasesLocations[ep], songId, currentEmbellishedPhrasePitches.Id, Sinphinity.Models.PhraseTypeEnum.EmbelishedPitches);
                 }
             }
             catch (Exception sePudrioPapi)
@@ -163,7 +163,7 @@ namespace SinphinitySysStore.Data
             }
         }
 
-        public async Task SaveEmbellishedPhrasesOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
+        public async Task SaveEmbellishedPhrasesOfSongAsync(Dictionary<string, List<Sinphinity.Models.PhraseLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -193,7 +193,7 @@ namespace SinphinitySysStore.Data
                         currentPhrase = phraseEntity;
                     }
                     await SaveAssociationsOfPhrase(currentPhrase.Id, song);
-                    await InsertOccurrences(phrasesLocations[ep], songId, currentPhrase.Id);
+                    await InsertOccurrences(phrasesLocations[ep], songId, currentPhrase.Id, Sinphinity.Models.PhraseTypeEnum.EmbellishedBoth);
 
                 }
             }
@@ -205,7 +205,7 @@ namespace SinphinitySysStore.Data
 
 
 
-        public async Task SavePhrasesOfSongAsync(Dictionary<string, List<Sinphinity.Models.SongLocation>> phrasesLocations, long songId)
+        public async Task SavePhrasesOfSongAsync(Dictionary<string, List<Sinphinity.Models.PhraseLocation>> phrasesLocations, long songId)
         {
             var song = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
@@ -229,7 +229,7 @@ namespace SinphinitySysStore.Data
                         currentPhrase = phraseEntity;
                     }
                     await SaveAssociationsOfPhrase(currentPhrase.Id, song);
-                    await InsertOccurrences(phrasesLocations[p], songId, currentPhrase.Id);
+                    await InsertOccurrences(phrasesLocations[p], songId, currentPhrase.Id, Sinphinity.Models.PhraseTypeEnum.Both);
                 }
             }
             catch (Exception sePudrioPapi)
@@ -291,7 +291,7 @@ namespace SinphinitySysStore.Data
 
 
 
-        private async Task InsertOccurrences(List<Sinphinity.Models.SongLocation> locations, long songId, long phraseId)
+        private async Task InsertOccurrences(List<Sinphinity.Models.PhraseLocation> locations, long songId, long phraseId, Sinphinity.Models.PhraseTypeEnum type)
         {
             // Insert Occurrences
             foreach (var loc in locations)
@@ -300,7 +300,7 @@ namespace SinphinitySysStore.Data
                     .FirstOrDefaultAsync();
                 if (occ == null)
                 {
-                    var occur = new PhraseOccurrenceEntity(loc, phraseId);
+                    var occur = new PhraseOccurrenceEntity(loc, phraseId, type);
                     _dbContext.PhrasesOccurrences.Add(occur);
                     await _dbContext.SaveChangesAsync();
                 }

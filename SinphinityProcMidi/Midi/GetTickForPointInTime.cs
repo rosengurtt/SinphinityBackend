@@ -14,6 +14,7 @@ namespace SinphinityProcMidi.Midi
         /// <returns></returns>
         public static long GetTickForPointInTime(string base64EncodedMidi, int secondsFromBeginningOfSong)
         {
+            if (secondsFromBeginningOfSong == 0) return 0;
             var midiFile = MidiFile.Read(base64EncodedMidi);
             midiFile = ConvertDeltaTimeToAccumulatedTime(midiFile);
             int ticksPerBeat = ((TicksPerQuarterNoteTimeDivision)midiFile.TimeDivision).TicksPerQuarterNote;
@@ -41,7 +42,7 @@ namespace SinphinityProcMidi.Midi
                 if (durationSoFar >= secondsFromBeginningOfSong)
                 {
                     return tempoEvents[i].DeltaTime +
-                        (long)Math.Floor(durationInTicks * (secondsFromBeginningOfSong - previousDuration)/ durationSoFar);
+                        (long)Math.Floor(durationInTicks * (secondsFromBeginningOfSong - previousDuration) / durationSoFar);
                 }
                 previousDuration = durationSoFar;
             }

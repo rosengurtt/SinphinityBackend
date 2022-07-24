@@ -24,7 +24,7 @@ namespace SinphinitySysStoreApi.Controllers
         }
 
         [HttpPost("{songId}"), DisableRequestSizeLimit]
-        public async Task<ActionResult> UploadPhrasesOfSongAsync(long songId, List<Dictionary<string, List<SongLocation>>> phrases)
+        public async Task<ActionResult> UploadPhrasesOfSongAsync(long songId, List<Dictionary<string, List<PhraseLocation>>> phrases)
         {
             if (phrases.Count != 6)
                 throw new Exception("Me mandaron cualquier mierda");
@@ -80,6 +80,14 @@ namespace SinphinitySysStoreApi.Controllers
                 items = occurreces
             };
             return Ok(new ApiOKResponse(retObj));
+        }
+  
+        [HttpPost("phrasesLinks")]
+        public async Task<ActionResult> GeneratePhrasesLinksForSong(long songId)
+        {
+            await _phrasesRepository.GeneratePhrasesLinksForSong(songId);
+            return Ok(new ApiOKResponse(null));
+
         }
     }
 }

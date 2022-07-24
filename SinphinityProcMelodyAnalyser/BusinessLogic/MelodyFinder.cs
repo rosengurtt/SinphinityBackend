@@ -14,14 +14,14 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// <param name="song"></param>
         /// <param name="songSimplification"></param>
         /// <returns></returns>
-        public static List<Dictionary<string, List<SongLocation>>> FindAllPhrases(Song song, int songSimplification = 0)
+        public static List<Dictionary<string, List<PhraseLocation>>> FindAllPhrases(Song song, int songSimplification = 0)
         {
-            var retObjPhrases = new Dictionary<string, List<SongLocation>>();
-            var retObjEmbellishedPhrases = new Dictionary<string, List<SongLocation>>();
-            var retObjPhrasesMetrics = new Dictionary<string, List<SongLocation>>();
-            var retObjPhrasesPitches = new Dictionary<string, List<SongLocation>>();
-            var retObjEmbellishedPhrasesMetrics = new Dictionary<string, List<SongLocation>>();
-            var retObjEmbellishedPhrasesPitches = new Dictionary<string, List<SongLocation>>();
+            var retObjPhrases = new Dictionary<string, List<PhraseLocation>>();
+            var retObjEmbellishedPhrases = new Dictionary<string, List<PhraseLocation>>();
+            var retObjPhrasesMetrics = new Dictionary<string, List<PhraseLocation>>();
+            var retObjPhrasesPitches = new Dictionary<string, List<PhraseLocation>>();
+            var retObjEmbellishedPhrasesMetrics = new Dictionary<string, List<PhraseLocation>>();
+            var retObjEmbellishedPhrasesPitches = new Dictionary<string, List<PhraseLocation>>();
             var notes = song.SongSimplifications.Where(x => x.Version == songSimplification).FirstOrDefault()?.Notes;
             var preprocessedNotes = Preprocessor.RemoveDrumsAndChordsVoices(notes);
             preprocessedNotes = Preprocessor.RemoveBoringBassVoices(preprocessedNotes);
@@ -69,22 +69,16 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
 
                     if (phraseInfo != null)
                     {
-                        if (phraseInfo.MetricsAsString.Split(",").Length > 40)
-                        {
-                            (var bar, var beat, var tick) = GetBarBeatAndTickOfEdge(song.Bars, phraseEdges[i]);
-                            var instrument = cleanedVoiceNotes[0].Instrument;
-                        }
-
                         if (!retObjPhrases.ContainsKey(phraseInfo.PhraseAsString))
-                            retObjPhrases.Add(phraseInfo.PhraseAsString, new List<SongLocation>());
+                            retObjPhrases.Add(phraseInfo.PhraseAsString, new List<PhraseLocation>());
                         retObjPhrases[phraseInfo.PhraseAsString].Add(phraseInfo.Location);
 
                         if (!retObjPhrasesMetrics.ContainsKey(phraseInfo.MetricsAsString))
-                            retObjPhrasesMetrics.Add(phraseInfo.MetricsAsString, new List<SongLocation>());
+                            retObjPhrasesMetrics.Add(phraseInfo.MetricsAsString, new List<PhraseLocation>());
                         retObjPhrasesMetrics[phraseInfo.MetricsAsString].Add(phraseInfo.Location);
 
                         if (!retObjPhrasesPitches.ContainsKey(phraseInfo.PitchesAsString))
-                            retObjPhrasesPitches.Add(phraseInfo.PitchesAsString, new List<SongLocation>());
+                            retObjPhrasesPitches.Add(phraseInfo.PitchesAsString, new List<PhraseLocation>());
                         retObjPhrasesPitches[phraseInfo.PitchesAsString].Add(phraseInfo.Location);
 
                         if (phraseInfo.EmbellishedPhraseAsString != "/")
@@ -93,23 +87,23 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                             // so we add it to the key separated by the "|" symbol
                             var embellishedPhraseKey = $"{phraseInfo.EmbellishedPhraseAsString}|{phraseInfo.PhraseAsString}";
                             if (!retObjEmbellishedPhrases.ContainsKey(embellishedPhraseKey))
-                                retObjEmbellishedPhrases.Add(embellishedPhraseKey, new List<SongLocation>());
+                                retObjEmbellishedPhrases.Add(embellishedPhraseKey, new List<PhraseLocation>());
                             retObjEmbellishedPhrases[embellishedPhraseKey].Add(phraseInfo.Location);
 
                             var embellishedPhrasesMetricsKey = $"{phraseInfo.EmbellishedMetricsAsString}|{phraseInfo.MetricsAsString}";
                             if (!retObjEmbellishedPhrasesMetrics.ContainsKey(embellishedPhrasesMetricsKey))
-                                retObjEmbellishedPhrasesMetrics.Add(embellishedPhrasesMetricsKey, new List<SongLocation>());
+                                retObjEmbellishedPhrasesMetrics.Add(embellishedPhrasesMetricsKey, new List<PhraseLocation>());
                             retObjEmbellishedPhrasesMetrics[embellishedPhrasesMetricsKey].Add(phraseInfo.Location);
 
                             var embellishedPhrasesPitches = $"{phraseInfo.EmbellishedPitchesAsString}|{phraseInfo.PitchesAsString}";
                             if (!retObjEmbellishedPhrasesPitches.ContainsKey(embellishedPhrasesPitches))
-                                retObjEmbellishedPhrasesPitches.Add(embellishedPhrasesPitches, new List<SongLocation>());
+                                retObjEmbellishedPhrasesPitches.Add(embellishedPhrasesPitches, new List<PhraseLocation>());
                             retObjEmbellishedPhrasesPitches[embellishedPhrasesPitches].Add(phraseInfo.Location);
                         }
                     }
                 }
             }
-            return new List<Dictionary<string, List<SongLocation>>>() { retObjPhrasesMetrics, retObjPhrasesPitches, retObjPhrases,
+            return new List<Dictionary<string, List<PhraseLocation>>>() { retObjPhrasesMetrics, retObjPhrasesPitches, retObjPhrases,
                 retObjEmbellishedPhrasesMetrics, retObjEmbellishedPhrasesPitches, retObjEmbellishedPhrases };
         }
 

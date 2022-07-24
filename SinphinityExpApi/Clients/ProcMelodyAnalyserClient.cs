@@ -22,7 +22,7 @@ namespace SinphinityExpApi.Clients
             _clientFactory = clientFactory;
         }
 
-        public async Task<List<Dictionary<string, List<SongLocation>>>> GetPhrasesOfSong(Song song, int songSimplification)
+        public async Task<List<Dictionary<string, List<PhraseLocation>>>> GetPhrasesOfSong(Song song, int songSimplification)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             httpClient.Timeout = TimeSpan.FromMinutes(500);
@@ -36,7 +36,7 @@ namespace SinphinityExpApi.Clients
             {
                 dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
                 var result = JsonConvert.SerializeObject(apiResponse.result);
-                return JsonConvert.DeserializeObject<List<Dictionary<string, List<SongLocation>>>>(result);
+                return JsonConvert.DeserializeObject<List<Dictionary<string, List<PhraseLocation>>>>(result);
             }
             else
             {

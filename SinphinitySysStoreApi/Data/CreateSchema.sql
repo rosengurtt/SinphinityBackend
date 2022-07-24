@@ -30,7 +30,15 @@ IF (OBJECT_ID('dbo.[FK_BandPhrase_Phrases]', 'F') IS NOT NULL)
 IF (OBJECT_ID('dbo.[FK_PhraseStyle_Phrases]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhraseStyle DROP CONSTRAINT FK_PhraseStyle_Phrases
 	
+IF (OBJECT_ID('dbo.[FK_PhrasesLinks_Phrases1]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhrasesLinks DROP CONSTRAINT FK_PhrasesLinks_Phrases1
+	
+IF (OBJECT_ID('dbo.[FK_PhrasesLinks_Phrases2]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhrasesLinks DROP CONSTRAINT FK_PhrasesLinks_Phrases2	
 
+IF (OBJECT_ID('dbo.[FK_PhrasesLinks_Songs]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhrasesLinks DROP CONSTRAINT FK_PhrasesLinks_Songs
+	
 IF OBJECT_ID('dbo.Styles', 'U') IS NOT NULL 
   DROP TABLE dbo.Styles
 
@@ -162,10 +170,13 @@ CREATE TABLE PhrasesOccurrences (
 	SongId BIGINT NOT NULL,
 	PhraseId BIGINT NOT NULL,
 	Voice TINYINT NOT NULL,
+	Instrument TINYINT NOT NULL,
 	BarNumber INT NOT NULL,	
 	Beat INT NOT NULL,
 	StartTick BIGINT NOT NULL,
 	EndTick BIGINT NOT NULL,
+	StartingPitch INT NULL,
+	PhraseType INT NOT NULL	,
     CONSTRAINT FK_PhrasesOccurrences_Songs_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id),
     CONSTRAINT FK_PhrasesOccurrences_Phrases_Id  FOREIGN KEY (PhraseId) REFERENCES Phrases(Id)
 )
@@ -205,6 +216,27 @@ CREATE TABLE PhraseStyle(
     CONSTRAINT [FK_PhraseStyle_Phrases] FOREIGN KEY (PhrasesId) REFERENCES Phrases (Id) ON DELETE CASCADE,
     CONSTRAINT [FK_PhraseStyle_Styles] FOREIGN KEY (StylesId) REFERENCES Styles (Id) ON DELETE CASCADE
 )
+
+
+IF OBJECT_ID('dbo.PhrasesLinks', 'U') IS NOT NULL 
+  DROP TABLE dbo.PhrasesLinks
+  
+CREATE TABLE PhrasesLinks(
+	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
+	PhraseId1 bigint NOT NULL,
+	PhraseId2 bigint NOT NULL,
+	ShiftInTicks bigint NOT NULL,
+	PitchShift int NOT NULL,	
+	SongId BIGINT NOT NULL,
+	Instrument1 TINYINT NOT NULL,
+	Instrument2 TINYINT NOT NULL,
+	PhraseType INT NOT NULL	,
+    CONSTRAINT [FK_PhrasesLinks_Phrases1] FOREIGN KEY (PhraseId1) REFERENCES Phrases (Id),
+    CONSTRAINT [FK_PhrasesLinks_Phrases2] FOREIGN KEY (PhraseId2) REFERENCES Phrases (Id),
+    CONSTRAINT [FK_PhrasesLinks_Songs] FOREIGN KEY (SongId) REFERENCES Songs (Id)	
+)
+
+CREATE INDEX IX_PhrasesLinks_PhraseType ON PhrasesLinks (PhraseType)
 
 SET IDENTITY_INSERT Styles ON
 

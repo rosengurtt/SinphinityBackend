@@ -13,7 +13,7 @@ namespace SinphinityProcMelodyAnalyser.Models
                 return $"{MetricsAsString}/{PitchesAsString}";
             }
         }
-        public SongLocation Location { get; set; }
+        public PhraseLocation Location { get; set; }
         public string EmbellishedMetricsAsString { get; set; }
         public string EmbellishedPitchesAsString { get; set; }
         public string EmbellishedPhraseAsString {
