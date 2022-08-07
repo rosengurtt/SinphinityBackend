@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Serilog;
 using Sinphinity.Models;
 using SinphinityExpApi.Models;
+using SinphinitySysStore.Models;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -359,7 +360,7 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task InsertPhrasesAsync(List<Dictionary<string, List<PhraseLocation>>> phrases, long songId)
+        public async Task InsertPhrasesAsync(List<ExtractedPhrase> phrases, long songId)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var content = new StringContent(JsonConvert.SerializeObject(phrases));

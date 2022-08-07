@@ -1,5 +1,7 @@
 ﻿using Sinphinity.Models;
 using SinphinityModel.Helpers;
+using SinphinityProcMelodyAnalyser.Models;
+using SinphinitySysStore.Models;
 
 namespace SinphinityProcMelodyAnalyser.BusinessLogic
 {
@@ -14,14 +16,11 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         /// <param name="song"></param>
         /// <param name="songSimplification"></param>
         /// <returns></returns>
-        public static List<Dictionary<string, List<PhraseLocation>>> FindAllPhrases(Song song, int songSimplification = 0)
+        public static List<ExtractedPhrase> FindAllPhrases(Song song, int songSimplification = 0)
         {
-            var retObjPhrases = new Dictionary<string, List<PhraseLocation>>();
-            var retObjEmbellishedPhrases = new Dictionary<string, List<PhraseLocation>>();
-            var retObjPhrasesMetrics = new Dictionary<string, List<PhraseLocation>>();
-            var retObjPhrasesPitches = new Dictionary<string, List<PhraseLocation>>();
-            var retObjEmbellishedPhrasesMetrics = new Dictionary<string, List<PhraseLocation>>();
-            var retObjEmbellishedPhrasesPitches = new Dictionary<string, List<PhraseLocation>>();
+            var retObj = new List<ExtractedPhrase>();
+
+
             var notes = song.SongSimplifications.Where(x => x.Version == songSimplification).FirstOrDefault()?.Notes;
             var preprocessedNotes = Preprocessor.RemoveDrumsAndChordsVoices(notes);
             preprocessedNotes = Preprocessor.RemoveBoringBassVoices(preprocessedNotes);
@@ -30,82 +29,102 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             foreach (var voice in preprocessedNotes.Voices())
             {
                 var voiceNotes = preprocessedNotes.Where(x => x.Voice == voice).OrderBy(y => y.StartSinceBeginningOfSongInTicks).ThenByDescending(z => z.Pitch).ToList();
-                if (voiceNotes.Where(x => x.DurationInTicks <= 0).Any())
-                {
-                }
-
 
                 var cleanedVoiceNotes = PhraseDetection.DiscretizeTiming(voiceNotes);
-                if (cleanedVoiceNotes.Where(x => x.DurationInTicks <= 0).Any())
-                {
-                }
-
                 cleanedVoiceNotes = PhraseDetection.RemoveHarmony(cleanedVoiceNotes);
-                if (cleanedVoiceNotes.Where(x => x.DurationInTicks <= 0).Any())
-                {
-                }
                 cleanedVoiceNotes = PhraseDetection.GetNotesWithSilencesRemoved(cleanedVoiceNotes);
-                if (cleanedVoiceNotes.Where(x => x.DurationInTicks < 0).Any())
-                {
-                }
                 // We remove harmony again because it could have been introduced in the previous step
                 cleanedVoiceNotes = PhraseDetection.RemoveHarmony(cleanedVoiceNotes);
-                if (cleanedVoiceNotes.Where(x => x.DurationInTicks <= 0).Any())
-                {
-                }
+
                 var phraseEdges = PhraseDetection.GetPhrasesEdges(cleanedVoiceNotes, song.Bars).OrderBy(x => x).ToList().OrderBy(x => x).ToList();
-
-                var sorets = new List<(int, int, int)>();
-                foreach (var edgy in phraseEdges)
-                {
-                    var soret = GetBarBeatAndTickOfEdge(song.Bars, edgy);
-                    sorets.Add(soret);
-                }
-
 
                 for (int i = 0; i < phraseEdges.Count - 1; i++)
                 {
                     var phraseInfo = PhraseDetection.GetPhraseBetweenEdges(cleanedVoiceNotes, phraseEdges[i], phraseEdges[i + 1], song.Id, voice, song.Bars);
-
-                    if (phraseInfo != null)
-                    {
-                        if (!retObjPhrases.ContainsKey(phraseInfo.PhraseAsString))
-                            retObjPhrases.Add(phraseInfo.PhraseAsString, new List<PhraseLocation>());
-                        retObjPhrases[phraseInfo.PhraseAsString].Add(phraseInfo.Location);
-
-                        if (!retObjPhrasesMetrics.ContainsKey(phraseInfo.MetricsAsString))
-                            retObjPhrasesMetrics.Add(phraseInfo.MetricsAsString, new List<PhraseLocation>());
-                        retObjPhrasesMetrics[phraseInfo.MetricsAsString].Add(phraseInfo.Location);
-
-                        if (!retObjPhrasesPitches.ContainsKey(phraseInfo.PitchesAsString))
-                            retObjPhrasesPitches.Add(phraseInfo.PitchesAsString, new List<PhraseLocation>());
-                        retObjPhrasesPitches[phraseInfo.PitchesAsString].Add(phraseInfo.Location);
-
-                        if (phraseInfo.EmbellishedPhraseAsString != "/")
-                        {
-                            // To build later the EmbellishedPhrase object from the asString version, we will need the related phrase without embellishments,
-                            // so we add it to the key separated by the "|" symbol
-                            var embellishedPhraseKey = $"{phraseInfo.EmbellishedPhraseAsString}|{phraseInfo.PhraseAsString}";
-                            if (!retObjEmbellishedPhrases.ContainsKey(embellishedPhraseKey))
-                                retObjEmbellishedPhrases.Add(embellishedPhraseKey, new List<PhraseLocation>());
-                            retObjEmbellishedPhrases[embellishedPhraseKey].Add(phraseInfo.Location);
-
-                            var embellishedPhrasesMetricsKey = $"{phraseInfo.EmbellishedMetricsAsString}|{phraseInfo.MetricsAsString}";
-                            if (!retObjEmbellishedPhrasesMetrics.ContainsKey(embellishedPhrasesMetricsKey))
-                                retObjEmbellishedPhrasesMetrics.Add(embellishedPhrasesMetricsKey, new List<PhraseLocation>());
-                            retObjEmbellishedPhrasesMetrics[embellishedPhrasesMetricsKey].Add(phraseInfo.Location);
-
-                            var embellishedPhrasesPitches = $"{phraseInfo.EmbellishedPitchesAsString}|{phraseInfo.PitchesAsString}";
-                            if (!retObjEmbellishedPhrasesPitches.ContainsKey(embellishedPhrasesPitches))
-                                retObjEmbellishedPhrasesPitches.Add(embellishedPhrasesPitches, new List<PhraseLocation>());
-                            retObjEmbellishedPhrasesPitches[embellishedPhrasesPitches].Add(phraseInfo.Location);
-                        }
-                    }
+                    retObj = AddPhraseToList(phraseInfo, retObj);
                 }
             }
-            return new List<Dictionary<string, List<PhraseLocation>>>() { retObjPhrasesMetrics, retObjPhrasesPitches, retObjPhrases,
-                retObjEmbellishedPhrasesMetrics, retObjEmbellishedPhrasesPitches, retObjEmbellishedPhrases };
+            retObj = AddEquivalences(retObj);
+  
+            return retObj;
         }
+        private static List<ExtractedPhrase> AddEquivalences(List<ExtractedPhrase> extractePhrasesSoFar)
+        {
+            foreach (var p in extractePhrasesSoFar)
+            {
+                var maxDistance = PhraseDistance.MaxDistanceToBeConsideredEquivalent(p.PhraseType, p.AsString);
+                p.Equivalences = extractePhrasesSoFar.Where(x => x.PhraseType == p.PhraseType && x.AsString!=p.AsString &&  PhraseDistance.GetDistance(p.PhraseType, p.AsString, x.AsString) < maxDistance)
+                                .Select(y => y.AsString).ToList();
+            }
+            return extractePhrasesSoFar;
+        }
+
+        private static List<ExtractedPhrase> AddPhraseToList(PhraseInfo phraseInfo, List<ExtractedPhrase> extractePhrasesSoFar)
+        {
+            if (phraseInfo == null)
+                return extractePhrasesSoFar;
+
+            var metricPhrase = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.Metrics && x.AsString == phraseInfo.MetricsAsString).FirstOrDefault();
+            if (metricPhrase == null)
+            {
+                metricPhrase = new ExtractedPhrase { AsString = phraseInfo.MetricsAsString, PhraseType = PhraseTypeEnum.Metrics, Occurrences = new List<PhraseLocation>() };
+                extractePhrasesSoFar.Add(metricPhrase);
+            }
+            metricPhrase.Occurrences.Add(phraseInfo.Location);
+
+            var pitchesPhrase = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.Pitches && x.AsString == phraseInfo.PitchesAsString).FirstOrDefault();
+            if (pitchesPhrase == null)
+            {
+                pitchesPhrase = new ExtractedPhrase { AsString = phraseInfo.PitchesAsString, PhraseType = PhraseTypeEnum.Pitches, Occurrences = new List<PhraseLocation>() };
+                extractePhrasesSoFar.Add(pitchesPhrase);
+            }
+            pitchesPhrase.Occurrences.Add(phraseInfo.Location);
+
+            var phrase = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.Both && x.AsString == phraseInfo.PhraseAsString).FirstOrDefault();
+            if (phrase == null)
+            {
+                phrase = new ExtractedPhrase { AsString = phraseInfo.PhraseAsString, PhraseType = PhraseTypeEnum.Both, Occurrences = new List<PhraseLocation>() };
+                extractePhrasesSoFar.Add(phrase);
+            }
+            phrase.Occurrences.Add(phraseInfo.Location);
+
+            if (phraseInfo.EmbellishedPhraseAsString != "/")
+            {
+                var embPhraseMetric = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.EmbelishedMetrics && x.AsString == phraseInfo.EmbellishedMetricsAsString).FirstOrDefault();
+                if (embPhraseMetric == null)
+                {
+                    embPhraseMetric = new ExtractedPhrase { AsString = phraseInfo.EmbellishedMetricsAsString, PhraseType = PhraseTypeEnum.EmbelishedMetrics, Occurrences = new List<PhraseLocation>() };
+                    extractePhrasesSoFar.Add(embPhraseMetric);
+                }
+                embPhraseMetric.Occurrences.Add(phraseInfo.Location);
+
+                var embPhrasePitches = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.EmbelishedPitches && x.AsString == phraseInfo.EmbellishedPitchesAsString).FirstOrDefault();
+                if (embPhrasePitches == null)
+                {
+                    embPhrasePitches = new ExtractedPhrase {
+                        AsString = phraseInfo.EmbellishedPitchesAsString,
+                        AsStringWithoutOrnaments= phraseInfo.PitchesAsString,
+                        PhraseType = PhraseTypeEnum.EmbelishedPitches, 
+                        Occurrences = new List<PhraseLocation>() };
+                    extractePhrasesSoFar.Add(embPhrasePitches);
+                }
+                embPhrasePitches.Occurrences.Add(phraseInfo.Location);
+
+                var embPhrase = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.EmbellishedBoth && x.AsString == phraseInfo.EmbellishedPhraseAsString).FirstOrDefault();
+                if (embPhrase == null)
+                {
+                    embPhrase = new ExtractedPhrase {
+                        AsString = phraseInfo.EmbellishedPhraseAsString,
+                        AsStringWithoutOrnaments= phraseInfo.PhraseAsString,
+                        PhraseType = PhraseTypeEnum.EmbellishedBoth,
+                        Occurrences = new List<PhraseLocation>() };
+                    extractePhrasesSoFar.Add(embPhrase);
+                }
+                embPhrase.Occurrences.Add(phraseInfo.Location);
+            }            
+            return extractePhrasesSoFar;
+        }
+
 
         public static (int, int, int) GetBarBeatAndTickOfEdge(List<Bar> bars, long tick)
         {

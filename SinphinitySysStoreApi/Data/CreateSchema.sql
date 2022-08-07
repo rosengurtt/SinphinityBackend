@@ -138,28 +138,38 @@ CREATE TABLE SongsSimplifications(
     CONSTRAINT FK_SongsSimplifications_SongData_Id FOREIGN KEY (SongDataId) REFERENCES SongData(Id)
 )
 
+IF OBJECT_ID('dbo.PhraseSkeletons', 'U') IS NOT NULL 
+  DROP TABLE dbo.PhraseSkeletons
+CREATE TABLE PhraseSkeletons (
+	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
+	AsString VARCHAR(1000) NOT NULL,
+	AsStringAccum VARCHAR(1000) NULL	
+	
+	
+
 IF OBJECT_ID('dbo.Phrases', 'U') IS NOT NULL 
   DROP TABLE dbo.Phrases
   
 CREATE TABLE Phrases (
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
 	AsString VARCHAR(1000) NOT NULL,
+	AsStringAccum VARCHAR(1000) NULL,
 	AsStringBasic VARCHAR(1000)  NULL,
 	AsStringWithoutOrnaments VARCHAR(1000)  NULL,
+	AsStringWithoutOrnamentsAccum VARCHAR(1000)  NULL,
+	Equivalences VARCHAR(MAX) NULL,
 	DurationInTicks BIGINT  NULL,
 	NumberOfNotes INT NOT NULL,
 	[Range] INT  NULL,
 	IsMonotone BIT  NULL,
 	Step INT  NULL,
-	PhraseType INT NOT NULL	
+	PhraseType INT NOT NULL
 )	
 
 CREATE INDEX IX_Phrases_PhraseType ON Phrases (PhraseType)
 CREATE INDEX IX_Phrases_AsString ON Phrases (AsString)
 CREATE INDEX IX_Phrases_AsStringBasic ON Phrases (AsStringBasic)
 CREATE INDEX IX_Phrases_AsStringWithoutOrnaments ON Phrases (AsStringWithoutOrnaments)
-
-	
 
 
 IF OBJECT_ID('dbo.PhrasesOccurrences', 'U') IS NOT NULL 
@@ -182,6 +192,8 @@ CREATE TABLE PhrasesOccurrences (
 )
 
 CREATE INDEX IX_PhrasesOccurrences_StartTick ON PhrasesOccurrences (StartTick)
+CREATE INDEX IX_PhrasesOccurrences_EndTick ON PhrasesOccurrences (EndTick)
+CREATE INDEX IX_PhrasesOccurrences_PhraseType ON PhrasesOccurrences (PhraseType)
 CREATE INDEX IX_PhrasesOccurrences_Voice ON PhrasesOccurrences (Voice)
 
 IF OBJECT_ID('dbo.PhraseSong', 'U') IS NOT NULL 
@@ -228,6 +240,7 @@ CREATE TABLE PhrasesLinks(
 	ShiftInTicks bigint NOT NULL,
 	PitchShift int NOT NULL,	
 	SongId BIGINT NOT NULL,
+	TicksFromStart BIGINT NOT NULL,
 	Instrument1 TINYINT NOT NULL,
 	Instrument2 TINYINT NOT NULL,
 	PhraseType INT NOT NULL	,
@@ -283,12 +296,14 @@ insert into bands([Name], StyleId) values ('Joseph Haydn', 1)
 insert into bands([Name], StyleId) values ('Franz Schubert', 1)
 insert into bands([Name], StyleId) values ('Franz Liszt', 1)
 insert into bands([Name], StyleId) values ('Johannes Brahms', 1)
+insert into bands([Name], StyleId) values ('George Gershwin', 1)
 
 
 insert into bands([Name], StyleId) values ('Abba', 2)
 insert into bands([Name], StyleId) values ('AC DC', 2)
 insert into bands([Name], StyleId) values ('Aerosmith', 2)
 insert into bands([Name], StyleId) values ('Aha', 2)
+insert into bands([Name], StyleId) values ('Al Green', 2)
 insert into bands([Name], StyleId) values ('Al Stewart', 2)
 insert into bands([Name], StyleId) values ('Alan Parsons', 2)
 insert into bands([Name], StyleId) values ('Alice Cooper', 2)
@@ -318,6 +333,7 @@ insert into bands([Name], StyleId) values ('Doors', 2)
 insert into bands([Name], StyleId) values ('Duran Duran', 2)
 insert into bands([Name], StyleId) values ('Eagle-Eye Cherry', 2)
 insert into bands([Name], StyleId) values ('Eagles', 2)
+insert into bands([Name], StyleId) values ('Ed Sheeran', 2)
 insert into bands([Name], StyleId) values ('Edgar Winter', 2)
 insert into bands([Name], StyleId) values ('Electric Light Orchestra', 2)
 insert into bands([Name], StyleId) values ('Elton John', 2)
@@ -348,6 +364,7 @@ insert into bands([Name], StyleId) values ('Kansas', 2)
 insert into bands([Name], StyleId) values ('KC and the Sunshine Band', 2)
 insert into bands([Name], StyleId) values ('Led Zeppelin', 2)
 insert into bands([Name], StyleId) values ('Lenny Kravitz', 2)
+insert into bands([Name], StyleId) values ('Madonna', 2)
 insert into bands([Name], StyleId) values ('Manfred Mann', 2)
 insert into bands([Name], StyleId) values ('Michael Jackson', 2)
 insert into bands([Name], StyleId) values ('Midnight Oil', 2)

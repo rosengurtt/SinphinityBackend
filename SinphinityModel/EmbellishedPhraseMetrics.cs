@@ -24,7 +24,53 @@ namespace Sinphinity.Models
         /// </summary>
         public long Id { get; set; }
         public string AsString { get; set; }
+
+        /// <summary>
+        /// Similar to AsString, but instead of having relative pitches, all pitches are relative to the first one.
+        /// If AsString is 
+        /// 24,48,24,96
+        /// AsStringAccum is
+        /// 24,72,96,192
+        /// </summary>
+        public string AsStringAccum
+        {
+            get
+            {
+                var retObj = "";
+                var sum = 0;
+                for (int i = 0; i < Items.Count; i++)
+                {
+                    sum += Items[i];
+                    if (i < Items.Count - 1)
+                        retObj += $"{sum},";
+                    else
+                        retObj += $"{sum}";
+                }
+                return retObj;
+            }
+        }
+
         public string AsStringWithoutOrnaments { get; set; }
+        public string AsStringWithoutOrnamentsAccum
+        {
+            get
+            {
+
+                var expanded = AsStringWithoutOrnaments.ExpandPattern();
+                var items = expanded.Replace("+", "").Split(',').Select(x => Convert.ToInt32(x)).ToList();
+                var retObj = "";
+                var sum = 0;
+                for (int i = 0; i < items.Count; i++)
+                {
+                    sum += items[i];
+                    if (i < items.Count - 1)
+                        retObj += $"{sum},";
+                    else
+                        retObj += $"{sum}";
+                }
+                return retObj;
+            }
+        }
         public long DurationInTicks
         {
             get

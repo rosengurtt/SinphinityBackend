@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Serilog;
 using Sinphinity.Models;
 using SinphinityExpApi.Models;
+using SinphinitySysStore.Models;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -22,7 +23,7 @@ namespace SinphinityExpApi.Clients
             _clientFactory = clientFactory;
         }
 
-        public async Task<List<Dictionary<string, List<PhraseLocation>>>> GetPhrasesOfSong(Song song, int songSimplification)
+        public async Task<List<ExtractedPhrase>> GetPhrasesOfSong(Song song, int songSimplification)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             httpClient.Timeout = TimeSpan.FromMinutes(500);
@@ -36,7 +37,7 @@ namespace SinphinityExpApi.Clients
             {
                 dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
                 var result = JsonConvert.SerializeObject(apiResponse.result);
-                return JsonConvert.DeserializeObject<List<Dictionary<string, List<PhraseLocation>>>>(result);
+                return JsonConvert.DeserializeObject<List<ExtractedPhrase>>(result);
             }
             else
             {

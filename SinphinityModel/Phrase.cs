@@ -28,7 +28,40 @@ namespace Sinphinity.Models
             AsString = $"{phraseMetrics.AsString}/{phrasePitches.AsString}";
         }
 
+        /// <summary>
+        /// This consist of the AsString of the metrics and the AsString of the pitches separated by a forward slash like 
+        /// 96,240,48,96/5,2,2,-9
+        /// </summary>
         public string AsString { get; set; }
+        /// <summary>
+        /// Similar to AsString, but instead of having relative pitches and ticks, all pitches and ticks are relative to the first one.
+        /// If AsString is 
+        /// 24,48,24,96/2,1,-3,4
+        /// AsStringAccum is
+        /// 24,72,96,192/2,3,0,4
+        /// </summary>
+        public string AsStringAccum
+        {
+            get
+            {
+                if (PhraseMetrics == null || PhrasePitches == null) {
+                    var parts = AsString.Split('/');
+                    PhraseMetrics = new PhraseMetrics(parts[0]);
+                    PhrasePitches = new PhrasePitches(parts[1]);
+                }
+                return $"{PhraseMetrics.AsStringAccum}/{PhrasePitches.AsStringAccum}";
+            }
+        }
+        /// <summary>
+        /// When we have something link C,D,C,E,C,F, this is equivalent to D,E,D,F,D,G (is the same pattern transposed up by 2 semitones). But they are not exactly the same
+        /// according to our definition of a phrasePitches, because the first would be coded as 2,-2,4,-4,5 and the second as 2,-2,3,-3,4
+        /// We use the "PhraseDistance" to compare the 2 and if it is small enough we consider the 2 phrases equivalent a we create only 1 record in the db. The AsString value is set
+        /// to one of the instances, and we store all equivalent phrases in the Equivalence field. In the database, this is stored as a json object in 1 varchar column, rather than
+        /// creating an extra table
+        /// 
+        /// We only care about pitches for equivalences. the metrics part must be the same in the 2 phrases
+        /// </summary>
+        public List<string> Equivalences { get; set; }
         public long DurationInTicks { get; set; }
         public int NumberOfNotes { get; set; }
         public int Range { get; set; }

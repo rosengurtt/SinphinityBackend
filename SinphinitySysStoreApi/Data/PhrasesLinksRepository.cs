@@ -27,6 +27,7 @@ namespace SinphinitySysStore.Data
                             ShiftInTicks = link.StartTick - oc.StartTick,
                             PitchShift = link.StartingPitch - oc.StartingPitch,
                             SongId = songId,
+                            //TicksFromStart= Math.Min(link.StartTick, oc.StartTick),
                             Instrument1 = oc.Instrument,
                             Instrument2 = link.Instrument,
                             PhraseType = oc.PhraseType
