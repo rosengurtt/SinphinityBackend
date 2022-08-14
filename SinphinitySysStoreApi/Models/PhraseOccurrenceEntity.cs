@@ -6,7 +6,7 @@ namespace SinphinitySysStore.Models
     {
         public PhraseOccurrenceEntity() { }
 
-        public PhraseOccurrenceEntity(Sinphinity.Models.PhraseLocation o, long phraseId, PhraseTypeEnum type)
+        public PhraseOccurrenceEntity(Sinphinity.Models.PhraseLocation o, long phraseId)
         {
             SongId = o.SongId;
             PhraseId = phraseId;
@@ -17,7 +17,6 @@ namespace SinphinitySysStore.Models
             EndTick = o.EndTick;
             StartingPitch = o.StartingPitch;
             Instrument = o.Instrument;
-            PhraseType = type;
         }
 
         public PhraseOccurrence AsPhraseOccurrence()
@@ -29,8 +28,7 @@ namespace SinphinitySysStore.Models
                 StartTick = this.StartTick,
                 EndTick = this.EndTick,
                 Voice = this.Voice,
-                Song = new Sinphinity.Models.Song { Id = this.SongId },
-                PhraseType=this.PhraseType
+                Song = new Sinphinity.Models.Song { Id = this.SongId }
             };
         }
         public long Id { get; set; }
@@ -44,6 +42,5 @@ namespace SinphinitySysStore.Models
 
         public long EndTick { get; set; }
         public int StartingPitch{ get; set; }
-        public PhraseTypeEnum PhraseType { get; set; }
     }
 }

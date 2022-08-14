@@ -72,7 +72,7 @@ namespace NunitTests
 		public void TestGetPhraseNotes()
 		{
 			var asString = "192,97,95,291,92,193,6/3,0,5,0,5,-19,-12";
-			var notes = PhraseConverter.GetPhraseNotes(PhraseTypeEnum.Both, asString, 0);
+			//var notes = PhraseConverter.GetPhraseNotes(PhraseTypeEnum.Both, asString, 0);
 
 		}
 	}

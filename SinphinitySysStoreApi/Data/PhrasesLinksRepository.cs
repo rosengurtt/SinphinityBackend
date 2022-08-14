@@ -14,7 +14,7 @@ namespace SinphinitySysStore.Data
 
             foreach (var oc in ocs)
             {
-                var links = _dbContext.PhrasesOccurrences.Where(x => x.SongId == songId && x.StartTick >= oc.StartTick && oc.EndTick + 96 > x.StartTick && x.Id != oc.Id && x.PhraseType == oc.PhraseType)
+                var links = _dbContext.PhrasesOccurrences.Where(x => x.SongId == songId && x.StartTick >= oc.StartTick && oc.EndTick + 96 > x.StartTick && x.Id != oc.Id)
                     .ToList();
                 if (links.Any())
                 {
@@ -27,10 +27,9 @@ namespace SinphinitySysStore.Data
                             ShiftInTicks = link.StartTick - oc.StartTick,
                             PitchShift = link.StartingPitch - oc.StartingPitch,
                             SongId = songId,
-                            //TicksFromStart= Math.Min(link.StartTick, oc.StartTick),
+                            TicksFromStart= Math.Min(link.StartTick, oc.StartTick),
                             Instrument1 = oc.Instrument,
-                            Instrument2 = link.Instrument,
-                            PhraseType = oc.PhraseType
+                            Instrument2 = link.Instrument
                         };
                         var isAlreadyThere = _dbContext.PhrasesLinks
                             .Where(x => x.PhraseId1 == pl.PhraseId1 && x.PhraseId2 == pl.PhraseId2 && x.SongId == pl.SongId && x.PhraseType==pl.PhraseType && 

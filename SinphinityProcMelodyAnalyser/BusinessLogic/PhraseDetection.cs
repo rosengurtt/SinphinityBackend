@@ -9,33 +9,19 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
     public static partial class PhraseDetection
     {
 
-        public static PhraseInfo? GetPhraseBetweenEdges(List<Note> notes, long start, long end, long songId, byte voice, List<Bar> bars)
+        public static (Phrase, PhraseLocation) GetPhraseBetweenEdges(List<Note> notes, long start, long end, long songId, byte voice, List<Bar> bars)
         {
             var phraseNotes = notes
                 .Where(x => x.StartSinceBeginningOfSongInTicks >= start && x.StartSinceBeginningOfSongInTicks < end)
                 .OrderBy(y => y.StartSinceBeginningOfSongInTicks)
                 .ToList();
+            if (notes.Count < 2)
+                return (null, null);
 
-            if (phraseNotes.Count > 2)
-            {
-                (var hasEmbellishments, var phraseWithoutEmbellishmentNotes) = EmbelishmentsDetection.GetPhraseWithoutEmbellishments(phraseNotes);
-                if (hasEmbellishments && phraseWithoutEmbellishmentNotes.Count <= 3)
-                    return null;
-                var metrics = hasEmbellishments ? new PhraseMetrics(phraseWithoutEmbellishmentNotes) : new PhraseMetrics(phraseNotes);
-                var pitches = hasEmbellishments ? new PhrasePitches(phraseWithoutEmbellishmentNotes) : new PhrasePitches(phraseNotes);
-                var embellishedMetrics = hasEmbellishments ? new PhraseMetrics(phraseNotes) : null;
-                var embellishedPitches = hasEmbellishments ? new PhrasePitches(phraseNotes) : null;
-                var retObj = new PhraseInfo
-                {
-                    Location = new PhraseLocation(songId, voice, start, end, phraseNotes[0].Instrument, phraseNotes[0].Pitch, bars),
-                    MetricsAsString = metrics.AsString,
-                    PitchesAsString = pitches.AsString,
-                    EmbellishedMetricsAsString = hasEmbellishments ? embellishedMetrics.AsString : "",
-                    EmbellishedPitchesAsString = hasEmbellishments ? embellishedPitches.AsString : ""
-                };
-                return retObj;
-            }
-            return null;
+            var location = new PhraseLocation(songId, voice, start, end, phraseNotes[0].Instrument, phraseNotes[0].Pitch, bars);
+            var phrase = new Phrase(notes);
+            return (phrase, location);
+        
         }
 
         /// <summary>

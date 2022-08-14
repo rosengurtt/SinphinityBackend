@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Serilog;
 using Sinphinity.Models;
 using SinphinityExpApi.Models;
-using SinphinitySysStore.Models;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -98,44 +97,6 @@ namespace SinphinityExpApi.Clients
         }
 
 
-        public async Task<PaginatedList<PhraseMetrics>> GetPhraseMetricsAsync(
-      long? styleId,
-            long? bandId,
-            long? songId,
-            string? contains,
-            int? numberOfNotes,
-            long? durationInTicks,
-            int? range,
-            bool? isMonotone,
-            int? step,
-            int pageNo = 0,
-            int pageSize = 10)
-        {
-            var responseContent = await GetPhrasesData(styleId, bandId, songId, PhraseTypeEnum.Metrics, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
-            dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
-            var result = JsonConvert.SerializeObject(apiResponse.result);
-            return JsonConvert.DeserializeObject<PaginatedList<PhraseMetrics>>(result);
-        }
-
-        public async Task<PaginatedList<PhrasePitches>> GetPhrasePitchesAsync(
-    long? styleId,
-            long? bandId,
-            long? songId,
-            string? contains,
-            int? numberOfNotes,
-            long? durationInTicks,
-            int? range,
-            bool? isMonotone,
-            int? step,
-            int pageNo = 0,
-            int pageSize = 10)
-        {
-            var responseContent = await GetPhrasesData(styleId, bandId, songId, PhraseTypeEnum.Pitches, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
-            dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
-            var result = JsonConvert.SerializeObject(apiResponse.result);
-            return JsonConvert.DeserializeObject<PaginatedList<PhrasePitches>>(result);
-        }
-
         public async Task<PaginatedList<Phrase>> GetPhrasesAsync(
         long? styleId,
             long? bandId,
@@ -149,70 +110,15 @@ namespace SinphinityExpApi.Clients
             int pageNo = 0,
             int pageSize = 10)
         {
-            var responseContent = await GetPhrasesData(styleId, bandId, songId, PhraseTypeEnum.Both, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
+            var responseContent = await GetPhrasesData(styleId, bandId, songId, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
             dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
             var result = JsonConvert.SerializeObject(apiResponse.result);
             return JsonConvert.DeserializeObject<PaginatedList<Phrase>>(result);
         }
-        public async Task<PaginatedList<EmbellishedPhrase>> GetEmbellishedPhrasesAsync(
-             long? styleId,
-            long? bandId,
-            long? songId,
-            string? contains,
-            int? numberOfNotes,
-            long? durationInTicks,
-            int? range,
-            bool? isMonotone,
-            int? step,
-            int pageNo = 0,
-            int pageSize = 10)
-        {
-            var responseContent = await GetPhrasesData(styleId, bandId, songId, PhraseTypeEnum.EmbellishedBoth, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
-            dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
-            var result = JsonConvert.SerializeObject(apiResponse.result);
-            return JsonConvert.DeserializeObject<PaginatedList<EmbellishedPhrase>>(result);
-        }
-        public async Task<PaginatedList<EmbellishedPhraseMetrics>> GetEmbellishedPhrasesMertricsAsync(
+           private async Task<string> GetPhrasesData(
             long? styleId,
             long? bandId,
             long? songId,
-            string? contains,
-            int? numberOfNotes,
-            long? durationInTicks,
-            int? range,
-            bool? isMonotone,
-            int? step,
-            int pageNo = 0,
-            int pageSize = 10)
-        {
-            var responseContent = await GetPhrasesData(styleId, bandId, songId, PhraseTypeEnum.EmbelishedMetrics, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
-            dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
-            var result = JsonConvert.SerializeObject(apiResponse.result);
-            return JsonConvert.DeserializeObject<PaginatedList<EmbellishedPhraseMetrics>>(result);
-        }
-        public async Task<PaginatedList<EmbellishedPhrasePitches>> GetEmbellishedPhrasesPitchesAsync(
-            long? styleId,
-            long? bandId,
-            long? songId,
-            string? contains,
-            int? numberOfNotes,
-            long? durationInTicks,
-            int? range,
-            bool? isMonotone,
-            int? step,
-            int pageNo = 0,
-            int pageSize = 10)
-        {
-            var responseContent = await GetPhrasesData(styleId, bandId, songId, PhraseTypeEnum.EmbelishedPitches, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
-            dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
-            var result = JsonConvert.SerializeObject(apiResponse.result);
-            return JsonConvert.DeserializeObject<PaginatedList<EmbellishedPhrasePitches>>(result);
-        }
-        private async Task<string> GetPhrasesData(
-            long? styleId,
-            long? bandId,
-            long? songId,
-            PhraseTypeEnum type,
             string contains,
             int? numberOfNotes,
             long? durationInTicks,
@@ -224,7 +130,7 @@ namespace SinphinityExpApi.Clients
         {
             HttpClient httpClient = _clientFactory.CreateClient();
             var url = $"{_appConfiguration.SysStoreUrl}/api/phrases" +
-                BuildGetPhraseQueryString(styleId, bandId, songId, type, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
+                BuildGetPhraseQueryString(styleId, bandId, songId, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
 
             var response = await httpClient.GetAsync(url);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -243,7 +149,6 @@ namespace SinphinityExpApi.Clients
             long? styleId,
             long? bandId,
             long? songId,
-            PhraseTypeEnum type,
             string? contains,
             int? numberOfNotes,
             long? durationInTicks,
@@ -257,7 +162,6 @@ namespace SinphinityExpApi.Clients
             if (styleId != null) retObj += $"&styleId={styleId}";
             if (bandId != null) retObj += $"&bandId={bandId}";
             if (songId != null) retObj += $"&songId={songId}";
-            retObj += $"&type={type}";
             if (numberOfNotes != null) retObj += $"&numberOfNotes={numberOfNotes}";
             if (contains != null) retObj += $"&contains={contains}";
             if (durationInTicks != null) retObj += $"&durationInTicks={durationInTicks}";

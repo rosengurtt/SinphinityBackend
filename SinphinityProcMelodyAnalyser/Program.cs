@@ -1,4 +1,6 @@
 using Serilog;
+using SinphinityProcMelodyAnalyser.Clients;
+using SinphinityProcMelodyAnalyser.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,14 @@ builder.Services.AddControllers();
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
                                     .ReadFrom.Configuration(hostingContext.Configuration));
+
+
+builder.Services.Configure<AppConfiguration>(options =>
+{
+    options.SysStoreUrl = builder.Configuration.GetSection("SysStoreUrl").Value;
+});
+
+builder.Services.AddSingleton<SysStoreClient>();
 
 var app = builder.Build();
 

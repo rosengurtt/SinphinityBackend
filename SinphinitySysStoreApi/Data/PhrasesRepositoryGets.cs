@@ -10,7 +10,6 @@ namespace SinphinitySysStore.Data
                    long? styleId,
                    long? bandId,
                    long? songId,
-                   PhraseTypeEnum? type,
                    string? contains,
                    int? numberOfNotes,
                    long? durationInTicks,
@@ -27,9 +26,8 @@ namespace SinphinitySysStore.Data
                     (styleId == null || p.Styles.Where(x => x.Id == styleId).Any()) &&
                     (bandId == null || p.Bands.Where(x => x.Id == bandId).Any()) &&
                     (songId == null || p.Songs.Where(x => x.Id == songId).Any()) &&
-                    (type == null || p.PhraseType == type) &&
                     (numberOfNotes == null || p.NumberOfNotes == numberOfNotes) &&
-                    (contains == null || p.AsString.Contains(contains)) &&
+                    (contains == null || p.MetricsAsString.Contains(contains) || p.PitchesAsString.Contains(contains)) &&
                     (durationInTicks == null || p.DurationInTicks == durationInTicks) &&
                     (range == null || p.Range == range) &&
                     (isMonotone == null || p.IsMonotone == isMonotone) &&
@@ -38,7 +36,8 @@ namespace SinphinitySysStore.Data
                 var total = await source.CountAsync();
 
                 var pages = await source
-                    .OrderBy(x => x.AsString)
+                    .OrderBy(x => x.MetricsAsString)
+                    .ThenBy(y=>y.PitchesAsString)
                     .Skip((pageNo) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();

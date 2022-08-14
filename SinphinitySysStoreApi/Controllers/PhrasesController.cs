@@ -38,7 +38,6 @@ namespace SinphinitySysStoreApi.Controllers
             long? styleId,
             long? bandId,
             long? songId,
-            string type,
             string contains,
             int? numberOfNotes,
             long? durationInTicks,
@@ -48,8 +47,7 @@ namespace SinphinitySysStoreApi.Controllers
             int pageNo = 0,
             int pageSize = 10)
         {
-            var phraseType = type == null ? PhraseTypeEnum.Metrics : (PhraseTypeEnum)Enum.Parse(typeof(PhraseTypeEnum), type, true);
-            (var totaPhrases, var phrases) = await _phrasesRepository.GetPhrasesAsync(styleId, bandId, songId, phraseType, contains, numberOfNotes,
+            (var totaPhrases, var phrases) = await _phrasesRepository.GetPhrasesAsync(styleId, bandId, songId, contains, numberOfNotes,
                 durationInTicks, range, isMonotone, step, pageNo, pageSize);
             var retObj = new
             {

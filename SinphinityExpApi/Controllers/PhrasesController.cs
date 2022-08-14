@@ -104,40 +104,18 @@ namespace SinphinityExpApi.Controllers
         public async Task<ActionResult> GetPhrasesAsync(long? styleId, long? bandId, long? songId, string phraseType, string contains, int? numberOfNotes,
             int? durationInTicks, int? range, bool? isMonotone, int? step, int pageNo = 0, int pageSize = 10)
         {
-            var type = phraseType == null ? PhraseTypeEnum.Metrics : (PhraseTypeEnum)Enum.Parse(typeof(PhraseTypeEnum), phraseType, true);
-            switch (type)
-            {
-                case PhraseTypeEnum.Metrics:
-                    return Ok(new ApiOKResponse(await _sysStoreClient.GetPhraseMetricsAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
-                      range, isMonotone, step, pageNo, pageSize)));
-                case PhraseTypeEnum.Pitches:
-                    return Ok(new ApiOKResponse(await _sysStoreClient.GetPhrasePitchesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
-                      range, isMonotone, step, pageNo, pageSize)));
-                case PhraseTypeEnum.Both:
-                    return Ok(new ApiOKResponse(await _sysStoreClient.GetPhrasesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
-                      range, isMonotone, step, pageNo, pageSize)));
-                case PhraseTypeEnum.EmbelishedMetrics:
-                    return Ok(new ApiOKResponse(await _sysStoreClient.GetEmbellishedPhrasesMertricsAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
-                      range, isMonotone, step, pageNo, pageSize)));
-                case PhraseTypeEnum.EmbelishedPitches:
-                    return Ok(new ApiOKResponse(await _sysStoreClient.GetEmbellishedPhrasesPitchesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
-                      range, isMonotone, step, pageNo, pageSize)));
-                case PhraseTypeEnum.EmbellishedBoth:
-                    return Ok(new ApiOKResponse(await _sysStoreClient.GetEmbellishedPhrasesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
-                      range, isMonotone, step, pageNo, pageSize)));
-                default:
-                    throw new Exception("Que mierda esta pidiendo?");
-            }
+            return Ok(new ApiOKResponse(await _sysStoreClient.GetPhrasesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
+              range, isMonotone, step, pageNo, pageSize)));
         }
 
 
         [HttpGet("midi")]
-        public async Task<ActionResult> GetPhraseMidiAsync(PhraseTypeEnum phraseType, string asString, int instrument = 0, int tempoInBPM = 90, byte startingPitch = 60)
+        public async Task<ActionResult> GetPhraseMidiAsync(string asString, int instrument = 0, int tempoInBPM = 90, byte startingPitch = 60)
         {
             try
             {
 
-                var base64encodedMidiBytes = await _procMidiClient.GetMidiOfPhrase(phraseType, asString, instrument, tempoInBPM, startingPitch);
+                var base64encodedMidiBytes = await _procMidiClient.GetMidiOfPhrase(asString, instrument, tempoInBPM, startingPitch);
                 var ms = new MemoryStream(Convert.FromBase64String(base64encodedMidiBytes));
 
                 return File(ms, MediaTypeNames.Text.Plain, $"Phrase {asString}");

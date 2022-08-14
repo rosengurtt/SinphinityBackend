@@ -21,20 +21,20 @@ builder.Services.Configure<AppConfiguration>(options =>
                 options.ProcMelodyAnalyserUrl = builder.Configuration.GetSection("ProcMelodyAnalyserUrl").Value;
             });
 
-            builder.Services.AddSingleton<SysStoreClient>();
-            builder.Services.AddSingleton<ProcMidiClient>();
-            builder.Services.AddSingleton<GraphApiClient>();
-            builder.Services.AddSingleton<ProcMelodyAnalyserClient>();
-            builder.Services.AddCors(options =>
+builder.Services.AddSingleton<SysStoreClient>();
+builder.Services.AddSingleton<ProcMidiClient>();
+builder.Services.AddSingleton<GraphApiClient>();
+builder.Services.AddSingleton<ProcMelodyAnalyserClient>();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+            builder =>
             {
-                options.AddDefaultPolicy(
-                       builder =>
-                       {
-                           builder.WithOrigins(baseUrl).AllowAnyHeader().AllowAnyMethod();
-                       });
+                builder.WithOrigins(baseUrl).AllowAnyHeader().AllowAnyMethod();
             });
+});
 			
-			var app = builder.Build();
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

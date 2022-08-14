@@ -39,6 +39,10 @@ IF (OBJECT_ID('dbo.[FK_PhrasesLinks_Phrases2]', 'F') IS NOT NULL)
 IF (OBJECT_ID('dbo.[FK_PhrasesLinks_Songs]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhrasesLinks DROP CONSTRAINT FK_PhrasesLinks_Songs
 	
+IF (OBJECT_ID('dbo.[FK_Phrases_PhraseSkeletons_Id]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.Phrases DROP CONSTRAINT FK_Phrases_PhraseSkeletons_Id	
+	
+	
 IF OBJECT_ID('dbo.Styles', 'U') IS NOT NULL 
   DROP TABLE dbo.Styles
 
@@ -142,8 +146,11 @@ IF OBJECT_ID('dbo.PhraseSkeletons', 'U') IS NOT NULL
   DROP TABLE dbo.PhraseSkeletons
 CREATE TABLE PhraseSkeletons (
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	AsString VARCHAR(1000) NOT NULL,
-	AsStringAccum VARCHAR(1000) NULL	
+	MetricsAsString VARCHAR(1000) NOT NULL,
+	PitchesAsString VARCHAR(1000) NOT NULL,
+	MetricsAccumAsString VARCHAR(1000) NULL,
+	PitchesAccumAsString VARCHAR(1000) NULL
+)	
 	
 	
 
@@ -152,24 +159,22 @@ IF OBJECT_ID('dbo.Phrases', 'U') IS NOT NULL
   
 CREATE TABLE Phrases (
 	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	AsString VARCHAR(1000) NOT NULL,
-	AsStringAccum VARCHAR(1000) NULL,
-	AsStringBasic VARCHAR(1000)  NULL,
-	AsStringWithoutOrnaments VARCHAR(1000)  NULL,
-	AsStringWithoutOrnamentsAccum VARCHAR(1000)  NULL,
+	MetricsAsString VARCHAR(1000) NOT NULL,
+	PitchesAsString VARCHAR(1000) NOT NULL,
+	MetricsAccumAsString VARCHAR(1000) NULL,
+	PitchesAccumAsString VARCHAR(1000) NULL,	
 	Equivalences VARCHAR(MAX) NULL,
 	DurationInTicks BIGINT  NULL,
 	NumberOfNotes INT NOT NULL,
 	[Range] INT  NULL,
 	IsMonotone BIT  NULL,
 	Step INT  NULL,
-	PhraseType INT NOT NULL
+	PhraseSkeletonId BIGINT NOT NULL,
+    CONSTRAINT FK_Phrases_PhraseSkeletons_Id FOREIGN KEY (PhraseSkeletonId) REFERENCES PhraseSkeletons(Id)
 )	
 
-CREATE INDEX IX_Phrases_PhraseType ON Phrases (PhraseType)
-CREATE INDEX IX_Phrases_AsString ON Phrases (AsString)
-CREATE INDEX IX_Phrases_AsStringBasic ON Phrases (AsStringBasic)
-CREATE INDEX IX_Phrases_AsStringWithoutOrnaments ON Phrases (AsStringWithoutOrnaments)
+CREATE INDEX IX_Phrases_MetricsAsString ON Phrases (MetricsAsString)
+CREATE INDEX IX_Phrases_PitchesAsString ON Phrases (PitchesAsString)
 
 
 IF OBJECT_ID('dbo.PhrasesOccurrences', 'U') IS NOT NULL 
@@ -186,14 +191,12 @@ CREATE TABLE PhrasesOccurrences (
 	StartTick BIGINT NOT NULL,
 	EndTick BIGINT NOT NULL,
 	StartingPitch INT NULL,
-	PhraseType INT NOT NULL	,
     CONSTRAINT FK_PhrasesOccurrences_Songs_Id  FOREIGN KEY (SongId) REFERENCES Songs(Id),
     CONSTRAINT FK_PhrasesOccurrences_Phrases_Id  FOREIGN KEY (PhraseId) REFERENCES Phrases(Id)
 )
 
 CREATE INDEX IX_PhrasesOccurrences_StartTick ON PhrasesOccurrences (StartTick)
 CREATE INDEX IX_PhrasesOccurrences_EndTick ON PhrasesOccurrences (EndTick)
-CREATE INDEX IX_PhrasesOccurrences_PhraseType ON PhrasesOccurrences (PhraseType)
 CREATE INDEX IX_PhrasesOccurrences_Voice ON PhrasesOccurrences (Voice)
 
 IF OBJECT_ID('dbo.PhraseSong', 'U') IS NOT NULL 

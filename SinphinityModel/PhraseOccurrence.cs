@@ -15,7 +15,6 @@ namespace Sinphinity.Models
         public long StartTick { get; set; }
         public long EndTick { get; set; }
         public int StartingPitch { get; set; }
-        public PhraseTypeEnum PhraseType { get; set; }
         public Phrase Phrase { get; set; }
         public Song Song { get; set; }
         public  Band Band{ get; set; }

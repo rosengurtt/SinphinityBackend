@@ -21,7 +21,7 @@ namespace Sinphinity.Models
         public byte Instrument2 { get; set; }
 
         public long SongId { get; set; }
-       // public long TicksFromStart { get; set; }
+        public long TicksFromStart { get; set; }
         /// <summary>
         /// The start time of the second phrase in relation to the first one
         /// If the 2 phrases are simultanewous it would be 0

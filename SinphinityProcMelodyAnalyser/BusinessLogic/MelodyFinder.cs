@@ -1,7 +1,6 @@
 ﻿using Sinphinity.Models;
 using SinphinityModel.Helpers;
 using SinphinityProcMelodyAnalyser.Models;
-using SinphinitySysStore.Models;
 
 namespace SinphinityProcMelodyAnalyser.BusinessLogic
 {
@@ -40,8 +39,8 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
 
                 for (int i = 0; i < phraseEdges.Count - 1; i++)
                 {
-                    var phraseInfo = PhraseDetection.GetPhraseBetweenEdges(cleanedVoiceNotes, phraseEdges[i], phraseEdges[i + 1], song.Id, voice, song.Bars);
-                    retObj = AddPhraseToList(phraseInfo, retObj);
+                    (var phrase, var location) = PhraseDetection.GetPhraseBetweenEdges(cleanedVoiceNotes, phraseEdges[i], phraseEdges[i + 1], song.Id, voice, song.Bars);
+                    retObj = AddPhraseToList(phrase, location, retObj);
                 }
             }
             retObj = AddEquivalences(retObj);
@@ -50,89 +49,33 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         }
         private static List<ExtractedPhrase> AddEquivalences(List<ExtractedPhrase> extractePhrasesSoFar)
         {
+            var maxPitchDistance = 0.4;
+            var maxMetricsDistance = 0.4;
             foreach (var p in extractePhrasesSoFar)
             {
-                var maxDistance = PhraseDistance.MaxDistanceToBeConsideredEquivalent(p.PhraseType, p.AsString);
-                p.Equivalences = extractePhrasesSoFar.Where(x => x.PhraseType == p.PhraseType && x.AsString!=p.AsString &&  PhraseDistance.GetDistance(p.PhraseType, p.AsString, x.AsString) < maxDistance)
-                                .Select(y => y.AsString).ToList();
+                p.Equivalences = extractePhrasesSoFar.Where(x => (PhraseDistance.GetMetricDistance(p.Phrase, x.Phrase) < maxMetricsDistance) && 
+                    (PhraseDistance.GetPitchDistance( p.Phrase, x.Phrase) < maxPitchDistance))
+                                .Select(y => $"{y.Phrase.MetricsAsString}/{y.Phrase.PitchesAsString}").ToList();
             }
             return extractePhrasesSoFar;
         }
 
-        private static List<ExtractedPhrase> AddPhraseToList(PhraseInfo phraseInfo, List<ExtractedPhrase> extractePhrasesSoFar)
+        private static List<ExtractedPhrase> AddPhraseToList(Phrase phrase, PhraseLocation location, List<ExtractedPhrase> extractePhrasesSoFar)
         {
-            if (phraseInfo == null)
-                return extractePhrasesSoFar;
+            if (phrase == null)
+                return extractePhrasesSoFar;      
 
-            var metricPhrase = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.Metrics && x.AsString == phraseInfo.MetricsAsString).FirstOrDefault();
-            if (metricPhrase == null)
-            {
-                metricPhrase = new ExtractedPhrase { AsString = phraseInfo.MetricsAsString, PhraseType = PhraseTypeEnum.Metrics, Occurrences = new List<PhraseLocation>() };
-                extractePhrasesSoFar.Add(metricPhrase);
-            }
-            metricPhrase.Occurrences.Add(phraseInfo.Location);
-
-            var pitchesPhrase = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.Pitches && x.AsString == phraseInfo.PitchesAsString).FirstOrDefault();
-            if (pitchesPhrase == null)
-            {
-                pitchesPhrase = new ExtractedPhrase { AsString = phraseInfo.PitchesAsString, PhraseType = PhraseTypeEnum.Pitches, Occurrences = new List<PhraseLocation>() };
-                extractePhrasesSoFar.Add(pitchesPhrase);
-            }
-            pitchesPhrase.Occurrences.Add(phraseInfo.Location);
-
-            var phrase = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.Both && x.AsString == phraseInfo.PhraseAsString).FirstOrDefault();
+            var p = extractePhrasesSoFar.Where(x => x.Phrase.MetricsAsString== phrase.MetricsAsString && x.Phrase.PitchesAsString==phrase.PitchesAsString).FirstOrDefault();
             if (phrase == null)
             {
-                phrase = new ExtractedPhrase { AsString = phraseInfo.PhraseAsString, PhraseType = PhraseTypeEnum.Both, Occurrences = new List<PhraseLocation>() };
-                extractePhrasesSoFar.Add(phrase);
+                p = new ExtractedPhrase { Phrase=phrase, Occurrences = new List<PhraseLocation>() };
+                extractePhrasesSoFar.Add(p);
             }
-            phrase.Occurrences.Add(phraseInfo.Location);
+            p.Occurrences.Add(location);
 
-            if (phraseInfo.EmbellishedPhraseAsString != "/")
-            {
-                var embPhraseMetric = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.EmbelishedMetrics && x.AsString == phraseInfo.EmbellishedMetricsAsString).FirstOrDefault();
-                if (embPhraseMetric == null)
-                {
-                    embPhraseMetric = new ExtractedPhrase { AsString = phraseInfo.EmbellishedMetricsAsString, PhraseType = PhraseTypeEnum.EmbelishedMetrics, Occurrences = new List<PhraseLocation>() };
-                    extractePhrasesSoFar.Add(embPhraseMetric);
-                }
-                embPhraseMetric.Occurrences.Add(phraseInfo.Location);
-
-                var embPhrasePitches = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.EmbelishedPitches && x.AsString == phraseInfo.EmbellishedPitchesAsString).FirstOrDefault();
-                if (embPhrasePitches == null)
-                {
-                    embPhrasePitches = new ExtractedPhrase {
-                        AsString = phraseInfo.EmbellishedPitchesAsString,
-                        AsStringWithoutOrnaments= phraseInfo.PitchesAsString,
-                        PhraseType = PhraseTypeEnum.EmbelishedPitches, 
-                        Occurrences = new List<PhraseLocation>() };
-                    extractePhrasesSoFar.Add(embPhrasePitches);
-                }
-                embPhrasePitches.Occurrences.Add(phraseInfo.Location);
-
-                var embPhrase = extractePhrasesSoFar.Where(x => x.PhraseType == PhraseTypeEnum.EmbellishedBoth && x.AsString == phraseInfo.EmbellishedPhraseAsString).FirstOrDefault();
-                if (embPhrase == null)
-                {
-                    embPhrase = new ExtractedPhrase {
-                        AsString = phraseInfo.EmbellishedPhraseAsString,
-                        AsStringWithoutOrnaments= phraseInfo.PhraseAsString,
-                        PhraseType = PhraseTypeEnum.EmbellishedBoth,
-                        Occurrences = new List<PhraseLocation>() };
-                    extractePhrasesSoFar.Add(embPhrase);
-                }
-                embPhrase.Occurrences.Add(phraseInfo.Location);
-            }            
             return extractePhrasesSoFar;
         }
 
 
-        public static (int, int, int) GetBarBeatAndTickOfEdge(List<Bar> bars, long tick)
-        {
-            var barNo = bars.Where(b => b.TicksFromBeginningOfSong <= tick).Count();
-            var beatLength = 4 * 96 / bars[barNo - 1].TimeSignature.Denominator;
-            var beat = (int)(tick - bars[barNo - 1].TicksFromBeginningOfSong) / beatLength;
-            var ticky = (int)(tick - bars[barNo - 1].TicksFromBeginningOfSong - beat * beatLength);
-            return (barNo, beat, ticky);
-        }
     }
 }
