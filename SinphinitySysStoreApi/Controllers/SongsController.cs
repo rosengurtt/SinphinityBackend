@@ -44,17 +44,24 @@ namespace SinphinitySysStore.Controllers
 
         // GET: api/Songs/5
         [HttpGet("{songId}")]
-        public async Task<IActionResult> GetSong(long songId, int? simplificationVersion)
+        public async Task<IActionResult> GetSongAsync(long songId, int? simplificationVersion)
         {
-            var song = await _songsRepository.GetSongByIdAsync(songId, simplificationVersion);
-            if (song == null)
-                return NotFound(new ApiResponse(404));
+            try
+            {
+                var song = await _songsRepository.GetSongByIdAsync(songId, simplificationVersion);
+                if (song == null)
+                    return NotFound(new ApiResponse(404));
 
-            return Ok(new ApiOKResponse(song));
+                return Ok(new ApiOKResponse(song));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<ActionResult<Sinphinity.Models.Song>> AddSong(Sinphinity.Models.Song song)
+        public async Task<ActionResult<Sinphinity.Models.Song>> AddSongAsync(Sinphinity.Models.Song song)
         {
             try
             {
@@ -84,7 +91,7 @@ namespace SinphinitySysStore.Controllers
         }
 
         [HttpPut, DisableRequestSizeLimit]
-        public async Task<ActionResult> UpdateSong(Sinphinity.Models.Song song)
+        public async Task<ActionResult> UpdateSongAsync(Sinphinity.Models.Song song)
         {
             Log.Information($"Me llego para updatear la song {song.Name}");
             await _songsRepository.UpdateSong(song);

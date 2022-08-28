@@ -9,7 +9,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
     public static partial class PhraseDetection
     {
 
-        public static (Phrase, PhraseLocation) GetPhraseBetweenEdges(List<Note> notes, long start, long end, long songId, byte voice, List<Bar> bars)
+        public static (Phrase, PhraseLocation) GetPhraseBetweenEdges(List<Note> notes, long start, long end, long songId, byte voice,  List<Bar> bars)
         {
             var phraseNotes = notes
                 .Where(x => x.StartSinceBeginningOfSongInTicks >= start && x.StartSinceBeginningOfSongInTicks < end)
@@ -18,7 +18,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             if (notes.Count < 2)
                 return (null, null);
 
-            var location = new PhraseLocation(songId, voice, start, end, phraseNotes[0].Instrument, phraseNotes[0].Pitch, bars);
+            var location = new PhraseLocation(songId, voice, 0, start, end, phraseNotes[0].Instrument, phraseNotes[0].Pitch, bars);
             var phrase = new Phrase(notes);
             return (phrase, location);
         
@@ -40,7 +40,7 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
             edgesSoFar = GetEdgesBetweenChangesInPacing(notes, bars, edgesSoFar);
             edgesSoFar = GetEdgesAtStartOrEndOfScales(notes, bars, edgesSoFar);
             edgesSoFar = GetEdgesBetweenGroupsOfNotesWithSmallSteps(notes, bars, edgesSoFar);
-            edgesSoFar = GetRepeatingPatterns(notes, edgesSoFar);
+           // edgesSoFar = GetRepeatingPatterns(notes, edgesSoFar);
             edgesSoFar = BreakPhrasesThatAreTooLong(notes, bars, edgesSoFar);
             return edgesSoFar;
         }

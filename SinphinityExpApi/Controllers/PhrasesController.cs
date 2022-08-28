@@ -33,11 +33,10 @@ namespace SinphinityExpApi.Controllers
 
         // api/songs/patterns/processPhrases?songId=60d577ef035c715d2ea7ef60
         [HttpGet("processSingle")]
-        public async Task<IActionResult> ProcessPhrasesForSong(long songId, int songSimplification)
+        public async Task<IActionResult> ProcessPhrasesForSong(long songId)
         {
-            var song = await _sysStoreClient.GetSongByIdAsync(songId);
 
-            var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(song, songSimplification);
+            var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(songId);
             await _sysStoreClient.InsertPhrasesAsync(phrases, songId);
 
             return Ok(new ApiOKResponse("Salvamos las phrases papi"));
@@ -64,26 +63,17 @@ namespace SinphinityExpApi.Controllers
                 {
                     foreach (var s in songsBatch.items)
                     {
-                        if (!s.IsSongProcessed || s.ArePhrasesExtracted) continue;
-                        var song = await _sysStoreClient.GetSongByIdAsync(s.Id, null);
-                        // we don't need MidiBase64Encoded
-                        song.MidiBase64Encoded = "";
-                        if (song.Bars == null)
-                            continue;
                         try
                         {
-                            Log.Information($"{alca} - Start with song: {song.Name}");
-                            if (song.SongSimplifications != null && song.SongSimplifications.Count > 0)
-                            {
-                                var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(song, 0);
-                                Log.Information($"Phrase extracion completed OK for {song.Name}");
-                                await _sysStoreClient.InsertPhrasesAsync(phrases, song.Id);
-                                Log.Information($"Saved OK {song.Name}");
-                            }
+                            Log.Information($"{alca} - Start with song: {s.Name}");
+                            var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(s.Id);
+                            Log.Information($"Phrase extracion completed OK for {s.Name}");
+                            await _sysStoreClient.InsertPhrasesAsync(phrases, s.Id);
+                            Log.Information($"Saved OK {s.Name}");
                         }
                         catch (Exception ex)
                         {
-                            Log.Error(ex, $"Couldn't process song {song.Name}");
+                            Log.Error(ex, $"Couldn't process song {s.Name}");
                             s.CantBeProcessed = true;
                             await _sysStoreClient.UpdateSong(s);
                         }

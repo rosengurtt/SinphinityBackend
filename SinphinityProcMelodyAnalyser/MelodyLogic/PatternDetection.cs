@@ -1,9 +1,9 @@
 ﻿using Sinphinity.Models;
 using System.Text.RegularExpressions;
 
-namespace SinphinityProcMelodyAnalyser.BusinessLogic
+namespace SinphinityProcMelodyAnalyser.MelodyLogic
 {
-    public static partial class PhraseDetection
+    public static class PatternDetection
     {
 
         /// <summary>
@@ -45,14 +45,14 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
         {
             var retObj = new HashSet<long>();
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
-            // if less than 8 notes leave it alone
             var totalNotes = notes.Count;
-            if (totalNotes < 8) return retObj;
-            // if total duration is not longer than 8 quarters and total of notes not more than 20 leave it alone
-            // we actually check the product intervalDurationInTicks * totalNotes to consider cases where we have shorter intervals but many notes
             var intervalDurationInTicks = orderedNotes.Max(x => x.EndSinceBeginningOfSongInTicks) - orderedNotes.Min(y => y.StartSinceBeginningOfSongInTicks);
-            if (intervalDurationInTicks * totalNotes < 8 * 96 * 12)
+
+            // to search for patterns we expect that we have at least 8 notes
+            // we dont't want to produce short intervals with few notes, we check the product duration * qty notes
+            if (totalNotes < 8 || intervalDurationInTicks * totalNotes < 8 * 192)
                 return retObj;
+
             // we use this variable to avoid testing the same value twice
             var patternsAlreadyTested = new List<string>();
 
@@ -159,15 +159,17 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 case PhraseTypeEnum.Both:
                     for (var i = 0; i < orderedNotes.Count - 1; i++)
                     {
-                        asString += $"{orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks},{orderedNotes[i + 1].Pitch - orderedNotes[i].Pitch};";
+                        asString += $"{orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks}," +
+                            $"{DiscretizedPitchDifference(orderedNotes[i + 1].Pitch , orderedNotes[i].Pitch)};";
                     }
                     return asString;
                 case PhraseTypeEnum.Metrics:
                     return string.Join(",", orderedNotes.Select(x => x.DurationInTicks.ToString())) + ",";
                 case PhraseTypeEnum.Pitches:
-                    for (var i=0;i< orderedNotes.Count - 1; i++)
+                    // for pitches, we don't look for exact matches, we want a tolerance of 1 semitone
+                    for (var i = 0; i < orderedNotes.Count - 1; i++)
                     {
-                        asString += (orderedNotes[i + 1].Pitch - orderedNotes[i].Pitch).ToString() + ",";
+                        asString += DiscretizedPitchDifference(orderedNotes[i + 1].Pitch, orderedNotes[i].Pitch).ToString() + ",";
                     }
                     return asString;
                 case PhraseTypeEnum.PitchDirection:
@@ -193,6 +195,21 @@ namespace SinphinityProcMelodyAnalyser.BusinessLogic
                 default:
                     throw new Exception("Que mierda me mandaron?");
             }
+        }
+        /// <summary>
+        /// We want to have some tolerance when comparing pitches, so we can consider the interval
+        /// C-D to be the same as E-F, even when C-D is 2 semitones and E-F is one semitone
+        /// This function "discretizes" the difference by returning the nearest larger even number to the actual difference between the 2 pitches
+        /// </summary>
+        /// <param name="pitch1"></param>
+        /// <param name="pitch2"></param>
+        /// <returns></returns>
+        private static int DiscretizedPitchDifference(int pitch1, int pitch2)
+        {
+            var difference = Math.Abs(pitch1 - pitch2);
+
+            if (difference % 2 == 0) return pitch1 - pitch2;
+            return (difference + 1) & Math.Sign(pitch1 - pitch2);
         }
 
     }

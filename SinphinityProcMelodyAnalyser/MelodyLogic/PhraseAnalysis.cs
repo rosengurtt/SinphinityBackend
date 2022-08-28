@@ -1,30 +1,92 @@
 ﻿using Sinphinity.Models;
+using SinphinityModel.Helpers;
 
 namespace SinphinityProcMelodyAnalyser.MelodyLogic
 {
     public static class PhraseAnalysis
     {
 
-        public static List<ExtractedPhrase> FindAllPhrases(Song song, int songSimplification = 0)
+        public static List<ExtractedPhrase> FindAllPhrases(List<Note> notes, List<Bar> bars, long songId)
         {
-            throw new NotImplementedException();
-        }
+            var retObj = new List<ExtractedPhrase>();
 
+            foreach (var voice in notes.Voices())
+            {
+                foreach (var subVoice in new List<byte> { 0,1 })
+                {
+                    var voiceNotes = notes.Where(x => x.Voice == voice && x.SubVoice == subVoice).OrderBy(y => y.StartSinceBeginningOfSongInTicks).ToList();
+                    var phrasesEdges = GetPhrasesEdges(voiceNotes, bars);
+                    for (int i = 0; i < phrasesEdges.Count - 1; i++)
+                    {
+                        (var phrase, var location) = GetPhraseBetweenEdges(voiceNotes, phrasesEdges[i], phrasesEdges[i + 1], songId, voice, subVoice,  bars);
+                        retObj = AddPhraseToList(phrase, location, retObj);
+                    }
+                }
+            }
+            retObj = AddEquivalences(retObj);
+            return retObj;
+        }
+        private static List<ExtractedPhrase> AddPhraseToList(Phrase phrase, PhraseLocation location, List<ExtractedPhrase> extractePhrasesSoFar)
+        {
+            if (phrase == null)
+                return extractePhrasesSoFar;
+
+            var p = extractePhrasesSoFar.Where(x => x.Phrase.MetricsAsString == phrase.MetricsAsString && x.Phrase.PitchesAsString == phrase.PitchesAsString).FirstOrDefault();
+            if (p == null)
+            {
+                p = new ExtractedPhrase { Phrase = phrase, Occurrences = new List<PhraseLocation>() };
+                extractePhrasesSoFar.Add(p);
+            }
+            p.Occurrences.Add(location);
+
+            return extractePhrasesSoFar;
+        }
+        private static List<ExtractedPhrase> AddEquivalences(List<ExtractedPhrase> extractePhrasesSoFar)
+        {
+            var maxPitchDistance = 0.4;
+            var maxMetricsDistance = 0.4;
+            foreach (var p in extractePhrasesSoFar)
+            {
+                p.Equivalences = extractePhrasesSoFar.Where(x => (PhraseDistance.GetMetricDistance(p.Phrase, x.Phrase) < maxMetricsDistance) &&
+                    (PhraseDistance.GetPitchDistance(p.Phrase, x.Phrase) < maxPitchDistance))
+                                .Select(y => $"{y.Phrase.MetricsAsString}/{y.Phrase.PitchesAsString}").ToList();
+            }
+            return extractePhrasesSoFar;
+        }
+        public static (Phrase, PhraseLocation) GetPhraseBetweenEdges(List<Note> notes, long start, long end, long songId, byte voice, byte subVoice, List<Bar> bars)
+        {
+            var phraseNotes = notes
+                .Where(x => x.StartSinceBeginningOfSongInTicks >= start && x.StartSinceBeginningOfSongInTicks < end)
+                .OrderBy(y => y.StartSinceBeginningOfSongInTicks)
+                .ToList();
+            if (notes.Count < 2)
+                return (null, null);
+
+            var location = new PhraseLocation(songId, voice, subVoice, start, end, phraseNotes[0].Instrument, phraseNotes[0].Pitch, bars);
+            var phrase = new Phrase(notes);
+            return (phrase, location);
+
+        }
         /// <summary>
         /// Analyzes the metric of the song to find the points where phrases start and end
         /// Returns a list with the locations represented as the number of ticks since the beginning of the song 
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        public static HashSet<long> GetPhrasesEdges(List<Note> notes, List<Bar> bars)
+        public static List<long> GetPhrasesEdges(List<Note> notes, List<Bar> bars)
         {
             var edgesSoFar = new HashSet<long>();
+            if (notes.Count == 0)
+                return edgesSoFar.ToList();
             edgesSoFar.Add(notes[0].StartSinceBeginningOfSongInTicks);
             edgesSoFar.Add(notes[notes.Count - 1].EndSinceBeginningOfSongInTicks);
 
             edgesSoFar = GetEdgesOfSilencesAndLongNotes(notes, bars, edgesSoFar);
-          
-            return edgesSoFar;
+            edgesSoFar = ChangeOfPaceDetection.GetEdgesBetweenChangesInPacing(notes, edgesSoFar);
+            edgesSoFar = IntervalJumpDetection.GetEdgesBetweenGroupsOfNotesWithSmallSteps(notes, edgesSoFar);
+            edgesSoFar = PatternDetection.GetRepeatingPatterns(notes, edgesSoFar);
+
+            return edgesSoFar.ToList().OrderBy(x=>x).ToList();
         }
 
         /// <summary>
