@@ -44,7 +44,7 @@ namespace SinphinitySysStore.Controllers
 
         // GET: api/Songs/5
         [HttpGet("{songId}")]
-        public async Task<IActionResult> GetSongAsync(long songId, int? simplificationVersion)
+        public async Task<IActionResult> GetSongByIdAsync(long songId, int? simplificationVersion)
         {
             try
             {

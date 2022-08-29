@@ -26,10 +26,17 @@ namespace SinphinitySysStoreApi.Controllers
         [HttpPost("{songId}"), DisableRequestSizeLimit]
         public async Task<ActionResult> UploadPhrasesOfSongAsync(long songId, List<ExtractedPhrase> extractedPhrases)
         {
-            await _phrasesRepository.SavePhrasesAsync(extractedPhrases, songId);
-            await _phrasesRepository.GeneratePhrasesLinksForSong(songId);
-            await _phrasesRepository.UpateSong(songId);
+            try
+            {
+                await _phrasesRepository.SavePhrasesAsync(extractedPhrases, songId);
+                await _phrasesRepository.GeneratePhrasesLinksForSong(songId);
+                await _phrasesRepository.UpateSong(songId);
+            }
+            catch(Exception ex)
+            {
 
+
+            }
             return Ok(new ApiOKResponse(null));
         }
 

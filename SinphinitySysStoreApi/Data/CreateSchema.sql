@@ -169,7 +169,7 @@ CREATE TABLE Phrases (
 	[Range] INT  NULL,
 	IsMonotone BIT  NULL,
 	Step INT  NULL,
-	PhraseSkeletonId BIGINT NOT NULL,
+	PhraseSkeletonId BIGINT NULL,
     CONSTRAINT FK_Phrases_PhraseSkeletons_Id FOREIGN KEY (PhraseSkeletonId) REFERENCES PhraseSkeletons(Id)
 )	
 

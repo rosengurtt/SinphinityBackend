@@ -271,6 +271,10 @@ namespace SinphinityExpApi.Clients
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             httpClient.Timeout = TimeSpan.FromMinutes(60);
             var url = $"{_appConfiguration.SysStoreUrl}/api/Phrases/{songId}";
+
+            var sacamela = await content.ReadAsByteArrayAsync();
+            string bitString = System.Text.Encoding.Default.GetString(sacamela);
+
             var response = await httpClient.PostAsync(url, content);
 
             if (response.StatusCode != HttpStatusCode.OK)

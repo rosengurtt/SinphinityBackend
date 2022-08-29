@@ -31,21 +31,32 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         {
             var retObj = new List<Note>();
             var simplification = song.SongSimplifications[0];
+            simplification.Notes = AddGuidToNotes(simplification.Notes);
             long tolerance = 4;
 
 
             foreach (var voice in simplification.Notes.NonPercussionVoices())
-            {
-                var voiceNotes = simplification.Notes.Where(x => x.Voice == voice).ToList().Clone();
+            { 
+                var voiceNotes = simplification.Notes.Where(x => x.Voice == voice)
+                                    .OrderBy(x => x.StartSinceBeginningOfSongInTicks)
+                                    .ToList()
+                                    .Clone();
                 voiceNotes = DiscretizeTiming(voiceNotes);
                 var processedVoiceNotes = new List<Note>();
-                if (IsTrackPolyphonic(voiceNotes) && !IsChordsTrack(voiceNotes))
+
+                if (voiceNotes.Count < 2)
+                    continue;
+                // We don't extract melodies from tracks that play chords
+                if (IsChordsTrack(voiceNotes))
+                    continue;
+
+                // If a voice has independent melodies, extract the lower and higher ones
+                if (IsTrackPolyphonic(voiceNotes))
                 {
-                    voiceNotes = RemoveDuplicates(voiceNotes);
+                    voiceNotes = RemoveDuplicates(voiceNotes).OrderBy(x=>x.StartSinceBeginningOfSongInTicks).ToList();
 
-                    foreach (var n in voiceNotes.OrderBy(x => x.StartSinceBeginningOfSongInTicks))
+                    foreach (var n in voiceNotes)
                     {
-
                         var neighboors = GetNeighboorsOfNote(voiceNotes, n);
                         (var averageLow, var average, var averageHigh) = GetNotesAverage(neighboors);
                         if (Math.Abs(n.Pitch - averageLow) < Math.Abs(n.Pitch - averageHigh))
@@ -85,6 +96,13 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             return retObj;
         }
 
+        private static List<Note> AddGuidToNotes(List<Note> notes)
+        {
+            foreach(var n in notes)
+                n.Guid=Guid.NewGuid();
+            return notes;
+        }
+
         private static List<Note> RemoveDuplicates (List<Note> notes)
         {
             var retObj = notes.Clone();
@@ -110,23 +128,40 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         }
 
         /// <summary>
-        /// We compute the total amount of time when notes are starting and endgin together and we compare with the total duration of all notes
+        /// We compute the total amount of time when notes are starting and ending together and we compare with the total duration of all notes
         /// We arbitrarily consider that the track consists of chords if the ratios is greater than 0.7
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
         private static bool IsChordsTrack(List<Note> notes)
         {
-            long totalChordsTime = 0;
-            long totalTime = notes.Sum(x => x.DurationInTicks);
-            long tolerance = 4;
-            foreach (var note in notes)
+            try
             {
-                totalChordsTime += notes.Where(x => Math.Abs(x.StartSinceBeginningOfSongInTicks - note.StartSinceBeginningOfSongInTicks) < tolerance &&
-                    Math.Abs(x.EndSinceBeginningOfSongInTicks - note.EndSinceBeginningOfSongInTicks) < tolerance).Sum(y => y.DurationInTicks) - note.DurationInTicks;
+                long totalChordsTime = 0;
+                long totalTime = notes.Sum(x => x.DurationInTicks);
+                long tolerance = 4;
+                var computedNotes = new HashSet<string>();
+                foreach (var note in notes)
+                {
+                    var simultaneousNotes = notes.Where(x => Math.Abs(x.StartSinceBeginningOfSongInTicks - note.StartSinceBeginningOfSongInTicks) < tolerance &&
+                         Math.Abs(x.EndSinceBeginningOfSongInTicks - note.EndSinceBeginningOfSongInTicks) < tolerance);
+                    foreach (var n in simultaneousNotes)
+                    {
+                        if (!computedNotes.Contains(n.Guid.ToString()))
+                        {
+                            totalChordsTime += n.DurationInTicks;
+                            computedNotes.Add(n.Guid.ToString());
+                        }
+                    }
+                }
+                return totalChordsTime / (double)totalTime > 0.7;
             }
-            return totalChordsTime / (double)totalTime > 0.7;
-        }    
+            catch(Exception ex)
+            {
+
+            }
+            return false;
+        }  
 
         /// <summary>
         /// We find the total time where 2 or more voices are played simultaneously and we compare it with the sum of the duration of all notes
@@ -163,8 +198,13 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             var averagePitch = notes.Sum(x => x.Pitch * x.DurationInTicks) / notes.Sum(y => y.DurationInTicks);
             var notesOverAverage = notes.Where(x => x.Pitch > averagePitch).ToList();
             var notesUnderAverage = notes.Where(x => x.Pitch < averagePitch).ToList();
-            var averageHigh = notesOverAverage.Sum(x => x.Pitch * x.DurationInTicks) / notesOverAverage.Sum(y => y.DurationInTicks);
-            var averageLow = notesUnderAverage.Sum(x => x.Pitch * x.DurationInTicks) / notesUnderAverage.Sum(y => y.DurationInTicks);
+
+            var averageHigh = notesOverAverage.Count>0?
+                notesOverAverage.Sum(x => x.Pitch * x.DurationInTicks) / notesOverAverage.Sum(y => y.DurationInTicks):
+                averagePitch;
+            var averageLow = notesUnderAverage.Count>0?
+                notesUnderAverage.Sum(x => x.Pitch * x.DurationInTicks) / notesUnderAverage.Sum(y => y.DurationInTicks):
+                averagePitch;
             return (averageLow, averagePitch, averageHigh);
         }
 
@@ -211,6 +251,8 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         /// <returns></returns>
         private static List<Note> DiscretizeTiming(List<Note> notes)
         {
+            if (notes.Count < 2)
+                return notes;
             var orderedNotes = SynchronizeNotesThatShoulsStartTogether(notes);
             var retObj = new List<Note>();
             retObj.Add((Note)orderedNotes[0].Clone());

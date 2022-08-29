@@ -69,18 +69,14 @@ namespace SinphinitySysStore.Data
 
         public async Task UpateSong(long songId)
         {
-            var currentSong = await _dbContext.Songs.Where(x => x.Id == songId).FirstOrDefaultAsync();
-            if (currentSong == null) throw new SongDoesntExistException();
-
-            currentSong.ArePhrasesExtracted = true;
-
-
+            var currentSong = await _dbContext.Songs
+                            .FromSqlRaw($"UPDATE Songs SET ArePhrasesExtracted=1 WHERE id ={songId}; SELECT TOP 1 * FROM songs")
+                            .ToListAsync();
             try
             {
-                _dbContext.Songs.Update(currentSong);
                 await _dbContext.SaveChangesAsync();
             }
-            catch (Exception sePudrioPapi)        ///// <summary>
+            catch (Exception sePudrioPapi)     
        
             {
                 Log.Error(sePudrioPapi, "Exception raised when trying to set ArePhrasesExtracted flag to true");

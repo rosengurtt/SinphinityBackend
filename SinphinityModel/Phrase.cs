@@ -1,6 +1,7 @@
-﻿using SinphinityModel.Helpers;
+﻿using Newtonsoft.Json;
+using SinphinityModel.Helpers;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+
 
 namespace Sinphinity.Models
 {
@@ -32,6 +33,7 @@ namespace Sinphinity.Models
             Guid = Guid.NewGuid();
             MetricsAsString = metricsAsString;
             PitchesAsString = pitchesAsString;
+            Equivalences=new List<string>();
         }
         public Phrase(List<Note> notes, bool dontFixStrangeDurations = false)
         {
@@ -52,6 +54,7 @@ namespace Sinphinity.Models
                 MetricsAsString = FixStrangeDurations(MetricsAsString);
             MetricsAsString = MetricsAsString.ExtractPattern();
             PitchesAsString = PitchesAsString.ExtractPattern();
+            Equivalences = new List<string>();
         }
 
         /// <summary>
@@ -203,13 +206,11 @@ namespace Sinphinity.Models
                 return PitchItems.All(x => x >= 0) || PitchItems.All((x => x <= 0));
             }
         }
-
+        [JsonIgnore]
         public Song AsSong
         {
             get
             {
-
-
                 int totalBeats = (int)Math.Ceiling((double)DurationInTicks / 96);
                 var bar = new Bar
                 {

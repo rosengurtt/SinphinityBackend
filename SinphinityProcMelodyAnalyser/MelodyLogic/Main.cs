@@ -85,7 +85,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             try
             {
                 var song = await _sysStoreClient.GetSongByIdAsync(songId, 0);
-                if (song.SongSimplifications.Count == 0 || song.Bars == null || song.Bars.Count == 0)
+                if (song.SongSimplifications == null ||song.SongSimplifications.Count == 0 || song.Bars == null || song.Bars.Count == 0)
                     return null;
                 var notes = SongPreprocess.ExtractMelodies(song);
                 return PhraseAnalysis.FindAllPhrases(notes, song.Bars, songId);

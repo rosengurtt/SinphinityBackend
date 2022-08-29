@@ -59,11 +59,14 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                 .Where(x => x.StartSinceBeginningOfSongInTicks >= start && x.StartSinceBeginningOfSongInTicks < end)
                 .OrderBy(y => y.StartSinceBeginningOfSongInTicks)
                 .ToList();
-            if (notes.Count < 2)
+            if (phraseNotes.Count < 2)
                 return (null, null);
 
             var location = new PhraseLocation(songId, voice, subVoice, start, end, phraseNotes[0].Instrument, phraseNotes[0].Pitch, bars);
-            var phrase = new Phrase(notes);
+            var phrase = new Phrase(phraseNotes);
+            if (phrase.MetricItems.Where(x => x == 0).Any()){
+
+            }
             return (phrase, location);
 
         }
