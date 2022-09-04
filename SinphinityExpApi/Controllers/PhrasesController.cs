@@ -74,8 +74,8 @@ namespace SinphinityExpApi.Controllers
                         catch (Exception ex)
                         {
                             Log.Error(ex, $"Couldn't process song {s.Name}");
-                            s.CantBeProcessed = true;
-                            await _sysStoreClient.UpdateSong(s);
+                          //  s.CantBeProcessed = true;
+                          //  await _sysStoreClient.UpdateSong(s);
                         }
                         alca++;
                     }

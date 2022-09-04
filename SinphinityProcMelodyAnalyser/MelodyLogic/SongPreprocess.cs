@@ -33,10 +33,11 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             var simplification = song.SongSimplifications[0];
             simplification.Notes = AddGuidToNotes(simplification.Notes);
             long tolerance = 4;
+            var nonPercusionVoices = simplification.Notes.NonPercussionVoices();
 
 
-            foreach (var voice in simplification.Notes.NonPercussionVoices())
-            { 
+            foreach (var voice in nonPercusionVoices)
+            {
                 var voiceNotes = simplification.Notes.Where(x => x.Voice == voice)
                                     .OrderBy(x => x.StartSinceBeginningOfSongInTicks)
                                     .ToList()
@@ -53,7 +54,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                 // If a voice has independent melodies, extract the lower and higher ones
                 if (IsTrackPolyphonic(voiceNotes))
                 {
-                    voiceNotes = RemoveDuplicates(voiceNotes).OrderBy(x=>x.StartSinceBeginningOfSongInTicks).ToList();
+                    voiceNotes = RemoveDuplicates(voiceNotes).OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
 
                     foreach (var n in voiceNotes)
                     {
@@ -90,37 +91,63 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                     processedVoiceNotes = voiceNotes;
                     processedVoiceNotes.ForEach(x => x.SubVoice = 0);
                 }
+                processedVoiceNotes = RemoveChordNotes(processedVoiceNotes);
                 processedVoiceNotes = MakeNotesStrictlyConsecutiveWithNoGaps(processedVoiceNotes);
                 retObj = retObj.Concat(processedVoiceNotes).ToList();
+            }
+            return retObj;
+        }
+        /// <summary>
+        /// If a voice is not polyphonic and has chords we keep the higher note of the chord and remove the rest
+        /// </summary>
+        /// <param name="notes"></param>
+        /// <returns></returns>
+        public static List<Note> RemoveChordNotes(List<Note> notes)
+        {
+            var retObj = notes.Clone();
+            var notesToRemove = new HashSet<Note>();
+            var tolerance = 3;
+            foreach (var n in retObj)
+            {
+                var chordNotes = retObj.Where(x => Math.Abs(n.StartSinceBeginningOfSongInTicks - x.StartSinceBeginningOfSongInTicks) < tolerance
+                     && n.Voice == x.Voice && n.SubVoice == x.SubVoice && (n.Pitch > x.Pitch || n.Guid != x.Guid));
+                if (chordNotes.Any())
+                {
+                    notesToRemove = notesToRemove.Concat(chordNotes).ToHashSet();
+                }
+            }
+            foreach (var note in notesToRemove)
+            {
+                retObj.Remove(note);
             }
             return retObj;
         }
 
         private static List<Note> AddGuidToNotes(List<Note> notes)
         {
-            foreach(var n in notes)
-                n.Guid=Guid.NewGuid();
+            foreach (var n in notes)
+                n.Guid = Guid.NewGuid();
             return notes;
         }
 
-        private static List<Note> RemoveDuplicates (List<Note> notes)
+        private static List<Note> RemoveDuplicates(List<Note> notes)
         {
             var retObj = notes.Clone();
-            var notesToRemove=new List<Note>();
-            foreach(var n in retObj)
+            var notesToRemove = new List<Note>();
+            foreach (var n in retObj)
             {
                 var dupl = retObj.Where(x => x.StartSinceBeginningOfSongInTicks == n.StartSinceBeginningOfSongInTicks && x.SubVoice == n.SubVoice)
-                    .OrderByDescending(z=>z.Pitch)
-                    .OrderByDescending(y=>y.Volume).ToList();
+                    .OrderByDescending(z => z.Pitch)
+                    .OrderByDescending(y => y.Volume).ToList();
                 if (dupl.Count > 1)
                 {
-                    for (var i=1; i<dupl.Count; i++)
+                    for (var i = 1; i < dupl.Count; i++)
                     {
                         notesToRemove.Add(dupl[i]);
                     }
                 }
             }
-            foreach(var n in notesToRemove)
+            foreach (var n in notesToRemove)
             {
                 retObj.Remove(n);
             }
@@ -133,35 +160,27 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        private static bool IsChordsTrack(List<Note> notes)
+        public static bool IsChordsTrack(List<Note> notes)
         {
-            try
+            long totalChordsTime = 0;
+            long totalTime = notes.Sum(x => x.DurationInTicks);
+            long tolerance = 4;
+            var computedNotes = new HashSet<string>();
+            foreach (var note in notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks))
             {
-                long totalChordsTime = 0;
-                long totalTime = notes.Sum(x => x.DurationInTicks);
-                long tolerance = 4;
-                var computedNotes = new HashSet<string>();
-                foreach (var note in notes)
+                var simultaneousNotes = notes.Where(x => Math.Abs(x.StartSinceBeginningOfSongInTicks - note.StartSinceBeginningOfSongInTicks) < tolerance &&
+                     Math.Abs(x.EndSinceBeginningOfSongInTicks - note.EndSinceBeginningOfSongInTicks) < tolerance).ToList();
+                foreach (var n in simultaneousNotes)
                 {
-                    var simultaneousNotes = notes.Where(x => Math.Abs(x.StartSinceBeginningOfSongInTicks - note.StartSinceBeginningOfSongInTicks) < tolerance &&
-                         Math.Abs(x.EndSinceBeginningOfSongInTicks - note.EndSinceBeginningOfSongInTicks) < tolerance);
-                    foreach (var n in simultaneousNotes)
+                    if (simultaneousNotes.Count > 1 && !computedNotes.Contains(n.Guid.ToString()))
                     {
-                        if (!computedNotes.Contains(n.Guid.ToString()))
-                        {
-                            totalChordsTime += n.DurationInTicks;
-                            computedNotes.Add(n.Guid.ToString());
-                        }
+                        totalChordsTime += n.DurationInTicks;
+                        computedNotes.Add(n.Guid.ToString());
                     }
                 }
-                return totalChordsTime / (double)totalTime > 0.7;
             }
-            catch(Exception ex)
-            {
-
-            }
-            return false;
-        }  
+            return totalChordsTime / (double)totalTime > 0.7;
+        }
 
         /// <summary>
         /// We find the total time where 2 or more voices are played simultaneously and we compare it with the sum of the duration of all notes
@@ -169,20 +188,20 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        private static bool IsTrackPolyphonic(List<Note> notes)
+        public static bool IsTrackPolyphonic(List<Note> notes)
         {
             long totalTime = notes.Sum(x => x.DurationInTicks);
             long totalPolyphonyTime = 0;
-            foreach (var note in notes)
+            foreach (var note in notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks))
             {
                 var simultaneousNotes = notes.Where(x => x.StartSinceBeginningOfSongInTicks < note.EndSinceBeginningOfSongInTicks &&
-                  x.EndSinceBeginningOfSongInTicks > note.StartSinceBeginningOfSongInTicks).ToList();
+                  x.EndSinceBeginningOfSongInTicks > note.StartSinceBeginningOfSongInTicks && x.Guid != note.Guid).ToList();
                 totalPolyphonyTime += simultaneousNotes
                     .Sum(x => Math.Min(x.EndSinceBeginningOfSongInTicks, note.EndSinceBeginningOfSongInTicks) - Math.Max(x.StartSinceBeginningOfSongInTicks, note.StartSinceBeginningOfSongInTicks)) / 2;
             }
             return totalPolyphonyTime / (double)totalTime > 0.5;
         }
- 
+
         /// <summary>
         /// Calculates the average pitch of all the notes, and then the average of 
         /// the notes that have a pitch above the average and the average of the notes
@@ -193,17 +212,17 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         /// </summary>
         /// <param name="notes"></param>
         /// <returns>A tuple with the lower average, the total average and the higher average</returns>
-        private static (double, double,double) GetNotesAverage(List<Note> notes)
+        private static (double, double, double) GetNotesAverage(List<Note> notes)
         {
             var averagePitch = notes.Sum(x => x.Pitch * x.DurationInTicks) / notes.Sum(y => y.DurationInTicks);
             var notesOverAverage = notes.Where(x => x.Pitch > averagePitch).ToList();
             var notesUnderAverage = notes.Where(x => x.Pitch < averagePitch).ToList();
 
-            var averageHigh = notesOverAverage.Count>0?
-                notesOverAverage.Sum(x => x.Pitch * x.DurationInTicks) / notesOverAverage.Sum(y => y.DurationInTicks):
+            var averageHigh = notesOverAverage.Count > 0 ?
+                notesOverAverage.Sum(x => x.Pitch * x.DurationInTicks) / notesOverAverage.Sum(y => y.DurationInTicks) :
                 averagePitch;
-            var averageLow = notesUnderAverage.Count>0?
-                notesUnderAverage.Sum(x => x.Pitch * x.DurationInTicks) / notesUnderAverage.Sum(y => y.DurationInTicks):
+            var averageLow = notesUnderAverage.Count > 0 ?
+                notesUnderAverage.Sum(x => x.Pitch * x.DurationInTicks) / notesUnderAverage.Sum(y => y.DurationInTicks) :
                 averagePitch;
             return (averageLow, averagePitch, averageHigh);
         }
@@ -345,17 +364,26 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         /// <returns></returns>
         public static List<Note> MakeNotesStrictlyConsecutiveWithNoGaps(List<Note> notes)
         {
-            var lowerVoice = notes.Where(x=>x.SubVoice==0).ToList().Clone();
+            var lowerVoice = notes.Where(x => x.SubVoice == 0).ToList().Clone();
             var higherVoice = notes.Where(x => x.SubVoice == 1).ToList().Clone();
             for (int i = 0; i < lowerVoice.Count - 1; i++)
             {
+                if (lowerVoice[i].StartSinceBeginningOfSongInTicks== lowerVoice[i + 1].StartSinceBeginningOfSongInTicks)
+                {
+
+                }
                 lowerVoice[i].EndSinceBeginningOfSongInTicks = lowerVoice[i + 1].StartSinceBeginningOfSongInTicks;
             }
             for (int i = 0; i < higherVoice.Count - 1; i++)
             {
+
+                if (higherVoice[i].StartSinceBeginningOfSongInTicks == higherVoice[i + 1].StartSinceBeginningOfSongInTicks)
+                {
+
+                }
                 higherVoice[i].EndSinceBeginningOfSongInTicks = higherVoice[i + 1].StartSinceBeginningOfSongInTicks;
             }
-            return lowerVoice.Concat(higherVoice).OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList(); ;
+            return lowerVoice.Concat(higherVoice).OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
         }
     }
 }

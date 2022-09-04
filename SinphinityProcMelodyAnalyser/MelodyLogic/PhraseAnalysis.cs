@@ -41,14 +41,14 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
 
             return extractePhrasesSoFar;
         }
-        private static List<ExtractedPhrase> AddEquivalences(List<ExtractedPhrase> extractePhrasesSoFar)
+        public static List<ExtractedPhrase> AddEquivalences(List<ExtractedPhrase> extractePhrasesSoFar)
         {
             var maxPitchDistance = 0.4;
             var maxMetricsDistance = 0.4;
             foreach (var p in extractePhrasesSoFar)
             {
                 p.Equivalences = extractePhrasesSoFar.Where(x => (PhraseDistance.GetMetricDistance(p.Phrase, x.Phrase) < maxMetricsDistance) &&
-                    (PhraseDistance.GetPitchDistance(p.Phrase, x.Phrase) < maxPitchDistance))
+                    (PhraseDistance.GetPitchDistance(p.Phrase, x.Phrase) < maxPitchDistance) && p != x)
                                 .Select(y => $"{y.Phrase.MetricsAsString}/{y.Phrase.PitchesAsString}").ToList();
             }
             return extractePhrasesSoFar;

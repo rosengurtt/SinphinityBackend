@@ -17,7 +17,11 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             edgesSoFar = GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Both);
             edgesSoFar = GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Metrics);
             edgesSoFar = GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Pitches);
-            return GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.PitchDirection);
+            edgesSoFar = GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.PitchDirection);
+            edgesSoFar = GetRepeatingNonContiguousPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Both);
+            edgesSoFar = GetRepeatingNonContiguousPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Metrics);
+            edgesSoFar = GetRepeatingNonContiguousPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Pitches);
+            return GetRepeatingNonContiguousPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.PitchDirection);
         }
         public static HashSet<long> GetRepeatingPatternsOfType(List<Note> notes, HashSet<long> edgesSoFar, PhraseTypeEnum type)
         {
@@ -33,10 +37,25 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             return edgesSoFar.Union(edgesToAdd).ToHashSet();
         }
 
+      
+        public static HashSet<long> GetRepeatingNonContiguousPatternsOfType(List<Note> notes, HashSet<long> edgesSoFar, PhraseTypeEnum type)
+        {
+            var edges = edgesSoFar.ToList().OrderBy(x => x).ToList();
+            var edgesToAdd = new HashSet<long>();
+            for (var i = 0; i < edges.Count - 1; i++)
+            {
+                var intervalNotes = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= edges[i] && x.StartSinceBeginningOfSongInTicks < edges[i + 1]).ToList();
+                var newEdges = GetNonContiguousPatterns(intervalNotes, type);
+                edgesToAdd = edgesToAdd.Union(newEdges).ToHashSet();
+
+            }
+            return edgesSoFar.Union(edgesToAdd).ToHashSet();
+        }
+
 
         /// <summary>
-        /// Given a group of consecutive notes (or metric intervals or pitches, depending on the parameter "type"), looks for a subset of them that consist of a repeating pattern
-        /// and returns the start and end of the repeating pattern section
+        /// Given a group of consecutive notes (or metric intervals or pitches, depending on the parameter "type"), looks for a subset of them 
+        /// that consist of a repeating pattern and returns the start and end of the repeating pattern section
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
@@ -56,36 +75,15 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             // we use this variable to avoid testing the same value twice
             var patternsAlreadyTested = new List<string>();
 
-            // pat is a regex pattern to search for i consecutive notes
+            // we use regex pattern matching so we convert the notes to a string
             string asString = GetNotesAsString(notes, type);
 
 
             for (var i = 1; i < notes.Count / 2; i++)
             {
-                // pat is a regex pattern to search for i consecutive notes
-                string pat;
-                char noteSeparator;
-                switch (type)
-                {
-                    case PhraseTypeEnum.Both:
-                        pat = string.Concat(Enumerable.Repeat("[0-9]+,[-]?[0-9]+;", i));
-                        noteSeparator = ';';
-                        break;
-                    case PhraseTypeEnum.Metrics:
-                        pat = string.Concat(Enumerable.Repeat("[0-9]+,", i));
-                        noteSeparator = ',';
-                        break;
-                    case PhraseTypeEnum.Pitches:
-                        pat = string.Concat(Enumerable.Repeat("[-]?[0-9]+,", i));
-                        noteSeparator = ',';
-                        break;
-                    case PhraseTypeEnum.PitchDirection:
-                        pat = string.Concat(Enumerable.Repeat("[-+0],", i));
-                        noteSeparator = ',';
-                        break;
-                    default:
-                        throw new Exception("Que mierda me mandaron?");
-                }
+                // pat is a regex pattern to search for groups of i consecutive notes
+                (var pat, var noteSeparator) = GetRegexPatternAndSeparatorForTypeAndLength(type, i);
+
                 foreach (Match match in Regex.Matches(asString, pat))
                 {
                     // We add this test to avoid checking twice the same thing. the Regex.Matches doesn't return unique values
@@ -98,6 +96,8 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                     {
                         // pat2 is the sequence of i consecutive notes repeated j times
                         // if the next "if" is true, it means the sequence "match.value" appear repeated j times
+                        var pattern = match.Value;
+                        var patternLength = pattern.Count(x => x == noteSeparator);
                         var pat2 = string.Concat(Enumerable.Repeat(match.Value, j));
 
                         if (asString.Contains(pat2))
@@ -126,7 +126,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                                 var patternDuration = orderedNotes[notesBeforeStart + i].EndSinceBeginningOfSongInTicks - orderedNotes[notesBeforeStart].StartSinceBeginningOfSongInTicks;
                                 var patternSectionDuration = endOfPatternSection - beginningOfPatternSection;
                                 // break at the beginning of each repetition if we are going to have a phrase that is too long or if the pattern is repeated too many times
-                                if (patternDuration > 4 * 96 || patternSectionDuration > 12 * 96 || j > 4)
+                                if (patternDuration > 4 * 96 || patternSectionDuration > 12 * 96 || (j > 4 && patternLength > 3))
                                 {
                                     for (var m = 1; m < j; m++)
                                     {
@@ -141,6 +141,30 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                 }
             }
             return retObj;
+        }
+
+        /// <summary>
+        /// Returns the regex pattern to use to look for repeating patterns of a specific type and a specific length
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private static (string,char) GetRegexPatternAndSeparatorForTypeAndLength(PhraseTypeEnum type, int i)
+        {
+            switch (type)
+            {
+                case PhraseTypeEnum.Both:
+                    return (string.Concat(Enumerable.Repeat("[0-9]+,[-]?[0-9]+;", i)), ';');
+                case PhraseTypeEnum.Metrics:
+                    return (string.Concat(Enumerable.Repeat("[0-9]+,", i)), ',');
+                case PhraseTypeEnum.Pitches:
+                    return (string.Concat(Enumerable.Repeat("[-]?[0-9]+,", i)), ',');
+                case PhraseTypeEnum.PitchDirection:
+                    return (string.Concat(Enumerable.Repeat("[-+0],", i)), ',');
+                default:
+                    throw new Exception("Que mierda me mandaron?");
+            }
         }
 
 
@@ -212,5 +236,87 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             return (difference + 1) & Math.Sign(pitch1 - pitch2);
         }
 
+        /// <summary>
+        /// When after applying all the other crieteria to break a sequences of notes in smaller pieces we still have long sequences,
+        /// we look for sections that appear in different parts, but they are not contiguous (we already looked for a pattern repeting
+        /// contiguosuly). We look for the longest repeating pattern and we break where the pattern starts and ends
+        /// </summary>
+        public static HashSet<long> GetNonContiguousPatterns(List<Note> notes, PhraseTypeEnum type)
+        {
+            var retObj = new HashSet<long>();
+            var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
+            var totalNotes = notes.Count;
+            var intervalDurationInTicks = orderedNotes.Max(x => x.EndSinceBeginningOfSongInTicks) - orderedNotes.Min(y => y.StartSinceBeginningOfSongInTicks);
+
+            // to search for patterns we expect that we have at least 16 notes
+            // we dont't want to produce short intervals with few notes, we check the product duration * qty notes
+            if (totalNotes < 16 || intervalDurationInTicks * totalNotes < 16 * 384)
+                return retObj;
+
+            // if the group of notes consists of a repeating contiguous pattern we don't want to split it
+            if (DoesPhraseConsistOfARepeatingContiguousPattern(notes, type))
+                return retObj;
+
+            // we use this variable to avoid testing the same value twice
+            var patternsAlreadyTested = new List<string>();
+
+            // we use regex pattern matching so we convert the notes to a string
+            string asString = GetNotesAsString(notes, type);
+
+
+            for (var i = notes.Count / 2; i > 3; i--)
+            {
+                // pat is a regex pattern to search for groups of i consecutive notes
+                (var pat, var noteSeparator) = GetRegexPatternAndSeparatorForTypeAndLength(type, i);
+
+
+                foreach (Match match in Regex.Matches(asString, pat))
+                {
+                    // We add this test to avoid checking twice the same thing. the Regex.Matches doesn't return unique values
+                    if (patternsAlreadyTested.Contains(match.Value))
+                        continue;
+                    patternsAlreadyTested.Add(match.Value);
+
+                    // match is any sequence of i consecutive notes, we now try to see if this sequence happens more than once
+                    // we need to escape the symbols + and - because they have special meanings.
+                    var patito = match.Value.Replace("+", "\\+").Replace("-", "\\-");
+                    var matches = Regex.Matches(asString, patito);
+                    if (matches.Count == 1)
+                        continue;
+
+                    // if we are here is because we found a sequence of i notes that happens at least twice
+                    foreach (Match m in matches)
+                    {
+                        // startCharacterIndex is the index in the asString string where the pattern starts
+                        var startCharacterIndex = m.Index;
+                        // startingNoteIndex is the index in the sequence of notes where the pattern starts
+                        var startingNoteIndex = asString.Substring(0, startCharacterIndex).Split(noteSeparator).Count();
+                        // we add to retObj the tick where the pattern starts
+                        retObj.Add(notes[startingNoteIndex].StartSinceBeginningOfSongInTicks);
+
+                        // we now add the place where the pattern ends
+                        if (startingNoteIndex + i + 1 < notes.Count)
+                            retObj.Add(notes[startingNoteIndex + i + 1].StartSinceBeginningOfSongInTicks);
+                    }
+                    return retObj;
+                }
+            }
+            return retObj;
+        }
+
+        public static bool DoesPhraseConsistOfARepeatingContiguousPattern(List<Note> notes, PhraseTypeEnum type)
+        {
+            var phrase = new Phrase(notes);
+            switch (type) {
+                case PhraseTypeEnum.Pitches:
+                    return phrase.PitchesAsString.Contains("*") == true;
+                case PhraseTypeEnum.Metrics:
+                    return phrase.MetricsAsString.Contains("*") == true;
+                case PhraseTypeEnum.Both:
+                    return phrase.PitchesAsString.Contains("*") == true && phrase.MetricsAsString.Contains("*") == true;
+                default:
+                    return false;
+            }
+        }
     }
 }

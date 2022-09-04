@@ -42,10 +42,9 @@ namespace SinphinityProcMidi.Midi
         {
             var notesObj = new List<Note>();
             var midiFile = MidiFile.Read(base64encodedMidiFile);
-            var soret = GetNoteOns(midiFile);
             long songDuration = GetSongDurationInTicks(base64encodedMidiFile);
             var isSustainPedalOn = false;
-            var notesOnBecauseOfSustainPedal = new List<Note>();
+            var notesOnBecauseOfSustainPedal = new List<(byte, byte)>();
             var instrumentOfChannel = new byte[16];
 
             short chunkNo = -1;
@@ -77,8 +76,8 @@ namespace SinphinityProcMidi.Midi
                         isSustainPedalOn = false;
                         foreach (var n in notesOnBecauseOfSustainPedal)
                         {
-                            ProcessNoteOff(n.Pitch, currentNotes, notesObj, currentTick,
-                                n.Instrument, (byte)chunkNo);
+                            ProcessNoteOff(n.Item1, currentNotes, notesObj, currentTick,
+                                n.Item2, (byte)chunkNo);
                         }
                         continue;
                     }
@@ -94,11 +93,18 @@ namespace SinphinityProcMidi.Midi
                         }
                         continue;
                     }
-                    if (eventito is NoteOffEvent && isSustainPedalOn == false)
+                    if (eventito is NoteOffEvent)
                     {
                         NoteOffEvent noteOffEvent = eventito as NoteOffEvent;
-                        ProcessNoteOff(noteOffEvent.NoteNumber, currentNotes, notesObj, currentTick,
-                            instrumentOfChannel[noteOffEvent.Channel], (byte)chunkNo);
+                        if (isSustainPedalOn)
+                        {
+                            notesOnBecauseOfSustainPedal.Add((noteOffEvent.NoteNumber, instrumentOfChannel[noteOffEvent.Channel]));
+                        }
+                        else
+                        {
+                            ProcessNoteOff(noteOffEvent.NoteNumber, currentNotes, notesObj, currentTick,
+                                instrumentOfChannel[noteOffEvent.Channel], (byte)chunkNo);
+                        }
                         continue;
                     }
                     if (eventito is PitchBendEvent)

@@ -31,8 +31,8 @@ namespace Sinphinity.Models
         public Phrase(string metricsAsString, string pitchesAsString)
         {
             Guid = Guid.NewGuid();
-            MetricsAsString = metricsAsString;
-            PitchesAsString = pitchesAsString;
+            MetricsAsString = metricsAsString.ExtractPattern();
+            PitchesAsString = pitchesAsString.ExtractPattern();
             Equivalences=new List<string>();
         }
         public Phrase(List<Note> notes, bool dontFixStrangeDurations = false)
@@ -158,7 +158,13 @@ namespace Sinphinity.Models
         /// We only care about pitches for equivalences. the metrics part must be the same in the 2 phrases
         /// </summary>
         public List<string> Equivalences { get; set; }
-        public long DurationInTicks { get; set; }
+        public long DurationInTicks {
+            get
+            {
+                var expanded = MetricsAsString.ExpandPattern();
+                return expanded.Sum(x => x);
+            }
+        }
         public int NumberOfNotes {
             get
             {
