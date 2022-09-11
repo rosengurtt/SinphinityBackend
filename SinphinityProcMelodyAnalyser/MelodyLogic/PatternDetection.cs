@@ -14,6 +14,10 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         /// <returns></returns>
         public static HashSet<long> GetRepeatingPatterns(List<Note> notes, HashSet<long> edgesSoFar)
         {
+            var newEdges = GetNonContiguousPatterns(notes, PhraseTypeEnum.PitchDirectionAndMetrics, 7, edgesSoFar);
+            if (newEdges != null && newEdges.Count > 0)
+                edgesSoFar = edgesSoFar.Union(newEdges).ToHashSet();
+
             edgesSoFar = GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Both);
             edgesSoFar = GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Metrics);
             edgesSoFar = GetRepeatingPatternsOfType(notes, edgesSoFar, PhraseTypeEnum.Pitches);
@@ -162,6 +166,8 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                     return (string.Concat(Enumerable.Repeat("[-]?[0-9]+,", i)), ',');
                 case PhraseTypeEnum.PitchDirection:
                     return (string.Concat(Enumerable.Repeat("[-+0],", i)), ',');
+                case PhraseTypeEnum.PitchDirectionAndMetrics:
+                    return (string.Concat(Enumerable.Repeat("[0-9]+,[-+0];", i)), ';');
                 default:
                     throw new Exception("Que mierda me mandaron?");
             }
@@ -174,7 +180,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
-        private static string GetNotesAsString(List<Note> notes, PhraseTypeEnum type)
+        public static string GetNotesAsString(List<Note> notes, PhraseTypeEnum type)
         {
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
             var asString = "";
@@ -184,7 +190,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                     for (var i = 0; i < orderedNotes.Count - 1; i++)
                     {
                         asString += $"{orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks}," +
-                            $"{DiscretizedPitchDifference(orderedNotes[i + 1].Pitch , orderedNotes[i].Pitch)};";
+                            $"{orderedNotes[i + 1].Pitch - orderedNotes[i].Pitch};";
                     }
                     return asString;
                 case PhraseTypeEnum.Metrics:
@@ -193,13 +199,13 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                     // for pitches, we don't look for exact matches, we want a tolerance of 1 semitone
                     for (var i = 0; i < orderedNotes.Count - 1; i++)
                     {
-                        asString += DiscretizedPitchDifference(orderedNotes[i + 1].Pitch, orderedNotes[i].Pitch).ToString() + ",";
+                        asString += (orderedNotes[i + 1].Pitch - orderedNotes[i].Pitch).ToString() + ",";
                     }
                     return asString;
                 case PhraseTypeEnum.PitchDirection:
-                    for (var j = 1; j < orderedNotes.Count; j++)
+                    for (var i = 0; i < orderedNotes.Count-1; i++)
                     {
-                        var value = Math.Sign(orderedNotes[j].Pitch - orderedNotes[j - 1].Pitch);
+                        var value = Math.Sign(orderedNotes[i+1].Pitch - orderedNotes[i].Pitch);
                         switch (value)
                         {
                             case -1:
@@ -216,32 +222,38 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                         }
                     }
                     return asString;
+                case PhraseTypeEnum.PitchDirectionAndMetrics:
+                    for (var i = 0; i < orderedNotes.Count - 1; i++)
+                    {
+                        var value = Math.Sign(orderedNotes[i+1].Pitch - orderedNotes[i].Pitch);
+                        switch (value)
+                        {
+                            case -1:
+                                asString += $"{orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks},-;";
+                                break;
+                            case 0:
+                                asString += $"{orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks},0;";
+                                break;
+                            case 1:
+                                asString += $"{orderedNotes[i + 1].StartSinceBeginningOfSongInTicks - orderedNotes[i].StartSinceBeginningOfSongInTicks},+;";
+                                break;
+                            default:
+                                throw new Exception("Que mierda me mandaron?");
+                        }
+                    }
+                    return asString;
                 default:
                     throw new Exception("Que mierda me mandaron?");
             }
         }
-        /// <summary>
-        /// We want to have some tolerance when comparing pitches, so we can consider the interval
-        /// C-D to be the same as E-F, even when C-D is 2 semitones and E-F is one semitone
-        /// This function "discretizes" the difference by returning the nearest larger even number to the actual difference between the 2 pitches
-        /// </summary>
-        /// <param name="pitch1"></param>
-        /// <param name="pitch2"></param>
-        /// <returns></returns>
-        private static int DiscretizedPitchDifference(int pitch1, int pitch2)
-        {
-            var difference = Math.Abs(pitch1 - pitch2);
 
-            if (difference % 2 == 0) return pitch1 - pitch2;
-            return (difference + 1) & Math.Sign(pitch1 - pitch2);
-        }
 
         /// <summary>
         /// When after applying all the other crieteria to break a sequences of notes in smaller pieces we still have long sequences,
         /// we look for sections that appear in different parts, but they are not contiguous (we already looked for a pattern repeting
         /// contiguosuly). We look for the longest repeating pattern and we break where the pattern starts and ends
         /// </summary>
-        public static HashSet<long> GetNonContiguousPatterns(List<Note> notes, PhraseTypeEnum type)
+        public static HashSet<long> GetNonContiguousPatterns(List<Note> notes, PhraseTypeEnum type, int minPatternLength = 4, HashSet<long> edgesSoFar = null)
         {
             var retObj = new HashSet<long>();
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
@@ -263,8 +275,9 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             // we use regex pattern matching so we convert the notes to a string
             string asString = GetNotesAsString(notes, type);
 
+            var maxPatternLengthToSearch = Math.Min(25, notes.Count / 2);
 
-            for (var i = notes.Count / 2; i > 3; i--)
+            for (var i = maxPatternLengthToSearch; i >= minPatternLength; i--)
             {
                 // pat is a regex pattern to search for groups of i consecutive notes
                 (var pat, var noteSeparator) = GetRegexPatternAndSeparatorForTypeAndLength(type, i);
@@ -291,18 +304,34 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                         var startCharacterIndex = m.Index;
                         // startingNoteIndex is the index in the sequence of notes where the pattern starts
                         var startingNoteIndex = asString.Substring(0, startCharacterIndex).Split(noteSeparator).Count();
-                        // we add to retObj the tick where the pattern starts
-                        retObj.Add(notes[startingNoteIndex].StartSinceBeginningOfSongInTicks);
 
-                        // we now add the place where the pattern ends
-                        if (startingNoteIndex + i + 1 < notes.Count)
-                            retObj.Add(notes[startingNoteIndex + i + 1].StartSinceBeginningOfSongInTicks);
+                        var patternStartTick = notes[startingNoteIndex].StartSinceBeginningOfSongInTicks;
+                        var pattternEndTick = startingNoteIndex + i + 1 < notes.Count ?
+                                    notes[startingNoteIndex + i + 1].StartSinceBeginningOfSongInTicks :
+                                    notes[notes.Count - 1].EndSinceBeginningOfSongInTicks;
+
+                        // Check that there isn't an edge inside the pattern
+                        var allEdges = edgesSoFar != null ? edgesSoFar.Concat(retObj).ToHashSet() : retObj;
+                        if (edgesSoFar != null && allEdges.Where(x => x > patternStartTick && x < pattternEndTick).Any())
+                            continue;
+
+                        // Check that we don't create short intervals
+                        var edgeBefore = allEdges.Where(x => x < patternStartTick).OrderByDescending(y => y).FirstOrDefault();
+                        var edgeAfter = allEdges.Where(x => x > pattternEndTick).Any() ?
+                                    allEdges.Where(x => x > pattternEndTick).OrderBy(y => y).FirstOrDefault() :
+                                    notes[notes.Count - 1].EndSinceBeginningOfSongInTicks;
+                        var minLength = 192;
+                        if (patternStartTick - edgeBefore < minLength || edgeAfter - pattternEndTick < minLength)
+                            continue;
+
+                        // Add start and end of the pattern to hash of edges
+                        retObj.Add(patternStartTick);
+                        retObj.Add(pattternEndTick);
                     }
-                    return retObj;
                 }
             }
             return retObj;
-        }
+        } 
 
         public static bool DoesPhraseConsistOfARepeatingContiguousPattern(List<Note> notes, PhraseTypeEnum type)
         {

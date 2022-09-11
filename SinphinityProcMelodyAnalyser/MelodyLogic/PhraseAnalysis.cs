@@ -41,15 +41,26 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
 
             return extractePhrasesSoFar;
         }
+
+        /// <summary>
+        /// 2 different phrases may be actually the same phrase but played in different parts of a scale, so the relative pitches will not
+        /// match exactly. For example C3E3F3 has relative pitches 4,1, while D3F3G3 has relative pitches 3,2, but they are essentially
+        /// the same thing
+        /// We calculate the distance in pitches and the distance in metrics, and the sum of th2 2 has to be less than 
+        /// maxPitchDistance + maxMetricsDistance
+        /// </summary>
+        /// <param name="extractePhrasesSoFar"></param>
+        /// <returns></returns>
         public static List<ExtractedPhrase> AddEquivalences(List<ExtractedPhrase> extractePhrasesSoFar)
         {
             var maxPitchDistance = 0.4;
             var maxMetricsDistance = 0.4;
             foreach (var p in extractePhrasesSoFar)
             {
-                p.Equivalences = extractePhrasesSoFar.Where(x => (PhraseDistance.GetMetricDistance(p.Phrase, x.Phrase) < maxMetricsDistance) &&
-                    (PhraseDistance.GetPitchDistance(p.Phrase, x.Phrase) < maxPitchDistance) && p != x)
-                                .Select(y => $"{y.Phrase.MetricsAsString}/{y.Phrase.PitchesAsString}").ToList();
+                p.Equivalences = extractePhrasesSoFar.Where(x => 
+                    (PhraseDistance.GetMetricDistance(p.Phrase, x.Phrase) + PhraseDistance.GetPitchDistance(p.Phrase, x.Phrase)) <= (maxMetricsDistance + maxPitchDistance) &&
+                    p != x)
+                    .Select(y => $"{y.Phrase.MetricsAsString}/{y.Phrase.PitchesAsString}").ToList();
             }
             return extractePhrasesSoFar;
         }

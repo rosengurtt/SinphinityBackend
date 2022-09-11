@@ -45,7 +45,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                 voiceNotes = DiscretizeTiming(voiceNotes);
                 var processedVoiceNotes = new List<Note>();
 
-                if (voiceNotes.Count < 2)
+                if (voiceNotes.Count < 10)
                     continue;
                 // We don't extract melodies from tracks that play chords
                 if (IsChordsTrack(voiceNotes))
@@ -214,6 +214,9 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         /// <returns>A tuple with the lower average, the total average and the higher average</returns>
         private static (double, double, double) GetNotesAverage(List<Note> notes)
         {
+            if (notes.Sum(y => y.DurationInTicks) == 0){
+
+            }
             var averagePitch = notes.Sum(x => x.Pitch * x.DurationInTicks) / notes.Sum(y => y.DurationInTicks);
             var notesOverAverage = notes.Where(x => x.Pitch > averagePitch).ToList();
             var notesUnderAverage = notes.Where(x => x.Pitch < averagePitch).ToList();

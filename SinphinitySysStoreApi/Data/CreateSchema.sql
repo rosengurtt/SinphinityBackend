@@ -1,6 +1,7 @@
 --------------------------------------------
 /* Remove all foreign keys */
 --------------------------------------------
+
 IF (OBJECT_ID('dbo.[FK_Band_Style_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.Bands DROP CONSTRAINT FK_Band_Style_Id
 	
@@ -21,13 +22,22 @@ IF (OBJECT_ID('dbo.[FK_PhrasesOccurrences_Songs_Id]', 'F') IS NOT NULL)
 IF (OBJECT_ID('dbo.[FK_PhrasesOccurrences_Phrases_Id]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhrasesOccurrences DROP CONSTRAINT FK_PhrasesOccurrences_Phrases_Id
 	
+IF (OBJECT_ID('dbo.[FK_PhraseSong_Songs]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhraseSong DROP CONSTRAINT FK_PhraseSong_Songs
+
 IF (OBJECT_ID('dbo.[FK_PhraseSong_Phrases]', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhraseSong DROP CONSTRAINT FK_PhraseSong_Phrases
-	
-IF (OBJECT_ID('dbo.[FK_BandPhrase_Phrases]', 'F') IS NOT NULL)
+
+IF (OBJECT_ID('dbo.FK_BandPhrase_Phrases', 'F') IS NOT NULL)
 	ALTER TABLE dbo.BandPhrase DROP CONSTRAINT FK_BandPhrase_Phrases
 	
-IF (OBJECT_ID('dbo.[FK_PhraseStyle_Phrases]', 'F') IS NOT NULL)
+IF (OBJECT_ID('dbo.[FK_BandPhrase_Bands]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.BandPhrase DROP CONSTRAINT FK_BandPhrase_Bands
+
+IF (OBJECT_ID('dbo.[FK_PhraseStyle_Styles]', 'F') IS NOT NULL)
+	ALTER TABLE dbo.PhraseStyle DROP CONSTRAINT FK_PhraseStyle_Styles	
+
+IF (OBJECT_ID('dbo.FK_PhraseStyle_Phrases', 'F') IS NOT NULL)
 	ALTER TABLE dbo.PhraseStyle DROP CONSTRAINT FK_PhraseStyle_Phrases
 	
 IF (OBJECT_ID('dbo.[FK_PhrasesLinks_Phrases1]', 'F') IS NOT NULL)
@@ -206,8 +216,8 @@ CREATE TABLE PhraseSong(
 	PhrasesId bigint NOT NULL,
 	SongsId bigint NOT NULL,
     CONSTRAINT PK_PhraseSong PRIMARY KEY NONCLUSTERED (PhrasesId, SongsId),
-    CONSTRAINT [FK_PhraseSong_Phrases] FOREIGN KEY (PhrasesId) REFERENCES Phrases (Id) ON DELETE CASCADE,
-    CONSTRAINT [FK_PhraseSong_Songs] FOREIGN KEY (SongsId) REFERENCES Songs (Id) ON DELETE CASCADE
+    CONSTRAINT FK_PhraseSong_Phrases FOREIGN KEY (PhrasesId) REFERENCES Phrases (Id) ON DELETE CASCADE,
+    CONSTRAINT FK_PhraseSong_Songs FOREIGN KEY (SongsId) REFERENCES Songs (Id) ON DELETE CASCADE
 )
 
 IF OBJECT_ID('dbo.BandPhrase', 'U') IS NOT NULL 
@@ -217,8 +227,8 @@ CREATE TABLE BandPhrase(
 	PhrasesId bigint NOT NULL,
 	BandsId bigint NOT NULL,
     CONSTRAINT PK_PhraseBand PRIMARY KEY NONCLUSTERED (PhrasesId, BandsId),
-    CONSTRAINT [FK_BandPhrase_Phrases] FOREIGN KEY (PhrasesId) REFERENCES Phrases (Id) ON DELETE CASCADE,
-    CONSTRAINT [FK_BandPhrase_Bands] FOREIGN KEY (BandsId) REFERENCES Bands (Id) ON DELETE CASCADE
+    CONSTRAINT FK_BandPhrase_Phrases FOREIGN KEY (PhrasesId) REFERENCES Phrases (Id) ON DELETE CASCADE,
+    CONSTRAINT FK_BandPhrase_Bands FOREIGN KEY (BandsId) REFERENCES Bands (Id) ON DELETE CASCADE
 )
 
 IF OBJECT_ID('dbo.PhraseStyle', 'U') IS NOT NULL 
@@ -228,7 +238,7 @@ CREATE TABLE PhraseStyle(
 	PhrasesId bigint NOT NULL,
 	StylesId bigint NOT NULL,
     CONSTRAINT PK_PhraseStyle PRIMARY KEY NONCLUSTERED (PhrasesId, StylesId),
-    CONSTRAINT [FK_PhraseStyle_Phrases] FOREIGN KEY (PhrasesId) REFERENCES Phrases (Id) ON DELETE CASCADE,
+    CONSTRAINT FK_PhraseStyle_Phrases FOREIGN KEY (PhrasesId) REFERENCES Phrases (Id) ON DELETE CASCADE,
     CONSTRAINT [FK_PhraseStyle_Styles] FOREIGN KEY (StylesId) REFERENCES Styles (Id) ON DELETE CASCADE
 )
 

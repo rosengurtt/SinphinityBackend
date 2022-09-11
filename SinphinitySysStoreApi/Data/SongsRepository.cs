@@ -58,7 +58,7 @@ namespace SinphinitySysStore.Data
                 .Include(m => m.Band)
                 .Where(y => y.Id == songId)
                 .FirstOrDefaultAsync();
-            var songData = await _dbContext.SongsData
+            var songData = await _dbContext.SongData
                 .Where(y => y.SongId == songId)
                 .FirstOrDefaultAsync();
             var song = songEntity?.AsSong(songData);
@@ -81,7 +81,7 @@ namespace SinphinitySysStore.Data
                 await _dbContext.SaveChangesAsync();
                 var songData = new SongData(song);
                 songData.SongId = songRecord.Id;
-                _dbContext.SongsData.Add(songData);
+                _dbContext.SongData.Add(songData);
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception fdsdsfsad)
@@ -94,7 +94,7 @@ namespace SinphinitySysStore.Data
         public async Task<Sinphinity.Models.Song> UpdateSong(Sinphinity.Models.Song song)
         {
             var currentSong = await _dbContext.Songs.Where(x => x.Id == song.Id).FirstOrDefaultAsync();
-            var currentSongData= await _dbContext.SongsData.Where(x => x.SongId == song.Id).FirstOrDefaultAsync();
+            var currentSongData= await _dbContext.SongData.Where(x => x.SongId == song.Id).FirstOrDefaultAsync();
             if (currentSong == null || currentSongData == null) throw new SongDoesntExistException();
 
             currentSong.ArePhrasesExtracted = song.ArePhrasesExtracted;
@@ -111,7 +111,7 @@ namespace SinphinitySysStore.Data
             try
             {
                 _dbContext.Songs.Update(currentSong);
-                _dbContext.SongsData.Update(currentSongData);
+                _dbContext.SongData.Update(currentSongData);
                 await _dbContext.SaveChangesAsync();
                 return song;
 

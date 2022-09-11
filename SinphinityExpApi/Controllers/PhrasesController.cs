@@ -63,6 +63,8 @@ namespace SinphinityExpApi.Controllers
                 {
                     foreach (var s in songsBatch.items)
                     {
+                        if (s.ArePhrasesExtracted || !s.IsSongProcessed || !s.IsMidiCorrect || s.CantBeProcessed)
+                            continue;
                         try
                         {
                             Log.Information($"{alca} - Start with song: {s.Name}");

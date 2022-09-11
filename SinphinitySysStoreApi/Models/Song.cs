@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SinphinitySysStore.Models
 {
@@ -18,6 +19,7 @@ namespace SinphinitySysStore.Models
             StyleId = song.Style.Id;
             MidiStats = new MidiStatsEntity(song.MidiStats, song);
             AverageTempoInBeatsPerMinute = song.AverageTempoInBeatsPerMinute;
+            MidiBase64Encoded = song.MidiBase64Encoded;
         }
 
         public long Id { get; set; }
@@ -26,6 +28,8 @@ namespace SinphinitySysStore.Models
         public bool CantBeProcessed { get; set; }
         public bool ArePhrasesExtracted { get; set; }
         public bool IsMidiCorrect { get; set; }
+        [NotMapped]
+        public string MidiBase64Encoded { get; set; }
 
         public long BandId { get; set; }
         public Band Band { get; set; }
@@ -52,6 +56,7 @@ namespace SinphinitySysStore.Models
                 Band = this.Band.AsBand(),
                 Style = this.Style.AsStyle(),
                 MidiStats = this.MidiStats?.AsMidiStats(),
+                MidiBase64Encoded=this.MidiBase64Encoded,
                 SongSimplifications = new List<Sinphinity.Models.SongSimplification>()
 
             };
