@@ -1,6 +1,7 @@
 ﻿
 using Newtonsoft.Json;
 using Sinphinity.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SinphinitySysStore.Models
 {
@@ -8,18 +9,20 @@ namespace SinphinitySysStore.Models
     {
         public Phrase() { }
 
-        public Phrase(ExtractedPhrase extractedPhrase)
+        public Phrase(Sinphinity.Models.Phrase p, List<string> equivalences)
         {
-            MetricsAsString = extractedPhrase.Phrase.MetricsAsString;
-            MetricsAccumAsString = extractedPhrase.Phrase.MetricsAccumAsString;
-            PitchesAsString = extractedPhrase.Phrase.PitchesAsString;
-            PitchesAccumAsString = extractedPhrase.Phrase.PitchesAccumAsString;
-            DurationInTicks = extractedPhrase.Phrase.DurationInTicks;
-            NumberOfNotes = extractedPhrase.Phrase.NumberOfNotes;
-            Range = extractedPhrase.Phrase.Range;
-            IsMonotone = extractedPhrase.Phrase.IsMonotone;
-            Step = extractedPhrase.Phrase.Step;
-            Equivalences = JsonConvert.SerializeObject(extractedPhrase.Equivalences);
+            MetricsAsString = p.MetricsAsString;
+            MetricsAccumAsString = p.MetricsAccumAsString;
+            PitchesAsString = p.PitchesAsString;
+            PitchesAccumAsString = p.PitchesAccumAsString;
+            DurationInTicks = p.DurationInTicks;
+            NumberOfNotes = p.NumberOfNotes;
+            Range = p.Range;
+            IsMonotone = p.IsMonotone;
+            Step = p.Step;
+            Equivalences = JsonConvert.SerializeObject(equivalences);
+            SkeletonMetricsAsString = p.SkeletonMetricsAsString;
+            SkeletonPitchesAsString= p.SkeletonPitchesAsString;
         }
      
 
@@ -27,8 +30,12 @@ namespace SinphinitySysStore.Models
         public long Id { get; set; }
         public string MetricsAsString { get; set; }
         public string MetricsAccumAsString { get; set; }
+
+        public string SkeletonMetricsAsString { get; set; }
+
         public string PitchesAsString { get; set; }
         public string PitchesAccumAsString { get; set; }
+        public string SkeletonPitchesAsString { get; set; }
 
         public string Equivalences{ get; set; }
         public long DurationInTicks { get; set; }

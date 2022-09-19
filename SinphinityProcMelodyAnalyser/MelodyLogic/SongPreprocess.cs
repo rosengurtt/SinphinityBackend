@@ -27,18 +27,16 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         /// </summary>
         /// <param name="song"></param>
         /// <returns></returns>
-        public static List<Note> ExtractMelodies(Song song)
+        public static List<Note> ExtractMelodies(List<Note> notes)
         {
             var retObj = new List<Note>();
-            var simplification = song.SongSimplifications[0];
-            simplification.Notes = AddGuidToNotes(simplification.Notes);
-            long tolerance = 4;
-            var nonPercusionVoices = simplification.Notes.NonPercussionVoices();
+            notes = AddGuidToNotes(notes);
+            var nonPercusionVoices = notes.NonPercussionVoices();
 
 
             foreach (var voice in nonPercusionVoices)
             {
-                var voiceNotes = simplification.Notes.Where(x => x.Voice == voice)
+                var voiceNotes = notes.Where(x => x.Voice == voice)
                                     .OrderBy(x => x.StartSinceBeginningOfSongInTicks)
                                     .ToList()
                                     .Clone();
@@ -51,41 +49,10 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                 if (IsChordsTrack(voiceNotes))
                     continue;
 
+                voiceNotes = RemoveDuplicates(voiceNotes).OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
                 // If a voice has independent melodies, extract the lower and higher ones
                 if (IsTrackPolyphonic(voiceNotes))
-                {
-                    voiceNotes = RemoveDuplicates(voiceNotes).OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
-
-                    foreach (var n in voiceNotes)
-                    {
-                        var neighboors = GetNeighboorsOfNote(voiceNotes, n);
-                        (var averageLow, var average, var averageHigh) = GetNotesAverage(neighboors);
-                        if (Math.Abs(n.Pitch - averageLow) < Math.Abs(n.Pitch - averageHigh))
-                        {
-                            // if there are notes (that are not ornaments) starting aprox at the same time with a higher pitch, ignore this note, it belongs to a middle voice
-                            if (voiceNotes.Where(x => Math.Abs(x.StartSinceBeginningOfSongInTicks - n.StartSinceBeginningOfSongInTicks) < tolerance &&
-                    x.DurationInTicks > 12 && n.DurationInTicks > 12 && n.Pitch > x.Pitch).Any())
-                                continue;
-                            else
-                            {
-                                n.SubVoice = 0;
-                                processedVoiceNotes.Add(n);
-                            }
-                        }
-                        else
-                        {
-                            // if there are notes (that are not ornaments) starting aprox at the same time with a lower pitch, ignore this note, it belongs to a middle voice
-                            if (voiceNotes.Where(x => Math.Abs(x.StartSinceBeginningOfSongInTicks - n.StartSinceBeginningOfSongInTicks) < tolerance &&
-                            x.DurationInTicks > 12 && n.DurationInTicks > 12 && n.Pitch < x.Pitch).Any())
-                                continue;
-                            else
-                            {
-                                n.SubVoice = 1;
-                                processedVoiceNotes.Add(n);
-                            }
-                        }
-                    }
-                }
+                    processedVoiceNotes = ExtractSubvoices(voiceNotes);
                 else
                 {
                     processedVoiceNotes = voiceNotes;
@@ -97,6 +64,50 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             }
             return retObj;
         }
+        /// <summary>
+        /// In a polyphonic list of notes, returns the lower and the upper voice, where the fact that is in the lowe or upper voice
+        /// is reflected in the subVoice property of the notes
+        /// </summary>
+        /// <param name="notes"></param>
+        /// <returns></returns>
+        public static List<Note> ExtractSubvoices(List<Note> notes)
+        {
+            long tolerance = 4;
+            var retObj = new List<Note>();
+            var voiceNotes = notes.Clone().OrderBy(x=>x.StartSinceBeginningOfSongInTicks).ToList();
+
+            foreach (var n in voiceNotes)
+            {
+                var neighboors = GetNeighboorsOfNote(voiceNotes, n);
+                (var averageLow, var average, var averageHigh) = GetNotesAverage(neighboors);
+                if (Math.Abs(n.Pitch - averageLow) < Math.Abs(n.Pitch - averageHigh))
+                {
+                    // if there are notes (that are not ornaments) starting aprox at the same time with a higher pitch, ignore this note, it belongs to a middle voice
+                    if (voiceNotes.Where(x => Math.Abs(x.StartSinceBeginningOfSongInTicks - n.StartSinceBeginningOfSongInTicks) < tolerance &&
+            x.DurationInTicks > 12 && n.DurationInTicks > 12 && n.Pitch > x.Pitch).Any())
+                        continue;
+                    else
+                    {
+                        n.SubVoice = 0;
+                        retObj.Add(n);
+                    }
+                }
+                else
+                {
+                    // if there are notes (that are not ornaments) starting aprox at the same time with a lower pitch, ignore this note, it belongs to a middle voice
+                    if (voiceNotes.Where(x => Math.Abs(x.StartSinceBeginningOfSongInTicks - n.StartSinceBeginningOfSongInTicks) < tolerance &&
+                    x.DurationInTicks > 12 && n.DurationInTicks > 12 && n.Pitch < x.Pitch).Any())
+                        continue;
+                    else
+                    {
+                        n.SubVoice = 1;
+                        retObj.Add(n);
+                    }
+                }
+            }
+            return retObj;
+        }
+
         /// <summary>
         /// If a voice is not polyphonic and has chords we keep the higher note of the chord and remove the rest
         /// </summary>

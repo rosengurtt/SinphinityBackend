@@ -20,18 +20,33 @@ namespace SinphinitySysStore.Data
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
             foreach (var extractedPhrase in extractePhrases)
             {
+                Log.Information($"Saving phrase {extractedPhrase.Phrase.MetricsAsString}/{extractedPhrase.Phrase.PitchesAsString}");
                 try
                 {
-                    var currentPhrase = await _dbContext.Phrases.Where(x =>  x.MetricsAsString == extractedPhrase.Phrase.MetricsAsString && x.PitchesAsString==extractedPhrase.Phrase.PitchesAsString)
+                    var currentPhrase = await _dbContext.Phrases.Where(x => x.MetricsAsString == extractedPhrase.Phrase.MetricsAsString && x.PitchesAsString == extractedPhrase.Phrase.PitchesAsString)
                         .FirstOrDefaultAsync();
                     if (currentPhrase == null)
                     {
-                        var phraseEntity = new Phrase(extractedPhrase);
+                        var phraseEntity = new Phrase(extractedPhrase.Phrase, extractedPhrase.Equivalences);
                         _dbContext.Phrases.Add(phraseEntity);
                         await _dbContext.SaveChangesAsync();
                         currentPhrase = phraseEntity;
+
+                        if (!string.IsNullOrEmpty(currentPhrase.SkeletonMetricsAsString))
+                        {
+                            var skeleton = new Phrase(new Sinphinity.Models.Phrase(currentPhrase.SkeletonMetricsAsString, currentPhrase.SkeletonPitchesAsString), new List<string>());
+                            var currentSkeleton = await _dbContext.Phrases.Where(x => x.MetricsAsString == skeleton.MetricsAsString && x.PitchesAsString == skeleton.PitchesAsString)
+                            .FirstOrDefaultAsync();
+                            if (currentSkeleton == null)
+                            {
+                                _dbContext.Phrases.Add(skeleton);
+                                await _dbContext.SaveChangesAsync();
+                            }
+                        }
                     }
+                    Log.Information("Saving associations");
                     await SaveAssociationsOfPhrase(currentPhrase.Id, song);
+                    Log.Information("Saving occurrences");
                     await InsertOccurrences(extractedPhrase.Occurrences, songId, currentPhrase.Id);
                 }
                 catch (Exception ex)

@@ -152,17 +152,6 @@ CREATE TABLE SongsSimplifications(
     CONSTRAINT FK_SongsSimplifications_SongData_Id FOREIGN KEY (SongDataId) REFERENCES SongData(Id)
 )
 
-IF OBJECT_ID('dbo.PhraseSkeletons', 'U') IS NOT NULL 
-  DROP TABLE dbo.PhraseSkeletons
-CREATE TABLE PhraseSkeletons (
-	Id BIGINT IDENTITY(1,1) PRIMARY KEY clustered NOT NULL,
-	MetricsAsString VARCHAR(1000) NOT NULL,
-	PitchesAsString VARCHAR(1000) NOT NULL,
-	MetricsAccumAsString VARCHAR(1000) NULL,
-	PitchesAccumAsString VARCHAR(1000) NULL
-)	
-	
-	
 
 IF OBJECT_ID('dbo.Phrases', 'U') IS NOT NULL 
   DROP TABLE dbo.Phrases
@@ -172,15 +161,15 @@ CREATE TABLE Phrases (
 	MetricsAsString VARCHAR(1000) NOT NULL,
 	PitchesAsString VARCHAR(1000) NOT NULL,
 	MetricsAccumAsString VARCHAR(1000) NULL,
-	PitchesAccumAsString VARCHAR(1000) NULL,	
+	PitchesAccumAsString VARCHAR(1000) NULL,
+	SkeletonMetricsAsString VARCHAR(1000) NULL,
+	SkeletonPitchesAsString VARCHAR(1000) NULL,
 	Equivalences VARCHAR(MAX) NULL,
 	DurationInTicks BIGINT  NULL,
 	NumberOfNotes INT NOT NULL,
 	[Range] INT  NULL,
 	IsMonotone BIT  NULL,
-	Step INT  NULL,
-	PhraseSkeletonId BIGINT NULL,
-    CONSTRAINT FK_Phrases_PhraseSkeletons_Id FOREIGN KEY (PhraseSkeletonId) REFERENCES PhraseSkeletons(Id)
+	Step INT  NULL
 )	
 
 CREATE INDEX IX_Phrases_MetricsAsString ON Phrases (MetricsAsString)

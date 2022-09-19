@@ -276,7 +276,8 @@ namespace SinphinityExpApi.Clients
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                var errorMessage = $"Couldn't insert patterns";
+                var quePasoPapi= await response.Content.ReadAsStringAsync();
+                var errorMessage = $"Couldn't insert patterns: {quePasoPapi}";
                 Log.Error(errorMessage);
                 throw new ApplicationException(errorMessage);
             }

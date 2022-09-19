@@ -12,13 +12,13 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
 
             foreach (var voice in notes.Voices())
             {
-                foreach (var subVoice in new List<byte> { 0,1 })
+                foreach (var subVoice in new List<byte> { 0, 1 })
                 {
                     var voiceNotes = notes.Where(x => x.Voice == voice && x.SubVoice == subVoice).OrderBy(y => y.StartSinceBeginningOfSongInTicks).ToList();
                     var phrasesEdges = GetPhrasesEdges(voiceNotes, bars);
                     for (int i = 0; i < phrasesEdges.Count - 1; i++)
                     {
-                        (var phrase, var location) = GetPhraseBetweenEdges(voiceNotes, phrasesEdges[i], phrasesEdges[i + 1], songId, voice, subVoice,  bars);
+                        (var phrase, var location) = GetPhraseBetweenEdges(voiceNotes, phrasesEdges[i], phrasesEdges[i + 1], songId, voice, subVoice, bars);
                         retObj = AddPhraseToList(phrase, location, retObj);
                     }
                 }
@@ -75,9 +75,10 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
 
             var location = new PhraseLocation(songId, voice, subVoice, start, end, phraseNotes[0].Instrument, phraseNotes[0].Pitch, bars);
             var phrase = new Phrase(phraseNotes);
-            if (phrase.MetricItems.Where(x => x == 0).Any()){
+            var skeleton = PhraseSkeleton.GetSkeleton(phrase);
+            phrase.SkeletonMetricsAsString = skeleton.MetricsAsString != phrase.MetricsAsString ? skeleton.MetricsAsString : "";
+            phrase.SkeletonPitchesAsString = skeleton.MetricsAsString != phrase.MetricsAsString ? skeleton.PitchesAsString : "";
 
-            }
             return (phrase, location);
 
         }

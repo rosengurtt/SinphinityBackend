@@ -9,35 +9,18 @@ namespace Sinphinity.Models
     {
         public long Id { get; set; }
 
-        /// <summary>
-        /// When we are extracting phrases, they still don't have an Id, because this is created when we save the record in a database
-        /// So we use a Guid as a form of temporary id
-        /// </summary>
-        public Guid Guid { get; set; }
-
-        /// <summary>
-        /// A phrase skeleton is another phrase that a simplified version of this one. 
-        /// </summary>
-        public long PhraseSkeletonId { get; set; }
-
-
-
-
         public Phrase()
-        {
-            Guid = Guid.NewGuid();
+        {        
         }
 
         public Phrase(string metricsAsString, string pitchesAsString)
         {
-            Guid = Guid.NewGuid();
             MetricsAsString = metricsAsString.ExtractPattern();
             PitchesAsString = pitchesAsString.ExtractPattern();
             Equivalences=new List<string>();
         }
         public Phrase(List<Note> notes, bool dontFixStrangeDurations = false)
         {
-            Guid = Guid.NewGuid();
             if (notes.Count < 2)
                 throw new Exception("Phrases must have at least 2 notes");
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
@@ -50,17 +33,13 @@ namespace Sinphinity.Models
                 if (i < notes.Count - 2)
                     PitchesAsString += ",";
             }
-            if (!dontFixStrangeDurations)
-                MetricsAsString = FixStrangeDurations(MetricsAsString);
+            //if (!dontFixStrangeDurations)
+            //    MetricsAsString = FixStrangeDurations(MetricsAsString);
             MetricsAsString = MetricsAsString.ExtractPattern();
             PitchesAsString = PitchesAsString.ExtractPattern();
             Equivalences = new List<string>();
         }
 
-        /// <summary>
-        /// The same as the Guid, we use this field while we don't have Ids defined because the data hasn't been stored in a db
-        /// </summary>
-        public Guid SkeletonPhraseGuid { get; set; }
 
         /// <summary>
         /// A string representation of the phrase metrics. It consists of numbers separated by commas
@@ -76,6 +55,10 @@ namespace Sinphinity.Models
         /// 96,96+,48,48
         /// </summary>
         public string MetricsAsString { get; set; }
+       /// <summary>
+       /// The metrics of the phrase skeleton of this phrase
+       /// </summary>
+        public string SkeletonMetricsAsString { get; set; }
 
         [JsonIgnore]
         public List<int> MetricItems
@@ -115,6 +98,10 @@ namespace Sinphinity.Models
         /// A comma separated list of the relative pitches
         /// </summary>
         public string PitchesAsString { get; set; }
+        /// <summary>
+        /// The pitches of the phrase skeleton of this phrase
+        /// </summary>
+        public string SkeletonPitchesAsString { get; set; }
         [JsonIgnore]
         public List<int> PitchItems
         {
