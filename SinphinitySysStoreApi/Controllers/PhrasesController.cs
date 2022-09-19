@@ -62,7 +62,14 @@ namespace SinphinitySysStoreApi.Controllers
                 pageSize,
                 totalItems = totaPhrases,
                 totalPages = (int)Math.Ceiling((double)totaPhrases / pageSize),
-                items = phrases
+                items = phrases.Select(x =>
+                new
+                {
+                    Id = x.Id,
+                    MetricsAsString = x.MetricsAsString,
+                    PitchesAsString = x.PitchesAsString,
+                    Equivalences = x.Equivalences
+                })
             };
             return Ok(new ApiOKResponse(retObj));
         }

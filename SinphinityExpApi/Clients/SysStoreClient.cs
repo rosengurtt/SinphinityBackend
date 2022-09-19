@@ -113,7 +113,8 @@ namespace SinphinityExpApi.Clients
             var responseContent = await GetPhrasesData(styleId, bandId, songId, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
             dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
             var result = JsonConvert.SerializeObject(apiResponse.result);
-            return JsonConvert.DeserializeObject<PaginatedList<Phrase>>(result);
+            var data = (PaginatedList<Phrase>) JsonConvert.DeserializeObject<PaginatedList<Phrase>>(result);
+            return data;
         }
            private async Task<string> GetPhrasesData(
             long? styleId,

@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using SinphinityModel.Helpers;
-using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace Sinphinity.Models
@@ -199,6 +198,7 @@ namespace Sinphinity.Models
                 return PitchItems.All(x => x >= 0) || PitchItems.All((x => x <= 0));
             }
         }
+
         [JsonIgnore]
         public Song AsSong
         {
@@ -226,6 +226,7 @@ namespace Sinphinity.Models
                 return retObj;
             }
         }
+
         [JsonIgnore]
         private List<Note> Notes
         {
@@ -267,13 +268,7 @@ namespace Sinphinity.Models
                 return retObj.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
             }
         }
-        public PhraseTypeEnum PhraseType
-        {
-            get
-            {
-                return PhraseTypeEnum.Both;
-            }
-        }
+    
         /// <summary>
         /// Aproximates for ex. values like 94, 95, 98, 101 to 96
         /// If the previous value is an ornament, it doesn't do the aproximation

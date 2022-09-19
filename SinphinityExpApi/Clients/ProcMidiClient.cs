@@ -96,10 +96,10 @@ namespace SinphinityExpApi.Clients
             }
         }
 
-        public async Task<string> GetMidiOfPhrase(string asString, int instrument, int tempoInBPM, byte startingPitch = 60)
+        public async Task<string> GetMidiOfPhrase(string metricsAsString, string pitchesAsString, int instrument, int tempoInBPM, byte startingPitch = 60)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
-            var url = $"{_appConfiguration.ProcMidiUrl}/api/SongProcessing/phrase?&asString={asString}&tempoInBPM={tempoInBPM}&instrument={instrument}&startingPitch={startingPitch}";
+            var url = $"{_appConfiguration.ProcMidiUrl}/api/SongProcessing/phrase?&metricsAsString={metricsAsString}&pitchesAsString={pitchesAsString}&tempoInBPM={tempoInBPM}&instrument={instrument}&startingPitch={startingPitch}";
             var response = await httpClient.GetAsync(url);
 
             if (response.StatusCode == HttpStatusCode.OK)

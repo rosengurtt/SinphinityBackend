@@ -6,7 +6,7 @@ namespace SinphinitySysStore.Data
 {
     public partial class PhrasesRepository
     {
-        public async Task<(int, List<Models.Phrase>)> GetPhrasesAsync(
+        public async Task<(int, List<Sinphinity.Models.Phrase>)> GetPhrasesAsync(
                    long? styleId,
                    long? bandId,
                    long? songId,
@@ -38,9 +38,11 @@ namespace SinphinitySysStore.Data
                 var pages = await source
                     .OrderBy(x => x.MetricsAsString)
                     .ThenBy(y=>y.PitchesAsString)
+                    .Select(x=>x.AsSynphinityModelsPhrase())
                     .Skip((pageNo) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
+
                 return (total, pages);
             }
             catch (Exception fdsfsa)

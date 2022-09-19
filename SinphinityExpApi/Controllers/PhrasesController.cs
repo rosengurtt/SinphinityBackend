@@ -69,10 +69,6 @@ namespace SinphinityExpApi.Controllers
                         {
                             Log.Information($"{alca} - Start with song: {s.Name}");
                             var phrases = await _procMelodyAnalyserClient.GetPhrasesOfSong(s.Id);
-                            if (phrases == null)
-                            {
-
-                            }
                             Log.Information($"Phrase extracion completed OK for {s.Name}");
                             await _sysStoreClient.InsertPhrasesAsync(phrases, s.Id);
                             Log.Information($"Saved OK {s.Name}");
@@ -100,21 +96,23 @@ namespace SinphinityExpApi.Controllers
         public async Task<ActionResult> GetPhrasesAsync(long? styleId, long? bandId, long? songId, string phraseType, string contains, int? numberOfNotes,
             int? durationInTicks, int? range, bool? isMonotone, int? step, int pageNo = 0, int pageSize = 10)
         {
-            return Ok(new ApiOKResponse(await _sysStoreClient.GetPhrasesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
-              range, isMonotone, step, pageNo, pageSize)));
+            var phrases= await _sysStoreClient.GetPhrasesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
+              range, isMonotone, step, pageNo, pageSize);
+            return Ok(new ApiOKResponse(phrases));
         }
 
 
         [HttpGet("midi")]
-        public async Task<ActionResult> GetPhraseMidiAsync(string asString, int instrument = 0, int tempoInBPM = 90, byte startingPitch = 60)
+        public async Task<ActionResult> GetPhraseMidiAsync(string metricsAsString, string pitchesAsString, int instrument = 0, 
+            int tempoInBPM = 90, byte startingPitch = 60)
         {
             try
             {
 
-                var base64encodedMidiBytes = await _procMidiClient.GetMidiOfPhrase(asString, instrument, tempoInBPM, startingPitch);
+                var base64encodedMidiBytes = await _procMidiClient.GetMidiOfPhrase(metricsAsString, pitchesAsString, instrument, tempoInBPM, startingPitch);
                 var ms = new MemoryStream(Convert.FromBase64String(base64encodedMidiBytes));
 
-                return File(ms, MediaTypeNames.Text.Plain, $"Phrase {asString}");
+                return File(ms, MediaTypeNames.Text.Plain, $"Phrase {metricsAsString}-{pitchesAsString}");
             }
             catch (Exception ex)
             {

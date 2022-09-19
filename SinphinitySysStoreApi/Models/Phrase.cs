@@ -24,7 +24,20 @@ namespace SinphinitySysStore.Models
             SkeletonMetricsAsString = p.SkeletonMetricsAsString;
             SkeletonPitchesAsString= p.SkeletonPitchesAsString;
         }
-     
+
+        public Sinphinity.Models.Phrase AsSynphinityModelsPhrase()
+        {
+            return new Sinphinity.Models.Phrase
+            {
+                Id = this.Id,
+                MetricsAsString = this.MetricsAsString,
+                PitchesAsString = this.PitchesAsString,
+                Equivalences = this.Equivalences == "[]" ?
+                     new List<string>() :
+                     JsonConvert.DeserializeObject<List<string>>(this.Equivalences)
+            };
+        }
+
 
 
         public long Id { get; set; }
