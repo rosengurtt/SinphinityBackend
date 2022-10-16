@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace Sinphinity.Models
 {
     /// <summary>
-    /// Represents the use of 2 phrases together, because they are played at the same time in different voices or they are played 
-    /// consecutively in the same voice
+    /// Represents the use of 2 phrases together in a song. They could be in the same voice or in different voices.
+    /// Phrase1 starts before or at the same time of Phrase2
+    /// Phrase 2 could be start immediately after Phrase1 starts, or could start earlier, but never before phrase1
     /// </summary>
     public class PhrasesLink
     {
@@ -21,7 +22,7 @@ namespace Sinphinity.Models
         public byte Instrument2 { get; set; }
 
         public long SongId { get; set; }
-        public long TicksFromStart { get; set; }
+        public long Phrase1Start { get; set; }
         /// <summary>
         /// The start time of the second phrase in relation to the first one
         /// If the 2 phrases are simultanewous it would be 0
@@ -35,6 +36,5 @@ namespace Sinphinity.Models
         /// </summary>
         public int PitchShift { get; set; }
 
-        public PhraseTypeEnum PhraseType { get; set; }
     }
 }

@@ -4,9 +4,14 @@ using SinphinityModel.Helpers;
 
 namespace Sinphinity.Models
 {
+    /// <summary>
+    /// This is a representation of a sequence of notes that has some abstractions:
+    /// - instead of absolute pitch values, we save relative pitches (relative to the first note)
+    /// - we don't care about the duration of the notes, only the distance in ticks between the start of consecutive notes
+    /// - we actually care about the duration of the last note, because that affects the duration of the phrase
+    /// </summary>
     public class Phrase
     {
-        public long Id { get; set; }
 
         public Phrase()
         {        
@@ -18,7 +23,7 @@ namespace Sinphinity.Models
             PitchesAsString = pitchesAsString.ExtractPattern();
             Equivalences=new List<string>();
         }
-        public Phrase(List<Note> notes, bool dontFixStrangeDurations = false)
+        public Phrase(List<Note> notes)
         {
             if (notes.Count < 2)
                 throw new Exception("Phrases must have at least 2 notes");
@@ -32,25 +37,26 @@ namespace Sinphinity.Models
                 if (i < notes.Count - 2)
                     PitchesAsString += ",";
             }
-            //if (!dontFixStrangeDurations)
-            //    MetricsAsString = FixStrangeDurations(MetricsAsString);
+            MetricsAsString += "," + orderedNotes[orderedNotes.Count - 1].DurationInTicks;
             MetricsAsString = MetricsAsString.ExtractPattern();
             PitchesAsString = PitchesAsString.ExtractPattern();
             Equivalences = new List<string>();
         }
-
+        /// <summary>
+        /// Primary key
+        /// </summary>
+        public long Id { get; set; }
 
         /// <summary>
         /// A string representation of the phrase metrics. It consists of numbers separated by commas
         /// The numbers represent the separations between the start of the notes
         /// The first number is the duration in ticks from the beginning of the phrase to the first note
-        /// The last number is the duration from the beginning of the last note to the start of the next phrase
-        /// or the end of the bar if the next phrase doesnt start until more than a bar later
+        /// The last number is the duration of the last note
         /// 
         /// 2 quarters starting from 0 and followed by 2 sixteenths would be
         /// 0,96,96,48,48
         /// 
-        /// Accentuations can be indicated with a plus sign after a numer, like:
+        /// Accentuations can be indicated with a plus sign after a number, like:
         /// 96,96+,48,48
         /// </summary>
         public string MetricsAsString { get; set; }
@@ -151,53 +157,15 @@ namespace Sinphinity.Models
                 return expanded.Sum(x => x);
             }
         }
+        [JsonIgnore]
         public int NumberOfNotes {
             get
             {
                 return PitchItems.Count + 1;
             }
         }
-        /// <summary>
-        /// The difference between the highest absolute pitch and the lowest absolute pitch
-        /// </summary>
-        public int Range
-        {
-            get
-            {
-                int MaxAccum = 0;
-                int MinAccum = 0;
-                int currentPitch = 0;
-                foreach (var item in PitchItems)
-                {
-                    currentPitch += item;
-                    if (currentPitch > MaxAccum)
-                        MaxAccum = currentPitch;
-                    if (currentPitch < MinAccum)
-                        MinAccum = currentPitch;
-                }
-                return MaxAccum - MinAccum;
-            }
-        }
-        /// <summary>
-        /// The difference between the pitch of the last and the first note
-        /// </summary>
-        public int Step
-        {
-            get
-            {
-                return PitchItems.Sum();
-            }
-        }
-        /// <summary>
-        /// If true notes never go up or never go down
-        /// </summary>
-        public bool IsMonotone
-        {
-            get
-            {
-                return PitchItems.All(x => x >= 0) || PitchItems.All((x => x <= 0));
-            }
-        }
+  
+
 
         [JsonIgnore]
         public Song AsSong

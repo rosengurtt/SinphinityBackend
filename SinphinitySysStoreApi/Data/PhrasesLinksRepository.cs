@@ -27,13 +27,13 @@ namespace SinphinitySysStore.Data
                             ShiftInTicks = link.StartTick - oc.StartTick,
                             PitchShift = link.StartingPitch - oc.StartingPitch,
                             SongId = songId,
-                            TicksFromStart= Math.Min(link.StartTick, oc.StartTick),
+                            Phrase1Start = Math.Min(link.StartTick, oc.StartTick),
                             Instrument1 = oc.Instrument,
                             Instrument2 = link.Instrument
                         };
                         var isAlreadyThere = _dbContext.PhrasesLinks
-                            .Where(x => x.PhraseId1 == pl.PhraseId1 && x.PhraseId2 == pl.PhraseId2 && x.SongId == pl.SongId && x.PhraseType==pl.PhraseType && 
-                            x.ShiftInTicks==pl.ShiftInTicks&& x.PitchShift==pl.PitchShift)
+                            .Where(x => x.PhraseId1 == pl.PhraseId1 && x.PhraseId2 == pl.PhraseId2 && x.SongId == pl.SongId  &&
+                            x.ShiftInTicks == pl.ShiftInTicks && x.PitchShift == pl.PitchShift)
                             .Any();
                         if (!isAlreadyThere)
                         {
@@ -51,5 +51,6 @@ namespace SinphinitySysStore.Data
                 }
             }
         }
+
     }
 }

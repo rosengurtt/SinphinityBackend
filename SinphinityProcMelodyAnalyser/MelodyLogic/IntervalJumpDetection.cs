@@ -17,9 +17,15 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             var retObj = new HashSet<long>(edgesSoFar);
             // When we split we don't want to produce phrases whose product of number of notes multiplied by duration is less than minLengthQtyNotes
             var minLengthQtyNotes = 192 * 2;
-            var groupsOfNotesWithSmallSteps = GetGroupsOfNotesWithoutLargePitchJumps(notes, 4, 10);
-            groupsOfNotesWithSmallSteps = groupsOfNotesWithSmallSteps.Union(GetGroupsOfNotesWithoutLargePitchJumps(notes, 7, 12)).ToHashSet();
-            groupsOfNotesWithSmallSteps = groupsOfNotesWithSmallSteps.Union(GetGroupsOfNotesWithoutLargePitchJumps(notes, 2, 8)).ToHashSet();
+           
+            var jumps = new List<(int, int)> { (2, 8), (4, 12) };
+            var groupsOfNotesWithSmallSteps = new HashSet<long>();
+            foreach ((var maxSizeOfSmallJump, var minSizeOfLargeJump) in jumps)
+            {
+                groupsOfNotesWithSmallSteps = groupsOfNotesWithSmallSteps
+                    .Union(GetPointsWhereThereIsAlargeJumpBetweenNotesWithSmallJumps(notes, maxSizeOfSmallJump, minSizeOfLargeJump))
+                    .ToHashSet();
+            }
 
             foreach (var jump in groupsOfNotesWithSmallSteps)
             {
@@ -46,7 +52,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         /// <param name="maxJump">Is the maximum difference in pitch between consecutive notes to consider that they are close</param>
         /// <param name="minLargeJump">The minimum jump in pitch to consider this a large jump</param>
         /// <returns></returns>
-        private static HashSet<long> GetGroupsOfNotesWithoutLargePitchJumps(List<Note> notes, int maxJump = 4, int minLargeJump = 10, int minNotes = 6)
+        private static HashSet<long> GetPointsWhereThereIsAlargeJumpBetweenNotesWithSmallJumps(List<Note> notes, int maxJump = 4, int minLargeJump = 10, int minNotes = 6)
         {
             var retObj = new HashSet<long>();
             if (notes == null || notes.Count < 7)

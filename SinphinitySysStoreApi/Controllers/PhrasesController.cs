@@ -88,13 +88,13 @@ namespace SinphinitySysStoreApi.Controllers
             return Ok(new ApiOKResponse(retObj));
         }
   
-        [HttpPost("phrasesLinks")]
-        public async Task<ActionResult> GeneratePhrasesLinksForSong(long songId)
-        {
-            await _phrasesRepository.GeneratePhrasesLinksForSong(songId);
-            return Ok(new ApiOKResponse(null));
+        //[HttpPost("phrasesLinks")]
+        //public async Task<ActionResult> GeneratePhrasesLinksForSong(long songId)
+        //{
+        //    await _phrasesRepository.GeneratePhrasesLinksForSong(songId);
+        //    return Ok(new ApiOKResponse(null));
 
-        }
+        //}
     }
 }
 

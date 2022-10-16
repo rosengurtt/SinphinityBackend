@@ -1,4 +1,5 @@
 ﻿using Sinphinity.Models;
+using SinphinityModel.Helpers;
 
 namespace SinphinityProcMelodyAnalyser.MelodyLogic
 {
@@ -23,15 +24,21 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         {
             var maxLengthOfShortNote = 9;
             var maxLengthOfContiguousShortNotes = 11;
-            var newPitchItems = new List<int>() { p.PitchItems[0]};
+
+            //if no short notes return p
+            if (!p.MetricItems.Where(x => x < maxLengthOfShortNote).Any())
+                return p;
+
+            var newPitchItems = new List<int>() { p.PitchItems[0] };
             var newMetricItems = new List<int>() { p.MetricItems[0] };
             var lastNoteAdded = 0;
             for (var i = 1; i < p.NumberOfNotes - 1; i++)
             {
-                // Check if it is a long note
+                // Check if it is a long or short note
                 if (p.MetricItems[i] > maxLengthOfShortNote)
                 {
-                    if (lastNoteAdded == i - 1)
+                    // if there are no previous short notes, add it
+                    if (i == 0 || lastNoteAdded == i - 1)
                     {
                         newPitchItems.Add(p.PitchItems[i]);
                         newMetricItems.Add(p.MetricItems[i]);
@@ -65,8 +72,10 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                     lastNoteAdded = i;
                 }
             }
-            var pitchesAsString = string.Join(",", newPitchItems);
-            var metricsAsString = string.Join(",", newMetricItems);
+            //Add duration of last note
+            newMetricItems.Add(p.MetricItems[p.NumberOfNotes - 1]);
+            var pitchesAsString = string.Join(",", newPitchItems).ExtractPattern();
+            var metricsAsString = string.Join(",", newMetricItems).ExtractPattern();
             return new Phrase(metricsAsString, pitchesAsString);
         }
 

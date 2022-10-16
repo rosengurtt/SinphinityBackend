@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Sinphinity.Models;
 using SinphinitySysStore.Models;
 
 namespace SinphinitySysStore.Data
@@ -20,6 +21,9 @@ namespace SinphinitySysStore.Data
             if (song == null) throw new Exception($"Song with id = {songId} does not exist");
             foreach (var extractedPhrase in extractePhrases)
             {
+                Log.Information("Saving segment");
+                var segment = await SaveSegmentOfPhrase(extractedPhrase.Phrase);
+
                 Log.Information($"Saving phrase {extractedPhrase.Phrase.MetricsAsString}/{extractedPhrase.Phrase.PitchesAsString}");
                 try
                 {
@@ -27,18 +31,22 @@ namespace SinphinitySysStore.Data
                         .FirstOrDefaultAsync();
                     if (currentPhrase == null)
                     {
-                        var phraseEntity = new Phrase(extractedPhrase.Phrase, extractedPhrase.Equivalences);
+                        var phraseEntity = new Models.Phrase(extractedPhrase.Phrase, extractedPhrase.Equivalences);
+                        phraseEntity.SegmentId = segment.Id;
                         _dbContext.Phrases.Add(phraseEntity);
                         await _dbContext.SaveChangesAsync();
                         currentPhrase = phraseEntity;
 
                         if (!string.IsNullOrEmpty(currentPhrase.SkeletonMetricsAsString))
-                        {
-                            var skeleton = new Phrase(new Sinphinity.Models.Phrase(currentPhrase.SkeletonMetricsAsString, currentPhrase.SkeletonPitchesAsString), new List<string>());
-                            var currentSkeleton = await _dbContext.Phrases.Where(x => x.MetricsAsString == skeleton.MetricsAsString && x.PitchesAsString == skeleton.PitchesAsString)
+                        {  var currentSkeleton = await _dbContext.Phrases.Where(x => x.MetricsAsString == currentPhrase.SkeletonMetricsAsString &&
+                                            x.PitchesAsString == currentPhrase.SkeletonPitchesAsString)
                             .FirstOrDefaultAsync();
                             if (currentSkeleton == null)
                             {
+                                var phraseSkeleton = new Sinphinity.Models.Phrase(currentPhrase.SkeletonMetricsAsString, currentPhrase.SkeletonPitchesAsString);
+                                var skeletonSegment = await SaveSegmentOfPhrase(phraseSkeleton);
+                                var skeleton = new Models.Phrase(phraseSkeleton, new List<string>());
+                                skeleton.SegmentId = skeletonSegment.Id;
                                 _dbContext.Phrases.Add(skeleton);
                                 await _dbContext.SaveChangesAsync();
                             }
@@ -55,10 +63,30 @@ namespace SinphinitySysStore.Data
                 }
             }
         }
+        private async Task<SegmentEntity> SaveSegmentOfPhrase(Sinphinity.Models.Phrase p)
+        {
+            var seg = new SegmentEntity(p);
+            try
+            {
+                var currentSegment = await _dbContext.Segments.Where(x => x.Hash == seg.Hash).FirstOrDefaultAsync();
+                if (currentSegment == null)
+                {
 
+                    _dbContext.Segments.Add(seg);
+                    await _dbContext.SaveChangesAsync();
+                    return seg;
+                }
+                else
+                    return currentSegment;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Couldn't save segment");
+                throw;
+            }
+        }
 
-
-        private async Task SaveAssociationsOfPhrase(long phraseId, Song song)
+        private async Task SaveAssociationsOfPhrase(long phraseId, SinphinitySysStore.Models.Song song)
         {
             var bandId = song.BandId;
             var styleId = await _dbContext.Bands.Where(b => b.Id == song.BandId).Include(y => y.Style).Select(x => x.Style.Id).FirstOrDefaultAsync();

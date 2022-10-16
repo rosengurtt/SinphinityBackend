@@ -1,7 +1,5 @@
 ﻿
 using Newtonsoft.Json;
-using Sinphinity.Models;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SinphinitySysStore.Models
 {
@@ -15,11 +13,6 @@ namespace SinphinitySysStore.Models
             MetricsAccumAsString = p.MetricsAccumAsString;
             PitchesAsString = p.PitchesAsString;
             PitchesAccumAsString = p.PitchesAccumAsString;
-            DurationInTicks = p.DurationInTicks;
-            NumberOfNotes = p.NumberOfNotes;
-            Range = p.Range;
-            IsMonotone = p.IsMonotone;
-            Step = p.Step;
             Equivalences = JsonConvert.SerializeObject(equivalences);
             SkeletonMetricsAsString = p.SkeletonMetricsAsString;
             SkeletonPitchesAsString= p.SkeletonPitchesAsString;
@@ -41,6 +34,7 @@ namespace SinphinitySysStore.Models
 
 
         public long Id { get; set; }
+        public long SegmentId { get; set; }
         public string MetricsAsString { get; set; }
         public string MetricsAccumAsString { get; set; }
 
@@ -51,13 +45,8 @@ namespace SinphinitySysStore.Models
         public string SkeletonPitchesAsString { get; set; }
 
         public string Equivalences{ get; set; }
-        public long DurationInTicks { get; set; }
-        public int NumberOfNotes { get; set; }
-        public int Range { get; set; }
-        public bool IsMonotone { get; set; }
-        public int Step { get; set; }
 
-        public ICollection<Song> Songs { get; set; }
+        public ICollection<SinphinitySysStore.Models.Song> Songs { get; set; }
         public ICollection<Band> Bands { get; set; }
         public ICollection<Style> Styles { get; set; }
 

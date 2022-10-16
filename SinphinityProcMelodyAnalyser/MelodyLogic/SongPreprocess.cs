@@ -30,7 +30,6 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         public static List<Note> ExtractMelodies(List<Note> notes)
         {
             var retObj = new List<Note>();
-            notes = AddGuidToNotes(notes);
             var nonPercusionVoices = notes.NonPercussionVoices();
 
 
@@ -40,7 +39,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                                     .OrderBy(x => x.StartSinceBeginningOfSongInTicks)
                                     .ToList()
                                     .Clone();
-                voiceNotes = DiscretizeTiming(voiceNotes);
+               // voiceNotes = DiscretizeTiming(voiceNotes);
                 var processedVoiceNotes = new List<Note>();
 
                 if (voiceNotes.Count < 10)
@@ -57,8 +56,8 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                 {
                     processedVoiceNotes = voiceNotes;
                     processedVoiceNotes.ForEach(x => x.SubVoice = 0);
+                    processedVoiceNotes = RemoveChordNotes(processedVoiceNotes);
                 }
-                processedVoiceNotes = RemoveChordNotes(processedVoiceNotes);
                 processedVoiceNotes = MakeNotesStrictlyConsecutiveWithNoGaps(processedVoiceNotes);
                 retObj = retObj.Concat(processedVoiceNotes).ToList();
             }
@@ -134,7 +133,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             return retObj;
         }
 
-        private static List<Note> AddGuidToNotes(List<Note> notes)
+        public static List<Note> AddGuidToNotes(List<Note> notes)
         {
             foreach (var n in notes)
                 n.Guid = Guid.NewGuid();
@@ -167,7 +166,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
 
         /// <summary>
         /// We compute the total amount of time when notes are starting and ending together and we compare with the total duration of all notes
-        /// We arbitrarily consider that the track consists of chords if the ratios is greater than 0.7
+        /// We arbitrarily consider that the track consists of chords if the ratios is greater than 0.8
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
@@ -190,12 +189,12 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                     }
                 }
             }
-            return totalChordsTime / (double)totalTime > 0.7;
+            return totalChordsTime / (double)totalTime > 0.8;
         }
 
         /// <summary>
         /// We find the total time where 2 or more voices are played simultaneously and we compare it with the sum of the duration of all notes
-        /// We arbitrarily consider the voice polyphonic if the ratio is greater than 10.5
+        /// We arbitrarily consider the voice polyphonic if the ratio is greater than 0.3
         /// </summary>
         /// <param name="notes"></param>
         /// <returns></returns>
@@ -210,7 +209,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                 totalPolyphonyTime += simultaneousNotes
                     .Sum(x => Math.Min(x.EndSinceBeginningOfSongInTicks, note.EndSinceBeginningOfSongInTicks) - Math.Max(x.StartSinceBeginningOfSongInTicks, note.StartSinceBeginningOfSongInTicks)) / 2;
             }
-            return totalPolyphonyTime / (double)totalTime > 0.5;
+            return totalPolyphonyTime / (double)totalTime > 0.3;
         }
 
         /// <summary>
@@ -286,7 +285,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         {
             if (notes.Count < 2)
                 return notes;
-            var orderedNotes = SynchronizeNotesThatShoulsStartTogether(notes);
+            var orderedNotes = SynchronizeNotesThatShouldStartTogether(notes);
             var retObj = new List<Note>();
             retObj.Add((Note)orderedNotes[0].Clone());
 
@@ -307,16 +306,12 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                     if (retObj[i - 1].StartSinceBeginningOfSongInTicks < note.StartSinceBeginningOfSongInTicks)
                         retObj[i - 1].EndSinceBeginningOfSongInTicks += shift;
                 }
-                if (note.DurationInTicks <= 0 || retObj[i - 1].DurationInTicks <= 0 || retObj[i - 1].StartSinceBeginningOfSongInTicks > note.StartSinceBeginningOfSongInTicks)
-                {
-
-                }
                 retObj.Add(note);
             }
             retObj.Add((Note)notes[notes.Count - 1].Clone());
             return retObj;
         }
-        private static List<Note> SynchronizeNotesThatShoulsStartTogether(List<Note> notes)
+        private static List<Note> SynchronizeNotesThatShouldStartTogether(List<Note> notes)
         {
             var orderedNotes = notes.Clone().OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
 
@@ -384,7 +379,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             {
                 if (lowerVoice[i].StartSinceBeginningOfSongInTicks== lowerVoice[i + 1].StartSinceBeginningOfSongInTicks)
                 {
-
+                    throw new Exception("There are 2 consecutive notes starting at the same time in the lower voice");
                 }
                 lowerVoice[i].EndSinceBeginningOfSongInTicks = lowerVoice[i + 1].StartSinceBeginningOfSongInTicks;
             }
@@ -393,7 +388,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
 
                 if (higherVoice[i].StartSinceBeginningOfSongInTicks == higherVoice[i + 1].StartSinceBeginningOfSongInTicks)
                 {
-
+                    throw new Exception("There are 2 consecutive notes starting at the same time in the higher voice");
                 }
                 higherVoice[i].EndSinceBeginningOfSongInTicks = higherVoice[i + 1].StartSinceBeginningOfSongInTicks;
             }

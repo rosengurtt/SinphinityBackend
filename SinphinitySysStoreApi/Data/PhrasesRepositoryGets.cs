@@ -25,13 +25,13 @@ namespace SinphinitySysStore.Data
                     .Where(p =>
                     (styleId == null || p.Styles.Where(x => x.Id == styleId).Any()) &&
                     (bandId == null || p.Bands.Where(x => x.Id == bandId).Any()) &&
-                    (songId == null || p.Songs.Where(x => x.Id == songId).Any()) &&
-                    (numberOfNotes == null || p.NumberOfNotes == numberOfNotes) &&
-                    (contains == null || p.MetricsAsString.Contains(contains) || p.PitchesAsString.Contains(contains)) &&
-                    (durationInTicks == null || p.DurationInTicks == durationInTicks) &&
-                    (range == null || p.Range == range) &&
-                    (isMonotone == null || p.IsMonotone == isMonotone) &&
-                    (step == null || p.Step == step));
+                    (songId == null || p.Songs.Where(x => x.Id == songId).Any())); //&&
+                    //(numberOfNotes == null || p.NumberOfNotes == numberOfNotes) &&
+                    //(contains == null || p.MetricsAsString.Contains(contains) || p.PitchesAsString.Contains(contains)) &&
+                    //(durationInTicks == null || p.DurationInTicks == durationInTicks) &&
+                    //(range == null || p.Range == range) &&
+                    //(isMonotone == null || p.IsMonotone == isMonotone) &&
+                    //(step == null || p.Step == step));
 
                 var total = await source.CountAsync();
 

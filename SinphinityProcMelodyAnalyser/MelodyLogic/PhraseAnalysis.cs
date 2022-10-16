@@ -6,19 +6,19 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
     public static class PhraseAnalysis
     {
 
-        public static List<ExtractedPhrase> FindAllPhrases(List<Note> notes, List<Bar> bars, long songId)
+        public static List<ExtractedPhrase> FindAllPhrases(List<Note>  originalNotes, List<Note> preprocessedNotes, List<Bar> bars, long songId)
         {
             var retObj = new List<ExtractedPhrase>();
 
-            foreach (var voice in notes.Voices())
+            foreach (var voice in preprocessedNotes.Voices())
             {
                 foreach (var subVoice in new List<byte> { 0, 1 })
                 {
-                    var voiceNotes = notes.Where(x => x.Voice == voice && x.SubVoice == subVoice).OrderBy(y => y.StartSinceBeginningOfSongInTicks).ToList();
+                    var voiceNotes = preprocessedNotes.Where(x => x.Voice == voice && x.SubVoice == subVoice).OrderBy(y => y.StartSinceBeginningOfSongInTicks).ToList();
                     var phrasesEdges = GetPhrasesEdges(voiceNotes, bars);
                     for (int i = 0; i < phrasesEdges.Count - 1; i++)
                     {
-                        (var phrase, var location) = GetPhraseBetweenEdges(voiceNotes, phrasesEdges[i], phrasesEdges[i + 1], songId, voice, subVoice, bars);
+                        (var phrase, var location) = GetPhraseBetweenEdges(originalNotes, voiceNotes, phrasesEdges[i], phrasesEdges[i + 1], songId, voice, subVoice, bars);
                         retObj = AddPhraseToList(phrase, location, retObj);
                     }
                 }
@@ -64,7 +64,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             }
             return extractePhrasesSoFar;
         }
-        public static (Phrase, PhraseLocation) GetPhraseBetweenEdges(List<Note> notes, long start, long end, long songId, byte voice, byte subVoice, List<Bar> bars)
+        public static (Phrase, PhraseLocation) GetPhraseBetweenEdges(List<Note> originalNotes, List<Note> notes, long start, long end, long songId, byte voice, byte subVoice, List<Bar> bars)
         {
             var phraseNotes = notes
                 .Where(x => x.StartSinceBeginningOfSongInTicks >= start && x.StartSinceBeginningOfSongInTicks < end)
@@ -74,6 +74,9 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                 return (null, null);
 
             var location = new PhraseLocation(songId, voice, subVoice, start, end, phraseNotes[0].Instrument, phraseNotes[0].Pitch, bars);
+            var lastNote = phraseNotes.OrderByDescending(x => x.StartSinceBeginningOfSongInTicks).FirstOrDefault();
+            var lastNoteOriginalDuration = originalNotes.Where(x => x.Guid == lastNote.Guid).FirstOrDefault().DurationInTicks;
+            lastNote.EndSinceBeginningOfSongInTicks = lastNote.StartSinceBeginningOfSongInTicks + lastNoteOriginalDuration;
             var phrase = new Phrase(phraseNotes);
             var skeleton = PhraseSkeleton.GetSkeleton(phrase);
             phrase.SkeletonMetricsAsString = skeleton.MetricsAsString != phrase.MetricsAsString ? skeleton.MetricsAsString : "";
