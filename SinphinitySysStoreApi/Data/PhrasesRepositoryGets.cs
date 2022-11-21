@@ -70,5 +70,34 @@ namespace SinphinitySysStore.Data
 
             return (total, pages);
         }
+
+
+        public async Task<(int, List<Sinphinity.Models.Phrase>)> GetPhrasesOfSongAndVoiceAsync(long songId, byte voiceId, int pageNo, int pageSize)
+        {
+            try
+            {
+                var source = _dbContext.Phrases.Join(
+                    _dbContext.PhrasesOccurrences,
+                    p => p.Id,
+                    po => po.PhraseId,
+                    (p, po) => new { phrase = p, occurrence = po })
+                    .Where(x => x.occurrence.SongId==songId && x.occurrence.Voice==voiceId);
+
+                var total = await source.CountAsync();
+
+                var pages = await source
+                    .OrderBy(x => x.occurrence.StartTick)
+                    .Select(x => x.phrase.AsSynphinityModelsPhrase())
+                    .Skip((pageNo) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return (total, pages);
+            }
+            catch (Exception fdsfsa)
+            {
+                throw fdsfsa;
+            }
+        }
     }
 }

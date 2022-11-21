@@ -96,11 +96,32 @@ namespace SinphinityExpApi.Clients
             }
         }
 
+        public async Task<string> GetMelodicVoicesOfSongAsync(long songId)
+        {
+            HttpClient httpClient = _clientFactory.CreateClient();
+            var url = $"{_appConfiguration.SysStoreUrl}/api/songs/{songId}/voices";
+            var response = await httpClient.GetAsync(url);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return responseContent;
+
+            }
+            else
+            {
+                var errorMessage = $"Couldn't get phrases";
+                Log.Error(errorMessage);
+                throw new ApplicationException(errorMessage);
+            }
+        }
+
+       
 
         public async Task<PaginatedList<Phrase>> GetPhrasesAsync(
         long? styleId,
             long? bandId,
             long? songId,
+            byte? voiceId,
             string? contains,
             int? numberOfNotes,
             long? durationInTicks,
@@ -110,7 +131,7 @@ namespace SinphinityExpApi.Clients
             int pageNo = 0,
             int pageSize = 10)
         {
-            var responseContent = await GetPhrasesData(styleId, bandId, songId, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
+            var responseContent = await GetPhrasesData(styleId, bandId, songId, voiceId, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
             dynamic apiResponse = JsonConvert.DeserializeObject<ExpandoObject>(responseContent);
             var result = JsonConvert.SerializeObject(apiResponse.result);
             var data = (PaginatedList<Phrase>) JsonConvert.DeserializeObject<PaginatedList<Phrase>>(result);
@@ -120,6 +141,7 @@ namespace SinphinityExpApi.Clients
             long? styleId,
             long? bandId,
             long? songId,
+            byte? voiceId,
             string contains,
             int? numberOfNotes,
             long? durationInTicks,
@@ -130,7 +152,9 @@ namespace SinphinityExpApi.Clients
             int pageSize)
         {
             HttpClient httpClient = _clientFactory.CreateClient();
-            var url = $"{_appConfiguration.SysStoreUrl}/api/phrases" +
+            var url = songId!=null && voiceId!=null?
+                $"{_appConfiguration.SysStoreUrl}/api/phrases?songId={songId}&voiceId={voiceId}&pageNo={pageNo}&pageSize={pageSize}":
+                $"{_appConfiguration.SysStoreUrl}/api/phrases" +
                 BuildGetPhraseQueryString(styleId, bandId, songId, contains, numberOfNotes, durationInTicks, range, isMonotone, step, pageNo, pageSize);
 
             var response = await httpClient.GetAsync(url);

@@ -14,7 +14,7 @@ namespace Sinphinity.Models
 
             BarNumber = bars.Where(b => b.TicksFromBeginningOfSong <= startTick).Count();
             var beatLength = 4 * 96 / bars[BarNumber - 1].TimeSignature.Denominator;
-            Beat = (int)(startTick - bars[BarNumber - 1].TicksFromBeginningOfSong) / beatLength;
+            Beat = 1 + (int)(startTick - bars[BarNumber - 1].TicksFromBeginningOfSong) / beatLength;
             SongId = songId;
             Voice = voice;
             SubVoice = subVoice;

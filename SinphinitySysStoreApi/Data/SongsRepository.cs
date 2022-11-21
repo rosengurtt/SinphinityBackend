@@ -122,5 +122,32 @@ namespace SinphinitySysStore.Data
             }
             return song;
         }
+    
+        /// <summary>
+        /// Returns the voices of a song that have phrases
+        /// The voices that have drums or chords are not returned
+        /// </summary>
+        /// <param name="songId"></param>
+        /// <returns></returns>
+        public async Task<List<object>> GetMelodicVoicesOfSong(long songId)
+        {
+            var voices = await _dbContext.PhrasesOccurrences.Where(x => x.SongId == songId)
+                .Select(y => new { voiceNumber = y.Voice, instrumentNumber = y.Instrument })
+                .Distinct()
+                .ToListAsync();
+
+            // Remove duplicates, that happen when a voice uses more than 1 instrument
+            var uniqueVoices = new HashSet<int>();
+            var retObj = new List<object>();
+            foreach (var v in voices)
+            {
+                if (!uniqueVoices.Contains(v.voiceNumber))
+                    retObj.Add((object)v);
+                uniqueVoices.Add(v.instrumentNumber);
+
+            }
+
+            return retObj;
+        }
     }
 }

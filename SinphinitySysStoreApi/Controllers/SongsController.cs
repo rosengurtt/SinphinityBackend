@@ -60,6 +60,31 @@ namespace SinphinitySysStore.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns the voices of a song as a list of tuples with the voice number and instrument like
+        /// (1, Piano)
+        /// (2, Drums)
+        /// (3. Guitar)
+        /// </summary>
+        /// <param name="songId"></param>
+        /// <returns></returns>
+        [HttpGet("{songId}/voices")]
+        public async Task<IActionResult> GetMelodicVoicesOfSong(long songId)
+        {
+            try
+            {
+                var voices = await _songsRepository.GetMelodicVoicesOfSong(songId);
+                if (voices == null)
+                    return NotFound(new ApiResponse(404));
+
+                return Ok(new ApiOKResponse(voices));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         [HttpPost, DisableRequestSizeLimit]
         public async Task<ActionResult<Sinphinity.Models.Song>> AddSongAsync(Sinphinity.Models.Song song)
         {

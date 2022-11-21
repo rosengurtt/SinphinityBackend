@@ -79,7 +79,11 @@ namespace SinphinitySysStore.Controllers
             }
         }
 
-
+        [HttpGet("{songId}/voices")]
+        public async Task<ActionResult> GetMelodicVoicesOfSong(long songId)
+        {
+            return Content(await _sysStoreClient.GetMelodicVoicesOfSongAsync(songId), "application/json");
+        }
 
 
         [HttpGet("{songId}/midi")]

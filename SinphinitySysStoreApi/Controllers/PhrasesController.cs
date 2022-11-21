@@ -45,6 +45,7 @@ namespace SinphinitySysStoreApi.Controllers
             long? styleId,
             long? bandId,
             long? songId,
+            byte? voiceId,
             string contains,
             int? numberOfNotes,
             long? durationInTicks,
@@ -54,14 +55,19 @@ namespace SinphinitySysStoreApi.Controllers
             int pageNo = 0,
             int pageSize = 10)
         {
-            (var totaPhrases, var phrases) = await _phrasesRepository.GetPhrasesAsync(styleId, bandId, songId, contains, numberOfNotes,
-                durationInTicks, range, isMonotone, step, pageNo, pageSize);
+            int totalPhrases;
+            List<Sinphinity.Models.Phrase> phrases;
+            if (songId != null && voiceId != null)
+                (totalPhrases, phrases) = await _phrasesRepository.GetPhrasesOfSongAndVoiceAsync((long)songId, (byte)voiceId, pageNo, pageSize);
+            else
+                (totalPhrases, phrases) = await _phrasesRepository.GetPhrasesAsync(styleId, bandId, songId, contains, numberOfNotes,
+                    durationInTicks, range, isMonotone, step, pageNo, pageSize);
             var retObj = new
             {
                 pageNo,
                 pageSize,
-                totalItems = totaPhrases,
-                totalPages = (int)Math.Ceiling((double)totaPhrases / pageSize),
+                totalItems = totalPhrases,
+                totalPages = (int)Math.Ceiling((double)totalPhrases / pageSize),
                 items = phrases.Select(x =>
                 new
                 {
@@ -73,6 +79,8 @@ namespace SinphinitySysStoreApi.Controllers
             };
             return Ok(new ApiOKResponse(retObj));
         }
+
+
         [HttpGet("{phraseId}/occurrences")]
         public async Task<ActionResult> GetOccurrencesOfPhraseAsync(long phraseId, long songId = 0, int pageNo = 0, int pageSize = 20)
         {

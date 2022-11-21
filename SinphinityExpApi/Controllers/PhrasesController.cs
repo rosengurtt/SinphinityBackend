@@ -93,14 +93,14 @@ namespace SinphinityExpApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult> GetPhrasesAsync(long? styleId, long? bandId, long? songId, string phraseType, string contains, int? numberOfNotes,
+        public async Task<ActionResult> GetPhrasesAsync(long? styleId, long? bandId, long? songId, byte? voiceId, string phraseType, string contains, int? numberOfNotes,
             int? durationInTicks, int? range, bool? isMonotone, int? step, int pageNo = 0, int pageSize = 10)
         {
-            var phrases= await _sysStoreClient.GetPhrasesAsync(styleId, bandId, songId, contains, numberOfNotes, durationInTicks,
+            var phrases = await _sysStoreClient.GetPhrasesAsync(styleId, bandId, songId, voiceId, contains, numberOfNotes, durationInTicks,
               range, isMonotone, step, pageNo, pageSize);
             return Ok(new ApiOKResponse(phrases));
         }
-
+      
 
         [HttpGet("midi")]
         public async Task<ActionResult> GetPhraseMidiAsync(string metricsAsString, string pitchesAsString, int instrument = 0, 
