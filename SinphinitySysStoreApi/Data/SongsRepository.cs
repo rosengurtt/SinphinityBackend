@@ -143,7 +143,7 @@ namespace SinphinitySysStore.Data
             {
                 if (!uniqueVoices.Contains(v.voiceNumber))
                     retObj.Add((object)v);
-                uniqueVoices.Add(v.instrumentNumber);
+                uniqueVoices.Add(v.voiceNumber);
 
             }
 

@@ -1,7 +1,6 @@
 ﻿using CommonRestLib.ErrorHandling;
 using Microsoft.AspNetCore.Mvc;
 using Sinphinity.Models;
-using SinphinityProcMelodyAnalyser.BusinessLogic;
 using SinphinityProcMelodyAnalyser.MelodyLogic;
 using System.Linq;
 

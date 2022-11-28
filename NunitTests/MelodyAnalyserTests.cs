@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sinphinity.Models;
-using SinphinityProcMelodyAnalyser.BusinessLogic;
 
 namespace NunitTests
 {
@@ -6053,12 +6052,5 @@ namespace NunitTests
 
 
 
-		[Test]
-		public void PhraseFinderWorksAsExpected()
-		{
-			var phrases = MelodyFinder.FindAllPhrases(song2, 0);
-
-			Assert.IsTrue(true);
-		}
 	}
 }

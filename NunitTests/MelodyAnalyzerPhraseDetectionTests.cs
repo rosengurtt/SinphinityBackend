@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sinphinity.Models;
-using SinphinityProcMelodyAnalyser.BusinessLogic;
 using System.IO;
 using SinphinityModel.Helpers;
 using SinphinityProcMidi.Helpers;
@@ -36,15 +35,6 @@ namespace NunitTests
 
 
 
-		[Test]
-		public void ExpectedPhrasesAreExtractedForInvention1()
-		{
-			var songSimplifications = new List<SongSimplification>();
-			songSimplifications.Add(new SongSimplification { Notes = notes, NumberOfVoices = 2, Version = 0 });
-			var song = new Song { Bars = bars, SongSimplifications = songSimplifications };
-			MelodyFinder.FindAllPhrases(song, 0);
-			Assert.IsTrue(true);
-		}
 
 		[Test]
 		public void ExtractMetrics()

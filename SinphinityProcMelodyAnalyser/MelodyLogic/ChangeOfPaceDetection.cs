@@ -30,11 +30,15 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                 var edgeBefore = edgesSoFar.Where(x => x < start).Count() > 0 ? edgesSoFar.Where(x => x < start).Max() : start;
                 var edgeAfter = edgesSoFar.Where(x => x > end).Count() > 0 ? edgesSoFar.Where(x => x > end).Min() : end;
 
+   
+                    continue;
+
+
                 // Add edge before group
                 var lastNoteBeforeGroup = notes.Where(x => x.StartSinceBeginningOfSongInTicks < start).OrderByDescending(x => x.StartSinceBeginningOfSongInTicks).FirstOrDefault();
-                if (lastNoteBeforeGroup == null || start - edgeBefore > 192)
+                if (lastNoteBeforeGroup != null && !PhraseAnalysis.WillNewEdgeCreatePhraseTooShort(notes, edgesSoFar, start))
                 {
-                    if (lastNoteBeforeGroup == null || durationOfNotes < lastNoteBeforeGroup.DurationInTicks)
+                    if ( durationOfNotes < lastNoteBeforeGroup.DurationInTicks)
                         retObj.Add(start);
                     else
                         retObj.Add(start + durationOfNotes);
@@ -42,7 +46,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
 
                 // Add edge after group
                 var firstNoteAfterGroup = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= end).OrderBy(x => x.StartSinceBeginningOfSongInTicks).FirstOrDefault();
-                if (firstNoteAfterGroup != null && edgeAfter - end > 192)
+                if (firstNoteAfterGroup != null && !PhraseAnalysis.WillNewEdgeCreatePhraseTooShort(notes, edgesSoFar, end))
                 {
                     if (durationOfNotes < firstNoteAfterGroup.DurationInTicks)
                         retObj.Add(end + firstNoteAfterGroup.DurationInTicks);
@@ -52,6 +56,8 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             }
             return retObj;
         }
+
+
         /// <summary>
         /// Looks for groups of consecutive notes evenly spaced (meaning that the distance in ticks between consecutive notes is constant) and for each 
         /// returns the point where it starts, the number of consecutive notes and the duration of the note

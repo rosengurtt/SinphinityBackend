@@ -6,7 +6,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
     public static class PhraseAnalysis
     {
 
-        public static List<ExtractedPhrase> FindAllPhrases(List<Note>  originalNotes, List<Note> preprocessedNotes, List<Bar> bars, long songId)
+        public static List<ExtractedPhrase> FindAllPhrases(List<Note> originalNotes, List<Note> preprocessedNotes, List<Bar> bars, long songId)
         {
             var retObj = new List<ExtractedPhrase>();
 
@@ -31,7 +31,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             if (phrase == null)
                 return extractePhrasesSoFar;
 
-            var p = extractePhrasesSoFar.Where(x => x.Phrase.MetricsAsString == phrase.MetricsAsString && x.Phrase.PitchesAsString == phrase.PitchesAsString).FirstOrDefault();
+            var p = extractePhrasesSoFar.Where(x => AreMetricsEssentiallyTheSame(x.Phrase.MetricsAsString, phrase.MetricsAsString) && x.Phrase.PitchesAsString == phrase.PitchesAsString).FirstOrDefault();
             if (p == null)
             {
                 p = new ExtractedPhrase { Phrase = phrase, Occurrences = new List<PhraseLocation>() };
@@ -40,6 +40,29 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             p.Occurrences.Add(location);
 
             return extractePhrasesSoFar;
+        }
+        /// <summary>
+        /// When we compare 2 prhases to decide if they are the same phrase, we must have some tolerance regarding the timing
+        /// For example if we have the metrics (95,97,48,47), this is essentially the same as (96,96,48,48)
+        /// </summary>
+        /// <param name="metrics1"></param>
+        /// <param name="metrics2"></param>
+        /// <returns></returns>
+        private static Boolean AreMetricsEssentiallyTheSame(string metrics1, string metrics2)
+        {
+            var times1 = metrics1.ExpandPattern().Split(",").Select(x => int.Parse(x)).ToList();
+            var times2 = metrics2.ExpandPattern().Split(",").Select(x => int.Parse(x)).ToList();
+            if (times1.Count != times2.Count) return false;
+            // if the total duration differs more than 10% we consider them different
+            if (Math.Abs(times1.Sum() - times2.Sum()) > (times1.Sum() + times2.Sum()) / 20)
+                return false;
+            for (int i = 0; i < times1.Count; i++)
+            {
+                //  if the difference is more than 50% in any of the notes duration we consider the phrases different
+                if (Math.Abs(times1[i] - times2[i]) > (times1[i] + times2[i]) / 4)
+                    return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -57,7 +80,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             var maxMetricsDistance = 0.4;
             foreach (var p in extractePhrasesSoFar)
             {
-                p.Equivalences = extractePhrasesSoFar.Where(x => 
+                p.Equivalences = extractePhrasesSoFar.Where(x =>
                     (PhraseDistance.GetMetricDistance(p.Phrase, x.Phrase) + PhraseDistance.GetPitchDistance(p.Phrase, x.Phrase)) <= (maxMetricsDistance + maxPitchDistance) &&
                     p != x)
                     .Select(y => $"{y.Phrase.MetricsAsString}/{y.Phrase.PitchesAsString}").ToList();
@@ -104,7 +127,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             edgesSoFar = IntervalJumpDetection.GetEdgesBetweenGroupsOfNotesWithSmallSteps(notes, edgesSoFar);
             edgesSoFar = PatternDetection.GetRepeatingPatterns(notes, edgesSoFar);
 
-            return edgesSoFar.ToList().OrderBy(x=>x).ToList();
+            return edgesSoFar.ToList().OrderBy(x => x).ToList();
         }
 
         /// <summary>
@@ -162,6 +185,41 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             if (followingEdge - candidateLocation < 144 && notesAfter < 6) return false;
             if (longestBefore > 0.9 * candidateDuration || longestAfter > 0.9 * candidateDuration) return false;
             return true;
+        }
+
+
+        public static bool WillNewEdgeCreatePhraseTooShort(List<Note> notes, HashSet<long> edgesSoFar, long newEdge)
+        {
+            var endOfLastNote = notes.Max(x => x.EndSinceBeginningOfSongInTicks);
+            var edgeBefore = edgesSoFar.Where(x => x < newEdge).Count() > 0 ? edgesSoFar.Where(x => x < newEdge).Max() : 0;
+            var edgeAfter = edgesSoFar.Where(x => x > newEdge).Count() > 0 ? edgesSoFar.Where(x => x > newEdge).Min() : endOfLastNote;
+
+            var notesBefore = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= edgeBefore && x.StartSinceBeginningOfSongInTicks < newEdge);
+            var notesAfter = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= newEdge && x.StartSinceBeginningOfSongInTicks < edgeAfter);
+
+            // if we would have too few notes and a short time don't add edge
+            if ((newEdge - edgeBefore) * notesBefore.Count() < 384 * 4)
+                return true;
+            if ((edgeAfter - newEdge) * notesAfter.Count() < 384 * 4)
+                return true;
+
+
+            // If we are going to break a group of less than 12 notes, leave it
+            var numberOfNotesBetweenEdges = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= edgeBefore &&
+                                                        x.EndSinceBeginningOfSongInTicks <= edgeAfter)
+                                                   .Count();
+            if (numberOfNotesBetweenEdges < 12)
+                return true;
+
+            // If the phrase we are going to break is less than 384 ticks, leave it
+            var musicStart = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= edgeBefore).OrderBy(x => x.StartSinceBeginningOfSongInTicks).First();
+            var musicEnd = notes.Where(x => x.StartSinceBeginningOfSongInTicks < edgeAfter).OrderByDescending(x => x.StartSinceBeginningOfSongInTicks).First();
+            if (musicEnd.StartSinceBeginningOfSongInTicks - musicStart.StartSinceBeginningOfSongInTicks < 384)
+                return true;
+
+
+
+            return false;
         }
 
     }

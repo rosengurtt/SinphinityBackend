@@ -153,8 +153,7 @@ namespace Sinphinity.Models
         public long DurationInTicks {
             get
             {
-                var expanded = MetricsAsString.ExpandPattern();
-                return expanded.Sum(x => x);
+                return MetricItems.Sum(x => x);
             }
         }
         [JsonIgnore]

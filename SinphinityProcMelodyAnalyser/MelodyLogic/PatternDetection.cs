@@ -35,10 +35,15 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             {
                 var intervalNotes = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= edges[i] && x.StartSinceBeginningOfSongInTicks < edges[i + 1]).ToList();
                 var newEdges = GetRepeatingNotePatternSection(intervalNotes, type);
-                edgesToAdd = edgesToAdd.Union(newEdges).ToHashSet();
 
+                // before adding the edges, we check that we will not create phrases that are too short
+                foreach (var edge in newEdges)
+                {
+                    if (!PhraseAnalysis.WillNewEdgeCreatePhraseTooShort(notes, edgesSoFar, edge))
+                        edgesSoFar.Add(edge);
+                }
             }
-            return edgesSoFar.Union(edgesToAdd).ToHashSet();
+            return edgesSoFar;
         }
 
       
@@ -115,6 +120,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
 
                             if (totalNotesInRepeatedPattern > 5)
                             {
+
                                 // we add the point where the repeated pattern starts to the list of edges
                                 var beginningOfPatternSection = orderedNotes[notesBeforeStart].StartSinceBeginningOfSongInTicks;
                                 retObj.Add(beginningOfPatternSection);

@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sinphinity.Models;
-using SinphinityProcMelodyAnalyser.BusinessLogic;
 
 namespace NunitTests
 {
@@ -27,15 +26,6 @@ namespace NunitTests
 
 
 
-		[Test]
-		public void DiscretizeTimingWorksAsExpected()
-		{
-			var cleanedNotes = PhraseDetection.DiscretizeTiming(notes);
-			var antes = GetDurations(notes);
-			var despues = GetDurations(cleanedNotes);
-
-			Assert.IsTrue(true);
-		}
 		private List<long> GetDurations(List<Note> notes)
 		{
 			var retObj = new List<long>();
