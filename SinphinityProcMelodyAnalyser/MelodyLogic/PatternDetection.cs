@@ -265,6 +265,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             var orderedNotes = notes.OrderBy(x => x.StartSinceBeginningOfSongInTicks).ToList();
             var totalNotes = notes.Count;
             var intervalDurationInTicks = orderedNotes.Max(x => x.EndSinceBeginningOfSongInTicks) - orderedNotes.Min(y => y.StartSinceBeginningOfSongInTicks);
+           
 
             // to search for patterns we expect that we have at least 16 notes
             // we dont't want to produce short intervals with few notes, we check the product duration * qty notes
@@ -304,8 +305,9 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                         continue;
 
                     // if we are here is because we found a sequence of i notes that happens at least twice
-                    foreach (Match m in matches)
+                    for (var j=0;j< matches.Count;j++)
                     {
+                        var m = matches[j];
                         // startCharacterIndex is the index in the asString string where the pattern starts
                         var startCharacterIndex = m.Index;
                         // startingNoteIndex is the index in the sequence of notes where the pattern starts
@@ -330,14 +332,33 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                         if (patternStartTick - edgeBefore < minLength || edgeAfter - pattternEndTick < minLength)
                             continue;
 
+                        var notesGroupThatWillBeSplitted = notes.Where(x => x.StartSinceBeginningOfSongInTicks >= edgeBefore &&
+                        x.StartSinceBeginningOfSongInTicks < edgeAfter).ToList();
                         // Add start and end of the pattern to hash of edges
-                        retObj.Add(patternStartTick);
-                        retObj.Add(pattternEndTick);
+                        if (!PhraseAnalysis.WillNewEdgeCreatePhraseTooShort(notesGroupThatWillBeSplitted, retObj, patternStartTick) &&
+                            !WillNewEdgeBreakArepeatingPattern(notesGroupThatWillBeSplitted, type, patternStartTick))
+                            retObj.Add(patternStartTick);   
+                        if (!PhraseAnalysis.WillNewEdgeCreatePhraseTooShort(notesGroupThatWillBeSplitted, retObj, pattternEndTick) &&
+                            !WillNewEdgeBreakArepeatingPattern(notesGroupThatWillBeSplitted, type, pattternEndTick))
+                            retObj.Add(pattternEndTick);
                     }
                 }
             }
             return retObj;
         } 
+
+        private static bool WillNewEdgeBreakArepeatingPattern(List<Note> notes, PhraseTypeEnum type, long edge)
+        {
+            var repeatingPatternSection = GetRepeatingNotePatternSection(notes, type);
+            if (repeatingPatternSection.Count == 2)
+            {
+                var start = repeatingPatternSection.Min();
+                var end = repeatingPatternSection.Max();
+                if (start < edge && edge < end)
+                    return true;
+            }
+            return false;
+        }
 
         public static bool DoesPhraseConsistOfARepeatingContiguousPattern(List<Note> notes, PhraseTypeEnum type)
         {

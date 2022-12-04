@@ -31,11 +31,20 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             if (phrase == null)
                 return extractePhrasesSoFar;
 
-            var p = extractePhrasesSoFar.Where(x => AreMetricsEssentiallyTheSame(x.Phrase.MetricsAsString, phrase.MetricsAsString) && x.Phrase.PitchesAsString == phrase.PitchesAsString).FirstOrDefault();
+            var p = extractePhrasesSoFar.Where(x => 
+                AreMetricsEssentiallyTheSame(x.Phrase.MetricsAsString, x.Phrase.PitchesAsString, phrase.MetricsAsString, phrase.PitchesAsString))
+                .FirstOrDefault();
             if (p == null)
             {
                 p = new ExtractedPhrase { Phrase = phrase, Occurrences = new List<PhraseLocation>() };
                 extractePhrasesSoFar.Add(p);
+            }
+            else
+            {
+                // if the 2 phrases are essentially the same, but one is more complex than the other (has more notes) we want to keep
+                // the most complex version
+                if (phrase.PitchItems.Count > p.Phrase.PitchItems.Count)
+                    p.Phrase = phrase;
             }
             p.Occurrences.Add(location);
 
@@ -45,13 +54,17 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
         /// When we compare 2 prhases to decide if they are the same phrase, we must have some tolerance regarding the timing
         /// For example if we have the metrics (95,97,48,47), this is essentially the same as (96,96,48,48)
         /// </summary>
-        /// <param name="metrics1"></param>
+        /// <param name="metricsAsString1"></param>
         /// <param name="metrics2"></param>
         /// <returns></returns>
-        private static Boolean AreMetricsEssentiallyTheSame(string metrics1, string metrics2)
+        private static Boolean AreMetricsEssentiallyTheSame(string metricsAsStringInput1, string pitchesAsStringInput1,
+            string metricsAsStringInput2, string pitchesAsStringInput2)
         {
-            var times1 = metrics1.ExpandPattern().Split(",").Select(x => int.Parse(x)).ToList();
-            var times2 = metrics2.ExpandPattern().Split(",").Select(x => int.Parse(x)).ToList();
+            (var metricsAsString1, var pitchesAsString1) = SimplifyPhrase(metricsAsStringInput1, pitchesAsStringInput1);
+            (var metricsAsString2, var pitchesAsString2) = SimplifyPhrase(metricsAsStringInput2, pitchesAsStringInput2);
+
+            var times1 = metricsAsString1.ExpandPattern().Split(",").Select(x => int.Parse(x)).ToList();
+            var times2 = metricsAsString2.ExpandPattern().Split(",").Select(x => int.Parse(x)).ToList();
             if (times1.Count != times2.Count) return false;
             // if the total duration differs more than 10% we consider them different
             if (Math.Abs(times1.Sum() - times2.Sum()) > (times1.Sum() + times2.Sum()) / 20)
@@ -63,6 +76,40 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                     return false;
             }
             return true;
+        }
+        /// <summary>
+        /// When comparing 2 phrases to determine if they are essentially the same, if we have a note that in one phrase is played 
+        /// as a single note of duration x, and in the other is played as 2 consecutive notes with duration x/2 each, we want to consider 
+        /// the phrases to be the same
+        /// This function replaces a group of consecutive repeated notes by a single note that has a duration that is the sum of the 
+        /// duration of the single notes
+        /// </summary>
+        /// <param name="metrics"></param>
+        /// <param name="pitches"></param>
+        /// <returns>A tuple that has the metrics as string and the pitches as string</returns>
+        private static (string, string) SimplifyPhrase(string metricsAsString, string pitchesAsString)
+        {
+            var retMetricsAsString = "";
+            var retPitchesAsString = "";
+
+            var metrics = metricsAsString.ExpandPattern().Split(",").Select(x => int.Parse(x)).ToList();
+            var pitches = pitchesAsString.ExpandPattern().Split(",").ToList();
+            for (var i = 0; i < pitches.Count; i++)
+            {
+                var j = 1;
+                while (i + j < pitches.Count && pitches[i + j] == "0")
+                    j++;
+                retPitchesAsString += pitches[i];
+                var totalMetrics = metrics.Skip(i).Take(j).Sum();
+                retMetricsAsString += totalMetrics.ToString();
+                i = i + j - 1;
+                if (i < pitches.Count - 1)
+                {
+                    retMetricsAsString += ",";
+                    retPitchesAsString += ",";
+                }
+            }
+            return (retMetricsAsString, retPitchesAsString);
         }
 
         /// <summary>
@@ -168,7 +215,8 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
                                     .OrderBy(z => z.StartSinceBeginningOfSongInTicks).Take(4);
                 var longestAfter = fourNotesAfter.Count() == 0 ? 0 : fourNotesAfter.Select(y => y.DurationInTicks).Max();
 
-                if (IsGoodCandidate(candidateLocation, candidateDuration, previousEdge, followingEdge, notesBefore, notesAfter, longestBefore, longestAfter))
+                if (IsGoodCandidate(candidateLocation, candidateDuration, previousEdge, followingEdge, notesBefore, notesAfter, longestBefore, longestAfter) &&
+                    !WillNewEdgeCreatePhraseTooShort(notes, retObj, candidateLocation))
                 {
                     retObj.Add(candidateLocation);
                 }
