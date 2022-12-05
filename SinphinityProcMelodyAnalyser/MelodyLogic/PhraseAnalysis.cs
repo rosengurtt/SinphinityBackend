@@ -26,18 +26,18 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             retObj = AddEquivalences(retObj);
             return retObj;
         }
-        private static List<ExtractedPhrase> AddPhraseToList(Phrase phrase, PhraseLocation location, List<ExtractedPhrase> extractePhrasesSoFar)
+        private static List<ExtractedPhrase> AddPhraseToList(Phrase phrase, PhraseLocation location, List<ExtractedPhrase> extractedPhrasesSoFar)
         {
             if (phrase == null)
-                return extractePhrasesSoFar;
+                return extractedPhrasesSoFar;
 
-            var p = extractePhrasesSoFar.Where(x => 
+            var p = extractedPhrasesSoFar.Where(x => 
                 AreMetricsEssentiallyTheSame(x.Phrase.MetricsAsString, x.Phrase.PitchesAsString, phrase.MetricsAsString, phrase.PitchesAsString))
                 .FirstOrDefault();
             if (p == null)
             {
                 p = new ExtractedPhrase { Phrase = phrase, Occurrences = new List<PhraseLocation>() };
-                extractePhrasesSoFar.Add(p);
+                extractedPhrasesSoFar.Add(p);
             }
             else
             {
@@ -48,7 +48,7 @@ namespace SinphinityProcMelodyAnalyser.MelodyLogic
             }
             p.Occurrences.Add(location);
 
-            return extractePhrasesSoFar;
+            return extractedPhrasesSoFar;
         }
         /// <summary>
         /// When we compare 2 prhases to decide if they are the same phrase, we must have some tolerance regarding the timing

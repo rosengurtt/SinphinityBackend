@@ -37,20 +37,20 @@ namespace SinphinitySysStore.Data
                         await _dbContext.SaveChangesAsync();
                         currentPhrase = phraseEntity;
 
-                        if (!string.IsNullOrEmpty(currentPhrase.SkeletonMetricsAsString))
-                        {  var currentSkeleton = await _dbContext.Phrases.Where(x => x.MetricsAsString == currentPhrase.SkeletonMetricsAsString &&
-                                            x.PitchesAsString == currentPhrase.SkeletonPitchesAsString)
-                            .FirstOrDefaultAsync();
-                            if (currentSkeleton == null)
-                            {
-                                var phraseSkeleton = new Sinphinity.Models.Phrase(currentPhrase.SkeletonMetricsAsString, currentPhrase.SkeletonPitchesAsString);
-                                var skeletonSegment = await SaveSegmentOfPhrase(phraseSkeleton);
-                                var skeleton = new Models.Phrase(phraseSkeleton, new List<string>());
-                                skeleton.SegmentId = skeletonSegment.Id;
-                                _dbContext.Phrases.Add(skeleton);
-                                await _dbContext.SaveChangesAsync();
-                            }
-                        }
+                        //if (!string.IsNullOrEmpty(currentPhrase.SkeletonMetricsAsString))
+                        //{  var currentSkeleton = await _dbContext.Phrases.Where(x => x.MetricsAsString == currentPhrase.SkeletonMetricsAsString &&
+                        //                    x.PitchesAsString == currentPhrase.SkeletonPitchesAsString)
+                        //    .FirstOrDefaultAsync();
+                        //    if (currentSkeleton == null)
+                        //    {
+                        //        var phraseSkeleton = new Sinphinity.Models.Phrase(currentPhrase.SkeletonMetricsAsString, currentPhrase.SkeletonPitchesAsString);
+                        //        var skeletonSegment = await SaveSegmentOfPhrase(phraseSkeleton);
+                        //        var skeleton = new Models.Phrase(phraseSkeleton, new List<string>());
+                        //        skeleton.SegmentId = skeletonSegment.Id;
+                        //        _dbContext.Phrases.Add(skeleton);
+                        //        await _dbContext.SaveChangesAsync();
+                        //    }
+                        //}
                     }
                     Log.Information("Saving associations");
                     await SaveAssociationsOfPhrase(currentPhrase.Id, song);
